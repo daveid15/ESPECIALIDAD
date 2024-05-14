@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <h2>Lista de habilidades</h2>
+        <table border="1">
+            <thead>
+                <th>Habilidad</th>
+                <th>Nivel</th>
+            </thead>
+            <tbody>
+                {% for h in habilidades %}
+                    <tr>
+                        <td>{{ h.nombre }}</td>
+                        <td>{{ h.nivel }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </body>
+</html>
+

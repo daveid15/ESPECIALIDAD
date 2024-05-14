@@ -1,0 +1,5 @@
+<form method="post" action="{% url 'ejemplos_autor_save' %}">
+    {% csrf_token %}
+    <input type="text" name="nombre"/>
+    <input type="submit"/>
+</form>

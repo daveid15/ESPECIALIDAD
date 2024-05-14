@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalles de la Orden de Compra</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            padding: 20px;
+        }
+        .container {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .detail-item {
+            margin-bottom: 10px;
+        }
+        .detail-item p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Detalles de la Orden de Compra</h1>
+        <div class="detail-item">
+            <p><strong>Proveedor:</strong> {{ orden.proveedor_orden }}</p>
+        </div>
+        <div class="detail-item">
+            <p><strong>Producto:</strong> {{ orden.producto_orden }}</p>
+        </div>
+        <div class="detail-item">
+            <p><strong>Unidad:</strong> {{ orden.unidad_orden }}</p>
+        </div>
+        <div class="detail-item">
+            <p><strong>Cantidad:</strong> {{ orden.cantidad_orden }}</p>
+        </div>
+        <!-- Puedes agregar más campos aquí según sea necesario -->
+
+        <a href="{% url 'orden_list_rechazada' %}" class="button">Volver</a> <!-- Botón "Volver" -->
+    </div>
+</body>
+</html>

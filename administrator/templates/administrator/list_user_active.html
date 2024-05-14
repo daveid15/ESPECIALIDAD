@@ -1,0 +1,106 @@
+{% extends 'core/base_admin.html' %}
+{% load static %}
+
+{% block content %}
+{% block extrahead %}
+
+{% endblock %}
+<style>.errorlist{color:red;}</style>
+<main role="main">
+    <div class="container col-12">
+        <div class="col-12 border">
+            <table id="service" class="table mt-2 table-hover table-sm table-bordered">      
+                <thead class="table-danger">
+                    <tr>
+                    <tr>
+                        {% if profiles.group_id == 1 %}
+                            <th colspan="5"><h3>Usuarios</h3></th>
+                        {% endif %}
+                        {% if profiles.group_id == 2 %}
+                            <th colspan="4"><h3>Usuarios</h3></th>
+                        {% endif %}
+                        <th colspan="1">
+                            <div class="row">
+                                <div class="col-12 col-sm-12">
+                                    <a href="{% url 'list_main' group.id %}" class="btn btn-danger form-control">Volver</a>
+                               </div>
+                            </div>
+                        </th>
+                    </tr>
+                    <tr class="text-center">
+                        <th width="450" scope="col">Nombre</th>
+                        <th width="300" scope="col">Correo</th>
+                        <th width="150" scope="col">Acciones</th> <!-- Nuevo encabezado para el botón "Ver" -->
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for s in user_list %}
+                        <tr>
+                            <th scope="row">{{s.name}}</th>
+                            <th scope="row">{{s.mail}}</th>
+                            {% if profiles.group_id == 1 %}
+                                <th scope="row">
+                                    {% if s.id != request.user.id %}
+                                        <a href="{% url 'user_detail' s.id %}"> <!-- Nuevo enlace para los detalles del usuario -->
+                                            Ver
+                                        </a>
+                                    
+                                        <a href="{% url 'edit_user' s.id %}">
+                                            Editar
+                                        </a>
+
+                                        <a href="#" onclick="confirmDelete('{{ s.id }}')">
+                                            Eliminar
+                                        </a>
+                                    
+                                    {% endif %}
+                                </th>   
+                            {% endif %}                            
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <!-- Paginación -->
+                {% if paginator.num_pages > 1 %}
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination justify-content-center">
+                            {% if user_list.has_previous %}
+                                <li class="page-item ">
+                                    <a class="page-link" href="?page={{ user_list.previous_page_number}}">&laquo;</a>
+                                </li>
+                            {% else %}
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#" tabindex="-1">&laquo;</a>
+                                </li>
+                            {% endif %}
+                            {% for i in paginator.page_range %}
+                                <li class="page-item {% if user_list.number == i %}active{% endif %}">
+                                    <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+                                </li>
+                            {% endfor %}
+                            {% if user_list.has_next %}
+                                <li class="page-item ">
+                                    <a class="page-link" href="?page={{ user_list.next_page_number }}">&raquo;</a>
+                                </li>
+                            {% else %}
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#" tabindex="-1">&raquo;</a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                {% endif %}  
+            <!-- Paginación -->                    
+        </div>
+    </div>
+</main>
+
+<script>
+    function confirmDelete(id) {
+        if (confirm("¿Estás seguro de que deseas eliminar este usuario?")) {
+            window.location.href = "{% url 'user_block' 0 %}".replace('0', id);
+        }
+    }
+</script>
+
+{% endblock %}

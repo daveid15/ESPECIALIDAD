@@ -1,0 +1,16 @@
+<form method="post" action="{% url 'ejemplos_proyect_edit_save' %}">
+    {% csrf_token %}
+    <input type="hidden" name="id" value="{{proyect_data.id}}"/>
+    <input type="text" name="nombre" value="{{proyect_data.nombre}}"/>
+    <input type="text" name="palabras_clave" value="{{proyect_data.palabras_clave }}"/>
+    <select name="autor" multiple>
+        {% for a in autor_list %}           
+            {% if a.id in autor_data_list %}
+                <option value="{{a.id}}" selected >{{a.nombre}}</option>
+            {% else %}
+                <option value="{{a.id}}">{{a.nombre}}</option>
+            {% endif %}
+       {%endfor %}
+    </select>
+    <input type="submit"/>
+</form>

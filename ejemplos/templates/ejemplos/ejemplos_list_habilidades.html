@@ -1,0 +1,120 @@
+{% extends 'core/base_admin.html' %}
+{% load static %}
+{% block title %}{% endblock %}
+{% block content %}
+    {% block extra_css %}    
+    {% endblock extra_css %}    
+    <header class='mb-5'>
+        <div class="row">
+            <div class="col-12 col-sm-8 mb-3">
+                <h2 class='h2 medium text-blue'>Gestión de habilidades</h2>
+            </div>
+            <div class="col-12 col-sm-4 mb-3">
+                <a href="{% url 'ejemplos_main'%}" class="button button--gray form-control">Volver</a>
+            </div>
+        </div>
+        <div class="d-flex flex-column flex-lg-row mt-2">
+            <p class='body--normal text-gray'>
+                {% lorem 2 b random %}
+            </p>
+        </div>
+    </header>
+    <div class="d-flex flex-column flex-lg-row my-5">
+        <div class="my-auto d-flex flex-column flex-lg-row ms-lg-auto">
+            <div class="feedback body--small normal"></div>
+        </div>
+        <form method="post" action="" class='col-12 col-lg-6 input-container-search my-auto me-3'>
+            {% csrf_token %}
+            <input name="search" id="search" type="text" placeholder='Buscar por habilidad'/>
+            <button type="submit" class="button button--gray">
+                <span class="material-icons-outlined">
+                    search
+                </span>
+            </button>            
+        <form>       
+    </div>
+    <div class="table-container mt-5">
+        <table class="table table-user">
+            <thead>
+                <tr>
+                    <th width="10%" scope="col">Habilidad</th>
+                    <th width="12%" scope="col">Tipo</th>
+                    <th width="10%" scope="col">
+                        Acciones
+                        &nbsp;&nbsp;
+                        <a href="{% url 'reporte_todas_habilidades' %}" title="Descarga listado">
+                            <span class="material-icons-outlined">
+                                cloud_download
+                            </span>
+                        </a>
+                        &nbsp;&nbsp;
+                        <a href="{% url 'reportes_main' %}" title="Otros Reportes">
+                            <span class="material-icons-outlined">
+                                content_paste
+                            </span>
+                        </a>
+                        &nbsp;&nbsp;
+                        <a href="{% url 'lista_habilidades_pdf' %}" title="descarga PDF">
+                            <span class="material-icons-outlined">
+                                picture_as_pdf
+                            </span>
+                        </a>
+                        
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for h in h_list_paginate %}
+                    <tr>
+                        <td>{{h.nombre}}</td>
+                        <td>{{h.nivel}}</td>
+                        <td>
+                            <a href="{% url 'ejemplos_habilidad_ver' h.id %}">Ver</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <!-- Paginación -->
+            {% if paginator.num_pages > 1 %}
+                <div class="d-flex">
+                    <nav aria-label="Page navigation example" class="ms-auto">
+                        <ul class="pagination pagination-table">
+                            {% if h_list_paginate.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ h_list_paginate.previous_page_number}}&search={{search}}" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                            {% else %}
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#" tabindex="-1">&laquo;</a>
+                                </li>                        
+                            {% endif %}
+                            {% for i in paginator.page_range %}
+                                <li class="page-item {% if h_list_paginate.number == i %}active{% endif %}">
+                                    <a class="page-link" href="?page={{ i }}&search={{search}}">{{ i }}</a>
+                                </li>                        
+                            {% endfor %}
+                            {% if h_list_paginate.has_next %}
+                                <li class="page-item ">
+                                    <a class="page-link" href="?page={{ h_list_paginate.next_page_number }}&search={{search}}">&raquo;</a>
+                                </li>
+                            {% else %}
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#" tabindex="-1">&raquo;</a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                </div>
+            {% endif %}  
+        <!-- Paginación -->    
+    </div>
+
+
+
+
+    {% block extrajs %}    
+    {% endblock extrajs %}    
+{% endblock %}

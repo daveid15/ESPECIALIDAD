@@ -1,0 +1,88 @@
+{% extends 'core/base_admin.html' %}
+{% load static %}
+{% block title %}{% endblock %}
+{% block content %}
+    {% block extra_css %}    
+    {% endblock extra_css %}    
+    <header class='mb-4'>
+        <h2 class='h2 medium text-blue'>Nuevo Proveedor</h2>
+    </header>
+    <div class="col-md-11">
+        <div class="mb-3">
+            <div class="d-flex flex-column align-items-center align-items-lg-start">
+                <form method="post" action="{% url 'proveedor_save' %}">
+                    {% csrf_token %}
+                    <body>
+                    <div class="col-12 col-lg-12 row row-cols-1 row-cols-md-1 g-2 p-lg-0-5">
+                        <div class="mb-0 col-md-6">
+                            <label for="proveedor_name" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" name="proveedor_name" id="proveedor_name" placeholder="Nombre" style="text-transform: capitalize;" required>
+                        </div>
+                        <div class="mb-0 col-md-6">
+                            <label for="proveedor_last_name" class="form-label">Apellido</label>
+                            <input type="text" class="form-control" name="proveedor_last_name" id="proveedor_last_name" placeholder="Apellido" style="text-transform: capitalize;" required>
+                        </div>
+                        <div class="mb-0 col-md-6">
+                            <label for="proveedor_rut" class="form-label">Rut</label>
+                            <input type="text" class="form-control" name="proveedor_rut" id="proveedor_rut" placeholder="Rut" required>
+                        </div>
+                        <div class="mb-0 col-md-6">
+                            <label for="proveedor_mail" class="form-label">Correo electrónico</label>
+                            <input type="text" class="form-control" name="proveedor_mail" id="proveedor_mail" placeholder="nombre@gmail.com" required>
+                        </div>
+                        <div class="mb-0 col-md-6">
+                            <label for="proveedor_phone" class="form-label">Teléfono</label>
+                            <input type="text" class="form-control" name="proveedor_phone" id="proveedor_phone" placeholder="Teléfono" required>
+                        </div>
+                        <div class="mb-0 col-md-12">
+                            <label for="proveedor_address" class="form-label">Dirección</label>
+                            <input type="text" class="form-control" name="proveedor_address" id="proveedor_address" placeholder="Dirección" required>
+                        <div class="col-12 col-sm-4 mb-3">
+                            <label for="proveedor_region">Región</label>
+                            <select name="proveedor_region" id="proveedor_region" class="form-control border border-danger" required>
+                                <option value="">Seleccione una región</option>
+                                {% for region in regions %}
+                                <option value="{{ region }}">{{ región }}</option>
+                                {% endfor %}
+                                <option value="Region Metropolitana de Santiago">Región Metropolitana de Santiago
+                            </select>
+                            <label for="proveedor_comuna">Comuna</label>
+                                <select name="proveedor_comuna" id="proveedor_comuna" class="form-control border border-danger" required>
+                                    <option value="">Seleccione una comuna</option>
+                                    {% for comuna in comunas %}
+                                        <option value="{{ comuna }}">{{ comuna }}</option>
+                                    {% endfor %}
+                                        <optgroup label="Región Metropolitana de Santiago">
+                                        <option value="Providencia">Providencia</option>
+                                        <option value="Santiago">Santiago</option>
+                                        <option value="San Bernardo">San Bernardo</option>
+                                        <option value="Maipú">Maipú</option>
+                                        <option value="Buin">Buin</option>
+                                    </optgroup>
+                                </select>
+                            </select>
+                            <div class="mb-0 col-md-6">
+                                <label class="form-label">Insumos</label>
+                                <button onclick="test()" type="button" id="Añadir">Añadir</button>
+                            </div>
+                        </div>
+                    </div>
+                </body>    
+                        <div class="mb-0 col-md-4">
+                            <div class="d-flex justify-content-center mb-2">
+                                <div class="d-flex justify-content-center mx-0-5--custom">
+                                    <button type="submit">Crear</button>
+                                </div>
+                                <div class="d-flex justify-content-center mx-0-5--custom">
+                                    <a href="{% url 'proveedores_main' %}">Volver</a>
+                                </div>  
+                            </div>                                  
+                        </div>
+                </form>
+                <script src="{% static 'js/test.js' %}"></script> 
+            </div>
+        </div>
+    </div>
+    {% block extrajs %}    
+    {% endblock extrajs %}    
+{% endblock %}

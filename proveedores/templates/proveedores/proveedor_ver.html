@@ -1,0 +1,43 @@
+{% extends 'core/base_admin.html' %}
+{% load static %}
+
+{% block title %}
+{% endblock %}
+
+{% block content %}
+<header class='mb-4'>
+    <h2 class='h2 medium text-blue'>Ver Proveedor</h2>
+</header>
+<div class="col-md-11">
+    <div class="mb-3">
+        <div class="d-flex flex-column align-items-center align-items-lg-start">
+            <form method="post" action="{% url 'proveedor_ver' proveedor_id=proveedor_data.id %}">
+                {% csrf_token %}
+                <div class="col-12 col-lg-12 row row-cols-1 row-cols-md-1 g-2 p-lg-0-5">
+                    <div class="mb-0 col-md-12">
+                        <label for="proveedor_name" class="form-label">Nombre Proveedor: </label>
+                        <span class="form-control" id="proveedor_name">{{proveedor_data.proveedor_name}} {{proveedor_data.proveedor_last_name}}</span>
+                    </div>
+                    <div class="mb-0 col-md-12">
+                        <label for="proveedor_mail" class="form-label">Mail Proveedor: </label>
+                        <span class="form-control" id="proveedor_mail">{{proveedor_data.proveedor_mail}}</span>
+                    </div>
+                    <div class="mb-0 col-md-12">
+                        <label for="proveedor_phone" class="form-label">Número de contacto: </label>
+                        <span class="form-control" id="proveedor_phone">{{proveedor_data.proveedor_phone}}</span>
+                    </div>
+                    <div class="mb-0 col-md-12">
+                        <label for="proveedor_addres" class="form-label">Dirección: </label>
+                        <span class="form-control" id="proveedor_address">{{proveedor_data.proveedor_address}},</span>
+                        <span class="form-control" id="proveedor_region">{{proveedor_data.proveedor_region}},</span>
+                        <span class="form-control" id="proveedor_comuna">{{proveedor_data.proveedor_comuna}}.</span>
+                    </div>
+                    <div class="col-12 col-sm-6 mb-3">
+                            <a href="{% url 'proveedor_list' %}" class="btn btn-danger form-control">Volver</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

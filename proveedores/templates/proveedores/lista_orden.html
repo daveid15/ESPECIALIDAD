@@ -1,0 +1,30 @@
+{% extends 'core/base_admin.html' %}
+{% load static %}
+{% block content %}
+{% block extrahead %}
+{% endblock %}
+    <main role="main">
+        <div class="container col-12 mt-3">
+            <div class="col-12  mt-3 border">
+                <h3 class="px-5 py-4" style="text-align: center;">Lista de Órdenes de Compra</h3> 
+                <div class="row " style=" display: flex; justify-content: center;">
+                    <div class="col-12 col-sm-3 mb-3">
+                        <a href="{% url 'orden_list_enviada' %}"  class="botton form-control" style="padding: 4px; margin-top: 4px;">Enviadas</a>
+                    </div>
+                    <div class="col-12 col-sm-3 mb-3">
+                        <a href="{% url 'orden_list_aceptada' %}"  class="botton form-control" style="padding: 4px; margin-top: 4px;">Aceptadas</a>
+                    </div>
+                    <div class="col-12 col-sm-3 mb-3">
+                        <a href="{% url 'orden_list_rechazada' %}"  class="botton form-control" style="padding: 4px; margin-top: 4px;">Rechazadas</a>
+                    </div>
+                    <div class="col-12 col-sm-3 mb-3">
+                        <a href="{% url 'orden_list_anulada' %}"  class="botton form-control" style="padding: 4px; margin-top: 4px;">Anuladas</a>
+                    </div>
+                    <div class="col-12 col-sm-3 mb-3">
+                        <a href="{% url 'orden_main' %}"  class="botton form-control" style="padding: 4px; margin-top: 4px;">Volver</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

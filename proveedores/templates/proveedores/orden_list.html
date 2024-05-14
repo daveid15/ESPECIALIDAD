@@ -1,0 +1,91 @@
+{% extends 'core/base_admin.html' %}
+{% load static %}
+{% block title %}
+    <title>Listado de Órdenes de Compra</title>
+{% endblock %}
+{% block content %}
+    {% block extra_css %}    
+    {% endblock extra_css %}    
+    <header class='mb-5'>
+        <h2 class='h2 medium text-blue'>Listado de Órdenes de Compra</h2>
+    </header>
+
+    <div class="d-flex flex-column flex-lg-row my-5">
+        <div class="my-auto d-flex flex-column flex-lg-row ms-lg-auto">
+            <div class="feedback body--small normal"></div>
+        </div>
+        <form method="post" action="" class='col-12 col-lg-6 input-container-search my-auto me-3'>
+            {% csrf_token %}
+            <input name="search" id="search" type="text" placeholder='Buscar por Nombre'/>
+        </form>       
+    </div>
+
+    <div class="table-container mt-5">
+        <table class="table table-user">
+            <thead>
+                <tr>
+                    <th width="20%" scope="col">Proveedor</th>
+                    <th width="30%" scope="col">Producto</th>
+                    <th width="20%" scope="col">Unidad</th>
+                    <th width="30%" scope="col">Cantidad</th>
+                    <th width="20%" scope="col">Acciones</th> <!-- Nueva columna para los botones -->
+                </tr>
+            </thead>
+            <tbody>
+                {% for orden in ordenes %}
+                    <tr>
+                        <td>{{ orden.proveedor_orden }}</td>
+                        <td>{{ orden.producto_orden }}</td>
+                        <td>{{ orden.unidad_orden }}</td>
+                        <td>{{ orden.cantidad_orden }}</td>
+                        <td>
+                            <a href="{% url 'detalle_orden_de_compra' orden_id=orden.id %}" class="btn btn-primary">Ver</a>
+                            <a href="{% url 'editar_orden' orden_id=orden.id %}" class="btn btn-secondary">Editar</a> <!-- Botón Editar -->
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <!-- Paginación -->
+        {% if paginator.num_pages > 1 %}
+            <div class="d-flex">
+                <nav aria-label="Page navigation example" class="ms-auto">
+                    <ul class="pagination pagination-table">
+                        {% if ordenes.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ ordenes.previous_page_number }}&search={{ search }}" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1">&laquo;</a>
+                            </li>                        
+                        {% endif %}
+                        {% for i in paginator.page_range %}
+                            <li class="page-item {% if ordenes.number == i %}active{% endif %}">
+                                <a class="page-link" href="?page={{ i }}&search={{ search }}">{{ i }}</a>
+                            </li>                        
+                        {% endfor %}
+                        {% if ordenes.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ ordenes.next_page_number }}&search={{ search }}">&raquo;</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1">&raquo;</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+        {% endif %}  
+        <!-- Paginación --> 
+        <div class="d-flex justify-content-center mx-0-5--custom">
+            <a href="{% url 'orden_main' %}" class="button">Regresar</a>
+        </div>    
+    </div>
+
+    {% block extrajs %}    
+    {% endblock extrajs %}    
+{% endblock %}

@@ -1,0 +1,122 @@
+{% extends 'core/base_admin.html' %}
+{% load static %}
+{% block title %}
+    <title>Listado de Órdenes de Compra</title>
+{% endblock %}
+{% block content %}
+    {% block extra_css %}    
+    {% endblock extra_css %}    
+    <header class='mb-5'>
+        <h2 class='h2 medium text-blue'>Órdenes de Compra Aceptadas</h2>
+    </header>
+    <div class="d-flex flex-column flex-lg-row my-5">
+        <div class="my-auto d-flex flex-column flex-lg-row ms-lg-auto">
+            <div class="feedback body--small normal"></div>
+        </div>
+        <form method="get" action="{% url 'orden_list_aceptada' %}" class='col-12 col-lg-6 input-container-search my-auto me-3'>
+            {% csrf_token %}
+            <input name="search" id="search" type="text" placeholder='Buscar por Nombre'/>
+            <button type="submit">Buscar</button>
+        </form>       
+    </div>
+    <div class="table-container mt-5">
+        <table class="table table-user" style="text-align: center;">
+            <thead>
+                <tr>
+                    <th width="10%" scope="col">Proveedor</th>
+                    <th width="10%" scope="col">Producto</th>
+                    <th width="10%" scope="col">Cantidad</th>
+                    <th width="10%" scope="col">Unidad</th>
+                    <th width="10%" scope="col">Acciones</th>
+                    <th width="10%" scope="col">Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for orden in ordenes %}
+                    <tr>
+                        <td>{{ orden.proveedor_orden }}</td>
+                        <td>{{ orden.producto_orden }}</td>
+                        <td>{{ orden.cantidad_orden }}</td>
+                        <td>{{ orden.unidad_orden }}</td>
+                        <td>
+                            <a href="{% url 'detalle_orden_de_compra_aceptada' orden_id=orden.id %}" class="btn btn-primary">Ver</a>
+                        </td>
+                        <td>
+                            <!-- Modal -->
+                            <div class="modal fade" id="estadoOrden{{ orden.id }}" tabindex="-1" aria-labelledby="estadoOrden{{ orden.id }}Label" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form id="estadoForm{{ orden.id }}" method="post" action="{% url 'cambiar_estado_orden_aceptada' orden.id %}">
+                                                {% csrf_token %}
+                                                    <div class="col-sm-8 d-flex justify-content-between align-items-center">
+                                                        <select name="nuevo_estado" id="nuevo_estado" class="form-select me-2">
+                                                            <option value="" selected disabled>Seleccione un estado</option>
+                                                            <option value="anulado">Anulado</option>
+                                                        </select>
+                                                        <button type="submit" class="btn btn-primary">Enviar</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>                                                                               
+                                    </div>
+                                </div>
+                            </div>
+                        </tr>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <!-- Paginación -->
+        {% if paginator.num_pages > 1 %}
+            <div class="d-flex">
+                <nav aria-label="Page navigation example" class="ms-auto">
+                    <ul class="pagination pagination-table">
+                        {% if ordenes.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ ordenes.previous_page_number }}&search={{ search }}" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1">&laquo;</a>
+                            </li>                        
+                        {% endif %}
+                        {% for i in paginator.page_range %}
+                            <li class="page-item {% if ordenes.number == i %}active{% endif %}">
+                                <a class="page-link" href="?page={{ i }}&search={{ search }}">{{ i }}</a>
+                            </li>                        
+                        {% endfor %}
+                        {% if ordenes.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ ordenes.next_page_number }}&search={{ search }}">&raquo;</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1">&raquo;</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+        {% endif %}  
+        <!-- Paginación --> 
+        <div class="d-flex justify-content-center mx-0-5--custom">
+            <a href="{% url 'lista_orden' grupo_id=1 %}" class="button">Regresar</a>
+        </div>    
+    </div>
+
+    <script>
+        function enviarFormulario(ordenId) {
+            document.getElementById('estadoForm' + ordenId).submit();
+        }
+    </script>
+    
+    {% block extrajs %}    
+    {% endblock extrajs %}    
+{% endblock %}

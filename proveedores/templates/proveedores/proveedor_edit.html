@@ -1,0 +1,79 @@
+{% extends 'core/base_admin.html' %}
+{% load static %}
+
+{% block title %}
+Editar Proveedor
+{% endblock %}
+
+{% block content %}
+<header class='mb-4'>
+    <h2 class='h2 medium text-blue'>Editar Proveedor</h2>
+</header>
+<div class="col-md-11">
+    <div class="mb-3">
+        <div class="d-flex flex-column align-items-center align-items-lg-start">
+            <form method="post" action="{% url 'proveedor_edit' proveedor_id=proveedor_data.id %}">
+                {% csrf_token %}
+                <div class="col-12 col-lg-12 row row-cols-1 row-cols-md-1 g-2 p-lg-0-5">
+                    <div class="mb-0 col-md-12">
+                        <label for="proveedor_name" class="form-label">Nombre (*)</label>
+                        <input type="text" id="proveedor_name" name="proveedor_name" value="{{ proveedor_data.proveedor_name }}" class="form-control border border-danger" required/>
+                    </div>
+                    <div class="mb-0 col-md-12">
+                        <label for="proveedor_last_name">Apellido (*)</label>
+                        <input type="text" id="proveedor_last_name" name="proveedor_last_name" value="{{ proveedor_data.proveedor_last_name }}" class="form-control border border-danger" required/>
+                    </div>
+                    <div class="mb-0 col-md-12">
+                        <label for="proveedor_mail" class="form-label">Mail Proveedor:</label>
+                        <input type="text" id="proveedor_mail" name="proveedor_mail" value="{{ proveedor_data.proveedor_mail }}" class="form-control border border-danger" required/>
+                    </div>
+                    <div class="mb-0 col-md-12">
+                        <label for="proveedor_phone" class="form-label">Número de contacto (*):</label>
+                        <input type="text" id="proveedor_phone" name="proveedor_phone" value="{{ proveedor_data.proveedor_phone }}" class="form-control border border-danger" required/>
+                    </div>                       
+                    <div class="col-12 col-sm-4 mb-3">
+                        <div class="col-12 col-sm-8 mb-3">
+                            <!-- Una vez que se almacene en la bd ponerle un value -->
+                            <label for="proveedor_address">Dirección</label>
+                            <input type="text" class="form-control border border-danger" value="{{ proveedor_data.proveedor_address }}" name="proveedor_address" required/>
+                        </div>
+                        <div class="col-12 col-sm-4 mb-3">
+                            <label for="proveedor_region">Región</label>
+                            <select name="proveedor_region" id="proveedor_region" class="form-control border border-danger" required>
+                                <option value="">Seleccione una región</option>
+                                <option value="Region Metropolitana de Santiago" {% if proveedor_data.proveedor_region == "Region Metropolitana de Santiago" %}selected{% endif %}>Región Metropolitana de Santiago</option>
+                            </select>      
+                        </div>
+                        <div class="col-12 col-sm-4 mb-3">
+                            <label for="proveedor_comuna">Comuna</label>
+                            <select name="proveedor_comuna" id="proveedor_comuna" class="form-control border border-danger" required>
+                                <option value="">Seleccione una comuna</option>
+                                {% for comuna in comunas %}
+                                    <option value="{{ comuna }}" {% if proveedor_data.proveedor_comuna == comuna %}selected{% endif %}>{{ comuna }}</option>
+                                {% endfor %}
+                                <optgroup label="Región Metropolitana de Santiago">
+                                    <option value="Providencia" {% if proveedor_data.proveedor_comuna == "Providencia" %}selected{% endif %}>Providencia</option>
+                                    <option value="Santiago" {% if proveedor_data.proveedor_comuna == "Santiago" %}selected{% endif %}>Santiago</option>
+                                    <option value="San Bernardo" {% if proveedor_data.proveedor_comuna == "San Bernardo" %}selected{% endif %}>San Bernardo</option>
+                                    <option value="Maipú" {% if proveedor_data.proveedor_comuna == "Maipú" %}selected{% endif %}>Maipú</option>
+                                    <option value="Buin" {% if proveedor_data.proveedor_comuna == "Buin" %}selected{% endif %}>Buin</option>
+                                </optgroup>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-0 col-md-12">
+                        <div class="d-flex justify-content-center mb-2">
+                            <div class="d-flex justify-content-center mx-0-5--custom">
+                                <button type="submit" class="button">Editar</button>
+                            </div> 
+                            <div class="d-flex justify-content-center mx-0-5--custom">
+                                <a href="{% url 'proveedor_list' %}" class="button">Regresar</a>
+                            </div>                                  
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

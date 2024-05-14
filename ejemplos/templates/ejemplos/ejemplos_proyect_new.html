@@ -1,0 +1,11 @@
+<form method="post" action="{% url 'ejemplos_proyect_save' %}">
+    {% csrf_token %}
+    <input type="text" name="nombre"/>
+    <input type="text" name="palabras_clave"/>
+    <select name="autor" multiple>
+        {% for a in autor_list %}
+            <option value="{{a.id}}">{{a.nombre}}</option>
+        {%endfor %}
+    </select>
+    <input type="submit"/>
+</form>

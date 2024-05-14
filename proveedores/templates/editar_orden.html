@@ -1,0 +1,48 @@
+{% extends 'core/base_admin.html' %}
+{% load static %}
+{% block content %}
+{% block extrahead %}
+{% endblock %}
+
+<!---->
+    <main role="main">
+        <div class="container col-12 mt-3">
+            <div class="col-12  mt-3 border">
+                <h3>Editar Orden de Compra</h3> 
+                {% if messages %}
+                    <div>
+                        {% for message in messages %}
+                            {{ message }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" value="{{ orden.id }}" name="orden_id" id="orden_id">
+                    <div class="row"> 
+                        <div class="col-12 col-sm-8 mb-3">
+                            <label for="proveedor_orden">Proveedor:</label>
+                            <input type="text" id="proveedor_orden" name="proveedor_orden" value="{{ orden.proveedor_orden }}"  class="form-control border border-danger" required/>
+                            <label for="producto_orden">Producto:</label>
+                            <input type="text" id="producto_orden" name="producto_orden" value="{{ orden.producto_orden }}"  class="form-control border border-danger" required/>
+                        </div>
+                        <div class="col-12 col-sm-4 mb-3">
+                            <label for="unidad_orden">Unidad:</label>
+                            <input type="text" id="unidad_orden" name="unidad_orden" value="{{ orden.unidad_orden }}" class="form-control border border-danger" required/>
+                            <label for="cantidad_orden">Cantidad:</label>
+                            <input type="text" id="cantidad_orden" name="cantidad_orden" value="{{ orden.cantidad_orden }}" class="form-control border border-danger" required/>
+                        </div>
+                    </div> 
+                    <div class="row"> 
+                        <div class="col-12 col-sm-6 mb-3">
+                            <input type="submit" value="Editar" class="btn btn-danger form-control">
+                        </div>
+                        <div class="col-12 col-sm-6 mb-3">
+                            <a href="{% url 'orden_list_enviada' %}" class="btn btn-danger form-control">Volver</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+{% endblock %}

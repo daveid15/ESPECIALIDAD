@@ -1,0 +1,35 @@
+
+
+<!--ESTO YA NO LO USAMOS PERO NO LO QUIERO BORRAR PORQUE PUEDE SERVIR PARA UN FUTURO.-->
+
+
+{% extends 'core/base_admin.html' %}
+{% load static %}
+
+{% block content %}
+{% block extrahead %}
+
+{% endblock %}
+    <main role="main">
+        <div class="container col-12 mt-3">
+            <div class="col-12  mt-3 border">
+                <h3>Nuevo Grupo</h3> 
+                <form action="" method="post">
+                    {% csrf_token %}  
+                    <div class="row">                       
+                        <div class="col-12 col-sm-4 mb-3">
+                            <label for="name">Nombre Grupo (*)</label>
+                            <input type="text" class="form-control border border-danger" id="name" name="name" autofocus maxlength="254" required/>
+                        </div>
+                        <div class="col-12 col-sm-6 mb-3">
+                            <input type="submit" value="Crear Grupo" class="botton form-control" style="padding: 4px; margin-top: 4px;">
+                        </div>
+                        <div class="col-12 col-sm-6 mb-3">
+                            <a href="{% url 'users_main' %}"  class="botton form-control" style="padding: 4px; margin-top: 4px;">Volver</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'core/base_admin.html' %}
+{% load static %}
+{% block content %}
+{% block extrahead %}
+    <link rel="stylesheet" href="{% static 'css/user_detail.css' %}">
+{% endblock %}
+
+<main role="main">
+    <div class="container col-12 mt-3">
+        <div class="col-12 mt-3 border">
+            <h3>Detalles del Usuario</h3>
+            <div class="user-details">
+                <p><strong>Nombre:</strong> {{ user_data.first_name }}</p>
+                <p><strong>Apellido:</strong> {{ user_data.last_name }}</p>
+                <p><strong>Correo:</strong> {{ user_data.email }}</p>
+                <p><strong>Teléfono:</strong> {{ profile_data.mobile }}</p>
+                <p><strong>Dirección:</strong> {{ profile_data.address }}</p>
+                <p><strong>Región:</strong> {{ profile_data.region }}</p>
+                <!-- Agrega aquí cualquier otro detalle que desees mostrar -->
+            </div>
+            <a href="{% url 'list_user_active' profile_data.group_id %}" class="btn btn-primary">Volver</a>
+        </div>
+    </div>
+</main>
+
+{% endblock %}
+

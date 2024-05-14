@@ -1,0 +1,44 @@
+{% extends 'core/base_admin.html' %}
+{% load static %}
+{% block content %}
+{% block extrahead %}
+{% endblock %}
+    <header class='mb-4'>
+        <h2 class='h2 medium text-blue'>Carga Masiva Habilidad</h2>
+    </header>
+    {%if profiles.group_id == 1 %}
+        <div class="col-md-11">
+            <div class="mb-3">
+                <div class="d-flex flex-column align-items-center align-items-lg-start">
+                    <form action="{% url 'ejemplos_carga_masiva_save' %}" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="col-12 col-lg-12 row row-cols-1 row-cols-md-1 g-2 p-lg-0-5">
+                            <div class="mb-0 col-md-12">
+                                <label for="category_name" class="form-label"><a href="{% url 'import_file' %}">Descarga archivo de importación</a></label>
+                                <input type="file" name="myfile" class="form-control" required>
+                                <div class="feedback body--small normal"></div>
+                            </div>
+                            <div class="row">  
+                                <div class="col-12 col-sm-6">
+                                    <button class="button form-control mt-2" type="submit">Cargar</button>
+                                </div>
+                                <div class="col-12 col-sm-6">
+                                    <a href="{% url 'ejemplos_main' %}" class="button button--gray form-control mt-2">Volver</a>
+                                </div>
+                            </div>                        
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="row">
+            <div class="col-12 col-sm-8 mb-3">
+                <p class='text-blue'>No cuenta con acceso a esta vista</p>
+            </div>
+            <div class="col-12 col-sm-4 mb-3">
+                <a href="{% url 'ejemplos_main'%}" class="button button--gray form-control">Volver</a>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

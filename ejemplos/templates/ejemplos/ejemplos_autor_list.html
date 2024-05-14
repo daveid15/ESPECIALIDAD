@@ -1,0 +1,7 @@
+{%for l in autor_list %}
+    nombre: {{l.nombre}}<br/>
+{% endfor %}
+</br>
+<a href="{% url 'ejemplos_autor_new' %}">Nuevo Autor</a>
+</br>
+<a href="{% url 'ejemplos_proyect_new' %}">Nuevo Proyecto</a>

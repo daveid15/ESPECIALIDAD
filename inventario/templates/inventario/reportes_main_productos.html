@@ -1,0 +1,59 @@
+{% extends 'core/base_admin.html' %}
+{% load static %}
+{% block content %}
+    {% block extra_css %}    
+    {% endblock extra_css %}    
+    <header class='mb-5'>
+        <div class="row">
+            <div class="col-12 col-sm-8 mb-3">
+                <h2 class='h2 medium text-blue'>Módulo Reportes</h2>
+            </div>
+            <div class="col-12 col-sm-4 mb-3">
+                <a href="{% url 'producto_list'%}" class="button button--gray form-control">Volver</a>
+            </div>
+        </div>
+        <hr/>
+        <div class="row">
+            <div class="col-12 col-sm-12 mt-12 mb-3">
+                <form action="{% url 'reporte_producto_filtro' %}" method="post">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-xl-4 col-md-12 col-sm-12 mt-2">
+                            <label>&nbsp;</label>
+                            <h5>Reporte producto por nombre</h5>
+                        </div>
+                        <div class="col-xl-5 col-md-12 col-sm-12 mt-2">
+                            <input type="text" name="product_name" class="form-control" placeholder="Ingrese un nombre" required>
+                        </div>
+                        <div class="col-xl-3 col-md-12 col-sm-12 mt-2">
+                            <div class="d-flex justify-content-center mx-0-5--custom">
+                                <button type="submit" class="button">Generar</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <hr/>
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-xl-4 col-md-12 col-sm-12 mt-2">
+                            <label>&nbsp;</label>
+                            <h5>Agregue un segundo reporte</h5>
+                        </div>
+                        <div class="col-xl-5 col-md-12 col-sm-12 mt-2">
+                        </div>
+                        <div class="col-xl-3 col-md-12 col-sm-12 mt-2">
+                            <div class="d-flex justify-content-center mx-0-5--custom">
+                                <button type="submit" class="button">Generar</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <hr/>
+
+            </div>
+        </div>
+    </header>
+    {% block extrajs %}    
+    {% endblock extrajs %}    
+{% endblock %}

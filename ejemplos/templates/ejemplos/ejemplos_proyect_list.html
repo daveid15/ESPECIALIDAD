@@ -1,0 +1,10 @@
+{%for l in proyect_list %}
+    nombre: {{l.nombre}}<br/>
+    palabras clave: {{l.palabras_clave}}
+    <a href="{% url 'ejemplos_proyect_edit' l.id %}">Edita</a>
+    <br/>
+{% endfor %}
+</br>
+<a href="{% url 'ejemplos_autor_new' %}">Nuevo Autor</a>
+</br>
+<a href="{% url 'ejemplos_proyect_new' %}">Nuevo Proyecto</a>

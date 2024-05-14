@@ -1,0 +1,34 @@
+{% extends 'core/base_admin.html' %}
+{% load static %}
+{% block content %}
+{% block extrahead %}
+{% endblock %}
+    <main role="main">
+        <div class="container col-12 mt-3">
+            <div class="col-12  mt-3 border">
+                <h3>Carga Masiva Users</h3> 
+                {%if profiles.group_id == 1 %}
+                    <div class="col-12">
+                        <form action="{% url 'carga_masiva_user_save' %}" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="row">  
+                                <div class="col-12 col-sm-6 mb-3">
+                                    <a href="{% url 'import_file_user' %}">Descarga archivo de importación</a>
+                                </div>   
+                                <div class="col-12 col-sm-6 mb-3">
+                                    <input type="file" name="myfile" class="form-control border border-danger" required>
+                                </div>   
+                                <div class="col-12 col-sm-3">
+                                    <button class="botton form-control" style="padding: 4px; margin-top: 4px;" type="submit">Cargar</button>
+                                </div>
+                                <div class="col-12 col-sm-3">
+                                    <a href="{% url 'users_main' %}" class="botton form-control" style="padding: 4px; margin-top: 4px;">Volver</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </main>
+{% endblock %}
