@@ -341,7 +341,7 @@ def list_user_active(request,group_id,page=None):
         profile_data = Profile.objects.get(user_id=us.id)
         name = us.first_name+' '+us.last_name
         user_all.append({'id':us.id,'user_name':us.username,'name':name,'mail':us.email})
-    paginator = Paginator(user_all, 30)  
+    paginator = Paginator(user_all, 2)  
     user_list = paginator.get_page(page)
     template_name = 'administrator/list_user_active.html'
     return render(request,template_name,{'profiles':profiles,'group':group,'user_list':user_list,'paginator':paginator,'page':page})

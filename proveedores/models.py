@@ -49,7 +49,6 @@ class Producto(models.Model):
 class Orden_compra(models.Model):
     proveedor_orden = models.CharField(max_length=100)
     producto_orden = models.CharField(max_length=100)
-    unidad_orden = models.CharField(max_length=100)
     cantidad_orden = models.CharField(max_length=100)
     
     ESTADOS_ORDEN = [

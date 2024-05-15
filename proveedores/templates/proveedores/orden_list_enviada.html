@@ -27,7 +27,6 @@
                     <th width="10%" scope="col">Proveedor</th>
                     <th width="10%" scope="col">Producto</th>
                     <th width="10%" scope="col">Cantidad</th>
-                    <th width="10%" scope="col">Unidad</th>
                     <th width="10%" scope="col">Acciones</th>
                     <th width="10%" scope="col">Estado</th>
                 </tr>
@@ -38,13 +37,11 @@
                         <td>{{ orden.proveedor_orden }}</td>
                         <td>{{ orden.producto_orden }}</td>
                         <td>{{ orden.cantidad_orden }}</td>
-                        <td>{{ orden.unidad_orden }}</td>
                         <td>
                             <a href="{% url 'detalle_orden_de_compra_enviada' orden_id=orden.id %}" class="btn btn-primary">Ver</a>
                             <a href="{% url 'editar_orden' orden_id=orden.id %}" class="btn btn-secondary">Editar</a> <!-- Botón Editar -->
                         </td>
                         <td>
-                        
                             <!-- Modal -->
                             <div class="modal fade" id="estadoOrden{{ orden.id }}" tabindex="-1" aria-labelledby="estadoOrden{{ orden.id }}Label" aria-hidden="true">
                                 <div class="modal-dialog">
@@ -55,22 +52,20 @@
                                         <div class="modal-body">
                                             <form id="estadoForm{{ orden.id }}" method="post" action="{% url 'cambiar_estado_orden_enviada' orden.id %}">
                                                 {% csrf_token %}
-                                                    <div class="col-sm-8 d-flex justify-content-between align-items-center">
-                                                        <select name="nuevo_estado" id="nuevo_estado" class="form-select me-2">
-                                                            <option value="" selected disabled>Seleccione un estado</option>
-                                                            <option value="aceptado">Aceptado</option>
-                                                            <option value="rechazado">Rechazado</option>
-                                                            <option value="anulado">Anulado</option>
-                                                        </select>
-                                                        <button type="submit" class="btn btn-primary">Enviar</button>
-                                                    </div>
+                                                <div class="col-sm-8 d-flex justify-content-between align-items-center">
+                                                    <select name="nuevo_estado" id="nuevo_estado" class="form-select me-2">
+                                                        <option value="" selected disabled>Seleccione un estado</option>
+                                                        <option value="aceptado">Aceptado</option>
+                                                        <option value="rechazado">Rechazado</option>
+                                                        <option value="anulado">Anulado</option>
+                                                    </select>
+                                                    <button type="button" class="btn btn-primary" onclick="confirmarEnvio('{{ orden.id }}')">Enviar</button>
                                                 </div>
                                             </form>
-                                        </div>                                                                               
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </tr>
                         </td>
                     </tr>
                 {% endfor %}
@@ -115,13 +110,14 @@
             <a href="{% url 'lista_orden' grupo_id=1 %}" class="button">Regresar</a>
         </div>    
     </div>
-
-    <script>
-        function enviarFormulario(ordenId) {
-            document.getElementById('estadoForm' + ordenId).submit();
-        }
-    </script>
     
     {% block extrajs %}    
+    <script>
+        function confirmarEnvio(ordenId) {
+            if (confirm("¿Estás seguro de cambiar el estado de ésta órden?")) {
+                document.getElementById('estadoForm' + ordenId).submit();
+            }
+        }
+    </script>
     {% endblock extrajs %}    
 {% endblock %}

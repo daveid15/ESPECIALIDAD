@@ -320,21 +320,6 @@ def descarga_reporte(request):
             return redirect('proveedor_list')
 
 #Órden de Compraa
-'''
-@login_required
-def orden_crear(request):
-    profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 2:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
-        return redirect('check_group_main')
-    #Consulta en la base de Datos para llamar los datos de Proveedores y colocarlos en el select
-    proveedores = Proveedor.objects.all()
-    #Consulta en la base de Datos para llamar los datos de Productos y colocarlos en el select
-    productos = Product.objects.all()
-    template_name = 'proveedores/orden_crear.html'
-    print(productos)
-    return render(request, template_name, {'profiles': profiles, 'proveedores': proveedores, 'productos': productos})
-    '''
 
 @login_required
 def orden_save(request):
@@ -347,18 +332,16 @@ def orden_save(request):
     if request.method == 'POST':
         proveedor_orden = request.POST.get('proveedor_orden')
         producto_orden = request.POST.get('producto_orden')
-        unidad_orden = request.POST.get('unidad_orden')
         cantidad_orden = request.POST.get('cantidad_orden')
         
 
-        if proveedor_orden == '' or producto_orden == '' or unidad_orden == '' or cantidad_orden == '':
+        if proveedor_orden == '' or producto_orden == '' or cantidad_orden == '':
             messages.add_message(request, messages.INFO, 'Debes ingresar toda la información')
             return render(request, template_name, {'profiles': profile})
 
         orden_save = Orden_compra(
             proveedor_orden=proveedor_orden,
             producto_orden=producto_orden,
-            unidad_orden=unidad_orden,
             cantidad_orden=cantidad_orden
         )
 
@@ -398,7 +381,6 @@ def orden_list_enviada(request, page=None, search=None):
     if search:
         ordenes = ordenes.filter(Q(proveedor_orden__icontains=search) |
                                  Q(producto_orden__icontains=search) |
-                                 Q(unidad_orden__icontains=search) |
                                  Q(cantidad_orden__icontains=search))
 
     paginator = Paginator(ordenes, 10)
@@ -419,7 +401,6 @@ def orden_list_aceptada(request, page=None, search=None):
     if search:
         ordenes = ordenes.filter(Q(proveedor_orden__icontains=search) |
                                  Q(producto_orden__icontains=search) |
-                                 Q(unidad_orden__icontains=search) |
                                  Q(cantidad_orden__icontains=search))
 
     paginator = Paginator(ordenes, 10)
@@ -440,7 +421,6 @@ def orden_list_rechazada(request, page=None, search=None):
     if search:
         ordenes = ordenes.filter(Q(proveedor_orden__icontains=search) |
                                  Q(producto_orden__icontains=search) |
-                                 Q(unidad_orden__icontains=search) |
                                  Q(cantidad_orden__icontains=search))
 
     paginator = Paginator(ordenes, 10)
@@ -461,7 +441,6 @@ def orden_list_anulada(request, page=None, search=None):
     if search:
         ordenes = ordenes.filter(Q(proveedor_orden__icontains=search) |
                                  Q(producto_orden__icontains=search) |
-                                 Q(unidad_orden__icontains=search) |
                                  Q(cantidad_orden__icontains=search))
 
     paginator = Paginator(ordenes, 10)
@@ -484,14 +463,12 @@ def orden_crear(request):
     if request.method == 'POST':
         proveedor_orden = request.POST.get('proveedor_orden')
         producto_orden = request.POST.get('producto_orden')
-        unidad_orden = request.POST.get('unidad_orden')
         cantidad_orden = request.POST.get('cantidad_orden')
 
         # Mostrar los datos recibidos del formulario
         print("Datos recibidos del formulario:")
         print(f"Proveedor: {proveedor_orden}")
         print(f"Producto: {producto_orden}")
-        print(f"Unidad: {unidad_orden}")
         print(f"Cantidad: {cantidad_orden}")
 
         # Intentar crear la nueva orden de compra
@@ -499,7 +476,6 @@ def orden_crear(request):
             nueva_orden = Orden_compra.objects.create(
                 proveedor_orden=proveedor_orden,
                 producto_orden=producto_orden,
-                unidad_orden=unidad_orden,
                 cantidad_orden=cantidad_orden,
                 # Puedes agregar más campos aquí según sea necesario
             )
@@ -613,17 +589,21 @@ def detalle_orden_de_compra_anulada(request, orden_id):
 @login_required
 def editar_orden(request, orden_id):
     orden = get_object_or_404(Orden_compra, pk=orden_id)
+    proveedor_nombre = orden.proveedor_orden
+    producto_nombre = orden.producto_orden
+    cantidad_nombre = orden.cantidad_orden
+    proveedores = Proveedor.objects.all()
+    productos = Product.objects.all()
+    
     if request.method == 'POST':
         # Obtener los datos del formulario POST
         proveedor = request.POST.get('proveedor_orden')
         producto = request.POST.get('producto_orden')
-        unidad = request.POST.get('unidad_orden')
         cantidad = request.POST.get('cantidad_orden')
         
         # Actualizar los campos de la orden de compra
         orden.proveedor_orden = proveedor
         orden.producto_orden = producto
-        orden.unidad_orden = unidad
         orden.cantidad_orden = cantidad
 
         # Guardar los cambios en la base de datos
@@ -636,4 +616,6 @@ def editar_orden(request, orden_id):
         return redirect('orden_list_enviada')
 
     # Si la solicitud es GET, renderizar el formulario de edición
-    return render(request, 'editar_orden.html', {'orden': orden})
+    return render(request, 'editar_orden.html', {'orden': orden, 'proveedores': proveedores, 
+                                                 'productos': productos, 'proveedor_nombre':proveedor_nombre, 
+                                                 'producto_nombre':producto_nombre, 'cantidad_nombre':cantidad_nombre})

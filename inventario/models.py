@@ -26,7 +26,7 @@ class Product(models.Model):
     supply_total =  models.CharField(max_length=240, null=True, blank=True)
 
     def get_nombre_producto(self):
-        return f'{self.supply_name} {self.supply_code}'
+        return f'{self.supply_name} ({self.supply_unit})'
     
     class Meta:
         verbose_name = 'Product'

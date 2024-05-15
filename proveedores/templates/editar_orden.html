@@ -1,46 +1,47 @@
 {% extends 'core/base_admin.html' %}
 {% load static %}
+{% block title %}{% endblock %}
 {% block content %}
-{% block extrahead %}
-{% endblock %}
-
-<!---->
-    <main role="main">
-        <div class="container col-12 mt-3">
-            <div class="col-12  mt-3 border">
-                <h3>Editar Orden de Compra</h3> 
-                {% if messages %}
-                    <div>
-                        {% for message in messages %}
-                            {{ message }}
-                        {% endfor %}
-                    </div>
-                {% endif %}
-                <form action="" method="post">
+    {% block extra_css %}    
+    {% endblock extra_css %}    
+    <header class='mb-4'>
+        <h2 class='h2 medium text-blue'> Editar Orden de Compra</h2>
+    </header>
+    <div class="col-md-11">
+        <div class="mb-3">
+            <div class="d-flex flex-column align-items-center align-items-lg-start">
+                <form method="post" action="{% url 'editar_orden' orden.id %}">
                     {% csrf_token %}
                     <input type="hidden" value="{{ orden.id }}" name="orden_id" id="orden_id">
-                    <div class="row"> 
-                        <div class="col-12 col-sm-8 mb-3">
-                            <label for="proveedor_orden">Proveedor:</label>
-                            <input type="text" id="proveedor_orden" name="proveedor_orden" value="{{ orden.proveedor_orden }}"  class="form-control border border-danger" required/>
-                            <label for="producto_orden">Producto:</label>
-                            <input type="text" id="producto_orden" name="producto_orden" value="{{ orden.producto_orden }}"  class="form-control border border-danger" required/>
+                    <div class="col-12 col-lg-12 row row-cols-1 row-cols-md-1 g-2 p-lg-0-5">
+                        <div class="mb-0 col-md-6">
+                            <label for="proveedor_orden" class="form-label">Proveedor</label>
+                            <select class="form-select" name="proveedor_orden" id="proveedor_orden" required>
+                                <option value="">{{proveedor_nombre}}</option>
+                                {% for proveedor in proveedores %}
+                                    <option value="{{ proveedor.get_nombre_completo }}">{{ proveedor.get_nombre_completo }}</option>
+                                {% endfor %}
+                            </select>
                         </div>
-                        <div class="col-12 col-sm-4 mb-3">
-                            <label for="unidad_orden">Unidad:</label>
-                            <input type="text" id="unidad_orden" name="unidad_orden" value="{{ orden.unidad_orden }}" class="form-control border border-danger" required/>
-                            <label for="cantidad_orden">Cantidad:</label>
-                            <input type="text" id="cantidad_orden" name="cantidad_orden" value="{{ orden.cantidad_orden }}" class="form-control border border-danger" required/>
+                        <div class="mb-0 col-md-6">
+                            <label for="producto_orden" class="form-label"> Producto </label>
+                            <select class="form-select" name="producto_orden" id="producto_orden" required>
+                                <option value="">{{producto_nombre}}</option>
+                                {% for producto in productos %}
+                                    <option value="{{ producto.get_nombre_producto }}">{{ producto.get_nombre_producto }}</option>
+                                {% endfor %}
+                            </select>
                         </div>
-                    </div> 
-                    <div class="row"> 
-                        <div class="col-12 col-sm-6 mb-3">
-                            <input type="submit" value="Editar" class="btn btn-danger form-control">
+                        <div class="mb-0 col-md-12">
+                            <label for="cantidad_orden" class="form-label"> Cantidad </label>
+                            <input type="number" class="form-control" name="cantidad_orden" id="cantidad_orden" placeholder={{cantidad_nombre}} style="text-transform: capitalize;" required>
+                        </div> 
+                        <div class="d-flex justify-content-center mx-0-5--custom">
+                            <input type="submit" value="Editar" class="button">
                         </div>
-                        <div class="col-12 col-sm-6 mb-3">
-                            <a href="{% url 'orden_list_enviada' %}" class="btn btn-danger form-control">Volver</a>
+                        <div class="d-flex justify-content-center mx-0-5--custom">
+                            <a href="{% url 'orden_list_enviada' %}" class="button">Regresa</a>
                         </div>
-                    </div>
                 </form>
             </div>
         </div>
