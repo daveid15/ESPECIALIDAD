@@ -71,44 +71,26 @@
                 {% endfor %}
             </tbody>
         </table>
-        <!-- Paginación -->
-        {% if paginator.num_pages > 1 %}
-            <div class="d-flex">
-                <nav aria-label="Page navigation example" class="ms-auto">
-                    <ul class="pagination pagination-table">
-                        {% if ordenes.has_previous %}
-                            <li class="page-item">
-                                <a class="page-link" href="?page={{ ordenes.previous_page_number }}&search={{ search }}" aria-label="Previous">
-                                    <span aria-hidden="true">&laquo;</span>
-                                </a>
-                            </li>
-                        {% else %}
-                            <li class="page-item disabled">
-                                <a class="page-link" href="#" tabindex="-1">&laquo;</a>
-                            </li>                        
-                        {% endif %}
-                        {% for i in paginator.page_range %}
-                            <li class="page-item {% if ordenes.number == i %}active{% endif %}">
-                                <a class="page-link" href="?page={{ i }}&search={{ search }}">{{ i }}</a>
-                            </li>                        
-                        {% endfor %}
-                        {% if ordenes.has_next %}
-                            <li class="page-item">
-                                <a class="page-link" href="?page={{ ordenes.next_page_number }}&search={{ search }}">&raquo;</a>
-                            </li>
-                        {% else %}
-                            <li class="page-item disabled">
-                                <a class="page-link" href="#" tabindex="-1">&raquo;</a>
-                            </li>
-                        {% endif %}
-                    </ul>
-                </nav>
-            </div>
-        {% endif %}  
-        <!-- Paginación --> 
         <div class="d-flex justify-content-center mx-0-5--custom">
             <a href="{% url 'lista_orden' grupo_id=1 %}" class="button">Regresar</a>
         </div>    
+    </div>
+    <div class="pagination">
+        <span class="step-links">
+            {% if pagina_obj.has_previous %}
+                <a href="?pagina=1">&laquo; Primera</a>
+                <a href="?pagina={{ pagina_obj.previous_page_number }}">Anterior</a>
+            {% endif %}
+    
+            <span class="current">
+                Página {{ pagina_obj.number }} de {{ pagina_obj.paginator.num_pages }}.
+            </span>
+    
+            {% if pagina_obj.has_next %}
+                <a href="?pagina={{ pagina_obj.next_page_number }}">Siguiente</a>
+                <a href="?pagina={{ pagina_obj.paginator.num_pages }}">Última &raquo;</a>
+            {% endif %}
+        </span>
     </div>
     
     {% block extrajs %}    

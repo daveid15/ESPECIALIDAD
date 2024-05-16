@@ -321,38 +321,6 @@ def descarga_reporte(request):
 
 #Órden de Compraa
 
-@login_required
-def orden_save(request):
-    profile = Profile.objects.get(user_id=request.user.id)
-    if profile.group_id != 1:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una área para la que no tiene permisos')
-        return redirect('check_group_main')
-    
-    
-    if request.method == 'POST':
-        proveedor_orden = request.POST.get('proveedor_orden')
-        producto_orden = request.POST.get('producto_orden')
-        cantidad_orden = request.POST.get('cantidad_orden')
-        
-
-        if proveedor_orden == '' or producto_orden == '' or cantidad_orden == '':
-            messages.add_message(request, messages.INFO, 'Debes ingresar toda la información')
-            return render(request, template_name, {'profiles': profile})
-
-        orden_save = Orden_compra(
-            proveedor_orden=proveedor_orden,
-            producto_orden=producto_orden,
-            cantidad_orden=cantidad_orden
-        )
-
-        orden_save.save()
-        template_name = 'proveedores/orden_crear.html'
-        return render(request, template_name, {'profiles': profile})
-
-    
-    else:
-        messages.add_message(request, messages.INFO, 'Error en el método de envío')
-
 
 @login_required
 def orden_main(request):
@@ -376,18 +344,37 @@ def orden_list_enviada(request, page=None, search=None):
     if profile.group_id != 1:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a un área para la que no tienes permisos')
         return redirect('check_group_main')
+    
+    
     search = request.GET.get('search')
     ordenes = Orden_compra.objects.filter(estado='enviado')
+    
     if search:
         ordenes = ordenes.filter(Q(proveedor_orden__icontains=search) |
                                  Q(producto_orden__icontains=search) |
                                  Q(cantidad_orden__icontains=search))
 
-    paginator = Paginator(ordenes, 10)
-    page_number = request.GET.get('page')
-    ordenes = paginator.get_page(page_number)
+    
+    paginator = Paginator(ordenes, 2)
+    pagina_numero = request.GET.get('pagina')
+    ordenes = paginator.get_page(pagina_numero)
 
-    return render(request, 'proveedores/orden_list_enviada.html', {'ordenes': ordenes, 'search': search})
+    try:
+        pagina_numero = int(pagina_numero)  # Convertir a entero
+    except TypeError:
+        pagina_numero = 1  # Si no hay número de página, mostrar la primera
+
+    try:
+        pagina_obj = paginator.page(pagina_numero)
+    except PageNotAnInteger:
+        # Si la página no es un entero, mostrar la primera página
+        pagina_obj = paginator.page(1)
+    except EmptyPage:
+        # Si la página está fuera de rango, mostrar la última página de resultados
+        pagina_obj = paginator.page(paginator.num_pages)
+    
+
+    return render(request, 'proveedores/orden_list_enviada.html', {'ordenes': ordenes, 'search': search, 'pagina_obj':pagina_obj})
 
 
 @login_required
@@ -402,10 +389,6 @@ def orden_list_aceptada(request, page=None, search=None):
         ordenes = ordenes.filter(Q(proveedor_orden__icontains=search) |
                                  Q(producto_orden__icontains=search) |
                                  Q(cantidad_orden__icontains=search))
-
-    paginator = Paginator(ordenes, 10)
-    page_number = request.GET.get('page')
-    ordenes = paginator.get_page(page_number)
 
     return render(request, 'proveedores/orden_list_aceptada.html', {'ordenes': ordenes, 'search': search})
 
@@ -449,9 +432,49 @@ def orden_list_anulada(request, page=None, search=None):
 
     return render(request, 'proveedores/orden_list_anulada.html', {'ordenes': ordenes, 'search': search})
 
+
+@login_required
+def orden_save(request):
+    profile = Profile.objects.get(user_id=request.user.id)
+    print("holaaaaaaa")
+    if profile.group_id != 1:
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a una área para la que no tiene permisos')
+        return redirect('check_group_main')
+    
+    proveedores = Proveedor.objects.all()
+    productos = Product.objects.all()
+    
+    
+    if request.method == 'POST':
+        proveedor_orden = request.POST.get('proveedor_orden')
+        producto_orden = request.POST.get('producto_orden')
+        cantidad_orden = request.POST.get('cantidad_orden')
+        
+
+        if proveedor_orden == '' or producto_orden == '' or cantidad_orden == '':
+            messages.add_message(request, messages.INFO, 'Debes ingresar toda la información')
+            return render(request, template_name, {'profiles': profile})
+
+        orden_save = Orden_compra(
+            proveedor_orden=proveedor_orden,
+            producto_orden=producto_orden,
+            cantidad_orden=cantidad_orden
+        )
+
+        orden_save.save()
+        template_name = 'proveedores/orden_crear.html'
+        messages.add_message(request, messages.INFO, 'Orden creada con éxito')
+        redirect('orden_crear')
+        return render(request, template_name, {'profiles': profile, 'proveedores': proveedores, 'productos': productos})
+
+    
+    else:
+        messages.add_message(request, messages.INFO, 'Error en el método de envío')
+
 @login_required
 def orden_crear(request):
     profiles = Profile.objects.get(user_id=request.user.id)
+    print("ajsdjahsd")
     if profiles.group_id not in [1, 2]:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a un área para la que no tiene permisos')
         return redirect('check_group_main')
@@ -459,17 +482,12 @@ def orden_crear(request):
     proveedores = Proveedor.objects.all()
     productos = Product.objects.all()
     template_name = 'proveedores/orden_crear.html'
+    '''
 
     if request.method == 'POST':
         proveedor_orden = request.POST.get('proveedor_orden')
         producto_orden = request.POST.get('producto_orden')
         cantidad_orden = request.POST.get('cantidad_orden')
-
-        # Mostrar los datos recibidos del formulario
-        print("Datos recibidos del formulario:")
-        print(f"Proveedor: {proveedor_orden}")
-        print(f"Producto: {producto_orden}")
-        print(f"Cantidad: {cantidad_orden}")
 
         # Intentar crear la nueva orden de compra
         try:
@@ -477,16 +495,16 @@ def orden_crear(request):
                 proveedor_orden=proveedor_orden,
                 producto_orden=producto_orden,
                 cantidad_orden=cantidad_orden,
-                # Puedes agregar más campos aquí según sea necesario
             )
+            print("¡Orden de compra creada con éxito!")
             # Guardar el ID de la nueva orden en la sesión
             request.session['nueva_orden_id'] = nueva_orden.id
-            print("¡Orden de compra creada con éxito!")
         except Exception as e:
             print(f"Error al crear la orden de compra: {e}")
 
         # Redirigir al usuario al listado de órdenes
         return redirect('lista_orden')
+        '''
     
     return render(request, template_name, {'profiles': profiles, 'proveedores': proveedores, 'productos': productos})
 
@@ -605,6 +623,10 @@ def editar_orden(request, orden_id):
         orden.proveedor_orden = proveedor
         orden.producto_orden = producto
         orden.cantidad_orden = cantidad
+        
+        if proveedor_nombre == proveedor and producto_nombre == producto and cantidad_nombre == cantidad:
+            messages.success(request, 'No se ha realizado ningún cambio')
+            return redirect('orden_list_enviada')
 
         # Guardar los cambios en la base de datos
         orden.save()
