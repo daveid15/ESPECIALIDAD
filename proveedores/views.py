@@ -12,6 +12,7 @@ from django.utils.decorators import method_decorator
 from django.urls import reverse
 import json
 import pandas as pd
+from openpyxl import Workbook
 import xlwt
 from datetime import datetime
 from django.http import HttpResponse
@@ -216,65 +217,79 @@ def carga_masiva_proveedor(request):
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
         return redirect('check_group_main')
     template_name = 'proveedores/carga_masiva_proveedor.html'
-    return render(request,template_name,{'profiles':profile})
+    return render(request, template_name, {'profiles': profile})
 
 @login_required
 def import_file_proveedor(request):
-    profiles = Profile.objects.get(user_id = request.user.id)
+    profiles = Profile.objects.get(user_id=request.user.id)
     if profiles.group_id != 1:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
         return redirect('check_group_main')
-    response = HttpResponse(content_type='application/ms-excel')
-    response['Content-Disposition'] = 'attachment; filename="archivo_importacion_proveedors.xls"'
-    wb = xlwt.Workbook(encoding='utf-8')
-    ws = wb.add_sheet('carga_masiva')
-    row_num = 0
-    columns = ['proveedor_name','proveedor_mail','proveedor_phone']
-    font_style = xlwt.XFStyle()
-    font_style.font.bold = True
-    for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], font_style)
-    font_style = xlwt.XFStyle()
-    date_format = xlwt.XFStyle()
-    date_format.num_format_str = 'dd/MM/yyyy'
-    for row in range(1):
-        row_num += 1
-        for col_num in range(3):
-            if col_num == 0:
-                ws.write(row_num, col_num, 'ej: Nombre proveedor' , font_style)
-            if col_num == 1:                           
-                ws.write(row_num, col_num, 'abc@gmail.com' , font_style)
-            if col_num == 2:                           
-                ws.write(row_num, col_num, '55642334' , font_style)
+    
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename="archivo_importacion_proveedors.xlsx"'
+
+    wb = Workbook()
+    ws = wb.active
+    ws.title = 'carga_masiva'
+
+    columns = ['proveedor_rut', 'proveedor_name', 'proveedor_last_name', 'proveedor_mail', 'proveedor_phone', 'proveedor_address', 'proveedor_region', 'proveedor_comuna']
+    ws.append(columns)
+
+    example_data = [
+        'ej: Rut',
+        'ej: Nombre proveedor',
+        'ej: Apellido proveedor',
+        'abc@gmail.com',
+        '55642334',
+        'ej: Direccion',
+        'ej: Region',
+        'ej: Comuna'
+    ]
+    ws.append(example_data)
+
     wb.save(response)
-    return response  
+    return response
 
 @login_required
 def carga_masiva_proveedor_save(request):
-    profiles = Profile.objects.get(user_id = request.user.id)
+    profiles = Profile.objects.get(user_id=request.user.id)
     if profiles.group_id != 1:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
         return redirect('check_group_main')
 
     if request.method == 'POST':
-        #try:
-        print(request.FILES['myfile'])
-        data = pd.read_excel(request.FILES['myfile'])
-        df = pd.DataFrame(data)
-        acc = 0
-        for item in df.itertuples():    
-            proveedor_name = str(item[1])            
-            proveedor_mail = str(item[2])
-            proveedor_phone = str(item[3])
-            proveedor_save = Proveedor(
-                proveedor_name = proveedor_name,            
-                proveedor_mail = proveedor_mail,
-                proveedor_phone = proveedor_phone,
-  
+        try:
+            data = pd.read_excel(request.FILES['myfile'], engine='openpyxl')
+            df = pd.DataFrame(data)
+            acc = 0
+            for item in df.itertuples():
+                proveedor_rut = str(item[1])
+                proveedor_name = str(item[2])
+                proveedor_last_name = str(item[3])
+                proveedor_mail = str(item[4])
+                proveedor_phone = str(item[5])
+                proveedor_address = str(item[6])
+                proveedor_region = str(item[7])
+                proveedor_comuna = str(item[8])
+                
+                proveedor_save = Proveedor(
+                    proveedor_rut=proveedor_rut,
+                    proveedor_name=proveedor_name,
+                    proveedor_last_name=proveedor_last_name,
+                    proveedor_mail=proveedor_mail,
+                    proveedor_phone=proveedor_phone,
+                    proveedor_address=proveedor_address,
+                    proveedor_region=proveedor_region,
+                    proveedor_comuna=proveedor_comuna
                 )
-            proveedor_save.save()
-        messages.add_message(request, messages.INFO, 'Carga masiva finalizada, se importaron '+str(acc)+' registros')
-        return redirect('carga_masiva_proveedor')
+                proveedor_save.save()
+                acc += 1
+            messages.add_message(request, messages.INFO, 'Carga masiva finalizada, se importaron ' + str(acc) + ' registros')
+            return redirect('carga_masiva_proveedor')
+        except Exception as e:
+            messages.add_message(request, messages.ERROR, f'Error al procesar el archivo: {str(e)}')
+            return redirect('carga_masiva_proveedor')
     
 @login_required
 def descarga_reporte(request):
