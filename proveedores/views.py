@@ -465,6 +465,11 @@ def orden_save(request):
         producto_orden = request.POST.get('producto_orden')
         cantidad_orden = request.POST.get('cantidad_orden')
         
+        proveedor_instance = Proveedor.objects.get(proveedor_name = proveedor_orden)
+        proveedor_orden = proveedor_instance
+
+        producto_instance = Product.objects.get(supply_name = producto_orden)
+        producto_orden = producto_instance
 
         if proveedor_orden == '' or producto_orden == '' or cantidad_orden == '':
             messages.add_message(request, messages.INFO, 'Debes ingresar toda la información')

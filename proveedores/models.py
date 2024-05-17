@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import Group, User 
 from django.contrib.postgres.fields import ArrayField
+from inventario.models import Product
 
 class Proveedor(models.Model):
     proveedor_name = models.CharField(max_length=100, null=True, blank=True)
@@ -35,7 +36,7 @@ class OrdenCompra(models.Model):
         return f'Orden de compra {self.id}'
         '''
 
-
+'''
 class Producto(models.Model):
     nombre = models.CharField(max_length=100)
     proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE)
@@ -43,6 +44,7 @@ class Producto(models.Model):
     
     def __str__(self):
         return f'{self.nombre}'
+        '''
     
 '''
     
@@ -50,11 +52,13 @@ class Producto_orden(models.Model):
     proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE)
     '''
     
+
+    
 #Orden de Compra
 class Orden_compra(models.Model):
-    proveedor_orden = models.CharField(max_length=100)
-    producto_orden = models.CharField(max_length=100)
-    cantidad_orden = models.CharField(max_length=100)
+    proveedor_orden = models.ForeignKey(Proveedor, on_delete=models.CASCADE)
+    producto_orden = models.ForeignKey(Product, on_delete=models.CASCADE)
+    cantidad_orden = models.PositiveIntegerField()
     
     ESTADOS_ORDEN = [
         ('enviado', 'Enviado'),
