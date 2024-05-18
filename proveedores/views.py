@@ -18,10 +18,11 @@ from datetime import datetime
 from django.http import HttpResponse
 import traceback
 import os
-
+from django.db import transaction
+from django.views.decorators.csrf import csrf_protect
 
 from registration.models import Profile
-from proveedores.models import Proveedor, Orden_compra
+from proveedores.models import Proveedor, Orden_compra, Producto_Orden
 from inventario.models import Product
 from administrator.views import validar_email,validar_rut,validar_string,validar_numero
 # Create your views here.
@@ -447,49 +448,53 @@ def orden_list_anulada(request, page=None, search=None):
 
     return render(request, 'proveedores/orden_list_anulada.html', {'ordenes': ordenes, 'search': search})
 
-
 @login_required
 def orden_save(request):
     profile = Profile.objects.get(user_id=request.user.id)
-    print("holaaaaaaa")
     if profile.group_id != 1:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una área para la que no tiene permisos')
         return redirect('check_group_main')
-    
+
     proveedores = Proveedor.objects.all()
     productos = Product.objects.all()
-    
-    
+
     if request.method == 'POST':
         proveedor_orden = request.POST.get('proveedor_orden')
-        producto_orden = request.POST.get('producto_orden')
-        cantidad_orden = request.POST.get('cantidad_orden')
-        
-        proveedor_instance = Proveedor.objects.get(proveedor_name = proveedor_orden)
-        proveedor_orden = proveedor_instance
+        producto_orden = request.POST.getlist('producto_orden[]')
+        cantidad_orden = request.POST.getlist('cantidad_orden[]')
 
-        producto_instance = Product.objects.get(supply_name = producto_orden)
-        producto_orden = producto_instance
+        try:
+            proveedor_instance = Proveedor.objects.get(proveedor_name=proveedor_orden)
+        except Proveedor.DoesNotExist:
+            messages.add_message(request, messages.ERROR, 'Proveedor no encontrado')
+            return render(request, 'proveedores/orden_crear.html', {'profiles': profile, 'proveedores': proveedores, 'productos': productos})
 
-        if proveedor_orden == '' or producto_orden == '' or cantidad_orden == '':
+        if not producto_orden or not cantidad_orden:
             messages.add_message(request, messages.INFO, 'Debes ingresar toda la información')
-            return render(request, template_name, {'profiles': profile})
+            return render(request, 'proveedores/orden_crear.html', {'profiles': profile, 'proveedores': proveedores, 'productos': productos})
 
-        orden_save = Orden_compra(
-            proveedor_orden=proveedor_orden,
-            producto_orden=producto_orden,
-            cantidad_orden=cantidad_orden
-        )
+        try:
+            with transaction.atomic():
+                orden = Orden_compra(proveedor_orden=proveedor_instance)
+                orden.save()
 
-        orden_save.save()
-        template_name = 'proveedores/orden_crear.html'
-        messages.add_message(request, messages.INFO, 'Orden creada con éxito')
-        redirect('orden_crear')
-        return render(request, template_name, {'profiles': profile, 'proveedores': proveedores, 'productos': productos})
-
-    
+                for prod, cant in zip(producto_orden, cantidad_orden):
+                    producto = Product.objects.get(supply_name=prod)
+                    detalle = Producto_Orden(
+                        orden_id=orden,
+                        producto=producto,
+                        cantidad_orden=cant,
+                    )
+                    detalle.save()
+                messages.add_message(request, messages.SUCCESS, 'Orden creada con éxito')
+                return redirect('orden_crear')  # Redirige a la página de creación para limpiar el formulario
+        except Exception as e:
+            messages.add_message(request, messages.ERROR, f'Error al crear la orden: {str(e)}')
+            return render(request, 'proveedores/orden_crear.html', {'profiles': profile, 'proveedores': proveedores, 'productos': productos})
     else:
-        messages.add_message(request, messages.INFO, 'Error en el método de envío')
+        messages.add_message(request, messages.ERROR, 'Error en el método de envío')
+        return redirect('orden_crear')
+
 
 @login_required
 def orden_crear(request):
