@@ -496,29 +496,33 @@ def carga_masiva_user_save(request):
                 mobile = str(item[5])
                 address = str(item[6])
                 region = str(item[7])
-                                  
-                new_user = User.objects.create_user(
-                    username=rut,
-                    email=email,
-                    first_name=nombre,
-                    last_name=apellido,
-                    is_active=True  # Asegúrate de que el usuario esté activo
-                )
-                new_user.save()
+                rut_exist = User.objects.filter(username=rut).count() 
+                if rut_exist== 0:
+                    new_user = User.objects.create_user(
+                        username=rut,
+                        email=email,
+                        first_name=nombre,
+                        last_name=apellido,
+                        is_active=True  # Asegúrate de que el usuario esté activo
+                    )
+                    new_user.save()
 
-                # Crear perfil asociado
-                new_profile = Profile.objects.create(
-                    user=new_user,
-                    group_id=1,  # Ajusta esto según el grupo que corresponda
-                    mobile=mobile,
-                    address=address,  # Nuevo campo
-                    region=region     # Nuevo campo
-                )
-                new_profile.save()
+                    # Crear perfil asociado
+                    new_profile = Profile.objects.create(
+                        user=new_user,
+                        group_id=1,  # Ajusta esto según el grupo que corresponda
+                        mobile=mobile,
+                        address=address,  # Nuevo campo
+                        region=region     # Nuevo campo
+                    )
+                    new_profile.save()
 
-                acc += 1
-            messages.add_message(request, messages.INFO, 'Carga masiva finalizada, se importaron ' + str(acc) + ' registros')
-            return redirect('carga_masiva_user')
+                    acc += 1
+                    messages.add_message(request, messages.INFO, 'Carga masiva finalizada, se importaron ' + str(acc) + ' registros')
+                    return redirect('carga_masiva_user')
+            else:
+                messages.add_message(request, messages.INFO, 'El rut que esta tratando de ingresar, ya existe en nuestros registros')   
+                return redirect('carga_masiva_user')
         except Exception as e:
             messages.add_message(request, messages.ERROR, f'Error al procesar el archivo: {str(e)}')
             return redirect('carga_masiva_user')

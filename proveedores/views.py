@@ -80,22 +80,30 @@ def proveedor_save(request):
         if proveedor_name == '' or proveedor_last_name == '' or proveedor_rut == '' or proveedor_mail == '' or proveedor_address == '' or proveedor_region == '' or proveedor_comuna == '' or proveedor_phone ==  '':
             messages.add_message(request, messages.INFO, 'Debes ingresar toda la información')
             return redirect('proveedores_main')
-
-        proveedor_save = Proveedor(
-            proveedor_name=proveedor_name,
-            proveedor_last_name=proveedor_last_name,
-            proveedor_rut=proveedor_rut,
-            proveedor_mail=proveedor_mail,
-            proveedor_address=proveedor_address,
-            proveedor_region=proveedor_region,
-            proveedor_comuna=proveedor_comuna,
-            proveedor_phone=proveedor_phone,
-            proveedor_insumo=proveedor_insumo
-        )
-        proveedor_save.save()
-        messages.add_message(request, messages.INFO, 'Proveedor ingresado con éxito')
-        return redirect('proveedores_main')
-    
+        rut_exist = Proveedor.objects.filter(proveedor_rut=proveedor_rut).count() 
+        mail_exist = User.objects.filter(proveedor_mail=proveedor_mail).count()
+        if rut_exist == 0:
+            if mail_exist == 0:
+                proveedor_save = Proveedor(
+                    proveedor_name=proveedor_name,
+                    proveedor_last_name=proveedor_last_name,
+                    proveedor_rut=proveedor_rut,
+                    proveedor_mail=proveedor_mail,
+                    proveedor_address=proveedor_address,
+                    proveedor_region=proveedor_region,
+                    proveedor_comuna=proveedor_comuna,
+                    proveedor_phone=proveedor_phone,
+                    proveedor_insumo=proveedor_insumo
+                )
+                proveedor_save.save()
+                messages.add_message(request, messages.INFO, 'Proveedor ingresado con éxito')
+                return redirect('proveedores_main')
+            else:
+                messages.add_message(request, messages.INFO, 'El correo que esta tratando de ingresar, ya existe en nuestros registros')
+                return redirect('proveedores_main') 
+        else:
+            messages.add_message(request, messages.INFO, 'El rut que esta tratando de ingresar, ya existe en nuestros registros')  
+            return redirect('proveedores_main')
     else:
         messages.add_message(request, messages.INFO, 'Error en el método de envío')
         return redirect('check_group_main')
@@ -277,21 +285,25 @@ def carga_masiva_proveedor_save(request):
                 proveedor_address = str(item[6])
                 proveedor_region = str(item[7])
                 proveedor_comuna = str(item[8])
-                
-                proveedor_save = Proveedor(
-                    proveedor_rut=proveedor_rut,
-                    proveedor_name=proveedor_name,
-                    proveedor_last_name=proveedor_last_name,
-                    proveedor_mail=proveedor_mail,
-                    proveedor_phone=proveedor_phone,
-                    proveedor_address=proveedor_address,
-                    proveedor_region=proveedor_region,
-                    proveedor_comuna=proveedor_comuna
-                )
-                proveedor_save.save()
-                acc += 1
-            messages.add_message(request, messages.INFO, 'Carga masiva finalizada, se importaron ' + str(acc) + ' registros')
-            return redirect('carga_masiva_proveedor')
+                rut_exist = User.objects.filter(proveedor_rut=proveedor_rut).count() 
+                if rut_exist== 0:
+                    proveedor_save = Proveedor(
+                        proveedor_rut=proveedor_rut,
+                        proveedor_name=proveedor_name,
+                        proveedor_last_name=proveedor_last_name,
+                        proveedor_mail=proveedor_mail,
+                        proveedor_phone=proveedor_phone,
+                        proveedor_address=proveedor_address,
+                        proveedor_region=proveedor_region,
+                        proveedor_comuna=proveedor_comuna
+                    )
+                    proveedor_save.save()
+                    acc += 1
+                    messages.add_message(request, messages.INFO, 'Carga masiva finalizada, se importaron ' + str(acc) + ' registros')
+                    return redirect('carga_masiva_proveedor')
+                else:
+                    messages.add_message(request, messages.INFO, 'El rut que esta tratando de ingresar, ya existe en nuestros registros')   
+                    return redirect('carga_masiva_user')
         except Exception as e:
             messages.add_message(request, messages.ERROR, f'Error al procesar el archivo: {str(e)}')
             return redirect('carga_masiva_proveedor')
