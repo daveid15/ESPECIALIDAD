@@ -34,7 +34,7 @@ class Product(models.Model):
         ordering = ['supply_name']
     
     def __str__(self):
-        return self.get_nombre_producto()
+        return self.supply_name
 """
 class Insumos(models.Model):
     insumos_name = models.CharField(max_length=100, null=True, blank=True)
