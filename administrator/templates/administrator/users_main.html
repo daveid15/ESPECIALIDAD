@@ -1,31 +1,38 @@
 {% extends 'core/base_admin.html' %}
 {% load static %}
-{% block content %}
-{% block extrahead %}
 
-{% endblock %}
-    <main role="main">
-        <div class="container col-12 mt-3">
-            <div class="col-12  mt-3 border">
-                <h3 class="px-5 py-4" style="text-align: center;">Gestión de Usuarios </h3> 
-                    {% if profiles.group_id == 1%}
-                        <div class="col-12 col-sm-3 mb-3" style="text-align: center;">
-                            <a href="{% url 'new_user' %}" class="boton form-control">Nuevo usuario</a>
-                        </div>
-                    {% endif %}
-                    {% for g in groups %}
-                        <div class="col-12 col-sm-3 mb-3" style="text-align: center;">
-                            <a href="{% url 'list_main' g.id %}" class="boton form-control">Listado de usuarios</a>
-                        </div>
-                    {% endfor %}
-                    <div class="col-12 col-sm-3 mb-3" style="text-align: center;">
-                        <a href="{% url 'carga_masiva_user' %}" class="boton form-control">Carga masiva</a>
-                    </div>
-                    </div>
-                </div>
+{% block extrahead %}
+<link
+  href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+  rel="stylesheet"
+  
+/>
+
+
+<link rel="stylesheet" href="{% static 'css/admin_main_styles.css' %}" />{% endblock %}
+
+{% block content %}
+<main role="main">
+    <div class="container col-12 mt-3">
+        <div class="col-12 mt-3 border">
+            <h3 class="px-5 py-4" style="text-align: center;">Gestión de Usuarios</h3>
+            {% if profiles.group_id == 1 %}
                 <div class="col-12 col-sm-3 mb-3" style="text-align: center;">
-                    <a href="{% url 'admin_main' %}" class="botton form-control" style="padding: 4px; margin-top: 4px;">Volver</a>
+                    <a href="{% url 'new_user' %}" class="boton form-control">Nuevo usuario</a>
+                </div>
+            {% endif %}
+            {% for g in groups %}
+                <div class="col-12 col-sm-3 mb-3" style="text-align: center;">
+                    <a href="{% url 'list_main' g.id %}" class="boton form-control">Listado de usuarios</a>
+                </div>
+            {% endfor %}
+            <div class="col-12 col-sm-3 mb-3" style="text-align: center;">
+                <a href="{% url 'carga_masiva_user' %}" class="boton form-control">Carga masiva</a>
             </div>
         </div>
-    </main>
+        <div class="col-12 col-sm-3 mb-3" style="text-align: center;">
+            <a href="{% url 'admin_main' %}" class="botton form-control" style="padding: 4px; margin-top: 4px;">Volver</a>
+        </div>
+    </div>
+</main>
 {% endblock %}

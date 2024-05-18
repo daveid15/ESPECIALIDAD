@@ -225,7 +225,7 @@ textarea {
 }
 
 .bg-green {
-    background-color: #5E9781 !important;
+    background-color: #3d8167 !important;
 }
 
 .bg-gray-blue {
@@ -316,38 +316,9 @@ ol {
 
 }
 
-.footer {
-    
-    /*margin-top: auto;*/
-    background-color: #D9F2E9;
-    height: 18.615vw;
-    /*position: absolute;*/
-    /*left: 0;*/
-    width: 100%;
-
-}
 
 
-.footer a {
-    text-decoration: none;
-    color: var(--blue);
-    padding-right: 3.125vw;
-}
 
-.footer hr {
-    opacity: 0.1;
-}
-
-.footer .copyright {
-    font-size: 0.75rem;
-    color: #606274;;
-}
-
-.footer h6 {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--blue);
-}
 
 .trust__title {
     position: relative;

@@ -2,44 +2,156 @@
 {% load static %}
 {% block title %}{% endblock %}
 {% block content %}
-<style>.errorlist{color:red;}</style>
+<style>
+    .errorlist {
+        color: red;
+    }
+
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f7f7f7;
+    }
+
+    section {
+        background-color: white;
+        max-width: 900px;
+        margin: 50px auto;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        display: flex;
+    }
+
+    .avatar {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        margin-right: 10px;
+    }
+
+    .titulo {
+        font-family: 'Sigmar', sans-serif;
+        color: #333;
+        font-size: 36px;
+        margin: 0;
+    }
+
+    .form-label {
+        font-size: 16px;
+        color: #333;
+    }
+
+    .form-control {
+        width: 100%;
+        height: 40px;
+        padding: 10px;
+        margin-top: 5px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+
+    .button {
+        background-color: #87963C;
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        width: 100%;
+        margin-top: 10px;
+        font-size: 16px;
+    }
+
+    .button:hover {
+        background-color: #65702d;
+        color: white;
+    }
+
+    .forgot-password {
+        margin-top: 10px;
+        text-align: right;
+    }
+
+    .forgot-password a {
+        color: #007bff;
+        text-decoration: none;
+    }
+
+    .forgot-password a:hover {
+        text-decoration: underline;
+    }
+
+    .message {
+        color: green;
+        text-align: center;
+    }
+
+    .error-message {
+        color: red;
+        text-align: center;
+    }
+
+    .left-half {
+        width: 50%;
+        padding: 10px;
+    }
+
+    .right-half {
+        width: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    @media (max-width: 768px) {
+        section {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .left-half, .right-half {
+            width: 100%;
+        }
+    }
+</style>
 <link href="https://fonts.googleapis.com/css2?family=Sigmar&display=swap" rel="stylesheet">
 <section>
-    {% if 'register' in request.GET %}
-        <p style="color: green">Usuario registrado correctamente</p>
-    {% endif%}
-    <form action="" method="post">
-        {% csrf_token %}
-        <a href="">
-            <div style=" display: flex; justify-content: center;">
-                <div class="avatar-normal-container" style="width: 50px; height: 50px;">
-                    <img src="{% static 'assets/img/ojo.png' %}" alt="avatar" style=" align-items: left">
-                 </div> 
-                 <h1 class="titulo"> Completopia</h1>   
-            </div>
-        </a>
-        {% if form.non_field_errors %}
-            <p style="color:red">Usuario o contraseña incorrectos, prueba de nuevo.</p>
+    <div class="left-half">
+        {% if 'register' in request.GET %}
+            <p class="message">Usuario registrado correctamente</p>
         {% endif %}
-        <div class="mb-3">
-            <label for="user" class="form-label">Correo</label>
-            <input type="text" name="username" class="form-control"/>
-            <span class="feedback body-small text-regular"></span>
-        </div>
-        <div class="mb-3">
-            <label for="password" class="form-label">Contraseña</label>
-            <input type="password" name="password" class="form-control" id="password"/>
-            <span class="feedback body-small text-regular"></span>
-        </div>
-        <div class="d-flex justify-content-end mb-3">
-            <a href="{% url 'password_reset' %}" class="body-normal text-blue text-decoration-underline cursor-pointer">¿Olvidaste tu contraseña?</a>
-        </div>
-        <div class="d-flex justify-content-center">
-            <button type="submit" class="button">
-                <span>Iniciar Sesión</span>
-            </button>
-        </div>
-    </form>
+        <form action="" method="post">
+            {% csrf_token %}
+            <a href="">
+                <div style=" display: flex; justify-content: center;">
+                    
+                    <h1 class="titulo">Completopia</h1>
+                </div>
+            </a>
+            {% if form.non_field_errors %}
+                <p class="error-message">Usuario o contraseña incorrectos, por favor prueba de nuevo.</p>
+            {% endif %}
+            <div class="mb-3">
+                <label for="user" class="form-label">Correo</label>
+                <input type="text" name="username" class="form-control"/>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Contraseña</label>
+                <input type="password" name="password" class="form-control" id="password"/>
+            </div>
+            <div class="forgot-password text-left">
+                <a href="{% url 'password_reset' %}">¿Olvidaste tu contraseña?</a>
+            </div>
+            <div>
+                <button type="submit" class="button">Iniciar Sesión</button>
+            </div>
+        </form>
+    </div>
+    <div class="right-half">
+        <!-- Espacio para el logo -->
+        <img src="{% static 'assets/img/logo.png' %}" alt="Logo" style="max-width: 100%; height: auto;">
+    </div>
 </section>
-
 {% endblock %}

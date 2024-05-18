@@ -6,124 +6,115 @@
     <title>TU PANEL</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800;900display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Icons+Outlined" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Icons+Round" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Icons+Sharp" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Icons+Two+Tone" rel="stylesheet">
-    <link href="{% static 'css/styles.css' %}" rel="stylesheet">
-    <link href="{% static 'css/index.css' %}" rel="stylesheet">
+    <!--<link href="{% static 'css/styles.css' %}" rel="stylesheet">
+    <link href="{% static 'css/index.css' %}" rel="stylesheet">-->
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/admin_main_styles.css' %}">
+
 </head>
 <body>
-<nav id="sidebar" class='side-bar to-left'>
-    <header class='my-xxl-4 my-1 mb-5'>
-        <div id="expand-side-bar" class="float-button">
-            <div class="m-auto">
-                <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="30px" viewBox="0 0 24 24" width="30px" fill="#1F2547">
-                    <g>
-                        <rect fill="none" height="24" width="24"/>
-                    </g>
-                    <g>
-                        <g>
-                            <polygon points="15.5,5 11,5 16,12 11,19 15.5,19 20.5,12"/>
-                            <polygon points="8.5,5 4,5 9,12 4,19 8.5,19 13.5,12"/>
-                        </g>
-                    </g>
-                </svg>
+<nav id="sidebar" class="side-bar to-left">
+    <div class="menu">
+        <!--=== Menu Inicio ===-->
+        <nav class="navbar">
+            <div class="user-info">
+                <img src="{% static 'user.jpg' %}" alt="User Image" class="profile">
+                <span class="username">{{ request.user.first_name }}</span>
             </div>
-        </div>
-        <a href="">
-            <img class="logo my-2" src="{% static 'assets/svg/logos.svg' %}" alt="logos"/>
-        </a>
-        <div style="display: flex; flex-direction: column;align-items: normal;">
-            <div class="avatar-normal-container">
-                <img src="{% static 'assets/img/no-avatar.jpg' %}" alt="avatar" width="50" height="50">
+            <div class="navbar_content">
+                
+                <div class="settings">
+                    <a href="{% url 'perfil_main' %}" class="settings-link">
+                        <i class="bi bi-gear-wide-connected"></i>
+                    </a>
+                </div>
             </div>
+        </nav>
+        <nav class="sidebar">
+            <div class="menu_content">
+                <ul class="menu_items">
+                    <li class="item">
+                        <a href="{% url 'admin_main' %}" class="nav_link submenu_item">
+                            <span class="navlink_icon">
+                                <i class="bx bx-buildings"></i>
+                            </span>
+                            <span class="navlink">Inicio</span>
+                            <i class="bx bx-chevron-right arrow-left"></i>
+                        </a>
+                        <ul class="menu_items submenu">
+                            <li><a href="{% url 'admin_main' %}" class="nav_link sublink">Inicio</a></li>
+                        </ul>
+                    </li>
+                    <li class="item">
+                        <a href="{% url 'users_main' %}" class="nav_link submenu_item">
+                            <span class="navlink_icon">
+                                <i class="bx bx-buildings"></i>
+                            </span>
+                            <span class="navlink">Gestión de usuarios</span>
+                            <i class="bx bx-chevron-right arrow-left"></i>
+                        </a>
+                        <ul class="menu_items submenu">
+                            <li><a href="{% url 'users_main' %}" class="nav_link sublink">Users Main</a></li>
+                        </ul>
+                    </li>
+                    <li class="item">
+                        <a href="{% url 'proveedores_main' %}" class="nav_link submenu_item">
+                            <span class="navlink_icon">
+                                <i class="bx bx-buildings"></i>
+                            </span>
+                            <span class="navlink">Gestión de proveedores</span>
+                            <i class="bx bx-chevron-right arrow-left"></i>
+                        </a>
+                        <ul class="menu_items submenu">
+                            <li><a href="{% url 'proveedores_main' %}" class="nav_link sublink">Proveedores Main</a></li>
+                        </ul>
+                    </li>
+                    <li class="item">
+                        <a href="{% url 'inventario_main' %}" class="nav_link submenu_item">
+                            <span class="navlink_icon">
+                                <i class="bx bx-archive"></i>
+                            </span>
+                            <span class="navlink">Gestión de inventario</span>
+                            <i class="bx bx-chevron-right arrow-left"></i>
+                        </a>
+                        <ul class="menu_items submenu">
+                            <li><a href="{% url 'inventario_main' %}" class="nav_link sublink">Inventario Main</a></li>
+                        </ul>
+                    </li>
+                    <li class="item">
+                        <a href="{% url 'orden_main' %}" class="nav_link submenu_item">
+                            <span class="navlink_icon">
+                                <i class="bx bx-shopping-bag"></i>
+                            </span>
+                            <span class="navlink">Ordenes de Compra</span>
+                            <i class="bx bx-chevron-right arrow-left"></i>
+                        </a>
+                        <ul class="menu_items submenu">
+                            <li><a href="{% url 'orden_main' %}" class="nav_link sublink">Órden Main</a></li>
+                        </ul>
+                    </li>
+                    <footer class="footer">
+                        <div class="logo_item">
+                            <i class="bx bx-menu" id="sidebarOpen"></i>
+                            <img src="{% static 'assets/img/logo.png' %}" alt="Logo" style="width: 150px; height: auto;"">
+                           
+                        </div>
+                    </footer>
+                </ul>
+            </div>
+        </nav>
+        <div class="side-bar-footer mb-5">
+            <button class="button" onclick="confirmLogout()">Cerrar Sesión</button>
         </div>
-    </header>
-
-    <div class='menu'>
-        <!--=== Menu Inicio ===-->  
-        {% if template_name == 'admin_main.html' %}
-            <a href="{% url 'admin_main' %}" class='item active'>
-        {% else %}
-            <a href="{% url 'admin_main' %}" class='item'>
-        {% endif %}
-            <span class="material-icons-outlined">
-                home
-            </span>
-            <p class='body--small'>Menú de inicio</p>
-        </a>
-        <!--=== Fin Menú Admin ===-->   
-        <!--=== Menu Ejemplos ===-->  
-        {% if template_name == 'perfil_main'%}
-            <a href="{% url 'perfil_main' %}" class='item active'>
-        {% else %}
-            <a href="{% url 'perfil_main' %}" class='item'>
-        {% endif %}
-            <span class="material-icons-outlined">
-                library_books
-            </span>
-            <p class='body--small'>Configuración</p>
-        </a>
-
-
-        {% if template_name == 'users_main'%}
-            <a href="{% url 'users_main' %}" class='item active'>
-        {% else %}
-            <a href="{% url 'users_main' %}" class='item'>
-        {% endif %}
-            <span class="material-icons-outlined">
-                person
-            </span>
-            <p class='body--small'>Usuarios</p>
-        </a>
-
-
-        {% if template_name == 'proveedores_main'%}
-            <a href="{% url 'proveedores_main' %}" class='item active'>
-        {% else %}
-            <a href="{% url 'proveedores_main' %}" class='item'>
-        {% endif %}
-            <span class="material-icons-outlined">
-                library_books
-            </span>
-            <p class='body--small'>Proveedores</p>
-        </a>
-
-
-        {% if template_name == 'inventario_main'%}
-            <a href="{% url 'inventario_main' %}" class='item active'>
-        {% else %}
-            <a href="{% url 'inventario_main' %}" class='item'>
-        {% endif %}
-            <span class="material-icons-outlined">
-                library_books
-            </span>
-            <p class='body--small'>Inventario</p>
-        </a>
-
-
-        {% if template_name == 'orden_main'%}
-            <a href="{% url 'orden_main' %}" class='item active'>
-        {% else %}
-            <a href="{% url 'orden_main' %}" class='item'>
-        {% endif %}
-            <span class="material-icons-outlined">
-                library_books
-            </span>
-            <p class='body--small'>Orden de compra</p>
-        </a>
-
-    </div>
-    <!--=== Fin Menú Ejemplos ===-->
-
-    <div class='side-bar-footer mb-5'>
-        <button class='button' onclick="confirmLogout()">Cerrar Sesión</button>
     </div>
 </nav>
-<div class='dashboard-container'>
+<div class="dashboard-container">
     <!-- Messages -->
     {% if messages %}
     <div class="alert alert-danger mt-3">
@@ -135,8 +126,8 @@
     <!-- End messages -->
     {% block content %}{% endblock %}
 </div>
+<script src="{% static 'js/admin_main_script.js' %}"></script>
 <script src="{% static 'node_modules/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
-
 <script>
     function confirmLogout() {
         if (confirm("¿Estás seguro de cerrar sesión?")) {
