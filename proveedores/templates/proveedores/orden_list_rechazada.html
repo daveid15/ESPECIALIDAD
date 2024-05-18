@@ -26,7 +26,6 @@
                     <th width="10%" scope="col">Proveedor</th>
                     <th width="10%" scope="col">Producto</th>
                     <th width="10%" scope="col">Cantidad</th>
-                    <th width="10%" scope="col">Unidad</th>
                     <th width="10%" scope="col">Acciones</th>
                     <th width="10%" scope="col">Estado</th>
                 </tr>
@@ -37,8 +36,6 @@
                         <td>{{ orden.proveedor_orden }}</td>
                         <td>{{ orden.producto_orden }}</td>
                         <td>{{ orden.cantidad_orden }}</td>
-                        <td>{{ orden.unidad_orden }}</td>
-                        <td>
                         <td>
                             <a href="{% url 'detalle_orden_de_compra_rechazada' orden_id=orden.id %}" class="btn btn-primary">Ver</a>
                         </td>
@@ -58,7 +55,7 @@
                                                             <option value="" selected disabled>Seleccione un estado</option>
                                                             <option value="anulado">Anulado</option>
                                                         </select>
-                                                        <button type="submit" class="btn btn-primary">Enviar</button>
+                                                        <button type="button" class="btn btn-primary" onclick="confirmarEnvio('{{ orden.id }}')">Enviar</button>
                                                     </div>
                                                 </div>
                                             </form>
@@ -111,13 +108,14 @@
             <a href="{% url 'lista_orden' grupo_id=1 %}" class="button">Regresar</a>
         </div>    
     </div>
-
-    <script>
-        function enviarFormulario(ordenId) {
-            document.getElementById('estadoForm' + ordenId).submit();
-        }
-    </script>
     
     {% block extrajs %}    
+    <script>
+        function confirmarEnvio(ordenId) {
+            if (confirm("¿Estás seguro de anular ésta órden?")) {
+                document.getElementById('estadoForm' + ordenId).submit();
+            }
+        }
+    </script>
     {% endblock extrajs %}    
 {% endblock %}

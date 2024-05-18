@@ -12,7 +12,7 @@
             <div class="d-flex flex-column align-items-center align-items-lg-start">
                 <form method="post" action="{% url 'proveedor_save' %}">
                     {% csrf_token %}
-                    <body>
+                    <div id ="container">
                     <div class="col-12 col-lg-12 row row-cols-1 row-cols-md-1 g-2 p-lg-0-5">
                         <div class="mb-0 col-md-6">
                             <label for="proveedor_name" class="form-label">Nombre</label>
@@ -67,7 +67,13 @@
                             </div>
                         </div>
                     </div>
-                </body>    
+                </div> 
+                <select name="proveedor_insumo" id="proveedor_insumo" >
+                    <option value="Palta">Palta</option>
+                    <option value="Tomate">Tomate</option>
+                    <option value="Pan">Pan</option>
+                </select>
+                    </div>                        
                         <div class="mb-0 col-md-4">
                             <div class="d-flex justify-content-center mb-2">
                                 <div class="d-flex justify-content-center mx-0-5--custom">
@@ -75,9 +81,8 @@
                                 </div>
                                 <div class="d-flex justify-content-center mx-0-5--custom">
                                     <a href="{% url 'proveedores_main' %}">Volver</a>
-                                </div>  
-                            </div>                                  
-                        </div>
+                                </div>                                   
+                    </div>
                 </form>
                 <script src="{% static 'js/test.js' %}"></script> 
             </div>

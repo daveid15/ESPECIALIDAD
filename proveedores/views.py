@@ -12,15 +12,17 @@ from django.utils.decorators import method_decorator
 from django.urls import reverse
 import json
 import pandas as pd
+from openpyxl import Workbook
 import xlwt
 from datetime import datetime
 from django.http import HttpResponse
 import traceback
 import os
-
+from django.db import transaction
+from django.views.decorators.csrf import csrf_protect
 
 from registration.models import Profile
-from proveedores.models import Proveedor, Orden_compra
+from proveedores.models import Proveedor, Orden_compra, Producto_Orden
 from inventario.models import Product
 from administrator.views import validar_email,validar_rut,validar_string,validar_numero
 # Create your views here.
@@ -60,6 +62,7 @@ def proveedor_save(request):
         proveedor_region = request.POST.get('proveedor_region')
         proveedor_comuna = request.POST.get('proveedor_comuna')
         proveedor_phone = request.POST.get('proveedor_phone')
+        proveedor_insumo = request.POST.getlist('proveedor_insumo')
         template_name = 'proveedores/proveedores_main.html'
         if not validar_string(proveedor_name,request):
             errores.append('Nombre inválido')
@@ -86,7 +89,8 @@ def proveedor_save(request):
             proveedor_address=proveedor_address,
             proveedor_region=proveedor_region,
             proveedor_comuna=proveedor_comuna,
-            proveedor_phone=proveedor_phone
+            proveedor_phone=proveedor_phone,
+            proveedor_insumo=proveedor_insumo
         )
         proveedor_save.save()
         messages.add_message(request, messages.INFO, 'Proveedor ingresado con éxito')
@@ -180,6 +184,7 @@ def proveedor_edit(request, proveedor_id):
         proveedor_address = request.POST.get('proveedor_address')
         proveedor_region = request.POST.get('proveedor_region') 
         proveedor_comuna = request.POST.get('proveedor_comuna')
+        proveedor_insumo = request.POST.getlist('proveedor_insumo')
 
         proveedor.proveedor_name = proveedor_name
         proveedor.proveedor_last_name = proveedor_last_name
@@ -188,6 +193,7 @@ def proveedor_edit(request, proveedor_id):
         proveedor.proveedor_address = proveedor_address
         proveedor.proveedor_region = proveedor_region
         proveedor.proveedor_comuna = proveedor_comuna
+        proveedor.proveedor_insumo = proveedor_insumo
         
         proveedor.save()
         
@@ -216,65 +222,79 @@ def carga_masiva_proveedor(request):
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
         return redirect('check_group_main')
     template_name = 'proveedores/carga_masiva_proveedor.html'
-    return render(request,template_name,{'profiles':profile})
+    return render(request, template_name, {'profiles': profile})
 
 @login_required
 def import_file_proveedor(request):
-    profiles = Profile.objects.get(user_id = request.user.id)
+    profiles = Profile.objects.get(user_id=request.user.id)
     if profiles.group_id != 1:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
         return redirect('check_group_main')
-    response = HttpResponse(content_type='application/ms-excel')
-    response['Content-Disposition'] = 'attachment; filename="archivo_importacion_proveedors.xls"'
-    wb = xlwt.Workbook(encoding='utf-8')
-    ws = wb.add_sheet('carga_masiva')
-    row_num = 0
-    columns = ['proveedor_name','proveedor_mail','proveedor_phone']
-    font_style = xlwt.XFStyle()
-    font_style.font.bold = True
-    for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], font_style)
-    font_style = xlwt.XFStyle()
-    date_format = xlwt.XFStyle()
-    date_format.num_format_str = 'dd/MM/yyyy'
-    for row in range(1):
-        row_num += 1
-        for col_num in range(3):
-            if col_num == 0:
-                ws.write(row_num, col_num, 'ej: Nombre proveedor' , font_style)
-            if col_num == 1:                           
-                ws.write(row_num, col_num, 'abc@gmail.com' , font_style)
-            if col_num == 2:                           
-                ws.write(row_num, col_num, '55642334' , font_style)
+    
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename="archivo_importacion_proveedors.xlsx"'
+
+    wb = Workbook()
+    ws = wb.active
+    ws.title = 'carga_masiva'
+
+    columns = ['proveedor_rut', 'proveedor_name', 'proveedor_last_name', 'proveedor_mail', 'proveedor_phone', 'proveedor_address', 'proveedor_region', 'proveedor_comuna']
+    ws.append(columns)
+
+    example_data = [
+        'ej: Rut',
+        'ej: Nombre proveedor',
+        'ej: Apellido proveedor',
+        'abc@gmail.com',
+        '55642334',
+        'ej: Direccion',
+        'ej: Region',
+        'ej: Comuna'
+    ]
+    ws.append(example_data)
+
     wb.save(response)
-    return response  
+    return response
 
 @login_required
 def carga_masiva_proveedor_save(request):
-    profiles = Profile.objects.get(user_id = request.user.id)
+    profiles = Profile.objects.get(user_id=request.user.id)
     if profiles.group_id != 1:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
         return redirect('check_group_main')
 
     if request.method == 'POST':
-        #try:
-        print(request.FILES['myfile'])
-        data = pd.read_excel(request.FILES['myfile'])
-        df = pd.DataFrame(data)
-        acc = 0
-        for item in df.itertuples():    
-            proveedor_name = str(item[1])            
-            proveedor_mail = str(item[2])
-            proveedor_phone = str(item[3])
-            proveedor_save = Proveedor(
-                proveedor_name = proveedor_name,            
-                proveedor_mail = proveedor_mail,
-                proveedor_phone = proveedor_phone,
-  
+        try:
+            data = pd.read_excel(request.FILES['myfile'], engine='openpyxl')
+            df = pd.DataFrame(data)
+            acc = 0
+            for item in df.itertuples():
+                proveedor_rut = str(item[1])
+                proveedor_name = str(item[2])
+                proveedor_last_name = str(item[3])
+                proveedor_mail = str(item[4])
+                proveedor_phone = str(item[5])
+                proveedor_address = str(item[6])
+                proveedor_region = str(item[7])
+                proveedor_comuna = str(item[8])
+                
+                proveedor_save = Proveedor(
+                    proveedor_rut=proveedor_rut,
+                    proveedor_name=proveedor_name,
+                    proveedor_last_name=proveedor_last_name,
+                    proveedor_mail=proveedor_mail,
+                    proveedor_phone=proveedor_phone,
+                    proveedor_address=proveedor_address,
+                    proveedor_region=proveedor_region,
+                    proveedor_comuna=proveedor_comuna
                 )
-            proveedor_save.save()
-        messages.add_message(request, messages.INFO, 'Carga masiva finalizada, se importaron '+str(acc)+' registros')
-        return redirect('carga_masiva_proveedor')
+                proveedor_save.save()
+                acc += 1
+            messages.add_message(request, messages.INFO, 'Carga masiva finalizada, se importaron ' + str(acc) + ' registros')
+            return redirect('carga_masiva_proveedor')
+        except Exception as e:
+            messages.add_message(request, messages.ERROR, f'Error al procesar el archivo: {str(e)}')
+            return redirect('carga_masiva_proveedor')
     
 @login_required
 def descarga_reporte(request):
@@ -320,55 +340,6 @@ def descarga_reporte(request):
             return redirect('proveedor_list')
 
 #Órden de Compraa
-'''
-@login_required
-def orden_crear(request):
-    profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 2:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
-        return redirect('check_group_main')
-    #Consulta en la base de Datos para llamar los datos de Proveedores y colocarlos en el select
-    proveedores = Proveedor.objects.all()
-    #Consulta en la base de Datos para llamar los datos de Productos y colocarlos en el select
-    productos = Product.objects.all()
-    template_name = 'proveedores/orden_crear.html'
-    print(productos)
-    return render(request, template_name, {'profiles': profiles, 'proveedores': proveedores, 'productos': productos})
-    '''
-
-@login_required
-def orden_save(request):
-    profile = Profile.objects.get(user_id=request.user.id)
-    if profile.group_id != 1:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una área para la que no tiene permisos')
-        return redirect('check_group_main')
-    
-    
-    if request.method == 'POST':
-        proveedor_orden = request.POST.get('proveedor_orden')
-        producto_orden = request.POST.get('producto_orden')
-        unidad_orden = request.POST.get('unidad_orden')
-        cantidad_orden = request.POST.get('cantidad_orden')
-        
-
-        if proveedor_orden == '' or producto_orden == '' or unidad_orden == '' or cantidad_orden == '':
-            messages.add_message(request, messages.INFO, 'Debes ingresar toda la información')
-            return render(request, template_name, {'profiles': profile})
-
-        orden_save = Orden_compra(
-            proveedor_orden=proveedor_orden,
-            producto_orden=producto_orden,
-            unidad_orden=unidad_orden,
-            cantidad_orden=cantidad_orden
-        )
-
-        orden_save.save()
-        template_name = 'proveedores/orden_crear.html'
-        return render(request, template_name, {'profiles': profile})
-
-    
-    else:
-        messages.add_message(request, messages.INFO, 'Error en el método de envío')
 
 
 @login_required
@@ -393,19 +364,37 @@ def orden_list_enviada(request, page=None, search=None):
     if profile.group_id != 1:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a un área para la que no tienes permisos')
         return redirect('check_group_main')
+    
+    
     search = request.GET.get('search')
     ordenes = Orden_compra.objects.filter(estado='enviado')
+    
     if search:
         ordenes = ordenes.filter(Q(proveedor_orden__icontains=search) |
                                  Q(producto_orden__icontains=search) |
-                                 Q(unidad_orden__icontains=search) |
                                  Q(cantidad_orden__icontains=search))
 
-    paginator = Paginator(ordenes, 10)
-    page_number = request.GET.get('page')
-    ordenes = paginator.get_page(page_number)
+    
+    paginator = Paginator(ordenes, 2)
+    pagina_numero = request.GET.get('pagina')
+    ordenes = paginator.get_page(pagina_numero)
 
-    return render(request, 'proveedores/orden_list_enviada.html', {'ordenes': ordenes, 'search': search})
+    try:
+        pagina_numero = int(pagina_numero)  # Convertir a entero
+    except TypeError:
+        pagina_numero = 1  # Si no hay número de página, mostrar la primera
+
+    try:
+        pagina_obj = paginator.page(pagina_numero)
+    except PageNotAnInteger:
+        # Si la página no es un entero, mostrar la primera página
+        pagina_obj = paginator.page(1)
+    except EmptyPage:
+        # Si la página está fuera de rango, mostrar la última página de resultados
+        pagina_obj = paginator.page(paginator.num_pages)
+    
+
+    return render(request, 'proveedores/orden_list_enviada.html', {'ordenes': ordenes, 'search': search, 'pagina_obj':pagina_obj})
 
 
 @login_required
@@ -419,12 +408,7 @@ def orden_list_aceptada(request, page=None, search=None):
     if search:
         ordenes = ordenes.filter(Q(proveedor_orden__icontains=search) |
                                  Q(producto_orden__icontains=search) |
-                                 Q(unidad_orden__icontains=search) |
                                  Q(cantidad_orden__icontains=search))
-
-    paginator = Paginator(ordenes, 10)
-    page_number = request.GET.get('page')
-    ordenes = paginator.get_page(page_number)
 
     return render(request, 'proveedores/orden_list_aceptada.html', {'ordenes': ordenes, 'search': search})
 
@@ -440,7 +424,6 @@ def orden_list_rechazada(request, page=None, search=None):
     if search:
         ordenes = ordenes.filter(Q(proveedor_orden__icontains=search) |
                                  Q(producto_orden__icontains=search) |
-                                 Q(unidad_orden__icontains=search) |
                                  Q(cantidad_orden__icontains=search))
 
     paginator = Paginator(ordenes, 10)
@@ -461,7 +444,6 @@ def orden_list_anulada(request, page=None, search=None):
     if search:
         ordenes = ordenes.filter(Q(proveedor_orden__icontains=search) |
                                  Q(producto_orden__icontains=search) |
-                                 Q(unidad_orden__icontains=search) |
                                  Q(cantidad_orden__icontains=search))
 
     paginator = Paginator(ordenes, 10)
@@ -471,8 +453,57 @@ def orden_list_anulada(request, page=None, search=None):
     return render(request, 'proveedores/orden_list_anulada.html', {'ordenes': ordenes, 'search': search})
 
 @login_required
+def orden_save(request):
+    profile = Profile.objects.get(user_id=request.user.id)
+    if profile.group_id != 1:
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a una área para la que no tiene permisos')
+        return redirect('check_group_main')
+
+    proveedores = Proveedor.objects.all()
+    productos = Product.objects.all()
+
+    if request.method == 'POST':
+        proveedor_orden = request.POST.get('proveedor_orden')
+        producto_orden = request.POST.getlist('producto_orden[]')
+        cantidad_orden = request.POST.getlist('cantidad_orden[]')
+
+        try:
+            proveedor_instance = Proveedor.objects.get(proveedor_name=proveedor_orden)
+        except Proveedor.DoesNotExist:
+            messages.add_message(request, messages.ERROR, 'Proveedor no encontrado')
+            return render(request, 'proveedores/orden_crear.html', {'profiles': profile, 'proveedores': proveedores, 'productos': productos})
+
+        if not producto_orden or not cantidad_orden:
+            messages.add_message(request, messages.INFO, 'Debes ingresar toda la información')
+            return render(request, 'proveedores/orden_crear.html', {'profiles': profile, 'proveedores': proveedores, 'productos': productos})
+
+        try:
+            with transaction.atomic():
+                orden = Orden_compra(proveedor_orden=proveedor_instance)
+                orden.save()
+
+                for prod, cant in zip(producto_orden, cantidad_orden):
+                    producto = Product.objects.get(supply_name=prod)
+                    detalle = Producto_Orden(
+                        orden_id=orden,
+                        producto=producto,
+                        cantidad_orden=cant,
+                    )
+                    detalle.save()
+                messages.add_message(request, messages.SUCCESS, 'Orden creada con éxito')
+                return redirect('orden_crear')  # Redirige a la página de creación para limpiar el formulario
+        except Exception as e:
+            messages.add_message(request, messages.ERROR, f'Error al crear la orden: {str(e)}')
+            return render(request, 'proveedores/orden_crear.html', {'profiles': profile, 'proveedores': proveedores, 'productos': productos})
+    else:
+        messages.add_message(request, messages.ERROR, 'Error en el método de envío')
+        return redirect('orden_crear')
+
+
+@login_required
 def orden_crear(request):
     profiles = Profile.objects.get(user_id=request.user.id)
+    print("ajsdjahsd")
     if profiles.group_id not in [1, 2]:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a un área para la que no tiene permisos')
         return redirect('check_group_main')
@@ -480,37 +511,29 @@ def orden_crear(request):
     proveedores = Proveedor.objects.all()
     productos = Product.objects.all()
     template_name = 'proveedores/orden_crear.html'
+    '''
 
     if request.method == 'POST':
         proveedor_orden = request.POST.get('proveedor_orden')
         producto_orden = request.POST.get('producto_orden')
-        unidad_orden = request.POST.get('unidad_orden')
         cantidad_orden = request.POST.get('cantidad_orden')
-
-        # Mostrar los datos recibidos del formulario
-        print("Datos recibidos del formulario:")
-        print(f"Proveedor: {proveedor_orden}")
-        print(f"Producto: {producto_orden}")
-        print(f"Unidad: {unidad_orden}")
-        print(f"Cantidad: {cantidad_orden}")
 
         # Intentar crear la nueva orden de compra
         try:
             nueva_orden = Orden_compra.objects.create(
                 proveedor_orden=proveedor_orden,
                 producto_orden=producto_orden,
-                unidad_orden=unidad_orden,
                 cantidad_orden=cantidad_orden,
-                # Puedes agregar más campos aquí según sea necesario
             )
+            print("¡Orden de compra creada con éxito!")
             # Guardar el ID de la nueva orden en la sesión
             request.session['nueva_orden_id'] = nueva_orden.id
-            print("¡Orden de compra creada con éxito!")
         except Exception as e:
             print(f"Error al crear la orden de compra: {e}")
 
         # Redirigir al usuario al listado de órdenes
         return redirect('lista_orden')
+        '''
     
     return render(request, template_name, {'profiles': profiles, 'proveedores': proveedores, 'productos': productos})
 
@@ -613,18 +636,26 @@ def detalle_orden_de_compra_anulada(request, orden_id):
 @login_required
 def editar_orden(request, orden_id):
     orden = get_object_or_404(Orden_compra, pk=orden_id)
+    proveedor_nombre = orden.proveedor_orden
+    producto_nombre = orden.producto_orden
+    cantidad_nombre = orden.cantidad_orden
+    proveedores = Proveedor.objects.all()
+    productos = Product.objects.all()
+    
     if request.method == 'POST':
         # Obtener los datos del formulario POST
         proveedor = request.POST.get('proveedor_orden')
         producto = request.POST.get('producto_orden')
-        unidad = request.POST.get('unidad_orden')
         cantidad = request.POST.get('cantidad_orden')
         
         # Actualizar los campos de la orden de compra
         orden.proveedor_orden = proveedor
         orden.producto_orden = producto
-        orden.unidad_orden = unidad
         orden.cantidad_orden = cantidad
+        
+        if proveedor_nombre == proveedor and producto_nombre == producto and cantidad_nombre == cantidad:
+            messages.success(request, 'No se ha realizado ningún cambio')
+            return redirect('orden_list_enviada')
 
         # Guardar los cambios en la base de datos
         orden.save()
@@ -636,4 +667,6 @@ def editar_orden(request, orden_id):
         return redirect('orden_list_enviada')
 
     # Si la solicitud es GET, renderizar el formulario de edición
-    return render(request, 'editar_orden.html', {'orden': orden})
+    return render(request, 'editar_orden.html', {'orden': orden, 'proveedores': proveedores, 
+                                                 'productos': productos, 'proveedor_nombre':proveedor_nombre, 
+                                                 'producto_nombre':producto_nombre, 'cantidad_nombre':cantidad_nombre})

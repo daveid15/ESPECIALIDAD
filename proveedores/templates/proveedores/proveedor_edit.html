@@ -14,6 +14,7 @@ Editar Proveedor
         <div class="d-flex flex-column align-items-center align-items-lg-start">
             <form method="post" action="{% url 'proveedor_edit' proveedor_id=proveedor_data.id %}">
                 {% csrf_token %}
+                <div id ="container">
                 <div class="col-12 col-lg-12 row row-cols-1 row-cols-md-1 g-2 p-lg-0-5">
                     <div class="mb-0 col-md-12">
                         <label for="proveedor_name" class="form-label">Nombre (*)</label>
@@ -59,7 +60,18 @@ Editar Proveedor
                                     <option value="Buin" {% if proveedor_data.proveedor_comuna == "Buin" %}selected{% endif %}>Buin</option>
                                 </optgroup>
                             </select>
+                            <div class="d-flex justify-content-center mx-0-5--custom">
+                                <label class="form-label">Insumos</label>
+                                <button onclick="test()" type="button" id="Añadir">Añadir</button>
+                            </div>
+                            <select name="proveedor_insumo" id="proveedor_insumo" >
+                                <option value="Palta">Palta</option>
+                                <option value="Tomate">Tomate</option>
+                                <option value="Pan">Pan</option>
+                        </select>
                         </div>
+                        </div>
+                    </div>
                     </div>
                     <div class="mb-0 col-md-12">
                         <div class="d-flex justify-content-center mb-2">
@@ -70,9 +82,9 @@ Editar Proveedor
                                 <a href="{% url 'proveedor_list' %}" class="button">Regresar</a>
                             </div>                                  
                         </div>
-                    </div>
                 </div>
             </form>
+            <script src="{% static 'js/test.js' %}"></script> 
         </div>
     </div>
 </div>

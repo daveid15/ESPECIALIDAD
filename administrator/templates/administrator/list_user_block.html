@@ -7,11 +7,22 @@
 {% endblock %}
 <style>.errorlist{color:red;}</style>
 <main role="main">
+    <header class='mb-5'>
+        <h2 class='h2 medium text-blue'>Lista de Usuarios Eliminados</h2>
+    </header>
+    <div class="d-flex flex-column flex-lg-row my-5">
+        <div class="my-auto d-flex flex-column flex-lg-row ms-lg-auto">
+            <div class="feedback body--small normal"></div>
+        </div>
+        <form method="get" action="" class='col-12 col-lg-6 input-container-search my-auto me-3'>
+            <input name="search" id="search" type="text" placeholder='Buscar por Nombre' />
+            <button type="submit">Buscar</button>
+        </form>
+    </div>
     <div class="container col-12">
         <div class="col-12 border">
             <table id="service" class="table mt-2 table-hover table-sm table-bordered">      
                 <thead class="table-danger">
-                    <tr>
                     <tr>
                         {% if profiles.group_id == 1 %}
                             <th colspan="5"><h3>Usuarios eliminados</h3></th>
@@ -23,7 +34,7 @@
                             <div class="row">
                                 <div class="col-12 col-sm-12">
                                     <a href="{% url 'list_main' group.id %}" class="btn btn-danger form-control">Volver</a>
-                               </div>
+                                </div>
                             </div>
                         </th>
                     </tr>
@@ -47,7 +58,6 @@
                                         <a href="#" onclick="confirmDelete('{{ s.id }}')">
                                             Eliminar
                                         </a>
-                                        
                                     {% endif %}
                                 </th>   
                             {% endif %}                            
@@ -56,35 +66,35 @@
                 </tbody>
             </table>
             <!-- Paginación -->
-                {% if paginator.num_pages > 1 %}
-                    <nav aria-label="Page navigation">
-                        <ul class="pagination justify-content-center">
-                            {% if user_list.has_previous %}
-                                <li class="page-item ">
-                                    <a class="page-link" href="?page={{ user_list.previous_page_number}}">&laquo;</a>
-                                </li>
-                            {% else %}
-                                <li class="page-item disabled">
-                                    <a class="page-link" href="#" tabindex="-1">&laquo;</a>
-                                </li>
-                            {% endif %}
-                            {% for i in paginator.page_range %}
-                                <li class="page-item {% if user_list.number == i %}active{% endif %}">
-                                    <a class="page-link" href="?page={{ i }}">{{ i }}</a>
-                                </li>
-                            {% endfor %}
-                            {% if user_list.has_next %}
-                                <li class="page-item ">
-                                    <a class="page-link" href="?page={{ user_list.next_page_number }}">&raquo;</a>
-                                </li>
-                            {% else %}
-                                <li class="page-item disabled">
-                                    <a class="page-link" href="#" tabindex="-1">&raquo;</a>
-                                </li>
-                            {% endif %}
-                        </ul>
-                    </nav>
-                {% endif %}  
+            {% if paginator.num_pages > 1 %}
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">
+                        {% if user_list.has_previous %}
+                            <li class="page-item ">
+                                <a class="page-link" href="?page={{ user_list.previous_page_number }}{% if search %}&search={{ search }}{% endif %}">&laquo;</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1">&laquo;</a>
+                            </li>
+                        {% endif %}
+                        {% for i in paginator.page_range %}
+                            <li class="page-item {% if user_list.number == i %}active{% endif %}">
+                                <a class="page-link" href="?page={{ i }}{% if search %}&search={{ search }}{% endif %}">{{ i }}</a>
+                            </li>
+                        {% endfor %}
+                        {% if user_list.has_next %}
+                            <li class="page-item ">
+                                <a class="page-link" href="?page={{ user_list.next_page_number }}{% if search %}&search={{ search }}{% endif %}">&raquo;</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1">&raquo;</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            {% endif %}
             <!-- Paginación -->                    
         </div>
     </div>

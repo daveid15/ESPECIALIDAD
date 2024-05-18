@@ -1,0 +1,35 @@
+{% extends 'core/base_admin.html' %}
+{% load static %}
+{% block content %}
+    <main role="main">
+        <div class="container col-12 mt-3">
+            <!-- Otro contenido de la página -->
+            <div class="col-12  mt-3 border">
+                <h3 class="px-5 py-4" style="text-align: center;">Ventas </h3> 
+                {% if profiles.group_id == 1 %}
+                    <div class="col-12 col-sm-3 mb-3" style="text-align: center;">
+                        <a href="{% url 'venta_crear' %}" class="boton form-control">Crear nueva venta</a>
+                    </div>
+                {% endif %}
+                <!-- Otro contenido de la página -->
+                <div class="col-12 col-sm-3 mb-3" style="text-align: center;">
+                    <a href="{% url 'carga_masiva_user' %}" class="boton form-control">Carga masiva</a>
+                </div>
+                <!-- Enlace al listado de órdenes -->
+                {% if profiles.group_id == 1 %}
+                    <div class="col-12 col-sm-3 mb-3" style="text-align: center;">
+                        <a href="{% url 'venta_list' grupo_id=1 %}" class="boton form-control">Listado de ventas</a>
+                    </div>
+                {% else %}
+                    <div class="col-12 col-sm-3 mb-3" style="text-align: center;">
+                        <p>grupo_id no definido</p>
+                    </div>
+                {% endif %}
+                <!-- Otro contenido de la página -->
+                <div class="col-12 col-sm-3 mb-3" style="text-align: center;">
+                    <a href="{% url 'admin_main' %}" class="botton form-control" style="padding: 4px; margin-top: 4px;">Volver</a>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

@@ -17,6 +17,7 @@ import json
 import pandas as pd
 import xlwt
 import traceback
+from openpyxl import Workbook
 from django.http import HttpResponse
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
@@ -85,15 +86,6 @@ def producto_save(request):
         messages.add_message(request, messages.INFO, 'Error en el método de envío')
         return redirect('check_group_main')
 
- #CARGA MASIVA   
-@login_required
-def carga_masiva_producto(request):
-    profile = Profile.objects.get(user_id=request.user.id)
-    if profile.group_id != 1:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
-        return redirect('check_group_main')
-    template_name = 'inventario/carga_masiva_producto.html'
-    return render(request,template_name,{'profiles':profile})
 
    #VER PRODUCTO Y se usa pa editar
 @login_required
@@ -230,77 +222,76 @@ def producto_delete(request, product_id):
     return redirect(reverse('producto_list'))
 
 
-
+ #CARGA MASIVA   
+@login_required
+def carga_masiva_producto(request):
+    profile = Profile.objects.get(user_id=request.user.id)
+    if profile.group_id != 1:
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a una área para la que no tiene permisos')
+        return redirect('check_group_main')
+    template_name = 'inventario/carga_masiva_producto.html'
+    return render(request, template_name, {'profiles': profile})
 
 @login_required
 def import_file_producto(request):
-    profiles = Profile.objects.get(user_id = request.user.id)
+    profiles = Profile.objects.get(user_id=request.user.id)
     if profiles.group_id != 1:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a una área para la que no tiene permisos')
         return redirect('check_group_main')
-    response = HttpResponse(content_type='application/ms-excel')
-    response['Content-Disposition'] = 'attachment; filename="archivo_importacion_productos.xls"'
-    wb = xlwt.Workbook(encoding='utf-8')
-    ws = wb.add_sheet('carga_masiva')
-    row_num = 0
-    columns = ['supply_name','supply_code','supply_unit','supply_stock_initial','supply_input','supply_output']
-    font_style = xlwt.XFStyle()
-    font_style.font.bold = True
-    for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], font_style)
-    font_style = xlwt.XFStyle()
-    date_format = xlwt.XFStyle()
-    date_format.num_format_str = 'dd/MM/yyyy'
-    for row in range(1):
-        row_num += 1
-        for col_num in range(6):
-            if col_num == 0:
-                ws.write(row_num, col_num, 'ej: Nombre producto' , font_style)
-            if col_num == 1:                           
-                ws.write(row_num, col_num, 'SK1111' , font_style)
-            if col_num == 2:                           
-                ws.write(row_num, col_num, 'Kg' , font_style)
-            if col_num == 3:                           
-                ws.write(row_num, col_num, '10' , font_style)
-            if col_num == 4:                           
-                ws.write(row_num, col_num, '10' , font_style)
-            if col_num == 5:                           
-                ws.write(row_num, col_num, '1' , font_style)
+
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename="archivo_importacion_productos.xlsx"'
+
+    wb = Workbook()
+    ws = wb.active
+    ws.title = 'carga_masiva'
+
+    columns = ['supply_name', 'supply_code', 'supply_unit', 'supply_stock_initial', 'supply_input', 'supply_output']
+    ws.append(columns)
+
+    example_data = ['ej: Nombre producto', 'SK1111', 'Kg', 10, 10, 1]
+    ws.append(example_data)
+
     wb.save(response)
     return response  
 
 @login_required
 def carga_masiva_producto_save(request):
-    profiles = Profile.objects.get(user_id = request.user.id)
+    profiles = Profile.objects.get(user_id=request.user.id)
     if profiles.group_id != 1:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a una área para la que no tiene permisos')
         return redirect('check_group_main')
 
     if request.method == 'POST':
-        #try:
-        print(request.FILES['myfile'])
-        data = pd.read_excel(request.FILES['myfile'])
-        df = pd.DataFrame(data)
-        acc = 1
-        for item in df.itertuples():
-            supply_name = str(item[1])            
-            supply_code = str(item[2])
-            supply_unit = str(item[3])
-            supply_initial_stock = int(item[4])
-            supply_input = int(item[5])
-            supply_output = int(item[6])
-            producto_save = Product(
-                supply_name = supply_name,            
-                supply_code = supply_code,
-                supply_unit = supply_unit,
-                supply_initial_stock = supply_initial_stock,
-                supply_input = supply_input,
-                supply_output = supply_output,
-                supply_total= (int(supply_initial_stock))+(int(supply_input))-(int(supply_output)),
+        try:
+            data = pd.read_excel(request.FILES['myfile'], engine='openpyxl')
+            df = pd.DataFrame(data)
+            acc = 0
+            for item in df.itertuples():
+                supply_name = str(item[1])
+                supply_code = str(item[2])
+                supply_unit = str(item[3])
+                supply_initial_stock = int(item[4])
+                supply_input = int(item[5])
+                supply_output = int(item[6])
+
+                producto_save = Product(
+                    supply_name=supply_name,
+                    supply_code=supply_code,
+                    supply_unit=supply_unit,
+                    supply_initial_stock=supply_initial_stock,
+                    supply_input=supply_input,
+                    supply_output=supply_output,
+                    supply_total=supply_initial_stock + supply_input - supply_output,
                 )
-            producto_save.save()
-        messages.add_message(request, messages.INFO, 'Carga masiva finalizada, se importaron '+str(acc)+' registros')
-        return redirect('carga_masiva_producto')
+                producto_save.save()
+                acc += 1
+
+            messages.add_message(request, messages.INFO, 'Carga masiva finalizada, se importaron ' + str(acc) + ' registros')
+            return redirect('carga_masiva_producto')
+        except Exception as e:
+            messages.add_message(request, messages.ERROR, f'Error al procesar el archivo: {str(e)}')
+            return redirect('carga_masiva_producto')
     
 @login_required
 def descarga_reporte_producto(request):

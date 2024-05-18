@@ -5,11 +5,14 @@ from django.views.decorators.csrf import csrf_exempt
 from administrator import views
 from proveedores import views as proveedores_views
 from inventario import views as inventario_views
+from ventas import views as ventas_views
+
 
 administrator_patterns = [
     path('admin_main', views.admin_main,name="admin_main"),
     path('proveedores_main', proveedores_views.proveedores_main,name="proveedores_main"),
     path('orden_main', proveedores_views.orden_main,name="orden_main"),
+    path('ventas_main', ventas_views.ventas_main,name="ventas_main"),
     #flujo usuarios
     path('perfil_main', views.perfil_main,name="perfil_main"),
     path('users_main', views.users_main,name="users_main"),

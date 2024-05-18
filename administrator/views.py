@@ -4,6 +4,7 @@ import random
 from turtle import home
 import pandas as pd
 import xlwt
+from openpyxl import Workbook
 from datetime import datetime, time, timedelta
 from django import forms
 from django.contrib import messages
@@ -320,56 +321,63 @@ def edit_user(request, user_id):
 
 
 @login_required    
-def list_user_active(request,group_id,page=None):
-
-    profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 2:
+def list_user_active(request, group_id, page=None):
+    profiles = Profile.objects.get(user_id=request.user.id)
+    if profiles.group_id not in [1, 2]:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
         return redirect('check_group_main')
-    if page == None:
+
+    search = request.GET.get('search')
+    
+    if page is None:
         page = request.GET.get('page')
-    else:
-        page = page
-    if request.GET.get('page') == None:
-        page = page
-    else:
-        page = request.GET.get('page')
+    
     group = Group.objects.get(pk=group_id)
+    user_array = User.objects.filter(is_active=True, profile__group_id=group_id)
+    
+    if search:
+        user_array = user_array.filter(first_name__icontains=search)
+
     user_all = []
-    user_array = User.objects.filter(is_active='t').filter(profile__group_id=group_id).order_by('first_name')
     for us in user_array:
         profile_data = Profile.objects.get(user_id=us.id)
-        name = us.first_name+' '+us.last_name
-        user_all.append({'id':us.id,'user_name':us.username,'name':name,'mail':us.email})
-    paginator = Paginator(user_all, 30)  
+        name = us.first_name + ' ' + us.last_name
+        user_all.append({'id': us.id, 'user_name': us.username, 'name': name, 'mail': us.email})
+
+    paginator = Paginator(user_all, 1)
     user_list = paginator.get_page(page)
     template_name = 'administrator/list_user_active.html'
-    return render(request,template_name,{'profiles':profiles,'group':group,'user_list':user_list,'paginator':paginator,'page':page})
+    return render(request, template_name, {'profiles': profiles, 'group': group, 'user_list': user_list, 'paginator': paginator, 'page': page, 'search': search})
+
 @login_required    
-def list_user_block(request,group_id,page=None):
-    profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 2:
+def list_user_block(request, group_id, page=None):
+    profiles = Profile.objects.get(user_id=request.user.id)
+    if profiles.group_id not in [1, 2]:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
         return redirect('check_group_main')
-    if page == None:
+
+    search = request.GET.get('search')
+    
+    if page is None:
         page = request.GET.get('page')
-    else:
-        page = page
-    if request.GET.get('page') == None:
-        page = page
-    else:
-        page = request.GET.get('page')
+    
     group = Group.objects.get(pk=group_id)
+    user_array = User.objects.filter(is_active=False, profile__group_id=group_id)
+    
+    if search:
+        user_array = user_array.filter(first_name__icontains=search)
+
     user_all = []
-    user_array = User.objects.filter(is_active='f').filter(profile__group_id=group_id).order_by('first_name')
     for us in user_array:
         profile_data = Profile.objects.get(user_id=us.id)
-        name = us.first_name+' '+us.last_name
-        user_all.append({'id':us.id,'user_name':us.username,'name':name,'mail':us.email})
-    paginator = Paginator(user_all, 30)  
+        name = us.first_name + ' ' + us.last_name
+        user_all.append({'id': us.id, 'user_name': us.username, 'name': name, 'mail': us.email})
+
+    paginator = Paginator(user_all, 30)
     user_list = paginator.get_page(page)
     template_name = 'administrator/list_user_block.html'
-    return render(request,template_name,{'profiles':profiles,'group':group,'user_list':user_list,'paginator':paginator,'page':page})
+    return render(request, template_name, {'profiles': profiles, 'group': group, 'user_list': user_list, 'paginator': paginator, 'page': page, 'search': search})
+
 @login_required
 def user_block(request,user_id):
     profiles = Profile.objects.get(user_id = request.user.id)
@@ -426,6 +434,7 @@ def user_delete(request,user_id):
          
     
 
+
 @login_required
 def carga_masiva_user(request):
     profile = Profile.objects.get(user_id=request.user.id)
@@ -433,77 +442,88 @@ def carga_masiva_user(request):
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
         return redirect('check_group_main')
     template_name = 'administrator/carga_masiva_user.html'
-    return render(request,template_name,{'profiles':profile})
+    return render(request, template_name, {'profiles': profile})
 
 @login_required
 def import_file_user(request):
-    profiles = Profile.objects.get(user_id = request.user.id)
+    profiles = Profile.objects.get(user_id=request.user.id)
     if profiles.group_id != 1:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
         return redirect('check_group_main')
-    response = HttpResponse(content_type='application/ms-excel')
-    response['Content-Disposition'] = 'attachment; filename="archivo_importacion_user.xls"'
-    wb = xlwt.Workbook(encoding='utf-8')
-    ws = wb.add_sheet('carga_masiva')
-    row_num = 0
-    columns = ['User_Rut','User_email','User_firstname','User_lastname','User_cel']
-    font_style = xlwt.XFStyle()
-    font_style.font.bold = True
-    for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], font_style)
-    font_style = xlwt.XFStyle()
-    date_format = xlwt.XFStyle()
-    date_format.num_format_str = 'dd/MM/yyyy'
-    for row in range(1):
-        row_num += 1
-        for col_num in range(5):
-            if col_num == 0:
-                ws.write(row_num, col_num, 'ej: Rut' , font_style)
-            if col_num == 1:
-                ws.write(row_num, col_num, 'ej: Email' , font_style)
-            if col_num == 2:
-                ws.write(row_num, col_num, 'ej: Nombre' , font_style)
-            if col_num == 3:
-                ws.write(row_num, col_num, 'ej: Apellido' , font_style)
-            if col_num == 4:
-                ws.write(row_num, col_num, 'ej: Telefono' , font_style)
+    
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename="archivo_importacion_user.xlsx"'
 
+    wb = Workbook()
+    ws = wb.active
+    ws.title = 'carga_masiva'
+    
+    columns = ['User_Rut', 'User_email', 'User_firstname', 'User_lastname', 'User_cel', 'User_address', 'User_region']
+    ws.append(columns)
+    
+    example_data = [
+        'ej: Rut',
+        'ej: Email',
+        'ej: Nombre',
+        'ej: Apellido',
+        'ej: Telefono',
+        'ej: Direccion',
+        'ej: Region'
+    ]
+    ws.append(example_data)
+    
     wb.save(response)
-    return response  
+    return response
+
 
 @login_required
 def carga_masiva_user_save(request):
-    profiles = Profile.objects.get(user_id = request.user.id)
+    profiles = Profile.objects.get(user_id=request.user.id)
     if profiles.group_id != 1:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
         return redirect('check_group_main')
 
     if request.method == 'POST':
-        #try:
-        print(request.FILES['myfile'])
-        data = pd.read_excel(request.FILES['myfile'])
-        df = pd.DataFrame(data)
-        acc = 0
-        for item in df.itertuples():
-            rut = str(item[1])
-            email = str(item[2])
-            nombre = str(item[3])
-            apellido = str(item[4])
-            mobile = str(item[5])
+        try:
+            data = pd.read_excel(request.FILES['myfile'], engine='openpyxl')
+            df = pd.DataFrame(data)
+            acc = 0
+            for item in df.itertuples():
+                rut = str(item[1])
+                email = str(item[2])
+                nombre = str(item[3])
+                apellido = str(item[4])
+                mobile = str(item[5])
+                address = str(item[6])
+                region = str(item[7])
                                   
-            new_user = User.objects.create_user(
-            username = rut,
-            email = email,
-            first_name = nombre,
-            last_name = apellido,
+                new_user = User.objects.create_user(
+                    username=rut,
+                    email=email,
+                    first_name=nombre,
+                    last_name=apellido,
+                    is_active=True  # Asegúrate de que el usuario esté activo
+                )
+                new_user.save()
 
-            
-                  
-            )
-            new_user.save()
-        messages.add_message(request, messages.INFO, 'Carga masiva finalizada, se importaron '+str(acc)+' registros')
-        return redirect('carga_masiva_user') 
-    
+                # Crear perfil asociado
+                new_profile = Profile.objects.create(
+                    user=new_user,
+                    group_id=1,  # Ajusta esto según el grupo que corresponda
+                    mobile=mobile,
+                    address=address,  # Nuevo campo
+                    region=region     # Nuevo campo
+                )
+                new_profile.save()
+
+                acc += 1
+            messages.add_message(request, messages.INFO, 'Carga masiva finalizada, se importaron ' + str(acc) + ' registros')
+            return redirect('carga_masiva_user')
+        except Exception as e:
+            messages.add_message(request, messages.ERROR, f'Error al procesar el archivo: {str(e)}')
+            return redirect('carga_masiva_user')
+
+
 @login_required
 def new_group(request):
     profile = Profile.objects.get(user_id=request.user.id)

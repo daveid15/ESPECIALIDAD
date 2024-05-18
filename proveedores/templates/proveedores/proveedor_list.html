@@ -34,9 +34,7 @@
             <thead>
                 <tr>
                     <th width="10%" scope="col">Nombre</th>
-                    <th width="10%" scope="col">Nombre</th>
                     <th width="10%" scope="col">Telefono de contacto</th>
-                    <th width="10%" scope="col">test</th>
                     <th width="10%" scope="col">
                         <a href="{% url 'descarga_reporte' %}" title="Descarga Proveedores">
                             <span class="material-icons-outlined">
@@ -52,7 +50,7 @@
                         <th scope="row">{{p.proveedor_name}}</th>
                         <th scope="row">{{p.proveedor_last_name}}</th>
                         <th scope="row">{{p.proveedor_phone}}</th>
-                        <th scope="row">{{p.proveedor_insumo}}</th>
+                        
                         <td>
                             <a href="{% url 'proveedor_ver' p.id %}">Ver</a>
                             <a href="{% url 'proveedor_edit' p.id%}">Editar</a>
