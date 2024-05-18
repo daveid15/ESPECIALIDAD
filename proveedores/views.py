@@ -61,6 +61,7 @@ def proveedor_save(request):
         proveedor_region = request.POST.get('proveedor_region')
         proveedor_comuna = request.POST.get('proveedor_comuna')
         proveedor_phone = request.POST.get('proveedor_phone')
+        proveedor_insumo = request.POST.getlist('proveedor_insumo')
         template_name = 'proveedores/proveedores_main.html'
         if not validar_string(proveedor_name,request):
             errores.append('Nombre inválido')
@@ -87,7 +88,8 @@ def proveedor_save(request):
             proveedor_address=proveedor_address,
             proveedor_region=proveedor_region,
             proveedor_comuna=proveedor_comuna,
-            proveedor_phone=proveedor_phone
+            proveedor_phone=proveedor_phone,
+            proveedor_insumo=proveedor_insumo
         )
         proveedor_save.save()
         messages.add_message(request, messages.INFO, 'Proveedor ingresado con éxito')
@@ -181,6 +183,7 @@ def proveedor_edit(request, proveedor_id):
         proveedor_address = request.POST.get('proveedor_address')
         proveedor_region = request.POST.get('proveedor_region') 
         proveedor_comuna = request.POST.get('proveedor_comuna')
+        proveedor_insumo = request.POST.getlist('proveedor_insumo')
 
         proveedor.proveedor_name = proveedor_name
         proveedor.proveedor_last_name = proveedor_last_name
@@ -189,6 +192,7 @@ def proveedor_edit(request, proveedor_id):
         proveedor.proveedor_address = proveedor_address
         proveedor.proveedor_region = proveedor_region
         proveedor.proveedor_comuna = proveedor_comuna
+        proveedor.proveedor_insumo = proveedor_insumo
         
         proveedor.save()
         
