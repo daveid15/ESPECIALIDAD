@@ -116,6 +116,19 @@
             <p class='body--small'>Orden de compra</p>
         </a>
 
+
+        
+        {% if template_name == 'ventas_main'%}
+            <a href="{% url 'ventas_main' %}" class='item active'>
+        {% else %}
+            <a href="{% url 'ventas_main' %}" class='item'>
+        {% endif %}
+            <span class="material-icons-outlined">
+                library_books
+            </span>
+            <p class='body--small'>Ventas</p>
+        </a>
+
     </div>
     <!--=== Fin Menú Ejemplos ===-->
 
