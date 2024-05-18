@@ -26,39 +26,8 @@ class Proveedor(models.Model):
         return self.get_nombre_completo()
 
 
-'''
-class OrdenCompra(models.Model):
-    proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE)
-    fecha_creacion = models.DateField(auto_now_add=True)
-    # Otros campos que necesites
-
-    def __str__(self):
-        return f'Orden de compra {self.id}'
-        '''
-
-'''
-class Producto(models.Model):
-    nombre = models.CharField(max_length=100)
-    proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE)
-    cantidad = models.PositiveIntegerField()
-    
-    def __str__(self):
-        return f'{self.nombre}'
-        '''
-    
-'''
-    
-class Producto_orden(models.Model):
-    proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE)
-    '''
-    
-
-    
-#Orden de Compra
 class Orden_compra(models.Model):
     proveedor_orden = models.ForeignKey(Proveedor, on_delete=models.CASCADE)
-    producto_orden = models.ForeignKey(Product, on_delete=models.CASCADE)
-    cantidad_orden = models.PositiveIntegerField()
     
     ESTADOS_ORDEN = [
         ('enviado', 'Enviado'),
@@ -68,15 +37,9 @@ class Orden_compra(models.Model):
     ]
 
     estado = models.CharField(max_length=20, choices=ESTADOS_ORDEN, default='enviado')
-    
-    '''
-    proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE)
-    fecha_creacion = models.DateField(auto_now_add=True)
-    id_orden = models.CharField(max_length=30)
-    producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
-    
-    def __str__(self):
-        return f'Orden de compra {self.id}'
-    
-    '''
-    
+
+
+class Producto_Orden(models.Model):
+    orden_id = models.ForeignKey(Orden_compra, on_delete=models.CASCADE)
+    producto = models.ForeignKey(Product, on_delete=models.CASCADE)
+    cantidad_orden = models.PositiveIntegerField()

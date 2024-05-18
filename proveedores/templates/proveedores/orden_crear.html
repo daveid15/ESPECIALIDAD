@@ -2,50 +2,73 @@
 {% load static %}
 {% block title %}{% endblock %}
 {% block content %}
-    {% block extra_css %}    
-    {% endblock extra_css %}    
+    {% block extra_css %}
+    {% endblock extra_css %}
     <header class='mb-4'>
-        <h2 class='h2 medium text-blue'> Nueva órden de compra</h2>
+        <h2 class='h2 medium text-blue'>Nueva orden de compra</h2>
     </header>
     <div class="col-md-11">
         <div class="mb-3">
             <div class="d-flex flex-column align-items-center align-items-lg-start">
+                {% if messages %}
+                    <div class="alert alert-info">
+                        {% for message in messages %}
+                            <p>{{ message }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
                 <form method="post" action="{% url 'orden_save' %}">
                     {% csrf_token %}
-                    <div class="col-12 col-lg-12 row row-cols-1 row-cols-md-1 g-2 p-lg-0-5">
-                        <div class="mb-0 col-md-6">
-                            <label for="proveedor_orden" class="form-label">Proveedor</label>
-                            <select class="form-select" name="proveedor_orden" id="proveedor_orden" required>
-                                <option value="">Selecciona un proveedor</option>
-                                {% for proveedor in proveedores %}
-                                    <option value="{{ proveedor.proveedor_name }}">{{ proveedor.get_nombre_completo }}</option>
-                                {% endfor %}
-                            </select>
+                    <div class="mb-0 col-md-6">
+                        <label for="proveedor_orden" class="form-label">Proveedor</label>
+                        <select class="form-select" name="proveedor_orden" id="proveedor_orden" required>
+                            <option value="">Selecciona un proveedor</option>
+                            {% for proveedor in proveedores %}
+                                <option value="{{ proveedor.proveedor_name }}">{{ proveedor.get_nombre_completo }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div id="productos-container" class="col-12 col-lg-12 row row-cols-1 row-cols-md-1 g-2 p-lg-0-5">
+                        <div class="producto-item mb-3 col-12">
+                            <div class="row">
+                                <div class="mb-0 col-md-6">
+                                    <label for="producto_orden" class="form-label">Producto</label>
+                                    <select class="form-select" name="producto_orden[]" required>
+                                        <option value="">Selecciona un Producto</option>
+                                        {% for producto in productos %}
+                                            <option value="{{ producto.supply_name }}">{{ producto.get_nombre_producto }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="mb-0 col-md-6">
+                                    <label for="cantidad_orden" class="form-label">Cantidad</label>
+                                    <input type="number" class="form-control" name="cantidad_orden[]" placeholder="Cantidad" style="text-transform: capitalize;" required>
+                                </div>
+                            </div>
                         </div>
-                        <div class="mb-0 col-md-6">
-                            <label for="producto_orden" class="form-label"> Producto </label>
-                            <select class="form-select" name="producto_orden" id="producto_orden" required>
-                                <option value="">Selecciona un Producto</option>
-                                {% for producto in productos %}
-                                    <option value="{{ producto.supply_name }}">{{ producto.get_nombre_producto }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="mb-0 col-md-12">
-                            <label for="cantidad_orden" class="form-label"> Cantidad </label>
-                            <input type="number" class="form-control" name="cantidad_orden" id="cantidad_orden" placeholder="Cantidad" style="text-transform: capitalize;" required>
-                        </div>
-                        <div class="d-flex justify-content-center mx-0-5--custom">
-                            <button type="submit" class="button">Crear</button>
-                        </div>
-                        <div class="d-flex justify-content-center mx-0-5--custom">
-                            <a href="{% url 'orden_main' %}" class="button">Regresa</a>
-                        </div>  
+                    </div>
+                    <div class="mb-3">
+                        <button type="button" id="add-producto" class="btn btn-secondary">Agregar Producto</button>
+                    </div>
+                    <div class="d-flex justify-content-center mx-0-5--custom">
+                        <button type="submit" class="button">Crear</button>
+                    </div>
+                    <div class="d-flex justify-content-center mx-0-5--custom">
+                        <a href="{% url 'orden_main' %}" class="button">Regresar</a>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-    {% block extrajs %}    
-    {% endblock extrajs %}    
+    {% block extrajs %}
+    <script>
+        document.getElementById('add-producto').addEventListener('click', function() {
+            var container = document.getElementById('productos-container');
+            var item = container.querySelector('.producto-item');
+            var clone = item.cloneNode(true);
+            clone.querySelectorAll('input').forEach(input => input.value = '');
+            container.appendChild(clone);
+        });
+    </script>
+    {% endblock extrajs %}
 {% endblock %}
