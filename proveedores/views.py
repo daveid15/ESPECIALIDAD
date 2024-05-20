@@ -81,7 +81,7 @@ def proveedor_save(request):
             messages.add_message(request, messages.INFO, 'Debes ingresar toda la información')
             return redirect('proveedores_main')
         rut_exist = Proveedor.objects.filter(proveedor_rut=proveedor_rut).count() 
-        mail_exist = User.objects.filter(proveedor_mail=proveedor_mail).count()
+        mail_exist = Proveedor.objects.filter(proveedor_mail=proveedor_mail).count()
         if rut_exist == 0:
             if mail_exist == 0:
                 proveedor_save = Proveedor(
