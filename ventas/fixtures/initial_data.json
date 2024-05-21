@@ -1,0 +1,26 @@
+[
+    {
+        "model": "ventas.prod_venta",
+        "pk": 1,
+        "fields": {
+            "nombre_producto": "Completo Italiano",
+            "precio": "2000"
+        }
+    },
+    {
+        "model": "ventas.prod_venta",
+        "pk": 2,
+        "fields": {
+            "nombre_producto": "Completo Personalizado",
+            "precio": "4000"
+        }
+    },
+    {
+        "model": "ventas.prod_venta",
+        "pk": 3,
+        "fields": {
+            "nombre_producto": "Bebida",
+            "precio": "1500"
+        }
+    }
+]

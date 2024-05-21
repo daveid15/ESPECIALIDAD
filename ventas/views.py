@@ -18,10 +18,15 @@ from datetime import datetime
 from django.http import HttpResponse
 import traceback
 import os
+from django.db import transaction
+from django.views.decorators.csrf import csrf_protect
+
 
 from registration.models import Profile
-from ventas.models import Cliente, Prod_venta, Orden_venta
+from ventas.models import Prod_venta, Orden_venta, Venta_producto
 from administrator.views import validar_email,validar_rut,validar_string,validar_numero
+from inventario.models import Product
+
 # Create your views here.
 
 @login_required
@@ -32,48 +37,45 @@ def ventas_main(request):
         return redirect('check_group_main')
     template_name = 'ventas/ventas_main.html'
     return render(request,template_name,{'profiles':profiles})
-    
+
 @login_required
 def venta_save(request):
-    profile = Profile.objects.get(user_id=request.user.id)
-    if profile.group_id != 1:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una área para la que no tiene permisos')
-        return redirect('check_group_main')
-    
-    
     if request.method == 'POST':
-        #numero_orden = request.POST.get('numero_orden')
         cliente_name = request.POST.get('cliente_name')
         cliente_last_name = request.POST.get('cliente_last_name')
-        producto_orden = request.POST.get('producto_orden')
-        cantidad_orden = request.POST.get('cantidad_orden')
-        #monto_orden = request.POST.get('monto_orden')
-        #producto_orden = request.POST.get('producto_orden')
-        agregados_orden = request.POST.get('agregados_orden')
-        
+        producto_venta = ['Completo Italiano', 'Completo Personalizado', 'Bebida']  #request.POST.getlist('producto_venta')
+        cantidad_venta = request.POST.getlist('cantidad_venta')
+        cliente_venta = f"{cliente_name} {cliente_last_name}"
+        print(producto_venta)
+        print(cantidad_venta)
+        if not all([cliente_name, cliente_last_name, producto_venta, cantidad_venta]):
+            messages.error(request, 'Debes ingresar toda la información')
+            return redirect('venta_crear')
 
+        try:
+            with transaction.atomic():
+                orden_venta = Orden_venta.objects.create(cliente_venta=cliente_venta)
+                total_venta = 0
 
-        if cliente_name == '' or cliente_last_name == '' or producto_orden == '' or cantidad_orden == '' or agregados_orden == '':
-            messages.add_message(request, messages.INFO, 'Debes ingresar toda la información')
-            return render(request, template_name, {'profiles': profile})
+                for prod, cant in zip(producto_venta, cantidad_venta):
+                    producto_instancia = Prod_venta.objects.get(nombre_producto=prod)
+                    venta_producto = Venta_producto.objects.create(producto=producto_instancia, cantidad=cant, id_orden=orden_venta, precio_producto=producto_instancia.precio)
+                    venta_producto.save()
+                    total_venta += producto_instancia.precio * int(cant)
 
-        venta_save = Orden_venta(
-            #numero_orden=numero_orden,
-            #cliente_name=cliente_name,
-            #cliente_last_name=cliente_last_name,
-            producto_orden=producto_orden,
-            cantidad_orden=cantidad_orden,
-            #monto_orden=monto_orden,
-            agregados_orden=agregados_orden
-        )
+                orden_venta.total_venta = total_venta
+                orden_venta.save()
 
-        venta_save.save()
-        template_name = 'ventas/venta_crear.html'
-        return render(request, template_name, {'profiles': profile})
-
-    
+                messages.success(request, 'Orden de Venta creada con éxito')
+                return redirect('venta_crear')
+        except Exception as e:
+            messages.error(request, f'Error al crear la orden: {str(e)}')
+            return redirect('venta_crear')
     else:
-        messages.add_message(request, messages.INFO, 'Error en el método de envío')
+        messages.error(request, 'Error en el método de envío')
+        return redirect('venta_crear')
+
+
 
 @login_required
 def venta_list(request, page=None, search=None,grupo_id=1):
@@ -91,10 +93,10 @@ def venta_crear(request):
         messages.add_message(request, messages.INFO, 'Intenta ingresar a un área para la que no tiene permisos')
         return redirect('check_group_main')
     
-    clientes = Cliente.objects.all()
-    producto_orden= Orden_venta.objects.all()
+    #clientes = Cliente.objects.all()
+    productos= Prod_venta.objects.all()
     template_name = 'ventas/venta_crear.html'
-
+    '''
     if request.method == 'POST':
         numero_orden = request.POST.get('numero_orden')
         cliente_name = request.POST.get('cliente_name')
@@ -132,8 +134,9 @@ def venta_crear(request):
 
         # Redirigir al usuario al listado de órdenes
         return redirect('venta_list')
+        '''
     
-    return render(request, template_name, {'profiles': profiles})
+    return render(request, template_name, {'profiles': profiles, 'productos':productos})
 
 @login_required
 def detalle_orden_de_venta(request, orden_id):
