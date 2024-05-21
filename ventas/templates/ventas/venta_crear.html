@@ -1,49 +1,53 @@
+{% extends 'core/base_admin.html' %}
 {% load static %}
 {% block title %}{% endblock %}
 {% block content %}
+    {% block extra_css %}
+    {% endblock extra_css %}
     <header class='mb-4'>
-        <h2 class='h2 medium text-blue'> Nueva órden de compra</h2>
+        <h2 class='h2 medium text-blue'>Nueva venta</h2>
     </header>
     <div class="col-md-11">
         <div class="mb-3">
             <div class="d-flex flex-column align-items-center align-items-lg-start">
+                {% if messages %}
+                    <div class="alert alert-info">
+                        {% for message in messages %}
+                            <p>{{ message }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
                 <form method="post" action="{% url 'venta_save' %}">
                     {% csrf_token %}
-                    <div class="col-12 col-lg-12 row row-cols-1 row-cols-md-1 g-2 p-lg-0-5">
-                        <div class="mb-0 col-md-6">
-                            <label for="cliente_name">Nombre (*)</label>
-                            <input type="text" class="form-control border border-danger" id="cliente_name" name="cliente_name" autofocus maxlength="254" required/>
-                            <label for="cliente_last_name">Apellido (*)</label>
-                            <input type="text" class="form-control border border-danger" id="cliente_last_name" name="cliente_last_name" required/>  
-                        </div>
-                        <div class="mb-0 col-md-6">
-                            <label for="producto_orden" class="form-label"> Producto </label>
-                            <select class="form-select" name="producto_orden" id="producto_orden" required>
-                                <option value="">Selecciona un Producto</option>
-                                {% for producto in productos %}
-                                    <!--AGREGAR LISTADO DE PRODUCTOS A VENDER ALGO COMO LO QUE HIZO EL DIEGO-->
-                                    <option value="{{ lista_productos}}">{{ lista_productos }}</option> 
-                                {% endfor %}
-                                <option value="Providencia">Providencia</option>
-                            </select>
-                        </div>
-                        <div class="mb-0 col-md-12">
-                            <label for="cantidad_orden" class="form-label"> Cantidad </label>
-                            <input type="number" min="0" class="form-control" name="cantidad_orden" id="cantidad_orden" style="text-transform: capitalize;" required>
-                        </div>
-                        <div class="mb-0 col-md-12">
-                            <label for="agregados_orden" class="form-label"> Agregados </label>
-                            <input type="number" min="0" class="form-control" name="agregados_orden" id="agregados_orden"  style="text-transform: capitalize;" required>
-                        </div>
-                        <div class="d-flex justify-content-center mx-0-5--custom">
-                            <button type="submit" class="button">Crear</button>
-                        </div>
-                        <div class="d-flex justify-content-center mx-0-5--custom">
-                            <a href="{% url 'orden_main' %}" class="button">Regresa</a>
-                        </div>  
+                    <div class="mb-0 col-md-6">
+                        <label for="cliente_name" class="form-label">Nombre del cliente</label>
+                        <input type="text" class="form-control" name="cliente_name" id="cliente_name" placeholder="Nombre" required>
+                    </div>
+                    <div class="mb-0 col-md-6">
+                        <label for="cliente_last_name" class="form-label">Apellido del cliente</label>
+                        <input type="text" class="form-control" name="cliente_last_name" id="cliente_last_name" placeholder="Apellido" required>
+                    </div>
+                    <div class="mb-0 col-md-6">
+                        <label for="cantidad_italiano" class="form-label">Completos Italianos</label>
+                        <input type="number" min ="0" class="form-control" name="cantidad_venta" id="cantidad_venta" placeholder="Cantidad" required>
+                    </div>
+                    <div class="mb-0 col-md-6">
+                        <label for="cantidad_personalizado" class="form-label">Completos Personalizados</label>
+                        <input type="number" min ="0" class="form-control" name="cantidad_venta" id="cantidad_venta" placeholder="Cantidad" required>
+                    </div>
+                    <div class="mb-0 col-md-6">
+                        <label for="cantidad_bebida" class="form-label">Bebidas</label>
+                        <input type="number" min ="0" class="form-control" name="cantidad_venta" id="cantidad_venta" placeholder="Cantidad" required>
+                    </div>
+                        <button type="submit" class="button">Crear</button>
+                    </div>
+                    <div class="d-flex justify-content-center mx-0-5--custom">
+                        <a href="{% url 'ventas_main' %}" class="button">Regresar</a>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+    {% block extrajs %}
+    {% endblock extrajs %}
 {% endblock %}
