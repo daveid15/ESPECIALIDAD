@@ -12,129 +12,135 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Icons+Round" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Icons+Sharp" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Icons+Two+Tone" rel="stylesheet">
-    <!--<link href="{% static 'css/styles.css' %}" rel="stylesheet">
-    <link href="{% static 'css/index.css' %}" rel="stylesheet">-->
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/admin_main_styles.css' %}">
-
 </head>
 <body>
-<nav id="sidebar" class="side-bar to-left">
-    <div class="menu">
-        <!--=== Menu Inicio ===-->
-        <nav class="navbar">
-            <div class="user-info">
-                <img src="{% static 'user.jpg' %}" alt="User Image" class="profile">
-                <span class="username">{{ request.user.first_name }}</span>
-            </div>
-            <div class="navbar_content">
-                
-                <div class="settings">
-                    <a href="{% url 'perfil_main' %}" class="settings-link">
-                        <i class="bi bi-gear-wide-connected"></i>
-                    </a>
+    <nav id="sidebar" class="side-bar to-left">
+        <div class="menu">
+            <!--=== Menu Inicio ===-->
+            <nav class="navbar">
+                <div class="user-info">
+                    <img src="{% static 'user.jpg' %}" alt="User Image" class="profile">
+                    <span class="username">{{ request.user.first_name }}</span>
                 </div>
-            </div>
-        </nav>
-        <nav class="sidebar">
-            <div class="menu_content">
-                <ul class="menu_items">
-                    <li class="item">
-                        <a href="{% url 'admin_main' %}" class="nav_link submenu_item">
-                            <span class="navlink_icon">
-                                <i class="bx bx-buildings"></i>
-                            </span>
-                            <span class="navlink">Inicio</span>
-                            <i class="bx bx-chevron-right arrow-left"></i>
+                <div class="navbar_content">
+                    <div class="settings">
+                        <a href="{% url 'perfil_main' %}" class="settings-link">
+                            <i class="bi bi-gear-wide-connected"></i>
                         </a>
-                        <ul class="menu_items submenu">
-                            <li><a href="{% url 'admin_main' %}" class="nav_link sublink">Inicio</a></li>
-                        </ul>
-                    </li>
-                    <li class="item">
-                        <a href="{% url 'users_main' %}" class="nav_link submenu_item">
-                            <span class="navlink_icon">
-                                <i class="bx bx-buildings"></i>
-                            </span>
-                            <span class="navlink">Gestión de usuarios</span>
-                            <i class="bx bx-chevron-right arrow-left"></i>
-                        </a>
-                        <ul class="menu_items submenu">
-                            <li><a href="{% url 'users_main' %}" class="nav_link sublink">Users Main</a></li>
-                        </ul>
-                    </li>
-                    <li class="item">
-                        <a href="{% url 'proveedores_main' %}" class="nav_link submenu_item">
-                            <span class="navlink_icon">
-                                <i class="bx bx-buildings"></i>
-                            </span>
-                            <span class="navlink">Gestión de proveedores</span>
-                            <i class="bx bx-chevron-right arrow-left"></i>
-                        </a>
-                        <ul class="menu_items submenu">
-                            <li><a href="{% url 'proveedores_main' %}" class="nav_link sublink">Proveedores Main</a></li>
-                        </ul>
-                    </li>
-                    <li class="item">
-                        <a href="{% url 'inventario_main' %}" class="nav_link submenu_item">
-                            <span class="navlink_icon">
-                                <i class="bx bx-archive"></i>
-                            </span>
-                            <span class="navlink">Gestión de inventario</span>
-                            <i class="bx bx-chevron-right arrow-left"></i>
-                        </a>
-                        <ul class="menu_items submenu">
-                            <li><a href="{% url 'inventario_main' %}" class="nav_link sublink">Inventario Main</a></li>
-                        </ul>
-                    </li>
-                    <li class="item">
-                        <a href="{% url 'orden_main' %}" class="nav_link submenu_item">
-                            <span class="navlink_icon">
-                                <i class="bx bx-shopping-bag"></i>
-                            </span>
-                            <span class="navlink">Ordenes de Compra</span>
-                            <i class="bx bx-chevron-right arrow-left"></i>
-                        </a>
-                        <ul class="menu_items submenu">
-                            <li><a href="{% url 'orden_main' %}" class="nav_link sublink">Órden Main</a></li>
-                        </ul>
-                    </li>
-                    <footer class="footer">
-                        <div class="logo_item">
-                            <i class="bx bx-menu" id="sidebarOpen"></i>
-                            <img src="{% static 'assets/img/logo.png' %}" alt="Logo" style="width: 150px; height: auto;"">
-                           
-                        </div>
-                    </footer>
-                </ul>
-            </div>
-        </nav>
-        <div class="side-bar-footer mb-5">
-            <button class="button" onclick="confirmLogout()">Cerrar Sesión</button>
+                    </div>
+                </div>
+            </nav>
+            <nav class="sidebar">
+                <div class="menu_content">
+                    <ul class="menu_items">
+                        <li class="item">
+                            <a href="{% url 'admin_main' %}" class="nav_link submenu_item">
+                                <span class="navlink_icon">
+                                    <i class="bx bx-buildings"></i>
+                                </span>
+                                <span class="navlink">Inicio</span>
+                                <i class="bx bx-chevron-right arrow-left"></i>
+                            </a>
+                            <ul class="menu_items submenu">
+                                <li><a href="{% url 'admin_main' %}" class="nav_link sublink">Inicio</a></li>
+                            </ul>
+                        </li>
+                        <li class="item">
+                            <a href="{% url 'users_main' %}" class="nav_link submenu_item">
+                                <span class="navlink_icon">
+                                    <i class="bx bx-buildings"></i>
+                                </span>
+                                <span class="navlink">Gestión de usuarios</span>
+                                <i class="bx bx-chevron-right arrow-left"></i>
+                            </a>
+                            <ul class="menu_items submenu">
+                                <li><a href="{% url 'users_main' %}" class="nav_link sublink">Users Main</a></li>
+                            </ul>
+                        </li>
+                        <li class="item">
+                            <a href="{% url 'proveedores_main' %}" class="nav_link submenu_item">
+                                <span class="navlink_icon">
+                                    <i class="bx bx-buildings"></i>
+                                </span>
+                                <span class="navlink">Gestión de proveedores</span>
+                                <i class="bx bx-chevron-right arrow-left"></i>
+                            </a>
+                            <ul class="menu_items submenu">
+                                <li><a href="{% url 'proveedores_main' %}" class="nav_link sublink">Proveedores Main</a></li>
+                            </ul>
+                        </li>
+                        <li class="item">
+                            <a href="{% url 'inventario_main' %}" class="nav_link submenu_item">
+                                <span class="navlink_icon">
+                                    <i class="bx bx-archive"></i>
+                                </span>
+                                <span class="navlink">Gestión de inventario</span>
+                                <i class="bx bx-chevron-right arrow-left"></i>
+                            </a>
+                            <ul class="menu_items submenu">
+                                <li><a href="{% url 'inventario_main' %}" class="nav_link sublink">Inventario Main</a></li>
+                            </ul>
+                        </li>
+                        <li class="item">
+                            <a href="{% url 'orden_main' %}" class="nav_link submenu_item">
+                                <span class="navlink_icon">
+                                    <i class="bx bx-shopping-bag"></i>
+                                </span>
+                                <span class="navlink">Ordenes de compra</span>
+                                <i class="bx bx-chevron-right arrow-left"></i>
+                            </a>
+                            <ul class="menu_items submenu">
+                                <li><a href="{% url 'orden_main' %}" class="nav_link sublink">Órden Main</a></li>
+                            </ul>
+                        </li>
+    
+                        <li class="item">
+                            <a href="{% url 'ventas_main' %}" class="nav_link submenu_item">
+                                <span class="navlink_icon">
+                                    <i class="bx bx-shopping-bag"></i>
+                                </span>
+                                <span class="navlink">Ordenes de venta</span>
+                                <i class="bx bx-chevron-right arrow-left"></i>
+                            </a>
+                            <ul class="menu_items submenu">
+                                <li><a href="{% url 'ventas_main' %}" class="nav_link sublink">Ventas Main</a></li>
+                            </ul>
+                        </li>
+                        <!-- Más ítems del menú -->
+                        <footer class="footer">
+                            <div class="logo_item">
+                                <i class="bx bx-menu" id="sidebarOpen"></i>
+                                <img src="{% static 'assets/img/logo.png' %}" alt="Logo" style="width: 150px; height: auto;">
+                                <button class="button" onclick="confirmLogout()">Cerrar Sesión</button>
+                            </div>
+                        </footer>
+                    </ul>
+                </div>
+            </nav>
         </div>
+    </nav>
+    <div class="dashboard-container">
+        <!-- Messages -->
+        {% if messages %}
+        <div class="alert alert-danger mt-3">
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+        </div>
+        {% endif %}
+        <!-- End messages -->
+        {% block content %}{% endblock %}
     </div>
-</nav>
-<div class="dashboard-container">
-    <!-- Messages -->
-    {% if messages %}
-    <div class="alert alert-danger mt-3">
-        {% for message in messages %}
-            {{ message }}
-        {% endfor %}
-    </div>
-    {% endif %}
-    <!-- End messages -->
-    {% block content %}{% endblock %}
-</div>
-<script src="{% static 'js/admin_main_script.js' %}"></script>
-<script src="{% static 'node_modules/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
-<script>
-    function confirmLogout() {
-        if (confirm("¿Estás seguro de cerrar sesión?")) {
-            // Lógica para cerrar sesión
-            window.location.href = "{% url 'logout' %}";
+    <script src="{% static 'js/admin_main_script.js' %}"></script>
+    <script src="{% static 'node_modules/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+    <script>
+        function confirmLogout() {
+            if (confirm("¿Estás seguro de cerrar sesión?")) {
+                window.location.href = "{% url 'logout' %}";
+            }
         }
-    }
-</script>
+    </script>
 </body>
 </html>

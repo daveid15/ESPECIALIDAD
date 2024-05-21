@@ -2,23 +2,24 @@
 {% load static %}
 {% block content %}
 {% block extrahead %}
-
 {% endblock %}
     <main role="main">
         <div class="container col-12 mt-3">
-            <div class="col-12  mt-3 border">
-                <h3 class="px-5 py-4" style="text-align: center;">Gestión de suarios </h3> 
+            <div class="col-12 mt-3 border">
+                <h3 class="px-5 py-4" style="text-align: center;">Gestión de usuarios</h3> 
                 <div class="row mt-4 mb-4">
                     <div class="col-12 col-sm-3 mb-3" style="text-align: center;">
-                            <a href="{% url 'edit_perfil' %}" class="boton form-control">Editar perfil</a>
+                        <a href="{% url 'edit_perfil' %}" class="boton form-control">Editar perfil</a>
                     </div>
                     <div class="d-flex justify-content-end mb-3" style="text-align: center;">
                         <a href="{% url 'password_reset' %}" class="body-normal text-blue text-decoration-underline cursor-pointer">Cambiar contraseña</a>
                     </div>
                     <!--REUTILICÉ EL CÓDIGO DE OLVIDASTE TU CONTRASEÑA PERO NECESITO CONFIRMACIÓN!!¡¡-->
-                <div class="col-12 col-sm-3 mb-3" style="text-align: center;">
-                    <a href="{% url 'admin_main' %}" class="botton form-control" style="padding: 4px; margin-top: 4px;">Volver</a>
-            </div>
-        </div>
+                    <div class="col-12 col-sm-3 mb-3" style="text-align: center;">
+                        <a href="{% url 'admin_main' %}" class="botton form-control" style="padding: 4px; margin-top: 4px;">Volver</a>
+                    </div> <!-- Cerrando el div col-12 col-sm-3 -->
+                </div> <!-- Cerrando el div row -->
+            </div> <!-- Cerrando el div col-12 mt-3 border -->
+        </div> <!-- Cerrando el div container -->
     </main>
 {% endblock %}

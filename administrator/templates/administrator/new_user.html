@@ -1,92 +1,91 @@
 {% extends 'core/base_admin.html' %}
 {% load static %}
 
-{% block content %}
 {% block extrahead %}
-
+<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="{% static 'css/admin_main_styles.css' %}" />
 {% endblock %}
 
-    <main role="main">
-        <div class="container col-12 mt-3">
-            <div class="col-12  mt-3 border">
-                <h3>Nuevo usuario</h3> 
-                <form action="" method="post">
-                    {% csrf_token %}
-                    <div class="row"> 
-                        <div class="col-12 col-sm-4 mb-3">
-                            <label for="name">Nombre (*)</label>
-                            <input type="text" class="form-control border border-danger" id="name" name="name" autofocus maxlength="254" required/>
-                            <label for="last_name">Apellido (*)</label>
-                            <input type="text" class="form-control border border-danger" id="last_name1" name="last_name1" required/>
-                            </div> 
-                        </div>  
-                    </div>    
-                    <div class="row">
-                        <div class="col-12 col-sm-8 mb-3">
-                            </div><label for="rut">RUN (*)</label>
-                            <input type="text" name="rut"  required oninput="checkRut(this)" autofocus maxlength="254" required id="id_rut" class="form-control border border-danger" placeholder="Rut (Ej: 17605812-2)"/>
-                                <label for="email">Cargo</label>
-                                <select name="grupo" id="grupo" class="form-control border" required>
-                                    <option value="">----------</option>
-                                    {% for g in groups %}
-                                    <option value="{{g.id}}">{{g.name}}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>
-                                          
-                        <div class="col-12 col-sm-4 mb-3">
-                            <label for="email">Correo electrónico (*)</label>
-                            <input type="email" class="form-control border border-danger" placeholder="nombre@unab.cl" name="email"/>
-                        </div>                        
+{% block content %}
+<main role="main">
+    <div class="container col-12 mt-3">
+        <div class="col-12 mt-3 border">
+            <h3>Nuevo usuario</h3>
+            <form action="" method="post">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-12 col-sm-4 mb-3">
+                        <label for="name">Nombre (*)</label>
+                        <input type="text" class="form-control border border-danger" id="name" name="name" autofocus maxlength="254" required />
+                        <label for="last_name">Apellido (*)</label>
+                        <input type="text" class="form-control border border-danger" id="last_name1" name="last_name1" required />
                     </div>
-                    <div class="row">
-                        <div class="col-12 col-sm-4 mb-3">
-                            <label for="mobile">Número de contacto (*)</label>
-                            <input type="text" class="form-control border border-danger" id="mobile" name="mobile" pattern="\d*">
-                        </div>                                               
-                    </div> <!---->
-                        <div class="row"> 
-                            <div class="col-12 col-sm-8 mb-3">
-                                <label for="address">Dirección</label>
-                                <input type="text" class="form-control border border-danger" name="address" required/>
-                            </div>
-                       <div class="col-12 col-sm-4 mb-3">
-                            <label for="region">Región</label>
-                            <select name="region" id="region" class="form-control border border-danger" required>
-                                <option value="">Seleccione una región</option>
-                                {% for region in regions %}
-                                    <option value="{{ region }}">{{ región }}</option>
-                                {% endfor %}
-                                <option value="Region Metropolitana de Santiago">Región Metropolitana de Santiago
-                            </select>
-                            <label for="comuna">Comuna</label>
-                                <select name="comuna" id="comuna" class="form-control border border-danger" required>
-                                    <option value="">Seleccione una comuna</option>
-                                    {% for comuna in comunas %}
-                                        <option value="{{ comuna }}">{{ comuna }}</option>
-                                    {% endfor %}
-                                     <optgroup label="Región Metropolitana de Santiago">
-                                     <option value="Providencia">Providencia</option>
-                                     <option value="Santiago">Santiago</option>
-                                     <option value="San Bernardo">San Bernardo</option>
-                                     <option value="Maipú">Maipú</option>
-                                     <option value="Buin">Buin</option>
-                                    </optgroup>
-                                </select>
-                            </select>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-sm-8 mb-3">
+                        <label for="rut">RUN (*)</label>
+                        <input type="text" name="rut" required oninput="checkRut(this)" autofocus maxlength="254" required id="id_rut" class="form-control border border-danger" placeholder="Rut (Ej: 17605812-2)" />
+                        <label for="email">Cargo</label>
+                        <select name="grupo" id="grupo" class="form-control border" required>
+                            <option value="">----------</option>
+                            {% for g in groups %}
+                            <option value="{{ g.id }}">{{ g.name }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-sm-4 mb-3">
+                        <label for="email">Correo electrónico (*)</label>
+                        <input type="email" class="form-control border border-danger" placeholder="nombre@unab.cl" name="email" />
                     </div>
-                    <div class="row"> 
-                        <div class="col-12 col-sm-6 mb-3">
-                            <input type="submit" value="Crear Usuario"  class="botton form-control" style="padding: 4px; margin-top: 4px;">
-                        </div>
-                        <div class="col-12 col-sm-6 mb-3">
-                            <a href="{% url 'users_main' %}"  class="botton form-control" style="padding: 4px; margin-top: 4px;">Volver</a>
-                        </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-sm-4 mb-3">
+                        <label for="mobile">Número de contacto (*)</label>
+                        <input type="text" class="form-control border border-danger" id="mobile" name="mobile" pattern="\d*" />
                     </div>
-                </form>
-            </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-sm-8 mb-3">
+                        <label for="address">Dirección</label>
+                        <input type="text" class="form-control border border-danger" name="address" required />
+                    </div>
+                    <div class="col-12 col-sm-4 mb-3">
+                        <label for="region">Región</label>
+                        <select name="region" id="region" class="form-control border border-danger" required>
+                            <option value="">Seleccione una región</option>
+                            {% for region in regions %}
+                            <option value="{{ region }}">{{ region }}</option>
+                            {% endfor %}
+                            <option value="Region Metropolitana de Santiago">Región Metropolitana de Santiago</option>
+                        </select>
+                        <label for="comuna">Comuna</label>
+                        <select name="comuna" id="comuna" class="form-control border border-danger" required>
+                            <option value="">Seleccione una comuna</option>
+                            {% for comuna in comunas %}
+                            <option value="{{ comuna }}">{{ comuna }}</option>
+                            {% endfor %}
+                            <optgroup label="Región Metropolitana de Santiago">
+                                <option value="Providencia">Providencia</option>
+                                <option value="Santiago">Santiago</option>
+                                <option value="San Bernardo">San Bernardo</option>
+                                <option value="Maipú">Maipú</option>
+                                <option value="Buin">Buin</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-sm-6 mb-3">
+                        <input type="submit" value="Crear Usuario" class="button form-control" style="padding: 4px; margin-top: 4px;">
+                    </div>
+                    <div class="col-12 col-sm-6 mb-3">
+                        <a href="{% url 'users_main' %}" class="button form-control" style="padding: 4px; margin-top: 4px;">Volver</a>
+                    </div>
+                </div>
+            </form>
         </div>
-    </main>
+    </div>
+</main>
 {% endblock %}
