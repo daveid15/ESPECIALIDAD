@@ -76,7 +76,7 @@ def venta_list(request, page=None, search=None, grupo_id=1):
                                  Q(cliente_venta__icontains=search) |
                                  Q(total_venta__icontains=search))
 
-    paginator = Paginator(ordenes, 10)
+    paginator = Paginator(ordenes, 20)
     pagina_numero = request.GET.get('pagina')
     ordenes = paginator.get_page(pagina_numero)
     

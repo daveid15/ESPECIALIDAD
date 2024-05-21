@@ -40,9 +40,13 @@
                                         {% endfor %}
                                     </select>
                                 </div>
-                                <div class="mb-0 col-md-6">
+                                <div class="mb-0 col-md-5">
                                     <label for="cantidad_orden" class="form-label">Cantidad</label>
                                     <input type="number" min="0" class="form-control" name="cantidad_orden[]" placeholder="Cantidad" style="text-transform: capitalize;" required>
+                                </div>
+                                <div class="mb-0 col-md-1 d-flex align-items-end">
+                                    <!-- Botón de "Borrar Producto" con atributo disabled -->
+                                    <button type="button" class="btn btn-danger btn-delete-producto" disabled>Borrar Producto</button>
                                 </div>
                             </div>
                         </div>
@@ -68,7 +72,30 @@
             var clone = item.cloneNode(true);
             clone.querySelectorAll('input').forEach(input => input.value = '');
             container.appendChild(clone);
+            updateDeleteButtons();
         });
+
+        document.addEventListener('click', function(event) {
+            if (event.target.classList.contains('btn-delete-producto')) {
+                if (document.querySelectorAll('.producto-item').length > 1) {
+                    event.target.closest('.producto-item').remove();
+                    updateDeleteButtons();
+                } else {
+                    alert("No puedes eliminar el único producto.");
+                }
+            }
+        });
+
+        function updateDeleteButtons() {
+            var deleteButtons = document.querySelectorAll('.btn-delete-producto');
+            if (deleteButtons.length === 1) {
+                deleteButtons[0].setAttribute('disabled', true);
+            } else {
+                deleteButtons.forEach(function(button) {
+                    button.removeAttribute('disabled');
+                });
+            }
+        }
     </script>
     {% endblock extrajs %}
 {% endblock %}
