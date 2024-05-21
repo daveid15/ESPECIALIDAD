@@ -67,30 +67,37 @@
 <body>
     {% load multiply_filter %}
     <div class="container">
-        <h1>Detalles de la Compra</h1>
+        <h1>Detalles de la venta</h1>
         <div class="detail-item">
-            <p><strong>Número de órden:</strong> {{ orden.id }}</p>
+            <p><strong>Número de órden:</strong> {{ orden.numero_orden }}</p>
         </div>
         <div class="detail-item">
-            <p><strong>Proveedor:</strong> {{ orden.proveedor_orden }}</p>
+            <p><strong>Cliente:</strong> {{ orden.cliente_venta }}</p>
         </div>
         <table class="product-list">
             <thead>
                 <tr>
                     <th>Producto</th>
                     <th>Cantidad</th>
+                    <th>Precio Unitario</th>
+                    <th>Subtotal</th>
                 </tr>
             </thead>
             <tbody>
-                {% for producto in orden_productos %}
+                {% for venta_producto in ventas_productos %}
                 <tr>
-                    <td>{{ producto.producto.supply_name }}</td>
-                    <td>{{ producto.cantidad_orden }} ({{producto.producto.supply_unit}})</td>
+                    <td>{{ venta_producto.producto.nombre_producto }}</td>
+                    <td>{{ venta_producto.cantidad }}</td>
+                    <td>${{ venta_producto.precio_producto }}</td>
+                    <td>${{ venta_producto.precio_producto|multiply:venta_producto.cantidad }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
-        <a href="{% url 'orden_list_enviada' %}" class="button">Volver</a>
+        <div class="total">
+            <p>TOTAL: ${{ orden.total_venta }}</p>
+        </div>
+        <a href="{% url 'venta_list' %}" class="button">Volver</a>
     </div>
 </body>
 </html>

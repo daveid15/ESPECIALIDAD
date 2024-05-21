@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Detalles de la Orden de Compra</title>
+    <title>Detalles de la venta</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -27,23 +27,70 @@
         .detail-item p {
             margin: 5px 0;
         }
+        .product-list {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+        .product-list th, .product-list td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .product-list th {
+            background-color: #f2f2f2;
+        }
+        .total {
+            text-align: right;
+            margin-top: 20px;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 20px;
+            font-size: 1em;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            text-align: center;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
+    {% load multiply_filter %}
     <div class="container">
-        <h1>Detalles de la Orden de Compra</h1>
+        <h1>Detalles de la Compra</h1>
+        <div class="detail-item">
+            <p><strong>Número de órden:</strong> {{ orden.id }}</p>
+        </div>
         <div class="detail-item">
             <p><strong>Proveedor:</strong> {{ orden.proveedor_orden }}</p>
         </div>
-        <div class="detail-item">
-            <p><strong>Producto:</strong> {{ orden.producto_orden }}</p>
-        </div>
-        <div class="detail-item">
-            <p><strong>Cantidad:</strong> {{ orden.cantidad_orden }}</p>
-        </div>
-        <!-- Puedes agregar más campos aquí según sea necesario -->
-
-        <a href="{% url 'orden_list_anulada' %}" class="button">Volver</a> <!-- Botón "Volver" -->
+        <table class="product-list">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for producto in orden_productos %}
+                <tr>
+                    <td>{{ producto.producto.supply_name }}</td>
+                    <td>{{ producto.cantidad_orden }} ({{producto.producto.supply_unit}})</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="{% url 'orden_list_anulada' %}" class="button">Volver</a>
     </div>
 </body>
 </html>

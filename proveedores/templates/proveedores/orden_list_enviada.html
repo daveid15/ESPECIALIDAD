@@ -24,9 +24,9 @@
         <table class="table table-user" style="text-align: center;">
             <thead>
                 <tr>
+                    <th width="10%" scope="col">Número de Órden</th>
                     <th width="10%" scope="col">Proveedor</th>
-                    <th width="10%" scope="col">Producto</th>
-                    <th width="10%" scope="col">Cantidad</th>
+                    <th width="10%" scope="col">Cantidad de Productos</th>
                     <th width="10%" scope="col">Acciones</th>
                     <th width="10%" scope="col">Estado</th>
                 </tr>
@@ -34,21 +34,18 @@
             <tbody>
                 {% for orden in ordenes %}
                     <tr>
+                        <td>{{ orden.id }}</td>
                         <td>{{ orden.proveedor_orden }}</td>
-                        <td>{{ orden.producto_orden }}</td>
-                        <td>{{ orden.cantidad_orden }}</td>
+                        <td>{{ orden.producto_orden_set.all|length }}</td>
                         <td>
                             <a href="{% url 'detalle_orden_de_compra_enviada' orden_id=orden.id %}" class="btn btn-primary">Ver</a>
-                            <a href="{% url 'editar_orden' orden_id=orden.id %}" class="btn btn-secondary">Editar</a> <!-- Botón Editar -->
+                            <a href="{% url 'editar_orden' orden_id=orden.id %}" class="btn btn-secondary">Editar</a>
                         </td>
                         <td>
                             <!-- Modal -->
                             <div class="modal fade" id="estadoOrden{{ orden.id }}" tabindex="-1" aria-labelledby="estadoOrden{{ orden.id }}Label" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
-                                        <div class="modal-header">
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
                                         <div class="modal-body">
                                             <form id="estadoForm{{ orden.id }}" method="post" action="{% url 'cambiar_estado_orden_enviada' orden.id %}">
                                                 {% csrf_token %}

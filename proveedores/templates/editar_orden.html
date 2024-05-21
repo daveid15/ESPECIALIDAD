@@ -2,48 +2,76 @@
 {% load static %}
 {% block title %}{% endblock %}
 {% block content %}
-    {% block extra_css %}    
-    {% endblock extra_css %}    
+    {% block extra_css %}
+    {% endblock extra_css %}
     <header class='mb-4'>
-        <h2 class='h2 medium text-blue'> Editar Orden de Compra</h2>
+        <h2 class='h2 medium text-blue'>Editar Órden de compra</h2>
     </header>
     <div class="col-md-11">
         <div class="mb-3">
             <div class="d-flex flex-column align-items-center align-items-lg-start">
-                <form method="post" action="{% url 'editar_orden' orden.id %}">
+                {% if messages %}
+                    <div class="alert alert-info">
+                        {% for message in messages %}
+                            <p>{{ message }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                <form method="post" action="{% url 'editar_orden' orden_id=orden.id %}">
                     {% csrf_token %}
-                    <input type="hidden" value="{{ orden.id }}" name="orden_id" id="orden_id">
-                    <div class="col-12 col-lg-12 row row-cols-1 row-cols-md-1 g-2 p-lg-0-5">
-                        <div class="mb-0 col-md-6">
-                            <label for="proveedor_orden" class="form-label">Proveedor</label>
-                            <select class="form-select" name="proveedor_orden" id="proveedor_orden" required>
-                                {% for proveedor in proveedores %}
-                                    <option value="{{proveedor_nombre}}">{{proveedor_nombre}}</option>
-                                    <option value="{{ proveedor.get_nombre_completo }}">{{ proveedor.get_nombre_completo }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="mb-0 col-md-6">
-                            <label for="producto_orden" class="form-label"> Producto </label>
-                            <select class="form-select" name="producto_orden" id="producto_orden" required>
-                                {% for producto in productos %}
-                                    <option value="{{producto_nombre}}">{{producto_nombre}}</option>
-                                    <option value="{{ producto.get_nombre_producto }}">{{ producto.get_nombre_producto }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="mb-0 col-md-12">
-                            <label for="cantidad_orden" class="form-label"> Cantidad </label>
-                            <input type="number" min="0" class="form-control border border-danger" value="{{cantidad_nombre}}" id="cantidad_orden" name="cantidad_orden" pattern="\d*">
-                        </div> 
-                        <div class="d-flex justify-content-center mx-0-5--custom">
-                            <input type="submit" value="Editar" class="button">
-                        </div>
-                        <div class="d-flex justify-content-center mx-0-5--custom">
-                            <a href="{% url 'orden_list_enviada' %}" class="button">Regresa</a>
-                        </div>
+                    <div class="mb-0 col-md-6">
+                        <label for="proveedor_orden" class="form-label">Proveedor</label>
+                        <select class="form-select" name="proveedor_orden" id="proveedor_orden" required>
+                            <option value="{{ orden.proveedor_orden.proveedor_name }}">{{ orden.proveedor_orden.get_nombre_completo }}</option>
+                            {% for proveedor in proveedores %}
+                                <option value="{{ proveedor.proveedor_name }}">{{ proveedor.get_nombre_completo }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div id="productos-container" class="col-12 col-lg-12 row row-cols-1 row-cols-md-1 g-2 p-lg-0-5">
+                        {% for producto_orden in productos_orden %}
+                            <div class="producto-item mb-3 col-12">
+                                <div class="row">
+                                    <div class="mb-0 col-md-6">
+                                        <label for="producto_orden" class="form-label">Producto</label>
+                                        <select class="form-select" name="producto_orden[]" required>
+                                            <option value="{{ producto_orden.producto.supply_name }}">{{ producto_orden.producto.get_nombre_producto }}</option>
+                                            {% for producto in productos %}
+                                                <option value="{{ producto.supply_name }}">{{ producto.get_nombre_producto }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="mb-0 col-md-6">
+                                        <label for="cantidad_orden" class="form-label">Cantidad</label>
+                                        <input type="number" min="0" class="form-control" name="cantidad_orden[]" value="{{ producto_orden.cantidad_orden }}" placeholder="Cantidad" style="text-transform: capitalize;" required>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="mb-3">
+                        <button type="button" id="add-producto" class="btn btn-secondary">Agregar Producto</button>
+                    </div>
+                    <div class="d-flex justify-content-center mx-0-5--custom">
+                        <button type="submit" class="button">Guardar</button>
+                    </div>
+                    <div class="d-flex justify-content-center mx-0-5--custom">
+                        <a href="{% url 'orden_list_enviada' %}" class="button">Regresar</a>
+                    </div>
                 </form>
             </div>
         </div>
-    </main>
+    </div>
+    {% block extrajs %}
+    <script>
+        document.getElementById('add-producto').addEventListener('click', function() {
+            var container = document.getElementById('productos-container');
+            var item = container.querySelector('.producto-item');
+            var clone = item.cloneNode(true);
+            clone.querySelectorAll('input').forEach(input => input.value = '');
+            clone.querySelectorAll('select').forEach(select => select.selectedIndex = 0);
+            container.appendChild(clone);
+        });
+    </script>
+    {% endblock extrajs %}
 {% endblock %}

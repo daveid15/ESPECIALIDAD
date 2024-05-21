@@ -83,8 +83,37 @@ def venta_list(request, page=None, search=None,grupo_id=1):
     if profile.group_id != 1:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a un área para la que no tienes permisos')
         return redirect('check_group_main')
+
+    search = request.GET.get('search')
+
+    ordenes = Orden_venta.objects.all()
+    
+    if search:
+        ordenes = ordenes.filter(Q(numero_orden__icontains=search) |
+                                 Q(cliente_venta__icontains=search) |
+                                 Q(total_venta__icontains=search))
+
+    
+    paginator = Paginator(ordenes, 10)
+    pagina_numero = request.GET.get('pagina')
+    ordenes = paginator.get_page(pagina_numero)
+    
+    try:
+        pagina_numero = int(pagina_numero)  # Convertir a entero
+    except TypeError:
+        pagina_numero = 1  # Si no hay número de página, mostrar la primera
+
+    try:
+        pagina_obj = paginator.page(pagina_numero)
+    except PageNotAnInteger:
+        # Si la página no es un entero, mostrar la primera página
+        pagina_obj = paginator.page(1)
+    except EmptyPage:
+        # Si la página está fuera de rango, mostrar la última página de resultados
+        pagina_obj = paginator.page(paginator.num_pages)
+    
     template_name = 'ventas/venta_list.html'
-    return render(request, template_name,{'profiles': profile})
+    return render(request, template_name,{'profiles': profile, 'ordenes': ordenes, 'search': search, 'pagina_obj':pagina_obj})
 
 @login_required
 def venta_crear(request):
@@ -139,6 +168,8 @@ def venta_crear(request):
     return render(request, template_name, {'profiles': profiles, 'productos':productos})
 
 @login_required
-def detalle_orden_de_venta(request, orden_id):
-    orden = get_object_or_404(Orden_venta, id=orden_id)
-    return render(request, 'detalle_orden_de_venta.html', {'orden': orden})
+def detalle_orden_venta(request, orden_id):
+    orden = Orden_venta.objects.get(numero_orden=orden_id)
+    ventas_productos = orden.venta_producto_set.all()  # Utiliza el nombre del modelo en minúsculas seguido de _set para acceder a los objetos relacionados
+    print(ventas_productos)
+    return render(request, 'detalle_orden_venta.html', {'orden': orden, 'ventas_productos': ventas_productos})

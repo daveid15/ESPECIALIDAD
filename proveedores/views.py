@@ -377,7 +377,6 @@ def orden_list_enviada(request, page=None, search=None):
         messages.add_message(request, messages.INFO, 'Intenta ingresar a un área para la que no tienes permisos')
         return redirect('check_group_main')
     
-    
     search = request.GET.get('search')
     ordenes = Orden_compra.objects.filter(estado='enviado')
     
@@ -387,7 +386,7 @@ def orden_list_enviada(request, page=None, search=None):
                                  Q(cantidad_orden__icontains=search))
 
     
-    paginator = Paginator(ordenes, 2)
+    paginator = Paginator(ordenes, 10)
     pagina_numero = request.GET.get('pagina')
     ordenes = paginator.get_page(pagina_numero)
 
@@ -515,7 +514,6 @@ def orden_save(request):
 @login_required
 def orden_crear(request):
     profiles = Profile.objects.get(user_id=request.user.id)
-    print("ajsdjahsd")
     if profiles.group_id not in [1, 2]:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a un área para la que no tiene permisos')
         return redirect('check_group_main')
@@ -523,29 +521,6 @@ def orden_crear(request):
     proveedores = Proveedor.objects.all()
     productos = Product.objects.all()
     template_name = 'proveedores/orden_crear.html'
-    '''
-
-    if request.method == 'POST':
-        proveedor_orden = request.POST.get('proveedor_orden')
-        producto_orden = request.POST.get('producto_orden')
-        cantidad_orden = request.POST.get('cantidad_orden')
-
-        # Intentar crear la nueva orden de compra
-        try:
-            nueva_orden = Orden_compra.objects.create(
-                proveedor_orden=proveedor_orden,
-                producto_orden=producto_orden,
-                cantidad_orden=cantidad_orden,
-            )
-            print("¡Orden de compra creada con éxito!")
-            # Guardar el ID de la nueva orden en la sesión
-            request.session['nueva_orden_id'] = nueva_orden.id
-        except Exception as e:
-            print(f"Error al crear la orden de compra: {e}")
-
-        # Redirigir al usuario al listado de órdenes
-        return redirect('lista_orden')
-        '''
     
     return render(request, template_name, {'profiles': profiles, 'proveedores': proveedores, 'productos': productos})
 
@@ -628,57 +603,86 @@ def eliminar_orden(request, orden_id):
 @login_required
 def detalle_orden_de_compra_enviada(request, orden_id):
     orden = get_object_or_404(Orden_compra, id=orden_id)
-    return render(request, 'detalle_orden_de_compra_enviada.html', {'orden': orden})
+    orden_productos = orden.producto_orden_set.all()
+    return render(request, 'detalle_orden_de_compra_enviada.html', {'orden': orden, 'orden_productos': orden_productos})
 
 @login_required
 def detalle_orden_de_compra_aceptada(request, orden_id):
     orden = get_object_or_404(Orden_compra, id=orden_id)
-    return render(request, 'detalle_orden_de_compra_aceptada.html', {'orden': orden})
+    orden_productos = orden.producto_orden_set.all()
+    return render(request, 'detalle_orden_de_compra_aceptada.html', {'orden': orden, 'orden_productos': orden_productos})
 
 @login_required
 def detalle_orden_de_compra_rechazada(request, orden_id):
     orden = get_object_or_404(Orden_compra, id=orden_id)
-    return render(request, 'detalle_orden_de_compra_rechazada.html', {'orden': orden})
+    orden_productos = orden.producto_orden_set.all()
+    return render(request, 'detalle_orden_de_compra_rechazada.html', {'orden': orden, 'orden_productos': orden_productos})
 
 @login_required
 def detalle_orden_de_compra_anulada(request, orden_id):
     orden = get_object_or_404(Orden_compra, id=orden_id)
-    return render(request, 'detalle_orden_de_compra_anulada.html', {'orden': orden})
+    orden_productos = orden.producto_orden_set.all()
+    return render(request, 'detalle_orden_de_compra_anulada.html', {'orden': orden, 'orden_productos': orden_productos})
 
 @login_required
 def editar_orden(request, orden_id):
-    orden = get_object_or_404(Orden_compra, pk=orden_id)
-    proveedor_nombre = orden.proveedor_orden
-    producto_nombre = orden.producto_orden
-    cantidad_nombre = orden.cantidad_orden
+    profile = get_object_or_404(Profile, user_id=request.user.id)
+    if profile.group_id != 1:
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a una área para la que no tiene permisos')
+        return redirect('check_group_main')
+
     proveedores = Proveedor.objects.all()
     productos = Product.objects.all()
-    
+    orden = get_object_or_404(Orden_compra, pk=orden_id)
+    productos_orden = Producto_Orden.objects.filter(orden_id=orden)
+
     if request.method == 'POST':
-        # Obtener los datos del formulario POST
-        proveedor = request.POST.get('proveedor_orden')
-        producto = request.POST.get('producto_orden')
-        cantidad = request.POST.get('cantidad_orden')
-        
-        # Actualizar los campos de la orden de compra
-        orden.proveedor_orden = proveedor
-        orden.producto_orden = producto
-        orden.cantidad_orden = cantidad
-        
-        if proveedor_nombre == proveedor and producto_nombre == producto and cantidad_nombre == cantidad:
-            messages.success(request, 'No se ha realizado ningún cambio')
-            return redirect('orden_list_enviada')
+        proveedor_orden = request.POST.get('proveedor_orden')
+        producto_orden = request.POST.getlist('producto_orden[]')
+        cantidad_orden = request.POST.getlist('cantidad_orden[]')
 
-        # Guardar los cambios en la base de datos
-        orden.save()
+        try:
+            proveedor_instance = Proveedor.objects.get(proveedor_name=proveedor_orden)
+        except Proveedor.DoesNotExist:
+            messages.add_message(request, messages.ERROR, 'Proveedor no encontrado')
+            return render(request, 'editar_orden.html', {
+                'profiles': profile, 'proveedores': proveedores, 'productos': productos, 
+                'orden': orden, 'productos_orden': productos_orden
+            })
 
-        # Agregar un mensaje de éxito
-        messages.success(request, '¡Los cambios se guardaron correctamente!')
+        if not producto_orden or not cantidad_orden:
+            messages.add_message(request, messages.INFO, 'Debes ingresar toda la información')
+            return render(request, 'editar_orden.html', {
+                'profiles': profile, 'proveedores': proveedores, 'productos': productos, 
+                'orden': orden, 'productos_orden': productos_orden
+            })
 
-        # Redirigir a la página de detalles de la orden de compra
-        return redirect('orden_list_enviada')
+        try:
+            with transaction.atomic():
+                orden.proveedor_orden = proveedor_instance
+                orden.save()
 
-    # Si la solicitud es GET, renderizar el formulario de edición
-    return render(request, 'editar_orden.html', {'orden': orden, 'proveedores': proveedores, 
-                                                 'productos': productos, 'proveedor_nombre':proveedor_nombre, 
-                                                 'producto_nombre':producto_nombre, 'cantidad_nombre':cantidad_nombre})
+                # Borra los productos anteriores y añade los nuevos
+                Producto_Orden.objects.filter(orden_id=orden).delete()
+                for prod, cant in zip(producto_orden, cantidad_orden):
+                    producto = Product.objects.get(supply_name=prod)
+                    detalle = Producto_Orden(
+                        orden_id=orden,
+                        producto=producto,
+                        cantidad_orden=cant,
+                    )
+                    detalle.save()
+                messages.add_message(request, messages.SUCCESS, 'Orden actualizada con éxito')
+                return redirect('editar_orden', orden_id=orden.id)
+        except Exception as e:
+            messages.add_message(request, messages.ERROR, f'Error al actualizar la orden: {str(e)}')
+            return render(request, 'editar_orden.html', {
+                'profiles': profile, 'proveedores': proveedores, 'productos': productos, 
+                'orden': orden, 'productos_orden': productos_orden
+            })
+    else:
+        return render(request, 'editar_orden.html', {
+            'profiles': profile, 'proveedores': proveedores, 'productos': productos, 
+            'orden': orden, 'productos_orden': productos_orden
+        })
+

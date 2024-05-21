@@ -11,14 +11,10 @@
                         <a href="{% url 'venta_crear' %}" class="boton form-control">Crear nueva venta</a>
                     </div>
                 {% endif %}
-                <!-- Otro contenido de la página -->
-                <div class="col-12 col-sm-3 mb-3" style="text-align: center;">
-                    <a href="{% url 'carga_masiva_user' %}" class="boton form-control">Carga masiva</a>
-                </div>
                 <!-- Enlace al listado de órdenes -->
                 {% if profiles.group_id == 1 %}
                     <div class="col-12 col-sm-3 mb-3" style="text-align: center;">
-                        <a href="{% url 'venta_list' grupo_id=1 %}" class="boton form-control">Listado de ventas</a>
+                        <a href="{% url 'venta_list' %}" class="boton form-control">Listado de ventas</a>
                     </div>
                 {% else %}
                     <div class="col-12 col-sm-3 mb-3" style="text-align: center;">
