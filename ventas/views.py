@@ -67,39 +67,24 @@ def venta_list(request, page=None, search=None):
         messages.add_message(request, messages.INFO, 'Intenta ingresar a un área para la que no tienes permisos')
         return redirect('check_group_main')
 
-    # Obtener parámetros de búsqueda y paginación
-    page = request.GET.get('page', page)
-    search = request.GET.get('search', search)
-
-    if request.method == 'POST':
-        search = request.POST.get('search')
-        page = None
-
-    # Filtrar las órdenes de venta por el nombre del cliente
-    if search:
-        ordenes = Orden_venta.objects.filter(cliente_venta__icontains=search).order_by('numero_orden')
-    else:
-        ordenes = Orden_venta.objects.all().order_by('numero_orden')
-
-    # Paginación
+    search = request.GET.get('search')
     ordenes = Orden_venta.objects.all()
-    paginator = Paginator(ordenes, 2)
+    
+    if search:
+        ordenes = ordenes.filter(Q(cliente_venta__icontains=search))
 
+    paginator = Paginator(ordenes, 10)
+    pagina_numero = request.GET.get('pagina')
+    
     try:
-        ordenes_paginate = paginator.get_page(page)
+        ordenes = paginator.page(pagina_numero)
     except PageNotAnInteger:
-        ordenes_paginate = paginator.page(1)
+        ordenes = paginator.page(1)
     except EmptyPage:
-        ordenes_paginate = paginator.page(paginator.num_pages)
-
-    template_name = 'ventas/venta_list.html'
-    return render(request, template_name, {
-        'profiles': profile,
-        'ordenes': ordenes_paginate,
-        'paginator': paginator,
-        'page': page,
-        'search': search
-    })
+        ordenes = paginator.page(paginator.num_pages)
+        
+    return render(request, 'ventas/venta_list.html', {'ordenes': ordenes, 'search': search, 'pagina_obj': ordenes})
+    
 @login_required
 def venta_crear(request):
     profiles = Profile.objects.get(user_id=request.user.id)

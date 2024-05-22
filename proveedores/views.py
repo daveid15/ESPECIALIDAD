@@ -249,6 +249,7 @@ def import_file_proveedor(request):
     columns = ['proveedor_rut', 'proveedor_name', 'proveedor_last_name', 'proveedor_mail', 'proveedor_phone', 'proveedor_address', 'proveedor_region', 'proveedor_comuna']
     ws.append(columns)
 
+
     example_data = [
         'ej: Rut',
         'ej: Nombre proveedor',
@@ -369,9 +370,8 @@ def lista_orden(request, grupo_id):
     ordenes = Orden_compra.objects.filter(proveedor_orden=grupo_id)
     return render(request, 'proveedores/lista_orden.html', {'ordenes': ordenes})
 
-    
 @login_required
-def orden_list_enviada(request, page=None, search=None):
+def orden_list_enviada(request, page=None):
     profile = Profile.objects.get(user_id=request.user.id)
     if profile.group_id != 1:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a un área para la que no tienes permisos')
@@ -381,31 +381,20 @@ def orden_list_enviada(request, page=None, search=None):
     ordenes = Orden_compra.objects.filter(estado='enviado')
     
     if search:
-        ordenes = ordenes.filter(Q(proveedor_orden__icontains=search) |
-                                 Q(producto_orden__icontains=search) |
-                                 Q(cantidad_orden__icontains=search))
+        ordenes = ordenes.filter(Q(proveedor_orden__proveedor_name__icontains=search))
 
-    
-    paginator = Paginator(ordenes, 10)
+    paginator = Paginator(ordenes, 1)
     pagina_numero = request.GET.get('pagina')
-    ordenes = paginator.get_page(pagina_numero)
-
-    try:
-        pagina_numero = int(pagina_numero)  # Convertir a entero
-    except TypeError:
-        pagina_numero = 1  # Si no hay número de página, mostrar la primera
-
-    try:
-        pagina_obj = paginator.page(pagina_numero)
-    except PageNotAnInteger:
-        # Si la página no es un entero, mostrar la primera página
-        pagina_obj = paginator.page(1)
-    except EmptyPage:
-        # Si la página está fuera de rango, mostrar la última página de resultados
-        pagina_obj = paginator.page(paginator.num_pages)
     
+    try:
+        ordenes = paginator.page(pagina_numero)
+    except PageNotAnInteger:
+        ordenes = paginator.page(1)
+    except EmptyPage:
+        ordenes = paginator.page(paginator.num_pages)
+    
+    return render(request, 'proveedores/orden_list_enviada.html', {'ordenes': ordenes, 'search': search, 'pagina_obj': ordenes})
 
-    return render(request, 'proveedores/orden_list_enviada.html', {'ordenes': ordenes, 'search': search, 'pagina_obj':pagina_obj})
 
 
 @login_required
@@ -416,10 +405,19 @@ def orden_list_aceptada(request, page=None, search=None):
         return redirect('check_group_main')
     search = request.GET.get('search')
     ordenes = Orden_compra.objects.filter(estado='aceptado')
+    
     if search:
-        ordenes = ordenes.filter(Q(proveedor_orden__icontains=search) |
-                                 Q(producto_orden__icontains=search) |
-                                 Q(cantidad_orden__icontains=search))
+        ordenes = ordenes.filter(Q(proveedor_orden__proveedor_name__icontains=search))
+
+    paginator = Paginator(ordenes, 2)
+    pagina_numero = request.GET.get('pagina')
+    
+    try:
+        ordenes = paginator.page(pagina_numero)
+    except PageNotAnInteger:
+        ordenes = paginator.page(1)
+    except EmptyPage:
+        ordenes = paginator.page(paginator.num_pages)
 
     return render(request, 'proveedores/orden_list_aceptada.html', {'ordenes': ordenes, 'search': search})
 
@@ -432,14 +430,19 @@ def orden_list_rechazada(request, page=None, search=None):
         return redirect('check_group_main')
     search = request.GET.get('search')
     ordenes = Orden_compra.objects.filter(estado='rechazado')
+    
     if search:
-        ordenes = ordenes.filter(Q(proveedor_orden__icontains=search) |
-                                 Q(producto_orden__icontains=search) |
-                                 Q(cantidad_orden__icontains=search))
+        ordenes = ordenes.filter(Q(proveedor_orden__proveedor_name__icontains=search))
 
     paginator = Paginator(ordenes, 10)
-    page_number = request.GET.get('page')
-    ordenes = paginator.get_page(page_number)
+    pagina_numero = request.GET.get('pagina')
+    
+    try:
+        ordenes = paginator.page(pagina_numero)
+    except PageNotAnInteger:
+        ordenes = paginator.page(1)
+    except EmptyPage:
+        ordenes = paginator.page(paginator.num_pages)
 
     return render(request, 'proveedores/orden_list_rechazada.html', {'ordenes': ordenes, 'search': search})
 
@@ -452,14 +455,19 @@ def orden_list_anulada(request, page=None, search=None):
         return redirect('check_group_main')
     search = request.GET.get('search')
     ordenes = Orden_compra.objects.filter(estado='anulado')
+    
     if search:
-        ordenes = ordenes.filter(Q(proveedor_orden__icontains=search) |
-                                 Q(producto_orden__icontains=search) |
-                                 Q(cantidad_orden__icontains=search))
+        ordenes = ordenes.filter(Q(proveedor_orden__proveedor_name__icontains=search))
 
     paginator = Paginator(ordenes, 10)
-    page_number = request.GET.get('page')
-    ordenes = paginator.get_page(page_number)
+    pagina_numero = request.GET.get('pagina')
+    
+    try:
+        ordenes = paginator.page(pagina_numero)
+    except PageNotAnInteger:
+        ordenes = paginator.page(1)
+    except EmptyPage:
+        ordenes = paginator.page(paginator.num_pages)
 
     return render(request, 'proveedores/orden_list_anulada.html', {'ordenes': ordenes, 'search': search})
 

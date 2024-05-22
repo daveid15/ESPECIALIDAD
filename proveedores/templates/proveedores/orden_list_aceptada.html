@@ -70,18 +70,18 @@
     </div>
     <div class="pagination">
         <span class="step-links">
-            {% if pagina_obj.has_previous %}
-                <a href="?pagina=1">&laquo; Primera</a>
-                <a href="?pagina={{ pagina_obj.previous_page_number }}">Anterior</a>
+            {% if ordenes.has_previous %}
+                <a href="?pagina=1{% if search %}&search={{ search }}{% endif %}">&laquo; Primera</a>
+                <a href="?pagina={{ ordenes.previous_page_number }}{% if search %}&search={{ search }}{% endif %}">Anterior</a>
             {% endif %}
     
             <span class="current">
-                Página {{ pagina_obj.number }} de {{ pagina_obj.paginator.num_pages }}.
+                Página {{ ordenes.number }} de {{ ordenes.paginator.num_pages }}.
             </span>
     
-            {% if pagina_obj.has_next %}
-                <a href="?pagina={{ pagina_obj.next_page_number }}">Siguiente</a>
-                <a href="?pagina={{ pagina_obj.paginator.num_pages }}">Última &raquo;</a>
+            {% if ordenes.has_next %}
+                <a href="?pagina={{ ordenes.next_page_number }}{% if search %}&search={{ search }}{% endif %}">Siguiente</a>
+                <a href="?pagina={{ ordenes.paginator.num_pages }}{% if search %}&search={{ search }}{% endif %}">Última &raquo;</a>
             {% endif %}
         </span>
     </div>

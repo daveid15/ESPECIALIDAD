@@ -10,13 +10,11 @@
         <div class="col-12 mt-3 border">
             <h3>Detalles del Usuario</h3>
             <div class="user-details">
-                <p><strong>Nombre:</strong> {{ user_data.first_name }}</p>
-                <p><strong>Apellido:</strong> {{ user_data.last_name }}</p>
+                <p><strong>{{ user_data.first_name }} {{ user_data.last_name }}</strong></p>
+                <p><strong>RUN:</strong> {{ profile_data.rut }}</p>
                 <p><strong>Correo:</strong> {{ user_data.email }}</p>
-                <p><strong>Teléfono:</strong> {{ profile_data.mobile }}</p>
-                <p><strong>Dirección:</strong> {{ profile_data.address }}</p>
-                <p><strong>Región:</strong> {{ profile_data.region }}</p>
-                <!-- Agrega aquí cualquier otro detalle que desees mostrar -->
+                <p><strong>Contacto:</strong> {{ profile_data.mobile }}</p>
+                <p><strong>Dirección:</strong> {{ profile_data.address }}, {{profile_data.comuna}}, {{ profile_data.region }}.</p>
             </div>
             <a href="{% url 'list_user_active' profile_data.group_id %}" class="btn btn-primary">Volver</a>
         </div>
@@ -24,4 +22,3 @@
 </main>
 
 {% endblock %}
-

@@ -31,12 +31,13 @@ def validar_numero(numero,request):
         else:
             return False
 
-def validar_string(cadena,request):
-        if request.method == 'POST':
-            if re.fullmatch(r'[A-Za-zÑñ]+', cadena):
-                return True
-            else:
-                return False
+def validar_string(cadena, request):
+    if request.method == 'POST':
+        if re.fullmatch(r'[A-Za-zÑñÁÉÍÓÚáéíóú]+', cadena):
+            return True
+        else:
+            return False
+        
 def validar_email(email,request):
     if request.method == 'POST':
         # Expresión regular para validar un correo electrónico

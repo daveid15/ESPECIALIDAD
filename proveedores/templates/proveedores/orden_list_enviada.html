@@ -1,13 +1,13 @@
 {% extends 'core/base_admin.html' %}
 {% load static %}
 {% block title %}
-    <title>Listado de Ordenes de Compra</title>
+    <title>Listado de Órdenes de Compra</title>
 {% endblock %}
 {% block content %}
     {% block extra_css %}    
     {% endblock extra_css %}    
     <header class='mb-5'>
-        <h2 class='h2 medium text-blue'>Ordenes de Compra Enviadas</h2>
+        <h2 class='h2 medium text-blue'>Órdenes de Compra Enviadas</h2>
     </header>
     <div class="d-flex flex-column flex-lg-row my-5">
         <div class="my-auto d-flex flex-column flex-lg-row ms-lg-auto">
@@ -15,7 +15,7 @@
         </div>
         <form method="get" action="{% url 'orden_list_enviada' %}" class='col-12 col-lg-6 input-container-search my-auto me-3'>
             {% csrf_token %}
-            <input name="search" id="search" type="text" placeholder='Buscar por Nombre'/>
+            <input name="search" id="search" type="text" placeholder='Buscar por Nombre' value="{{ search|default:'' }}"/>
             <button type="submit">Buscar</button>
         </form>
     </div>
@@ -23,7 +23,7 @@
         <table class="table table-user" style="text-align: center;">
             <thead>
                 <tr>
-                    <th width="10%" scope="col">Número de Orden</th>
+                    <th width="10%" scope="col">Número de Órden</th>
                     <th width="10%" scope="col">Proveedor</th>
                     <th width="10%" scope="col">Cantidad de Productos</th>
                     <th width="10%" scope="col">Acciones</th>
@@ -73,18 +73,18 @@
     </div>
     <div class="pagination">
         <span class="step-links">
-            {% if pagina_obj.has_previous %}
-                <a href="?pagina=1">&laquo; Primera</a>
-                <a href="?pagina={{ pagina_obj.previous_page_number }}">Anterior</a>
+            {% if ordenes.has_previous %}
+                <a href="?pagina=1{% if search %}&search={{ search }}{% endif %}">&laquo; Primera</a>
+                <a href="?pagina={{ ordenes.previous_page_number }}{% if search %}&search={{ search }}{% endif %}">Anterior</a>
             {% endif %}
     
             <span class="current">
-                Página {{ pagina_obj.number }} de {{ pagina_obj.paginator.num_pages }}.
+                Página {{ ordenes.number }} de {{ ordenes.paginator.num_pages }}.
             </span>
     
-            {% if pagina_obj.has_next %}
-                <a href="?pagina={{ pagina_obj.next_page_number }}">Siguiente</a>
-                <a href="?pagina={{ pagina_obj.paginator.num_pages }}">Última &raquo;</a>
+            {% if ordenes.has_next %}
+                <a href="?pagina={{ ordenes.next_page_number }}{% if search %}&search={{ search }}{% endif %}">Siguiente</a>
+                <a href="?pagina={{ ordenes.paginator.num_pages }}{% if search %}&search={{ search }}{% endif %}">Última &raquo;</a>
             {% endif %}
         </span>
     </div>
