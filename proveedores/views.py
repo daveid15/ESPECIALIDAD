@@ -527,18 +527,17 @@ def orden_crear(request):
 def cambiar_estado_orden_enviada(request, orden_id):
     if request.method == 'POST':
         nuevo_estado = request.POST.get('nuevo_estado')
-        if nuevo_estado == 'aceptado' or 'anulado' or 'rechazado':
-            orden = Orden_compra.objects.get(id=orden_id)
+        
+        if nuevo_estado in ['aceptado', 'rechazado', 'anulado']:
+            orden = get_object_or_404(Orden_compra, id=orden_id)
             orden.estado = nuevo_estado
             orden.save()
             messages.add_message(request, messages.INFO, 'Se ha cambiado el estado de la orden')
             return redirect('orden_list_enviada')
         else:
-            messages.error(request, 'El valor enviado para el nuevo estado no es válido.')
-        return redirect('orden_list_enviada')  # Redirigir a la página principal de órdenes o donde desees
+            messages.add_message(request, messages.INFO, 'Debe seleccionar un estado nuevo para la orden')
+            return redirect('orden_list_enviada')
 
-        
-    # Si el método de solicitud no es POST, simplemente redirigir de nuevo a la lista de órdenes
     return redirect('orden_main')
 
 def cambiar_estado_orden_rechazada(request, orden_id):
@@ -591,7 +590,7 @@ def eliminar_orden(request, orden_id):
         if nuevo_estado == "eliminar":
             # Eliminar la orden
             orden.delete()
-            messages.success(request, f'La orden {orden.id} ha sido eliminada correctamente.')
+            messages.success(request, f'La orden ha sido eliminada correctamente.')
         else:
             messages.error(request, 'El valor enviado para el nuevo estado no es válido.')
         return redirect('orden_list_anulada')  # Redirigir a la página principal de órdenes o donde desees
@@ -637,18 +636,9 @@ def editar_orden(request, orden_id):
     productos_orden = Producto_Orden.objects.filter(orden_id=orden)
 
     if request.method == 'POST':
-        proveedor_orden = request.POST.get('proveedor_orden')
+        #proveedor_orden = request.POST.get('proveedor_orden')
         producto_orden = request.POST.getlist('producto_orden[]')
         cantidad_orden = request.POST.getlist('cantidad_orden[]')
-
-        try:
-            proveedor_instance = Proveedor.objects.get(proveedor_name=proveedor_orden)
-        except Proveedor.DoesNotExist:
-            messages.add_message(request, messages.ERROR, 'Proveedor no encontrado')
-            return render(request, 'editar_orden.html', {
-                'profiles': profile, 'proveedores': proveedores, 'productos': productos, 
-                'orden': orden, 'productos_orden': productos_orden
-            })
 
         if not producto_orden or not cantidad_orden:
             messages.add_message(request, messages.INFO, 'Debes ingresar toda la información')
@@ -659,9 +649,7 @@ def editar_orden(request, orden_id):
 
         try:
             with transaction.atomic():
-                orden.proveedor_orden = proveedor_instance
-                orden.save()
-
+                
                 # Borra los productos anteriores y añade los nuevos
                 Producto_Orden.objects.filter(orden_id=orden).delete()
                 for prod, cant in zip(producto_orden, cantidad_orden):
