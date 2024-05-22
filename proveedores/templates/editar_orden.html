@@ -5,7 +5,7 @@
     {% block extra_css %}
     {% endblock extra_css %}
     <header class='mb-4'>
-        <h2 class='h2 medium text-blue'>Editar Órden de compra</h2>
+        <h2 class='h2 medium text-blue'>Editar Órden de compra Número #{{orden.id}}</h2>
     </header>
     <div class="col-md-11">
         <div class="mb-3">
@@ -21,12 +21,7 @@
                     {% csrf_token %}
                     <div class="mb-0 col-md-6">
                         <label for="proveedor_orden" class="form-label">Proveedor</label>
-                        <select class="form-select" name="proveedor_orden" id="proveedor_orden" required>
-                            <option value="{{ orden.proveedor_orden.proveedor_name }}">{{ orden.proveedor_orden.get_nombre_completo }}</option>
-                            {% for proveedor in proveedores %}
-                                <option value="{{ proveedor.proveedor_name }}">{{ proveedor.get_nombre_completo }}</option>
-                            {% endfor %}
-                        </select>
+                        <label for="proveedor_orden" class="form-label">{{orden.proveedor_orden}}</label>
                     </div>
                     <div id="productos-container" class="col-12 col-lg-12 row row-cols-1 row-cols-md-1 g-2 p-lg-0-5">
                         {% for producto_orden in productos_orden %}
@@ -44,6 +39,10 @@
                                     <div class="mb-0 col-md-6">
                                         <label for="cantidad_orden" class="form-label">Cantidad</label>
                                         <input type="number" min="0" class="form-control" name="cantidad_orden[]" value="{{ producto_orden.cantidad_orden }}" placeholder="Cantidad" style="text-transform: capitalize;" required>
+                                    </div>
+                                    <div class="mb-0 col-md-1 d-flex align-items-end">
+                                        <!-- Botón de "Borrar Producto" habilitado por defecto -->
+                                        <button type="button" class="btn btn-danger btn-delete-producto">Borrar Producto</button>
                                     </div>
                                 </div>
                             </div>
@@ -69,9 +68,31 @@
             var item = container.querySelector('.producto-item');
             var clone = item.cloneNode(true);
             clone.querySelectorAll('input').forEach(input => input.value = '');
-            clone.querySelectorAll('select').forEach(select => select.selectedIndex = 0);
             container.appendChild(clone);
+            updateDeleteButtons();
         });
+
+        document.addEventListener('click', function(event) {
+            if (event.target.classList.contains('btn-delete-producto')) {
+                if (document.querySelectorAll('.producto-item').length > 1) {
+                    event.target.closest('.producto-item').remove();
+                    updateDeleteButtons();
+                } else {
+                    alert("No puedes eliminar el único producto.");
+                }
+            }
+        });
+
+        function updateDeleteButtons() {
+            var deleteButtons = document.querySelectorAll('.btn-delete-producto');
+            if (deleteButtons.length === 1) {
+                deleteButtons[0].setAttribute('disabled', true);
+            } else {
+                deleteButtons.forEach(function(button) {
+                    button.removeAttribute('disabled');
+                });
+            }
+        }
     </script>
     {% endblock extrajs %}
 {% endblock %}

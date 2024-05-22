@@ -85,12 +85,14 @@
             </thead>
             <tbody>
                 {% for venta_producto in ventas_productos %}
-                <tr>
-                    <td>{{ venta_producto.producto.nombre_producto }}</td>
-                    <td>{{ venta_producto.cantidad }}</td>
-                    <td>${{ venta_producto.precio_producto }}</td>
-                    <td>${{ venta_producto.precio_producto|multiply:venta_producto.cantidad }}</td>
-                </tr>
+                    {% if venta_producto.cantidad > 0 %}
+                    <tr>
+                        <td>{{ venta_producto.producto.nombre_producto }}</td>
+                        <td>{{ venta_producto.cantidad }}</td>
+                        <td>${{ venta_producto.precio_producto }}</td>
+                        <td>${{ venta_producto.precio_producto|multiply:venta_producto.cantidad }}</td>
+                    </tr>
+                    {% endif %}
                 {% endfor %}
             </tbody>
         </table>
