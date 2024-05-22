@@ -373,7 +373,7 @@ def list_user_block(request, group_id, page=None):
         name = us.first_name + ' ' + us.last_name
         user_all.append({'id': us.id, 'user_name': us.username, 'name': name, 'mail': us.email})
 
-    paginator = Paginator(user_all, 30)
+    paginator = Paginator(user_all, 1)
     user_list = paginator.get_page(page)
     template_name = 'administrator/list_user_block.html'
     return render(request, template_name, {'profiles': profiles, 'group': group, 'user_list': user_list, 'paginator': paginator, 'page': page, 'search': search})

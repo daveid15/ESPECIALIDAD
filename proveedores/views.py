@@ -157,7 +157,7 @@ def proveedor_list(request, page=None, search=None):
             'proveedor_phone': p.proveedor_phone,
         })
 
-    paginator = Paginator(p_list, 4)
+    paginator = Paginator(p_list, 1)
     p_list_paginate = paginator.get_page(page)
 
     template_name = 'proveedores/proveedor_list.html'

@@ -3,9 +3,42 @@
 
 {% block content %}
 {% block extrahead %}
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<style>
+    .errorlist { color: red; }
+    .pagination { 
+        position: fixed;
+        bottom: 20px; /* Ajusta esta distancia según tus necesidades */
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex; 
+        justify-content: center; 
+        z-index: 999; /* Asegura que la paginación esté sobre otros elementos */
+        background-color: #9EB23B;
+        border-radius: 12px;
+        font-weight: bold;
+    }
+    .pagination .page-item { 
+        margin: 0 5px; 
+        list-style: none; /* Elimina los estilos de lista */
+        height: 30px; /* Altura fija para los elementos <li> */
+        display: flex; /* Para usar flexbox */
+        align-items: center; /* Centrar verticalmente el contenido */
+    } 
+    .pagination .page-link { 
+        text-decoration: none; 
+        color: #000; 
+        font-size: 18px; 
+        padding: 5px 10px; /* Añade un poco de espacio alrededor del número */
+    }
+    .pagination .page-item.active .page-link { 
+        background-color: #505c14; /* Cambia el color de fondo para la página activa */
+        color: #000; /* Cambia el color del texto para la página activa */
+        border-radius: 5px; /* Agrega bordes redondeados */
+    }
+</style>
 {% endblock %}
-<style>.errorlist{color:red;}</style>
+
 <main role="main">
     <header class='mb-5'>
         <h2 class='h2 medium text-blue'>Lista de Usuarios Activos</h2>
@@ -71,39 +104,43 @@
                     {% endfor %}
                 </tbody>
             </table>
-            <!-- Paginación -->
-                {% if paginator.num_pages > 1 %}
-                    <nav aria-label="Page navigation">
-                        <ul class="pagination justify-content-center">
-                            {% if user_list.has_previous %}
-                                <li class="page-item ">
-                                    <a class="page-link" href="?page={{ user_list.previous_page_number}}">&laquo;</a>
-                                </li>
-                            {% else %}
-                                <li class="page-item disabled">
-                                    <a class="page-link" href="#" tabindex="-1">&laquo;</a>
-                                </li>
-                            {% endif %}
-                            {% for i in paginator.page_range %}
-                                <li class="page-item {% if user_list.number == i %}active{% endif %}">
-                                    <a class="page-link" href="?page={{ i }}{% if search %}&search={{ search }}{% endif %}">{{ i }}</a>
-                                </li>
-                            {% endfor %}
-                            {% if user_list.has_next %}
-                                <li class="page-item ">
-                                    <a class="page-link" href="?page={{ user_list.next_page_number }}{% if search %}&search={{ search }}{% endif %}">&raquo;</a>
-                                </li>
-                            {% else %}
-                                <li class="page-item disabled">
-                                    <a class="page-link" href="#" tabindex="-1">&raquo;</a>
-                                </li>
-                            {% endif %}
-                        </ul>
-                    </nav>
-                {% endif %}  
-            <!-- Paginación -->                    
         </div>
     </div>
+    <!-- Paginación -->
+    {% if paginator.num_pages > 1 %}
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                {% if user_list.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ user_list.previous_page_number }}">
+                        <i class="fas fa-chevron-left"></i> <!-- Icono de flecha hacia la izquierda -->
+                    </a>
+                </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link"><i class="fas fa-chevron-left"></i></span>
+                    </li>
+                {% endif %}
+                {% for i in paginator.page_range %}
+                    <li class="page-item {% if user_list.number == i %}active{% endif %}">
+                        <a class="page-link" href="?page={{ i }}{% if search %}&search={{ search }}{% endif %}">{{ i }}</a>
+                    </li>
+                {% endfor %}
+                {% if user_list.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ user_list.next_page_number }}">
+                            <i class="fas fa-chevron-right"></i> <!-- Icono de flecha hacia la derecha -->
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link"><i class="fas fa-chevron-right"></i></span>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% endif %}  
+    <!-- Paginación -->  
 </main>
 
 <script>

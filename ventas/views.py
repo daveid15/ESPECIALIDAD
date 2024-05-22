@@ -79,41 +79,45 @@ def venta_save(request):
         return redirect('venta_crear')
 
 @login_required
-def venta_list(request, page=None, search=None, grupo_id=1):
+def venta_list(request, page=None, search=None):
     profile = Profile.objects.get(user_id=request.user.id)
     if profile.group_id != 1:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a un área para la que no tienes permisos')
         return redirect('check_group_main')
 
-    search = request.GET.get('search')
+    # Obtener parámetros de búsqueda y paginación
+    page = request.GET.get('page', page)
+    search = request.GET.get('search', search)
 
-    ordenes = Orden_venta.objects.all()
-    
+    if request.method == 'POST':
+        search = request.POST.get('search')
+        page = None
+
+    # Filtrar las órdenes de venta por el nombre del cliente
     if search:
-        ordenes = ordenes.filter(Q(numero_orden__icontains=search) |
-                                 Q(cliente_venta__icontains=search) |
-                                 Q(total_venta__icontains=search))
+        ordenes = Orden_venta.objects.filter(cliente_venta__icontains=search).order_by('numero_orden')
+    else:
+        ordenes = Orden_venta.objects.all().order_by('numero_orden')
 
-    paginator = Paginator(ordenes, 10)
-    pagina_numero = request.GET.get('pagina')
-    ordenes = paginator.get_page(pagina_numero)
-    
+    # Paginación
+    ordenes = Orden_venta.objects.all()
+    paginator = Paginator(ordenes, 2)
     try:
-        pagina_numero = int(pagina_numero)  # Convertir a entero
-    except TypeError:
-        pagina_numero = 1  # Si no hay número de página, mostrar la primera
-
-    try:
-        pagina_obj = paginator.page(pagina_numero)
+        ordenes_paginate = paginator.get_page(page)
     except PageNotAnInteger:
-        # Si la página no es un entero, mostrar la primera página
-        pagina_obj = paginator.page(1)
+        ordenes_paginate = paginator.page(1)
     except EmptyPage:
-        # Si la página está fuera de rango, mostrar la última página de resultados
-        pagina_obj = paginator.page(paginator.num_pages)
-    
+        ordenes_paginate = paginator.page(paginator.num_pages)
+
     template_name = 'ventas/venta_list.html'
-    return render(request, template_name, {'profiles': profile, 'ordenes': ordenes, 'search': search, 'pagina_obj': pagina_obj})
+    return render(request, template_name, {
+        'profiles': profile,
+        'ordenes': ordenes_paginate,
+        'paginator': paginator,
+        'page': page,
+        'search': search
+    })
+
 
 @login_required
 def venta_crear(request):

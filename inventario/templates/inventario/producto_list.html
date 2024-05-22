@@ -3,6 +3,40 @@
 {% block title %}{% endblock %}
 {% block content %}
 {% block extrahead %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<style>
+    .errorlist { color: red; }
+    .pagination { 
+        position: fixed;
+        bottom: 20px; /* Ajusta esta distancia según tus necesidades */
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex; 
+        justify-content: center; 
+        z-index: 999; /* Asegura que la paginación esté sobre otros elementos */
+        background-color: #9EB23B;
+        border-radius: 12px;
+        font-weight: bold;
+    }
+    .pagination .page-item { 
+        margin: 0 5px; 
+        list-style: none; /* Elimina los estilos de lista */
+        height: 30px; /* Altura fija para los elementos <li> */
+        display: flex; /* Para usar flexbox */
+        align-items: center; /* Centrar verticalmente el contenido */
+    } 
+    .pagination .page-link { 
+        text-decoration: none; 
+        color: #000; 
+        font-size: 18px; 
+        padding: 5px 10px; /* Añade un poco de espacio alrededor del número */
+    }
+    .pagination .page-item.active .page-link { 
+        background-color: #505c14; /* Cambia el color de fondo para la página activa */
+        color: #000; /* Cambia el color del texto para la página activa */
+        border-radius: 5px; /* Agrega bordes redondeados */
+    }
+</style>
 
 
 {% endblock %}
@@ -88,13 +122,15 @@
                     {% if p_list_paginate.has_previous %}
                         <li class="page-item">
                             <a class="page-link" href="?page={{ p_list_paginate.previous_page_number}}&search={{search}}" aria-label="Previous">
-                                <span aria-hidden="true">&laquo;</span>
+                                <i class="fas fa-chevron-left"></i> <!-- Icono de flecha hacia la izquierda -->
                             </a>
                         </li>
                     {% else %}
                         <li class="page-item disabled">
-                            <a class="page-link" href="#" tabindex="-1">&laquo;</a>
-                        </li>                        
+                            <a class="page-link" href="#" tabindex="-1">
+                                <i class="fas fa-chevron-left"></i>
+                            </a>
+                        </li>                     
                     {% endif %}
                     {% for i in paginator.page_range %}
                         <li class="page-item {% if p_list_paginate.number == i %}active{% endif %}">
@@ -103,11 +139,15 @@
                     {% endfor %}
                     {% if p_list_paginate.has_next %}
                         <li class="page-item ">
-                            <a class="page-link" href="?page={{ p_list_paginate.next_page_number }}&search={{search}}">&raquo;</a>
+                            <a class="page-link" href="?page={{ p_list_paginate.next_page_number}}{% if search %}&search={{ search }}{% endif %}">
+                                <i class="fas fa-chevron-right"></i> <!-- Icono de flecha hacia la derecha -->
+                            </a>
                         </li>
                     {% else %}
                         <li class="page-item disabled">
-                            <a class="page-link" href="#" tabindex="-1">&raquo;</a>
+                            <a class="page-link" href="#" tabindex="-1">
+                                <i class="fas fa-chevron-right"></i>
+                            </a>
                         </li>
                     {% endif %}
                 </ul>
