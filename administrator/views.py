@@ -440,7 +440,7 @@ def user_delete(request,user_id):
 def carga_masiva_user(request):
     profile = Profile.objects.get(user_id=request.user.id)
     if profile.group_id != 1:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a una área para la que no tiene permisos')
         return redirect('check_group_main')
     template_name = 'administrator/carga_masiva_user.html'
     return render(request, template_name, {'profiles': profile})
@@ -449,7 +449,7 @@ def carga_masiva_user(request):
 def import_file_user(request):
     profiles = Profile.objects.get(user_id=request.user.id)
     if profiles.group_id != 1:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a una área para la que no tiene permisos')
         return redirect('check_group_main')
     
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
@@ -459,7 +459,7 @@ def import_file_user(request):
     ws = wb.active
     ws.title = 'carga_masiva'
     
-    columns = ['User_Rut', 'User_email', 'User_firstname', 'User_lastname', 'User_cel', 'User_address', 'User_region']
+    columns = ['User_Rut', 'User_email', 'User_firstname', 'User_lastname', 'User_cel', 'User_address', 'User_region', 'User_comuna']  # Añadido User_comuna
     ws.append(columns)
     
     example_data = [
@@ -469,7 +469,49 @@ def import_file_user(request):
         'ej: Apellido',
         'ej: Telefono',
         'ej: Direccion',
-        'ej: Region'
+        'ej: Region',
+        'ej: Comuna'  # Añadido ejemplo para la comuna
+    ]
+    ws.append(example_data)
+    
+    wb.save(response)
+    return response
+
+@login_required
+def carga_masiva_user(request):
+    profile = Profile.objects.get(user_id=request.user.id)
+    if profile.group_id != 1:
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a una área para la que no tiene permisos')
+        return redirect('check_group_main')
+    template_name = 'administrator/carga_masiva_user.html'
+    return render(request, template_name, {'profiles': profile})
+
+@login_required
+def import_file_user(request):
+    profiles = Profile.objects.get(user_id=request.user.id)
+    if profiles.group_id != 1:
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a una área para la que no tiene permisos')
+        return redirect('check_group_main')
+    
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename="archivo_importacion_user.xlsx"'
+
+    wb = Workbook()
+    ws = wb.active
+    ws.title = 'carga_masiva'
+    
+    columns = ['User_Rut', 'User_email', 'User_firstname', 'User_lastname', 'User_cel', 'User_address', 'User_region', 'User_comuna']  # Añadido User_comuna
+    ws.append(columns)
+    
+    example_data = [
+        'ej: Rut',
+        'ej: Email',
+        'ej: Nombre',
+        'ej: Apellido',
+        'ej: Telefono',
+        'ej: Direccion',
+        'ej: Region',
+        'ej: Comuna'  # Añadido ejemplo para la comuna
     ]
     ws.append(example_data)
     
@@ -488,15 +530,15 @@ def carga_masiva_user_save(request):
             data = pd.read_excel(request.FILES['myfile'], engine='openpyxl')
             df = pd.DataFrame(data)
             acc = 0
-            for item in df.itertuples():
-                rut = str(item[1])
-                email = str(item[2])
-                nombre = str(item[3])
-                apellido = str(item[4])
-                mobile = str(item[5])
-                address = str(item[6])
-                region = str(item[7])
-                
+            for item in df.itertuples(index=False):  # Asegúrate de evitar el índice
+                rut = str(item[0])
+                email = str(item[1])
+                nombre = str(item[2])
+                apellido = str(item[3])
+                mobile = str(item[4])
+                address = str(item[5])
+                region = str(item[6])
+                comuna = str(item[7])  # Añadido comuna
                 # Validación de RUT
                 if not validar_rut(rut, request):
                     messages.add_message(request, messages.INFO, f'El RUT "{rut}" no es válido.')
@@ -520,38 +562,44 @@ def carga_masiva_user_save(request):
                 # Aquí puedes realizar más validaciones si lo deseas
 
                 # Crear usuario y perfil si pasa todas las validaciones
-                rut_exist = User.objects.filter(username=rut).count() 
-                if rut_exist == 0:
+                if not User.objects.filter(username=email).exists():
                     new_user = User.objects.create_user(
-                        username=rut,
+                        username=email,
                         email=email,
                         first_name=nombre,
                         last_name=apellido,
-                        
+                        password=User.objects.make_random_password(),  # Generar una contraseña aleatoria
                         is_active=True
                     )
-                    new_user.save()
 
-                    new_profile = Profile.objects.create(
+                    new_profile = Profile(
                         user=new_user,
-                        group_id=1,
+                        group_id=1,  # Verifica que este ID de grupo sea correcto
                         mobile=mobile,
                         address=address,
                         region=region,
-                        rut=rut
+                        comuna=comuna,  # Añadido comuna
+                        rut=rut,
+                        email=email,  # Añadido email
+                        username=email,  # Añadido username
+                        first_name=nombre,  # Añadido first_name
+                        last_name=apellido  # Añadido last_name
                     )
                     new_profile.save()
 
                     acc += 1
                 else:
-                    messages.add_message(request, messages.INFO, 'El RUT que está tratando de ingresar ya existe en nuestros registros')
+                    messages.add_message(request, messages.INFO, f'El RUT "{rut}" ya existe en nuestros registros')
 
-            messages.add_message(request, messages.INFO, 'Carga masiva finalizada, se importaron ' + str(acc) + ' registros')
+            messages.add_message(request, messages.INFO, f'Carga masiva finalizada, se importaron {acc} registros')
             return redirect('carga_masiva_user')
         
         except Exception as e:
             messages.add_message(request, messages.ERROR, f'Error al procesar el archivo: {str(e)}')
             return redirect('carga_masiva_user')
+
+
+
 
 
 
