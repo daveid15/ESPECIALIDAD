@@ -444,7 +444,7 @@ def orden_list_aceptada(request, page=None, search=None):
     if search:
         ordenes = ordenes.filter(Q(proveedor_orden__proveedor_name__icontains=search))
 
-    paginator = Paginator(ordenes, 2)
+    paginator = Paginator(ordenes, 5)
     pagina_numero = request.GET.get('pagina')
     
     try:
@@ -469,7 +469,7 @@ def orden_list_rechazada(request, page=None, search=None):
     if search:
         ordenes = ordenes.filter(Q(proveedor_orden__proveedor_name__icontains=search))
 
-    paginator = Paginator(ordenes, 10)
+    paginator = Paginator(ordenes, 5)
     pagina_numero = request.GET.get('pagina')
     
     try:
@@ -494,7 +494,7 @@ def orden_list_anulada(request, page=None, search=None):
     if search:
         ordenes = ordenes.filter(Q(proveedor_orden__proveedor_name__icontains=search))
 
-    paginator = Paginator(ordenes, 10)
+    paginator = Paginator(ordenes, 5)
     pagina_numero = request.GET.get('pagina')
     
     try:
