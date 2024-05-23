@@ -117,51 +117,25 @@ def proveedor_list(request, page=None, search=None):
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
         return redirect('check_group_main')
 
-    if page is None:
-        page = request.GET.get('page')
-    else:
-        page = page
+    ordenes = Proveedor.objects.all()
+    search = request.GET.get('search')
+    
+    
+    if search:
+        ordenes = ordenes.filter(Q(proveedor_name__icontains=search))
 
-    if request.GET.get('page') is None:
-        page = page
-    else:
-        page = request.GET.get('page')
-
-    if search is None:
-        search = request.GET.get('search')
-    else:
-        search = search
-
-    if request.GET.get('search') is None:
-        search = search
-    else:
-        search = request.GET.get('search')
-
-    if request.method == 'POST':
-        search = request.POST.get('search')
-        page = None
-
-    if search is None or search == "None":
-        p_count = Proveedor.objects.filter(proveedor_name='a').count()
-        p_list_array = Proveedor.objects.all().order_by('proveedor_name')
-    else:
-        p_count = Proveedor.objects.filter(proveedor_name='a').filter(proveedor_name__icontains=search).count()
-        p_list_array = Proveedor.objects.all().filter(proveedor_name__icontains=search).order_by('proveedor_name')
-
-    p_list = []
-    for p in p_list_array:
-        p_list.append({
-            'id': p.id,
-            'proveedor_name': p.proveedor_name,
-            'proveedor_mail': p.proveedor_mail,
-            'proveedor_phone': p.proveedor_phone,
-        })
-
-    paginator = Paginator(p_list, 5)
-    p_list_paginate = paginator.get_page(page)
+    paginator = Paginator(ordenes, 1)
+    pagina_numero = request.GET.get('pagina')
+    
+    try:
+        ordenes = paginator.page(pagina_numero)
+    except PageNotAnInteger:
+        ordenes = paginator.page(1)
+    except EmptyPage:
+        ordenes = paginator.page(paginator.num_pages)
 
     template_name = 'proveedores/proveedor_list.html'
-    return render(request, template_name, {'template_name': template_name, 'p_list_paginate': p_list_paginate, 'paginator': paginator, 'page': page})
+    return render(request, template_name, {'template_name': template_name, 'ordenes': ordenes, 'page': page})
 
 
 @login_required
@@ -494,7 +468,7 @@ def orden_list_anulada(request, page=None, search=None):
     if search:
         ordenes = ordenes.filter(Q(proveedor_orden__proveedor_name__icontains=search))
 
-    paginator = Paginator(ordenes, 5)
+    paginator = Paginator(ordenes, 2)
     pagina_numero = request.GET.get('pagina')
     
     try:
