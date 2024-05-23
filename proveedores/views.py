@@ -15,7 +15,7 @@ import pandas as pd
 from openpyxl import Workbook
 import xlwt
 from datetime import datetime
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 import traceback
 import os
 from django.db import transaction
@@ -157,7 +157,7 @@ def proveedor_list(request, page=None, search=None):
             'proveedor_phone': p.proveedor_phone,
         })
 
-    paginator = Paginator(p_list, 1)
+    paginator = Paginator(p_list, 5)
     p_list_paginate = paginator.get_page(page)
 
     template_name = 'proveedores/proveedor_list.html'
@@ -246,7 +246,7 @@ def import_file_proveedor(request):
     ws = wb.active
     ws.title = 'carga_masiva'
 
-    columns = ['proveedor_rut', 'proveedor_name', 'proveedor_last_name', 'proveedor_mail', 'proveedor_phone', 'proveedor_address', 'proveedor_region', 'proveedor_comuna']
+    columns = ['proveedor_rut', 'proveedor_name', 'proveedor_last_name', 'proveedor_mail', 'proveedor_phone', 'proveedor_address', 'proveedor_region', 'proveedor_comuna', 'proveedor_insumo']
     ws.append(columns)
 
 
@@ -258,7 +258,8 @@ def import_file_proveedor(request):
         '55642334',
         'ej: Direccion',
         'ej: Region',
-        'ej: Comuna'
+        'ej: Comuna',
+        'ej: Insumo'
     ]
     ws.append(example_data)
 
@@ -274,7 +275,7 @@ def carga_masiva_proveedor_save(request):
 
     if request.method == 'POST':
         try:
-            data = pd.read_excel(request.FILES['myfile'], engine='openpyxl')
+            data = pd.read_excel(request.FILES['myfile'], engine='openpyxl', skiprows=1)
             df = pd.DataFrame(data)
             acc = 0
             for item in df.itertuples():
@@ -286,7 +287,39 @@ def carga_masiva_proveedor_save(request):
                 proveedor_address = str(item[6])
                 proveedor_region = str(item[7])
                 proveedor_comuna = str(item[8])
-                rut_exist = User.objects.filter(proveedor_rut=proveedor_rut).count() 
+                proveedor_insumo = str(item[9])
+                
+                # Validación de rut
+                if not validar_rut(proveedor_rut, request):
+                    messages.add_message(request, messages.INFO, f'El RUT "{proveedor_rut}" no es válido.')
+                    continue
+
+                # Validación de correp
+                if not validar_email(proveedor_mail, request):
+                    messages.add_message(request, messages.INFO, f'El correo electrónico "{proveedor_mail}" no es válido.')
+                    continue
+
+                # Validación de nombre
+                if not validar_string(proveedor_name, request) or not validar_string(proveedor_last_name, request):
+                    messages.add_message(request, messages.INFO, 'El nombre y/o apellido no son válidos.')
+                    continue
+                
+                # Validación de direccion
+                if not validar_string(proveedor_region, request) or not validar_string(proveedor_comuna, request):
+                    messages.add_message(request, messages.INFO, 'La comuna y/o región no son válidos.')
+                    continue
+
+                # Validación de insumo
+                if not validar_string(proveedor_insumo, request):
+                    messages.add_message(request, messages.INFO, 'El insumo ingresado no es válido.')
+                    continue
+
+                # Validaci+on de telefono
+                if not validar_numero(proveedor_phone, request):
+                    messages.add_message(request, messages.INFO, f'El número de teléfono "{proveedor_phone}" no es válido.')
+                    continue
+
+                rut_exist = Proveedor.objects.filter(proveedor_rut=proveedor_rut).count() 
                 if rut_exist== 0:
                     proveedor_save = Proveedor(
                         proveedor_rut=proveedor_rut,
@@ -296,7 +329,8 @@ def carga_masiva_proveedor_save(request):
                         proveedor_phone=proveedor_phone,
                         proveedor_address=proveedor_address,
                         proveedor_region=proveedor_region,
-                        proveedor_comuna=proveedor_comuna
+                        proveedor_comuna=proveedor_comuna,
+                        proveedor_insumo=proveedor_insumo
                     )
                     proveedor_save.save()
                     acc += 1
@@ -308,7 +342,8 @@ def carga_masiva_proveedor_save(request):
         except Exception as e:
             messages.add_message(request, messages.ERROR, f'Error al procesar el archivo: {str(e)}')
             return redirect('carga_masiva_proveedor')
-    
+    return HttpResponseRedirect(reverse('carga_masiva_proveedor'))
+
 @login_required
 def descarga_reporte(request):
     try:    
@@ -383,7 +418,7 @@ def orden_list_enviada(request, page=None):
     if search:
         ordenes = ordenes.filter(Q(proveedor_orden__proveedor_name__icontains=search))
 
-    paginator = Paginator(ordenes, 1)
+    paginator = Paginator(ordenes, 5)
     pagina_numero = request.GET.get('pagina')
     
     try:
@@ -681,4 +716,3 @@ def editar_orden(request, orden_id):
             'profiles': profile, 'proveedores': proveedores, 'productos': productos, 
             'orden': orden, 'productos_orden': productos_orden
         })
-

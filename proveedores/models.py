@@ -12,7 +12,7 @@ class Proveedor(models.Model):
     proveedor_region = models.CharField(max_length=100, null=True, blank=True)
     proveedor_comuna = models.CharField(max_length=100, null=True, blank=True)
     proveedor_phone = models.CharField(max_length=100, null=True, blank=True)
-    proveedor_insumo = ArrayField(models.CharField(max_length=100,null=True, blank=True))
+    proveedor_insumo = models.CharField(max_length=100,null=True, blank=True)
 
     def get_nombre_completo(self):
         return f'{self.proveedor_name} {self.proveedor_last_name}'

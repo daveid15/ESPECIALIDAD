@@ -15,22 +15,23 @@
                 {% csrf_token %}
                 <div class="col-12 col-lg-12 row row-cols-1 row-cols-md-1 g-2 p-lg-0-5">
                     <div class="mb-0 col-md-12">
-                        <label for="proveedor_name" class="form-label">Nombre Proveedor: </label>
-                        <span class="form-control" id="proveedor_name">{{proveedor_data.proveedor_name}} {{proveedor_data.proveedor_last_name}}</span>
+                        <label for="proveedor_name" class="form-label"><strong>{{proveedor_data.proveedor_name}} {{proveedor_data.proveedor_last_name}}</strong></label>
                     </div>
                     <div class="mb-0 col-md-12">
-                        <label for="proveedor_mail" class="form-label">Mail Proveedor: </label>
+                        <label for="proveedor_rut" class="form-label">RUN: </label>
+                        <span class="form-control" id="proveedor_rut">{{proveedor_data.proveedor_rut}}</span>
+                    </div>
+                    <div class="mb-0 col-md-12">
+                        <label for="proveedor_mail" class="form-label">Correo: </label>
                         <span class="form-control" id="proveedor_mail">{{proveedor_data.proveedor_mail}}</span>
                     </div>
                     <div class="mb-0 col-md-12">
-                        <label for="proveedor_phone" class="form-label">Número de contacto: </label>
+                        <label for="proveedor_phone" class="form-label">Número de contacto:</label>
                         <span class="form-control" id="proveedor_phone">{{proveedor_data.proveedor_phone}}</span>
                     </div>
                     <div class="mb-0 col-md-12">
-                        <label for="proveedor_addres" class="form-label">Dirección: </label>
-                        <span class="form-control" id="proveedor_address">{{proveedor_data.proveedor_address}},</span>
-                        <span class="form-control" id="proveedor_region">{{proveedor_data.proveedor_region}},</span>
-                        <span class="form-control" id="proveedor_comuna">{{proveedor_data.proveedor_comuna}}.</span>
+                        <label for="proveedor_addres" class="form-label">Dirección:</label>
+                        <span class="form-control" id="proveedor_address">{{proveedor_data.proveedor_address}}, {{proveedor_data.proveedor_comuna}}, {{proveedor_data.proveedor_region}}.</span>
                     </div>
                     <div class="mb-0 col-md-12">
                         <label for="supply_name" class="form-label">PRODUCTOS: </label>

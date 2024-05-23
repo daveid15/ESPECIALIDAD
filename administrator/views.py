@@ -345,7 +345,7 @@ def list_user_active(request, group_id, page=None):
         name = us.first_name + ' ' + us.last_name
         user_all.append({'id': us.id, 'user_name': us.username, 'name': name, 'mail': us.email})
 
-    paginator = Paginator(user_all, 1)
+    paginator = Paginator(user_all, 5)
     user_list = paginator.get_page(page)
     template_name = 'administrator/list_user_active.html'
     return render(request, template_name, {'profiles': profiles, 'group': group, 'user_list': user_list, 'paginator': paginator, 'page': page, 'search': search})
@@ -476,12 +476,11 @@ def import_file_user(request):
     wb.save(response)
     return response
 
-
 @login_required
 def carga_masiva_user_save(request):
     profiles = Profile.objects.get(user_id=request.user.id)
     if profiles.group_id != 1:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a una área para la que no tiene permisos')
         return redirect('check_group_main')
 
     if request.method == 'POST':
@@ -497,36 +496,63 @@ def carga_masiva_user_save(request):
                 mobile = str(item[5])
                 address = str(item[6])
                 region = str(item[7])
+                
+                # Validación de RUT
+                if not validar_rut(rut, request):
+                    messages.add_message(request, messages.INFO, f'El RUT "{rut}" no es válido.')
+                    continue
+                
+                # Validación de correo electrónico
+                if not validar_email(email, request):
+                    messages.add_message(request, messages.INFO, f'El correo electrónico "{email}" no es válido.')
+                    continue
+                
+                # Validación de nombres
+                if not validar_string(nombre, request) or not validar_string(apellido, request):
+                    messages.add_message(request, messages.INFO, 'El nombre y/o apellido no son válidos.')
+                    continue
+                
+                # Validación de número de teléfono
+                if not validar_numero(mobile, request):
+                    messages.add_message(request, messages.INFO, f'El número de teléfono "{mobile}" no es válido.')
+                    continue
+
+                # Aquí puedes realizar más validaciones si lo deseas
+
+                # Crear usuario y perfil si pasa todas las validaciones
                 rut_exist = User.objects.filter(username=rut).count() 
-                if rut_exist== 0:
+                if rut_exist == 0:
                     new_user = User.objects.create_user(
                         username=rut,
                         email=email,
                         first_name=nombre,
                         last_name=apellido,
-                        is_active=True  # Asegúrate de que el usuario esté activo
+                        
+                        is_active=True
                     )
                     new_user.save()
 
-                    # Crear perfil asociado
                     new_profile = Profile.objects.create(
                         user=new_user,
-                        group_id=1,  # Ajusta esto según el grupo que corresponda
+                        group_id=1,
                         mobile=mobile,
-                        address=address,  # Nuevo campo
-                        region=region     # Nuevo campo
+                        address=address,
+                        region=region,
+                        rut=rut
                     )
                     new_profile.save()
 
                     acc += 1
-                    messages.add_message(request, messages.INFO, 'Carga masiva finalizada, se importaron ' + str(acc) + ' registros')
-                    return redirect('carga_masiva_user')
-            else:
-                messages.add_message(request, messages.INFO, 'El rut que esta tratando de ingresar, ya existe en nuestros registros')   
-                return redirect('carga_masiva_user')
+                else:
+                    messages.add_message(request, messages.INFO, 'El RUT que está tratando de ingresar ya existe en nuestros registros')
+
+            messages.add_message(request, messages.INFO, 'Carga masiva finalizada, se importaron ' + str(acc) + ' registros')
+            return redirect('carga_masiva_user')
+        
         except Exception as e:
             messages.add_message(request, messages.ERROR, f'Error al procesar el archivo: {str(e)}')
             return redirect('carga_masiva_user')
+
 
 
 @login_required
