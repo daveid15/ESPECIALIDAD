@@ -4,18 +4,60 @@ from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.db.models import Q
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.http.response import JsonResponse
+from random import randrange
+from django.db.models import Sum
+from django.db.models import F, ExpressionWrapper, DecimalField
 
 from registration.models import Profile
 from ventas.models import Prod_venta, Orden_venta, Venta_producto
 
-@login_required
 def ventas_main(request):
     profiles = Profile.objects.get(user_id=request.user.id)
     if profiles.group_id != 1 and profiles.group_id != 2:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una área para la que no tienes permisos')
         return redirect('check_group_main')
+
     template_name = 'ventas/ventas_main.html'
     return render(request, template_name, {'profiles': profiles})
+
+def get_chart_data(_request):
+    productos_venta = ['Completo Italiano', 'Completo Personalizado', 'Bebida']
+    
+    # Lista para almacenar las ganancias por producto
+    ganancias_por_producto = []
+    
+    # Iterar sobre cada producto
+    for producto in productos_venta:
+        # Obtener el producto correspondiente
+        prod_venta = Prod_venta.objects.get(nombre_producto=producto)
+        
+        # Calcular la ganancia total del producto sumando el producto de la cantidad y el precio de cada venta
+        ganancia_total = Venta_producto.objects.filter(producto=prod_venta).aggregate(
+            ganancia_total=Sum(ExpressionWrapper(F('cantidad') * F('precio_producto'), output_field=DecimalField()))
+        )['ganancia_total'] or 0
+        
+        # Agregar la ganancia total a la lista
+        ganancias_por_producto.append(ganancia_total)
+    
+    chart_data = {
+        'xAxis': {
+            'type': 'category',
+            'data': productos_venta
+        },
+        'yAxis': {
+            'type': 'value'
+        },
+        'series': [
+            {
+                'data': ganancias_por_producto,
+                'type': 'bar'
+            }
+        ]
+    }
+
+    return JsonResponse(chart_data)
+
 
 @login_required
 def venta_save(request):
@@ -102,3 +144,45 @@ def detalle_orden_venta(request, orden_id):
     orden = Orden_venta.objects.get(numero_orden=orden_id)
     ventas_productos = orden.venta_producto_set.all()  # Utiliza el nombre del modelo en minúsculas seguido de _set para acceder a los objetos relacionados
     return render(request, 'detalle_orden_venta.html', {'orden': orden, 'ventas_productos': ventas_productos})
+
+#DASHBOARD
+
+@login_required
+def get_chart_ventas(request):
+    colors = ['blue', 'orange', 'red', 'black', 'yellow', 'green', 'magenta', 'lightblue', 'purple', 'brown']
+    random_color = colors[randrange(0, len(colors))]
+
+    serie = [randrange(100, 400) for _ in range(7)]
+
+    chart = {
+        'tooltip': {
+            'show': True,
+            'trigger': "axis",
+            'triggerOn': "mousemove|click"
+        },
+        'xAxis': [
+            {
+                'type': "category",
+                'data': ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+            }
+        ],
+        'yAxis': [
+            {
+                'type': "value"
+            }
+        ],
+        'series': [
+            {
+                'data': serie,
+                'type': "line",
+                'itemStyle': {
+                    'color': random_color
+                },
+                'lineStyle': {
+                    'color': random_color
+                }
+            }
+        ]
+    }
+
+    return JsonResponse(chart)

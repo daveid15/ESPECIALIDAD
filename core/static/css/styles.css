@@ -682,6 +682,11 @@ ol {
     margin-left: 0.5rem;
 }
 
+.chart {
+    width: 10%;
+    min-height: 400px;
+}
+
 
 /*Small devices (landscape phones, 576px and up)*/
 @media (min-width: 576px) {
