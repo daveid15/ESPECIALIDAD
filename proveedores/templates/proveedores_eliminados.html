@@ -1,0 +1,133 @@
+{% extends 'core/base_admin.html' %}
+{% load static %}
+{% block title %}Proveedores Eliminados{% endblock %}
+{% block content %}
+{% block extra_css %}    
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<style>
+    .errorlist { color: red; }
+    .pagination { 
+        position: fixed;
+        bottom: 20px; 
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex; 
+        justify-content: center; 
+        z-index: 999; 
+        background-color: #9EB23B;
+        border-radius: 12px;
+        font-weight: bold;
+    }
+    .pagination .page-item { 
+        margin: 0 5px; 
+        list-style: none; 
+        height: 30px; 
+        display: flex; 
+        align-items: center; 
+    } 
+    .pagination .page-link { 
+        text-decoration: none; 
+        color: #000; 
+        font-size: 18px; 
+        padding: 5px 10px; 
+    }
+    .pagination .page-item.active .page-link { 
+        background-color: #505c14; 
+        color: #000; 
+        border-radius: 5px; 
+    }
+</style>
+{% endblock extra_css %}    
+
+<header class='mb-5'>
+    <h2 class='h2 medium text-blue'>Lista de Proveedores Eliminados</h2>
+</header>
+
+<div class="table-container mt-5">
+    <table class="table table-user">
+        <thead>
+            <tr>
+                <th width="10%" scope="col">Nombre</th>
+                <th width="10%" scope="col">Apellido</th>
+                <th width="10%" scope="col">Teléfono de contacto</th>
+                <th width="10%" scope="col">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in proveedores_eliminados %}
+                <tr>
+                    <td>{{ p.proveedor_name }}</td>
+                    <td>{{ p.proveedor_last_name }}</td>
+                    <td>{{ p.proveedor_phone }}</td>
+                    <td>
+                        <form action="{% url 'restaurar_proveedor' p.id %}" method="post" style="display:inline;">
+                            {% csrf_token %}
+                            <input type="submit" value="Restaurar" onclick="return confirm('¿Estás seguro de que deseas restaurar este proveedor?');">
+                        </form>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="4">No hay proveedores eliminados.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Paginación -->
+    {% if paginator.num_pages > 1 %}
+        <div class="d-flex justify-content-center mx-0-5--custom">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination pagination-table">
+                    {% if proveedores_eliminados.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ proveedores_eliminados.previous_page_number }}&search={{ search }}" aria-label="Previous">
+                                <i class="fas fa-chevron-left"></i>
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1">
+                                <i class="fas fa-chevron-left"></i>
+                            </a>
+                        </li>
+                    {% endif %}
+                    {% for i in paginator.page_range %}
+                        <li class="page-item {% if proveedores_eliminados.number == i %}active{% endif %}">
+                            <a class="page-link" href="?page={{ i }}&search={{ search }}">{{ i }}</a>
+                        </li>
+                    {% endfor %}
+                    {% if proveedores_eliminados.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ proveedores_eliminados.next_page_number }}&search={{ search }}">
+                                <i class="fas fa-chevron-right"></i>
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1">
+                                <i class="fas fa-chevron-right"></i>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    {% endif %}  
+    <!-- Paginación --> 
+    <div class="d-flex justify-content-center mx-0-5--custom">
+        <a href="{% url 'seleccion_proveedores' %}" class="button">Volver</a>
+    </div>    
+</div>
+
+{% block extrajs %}    
+<script>
+    function confirmRestore(id) {
+        if (confirm("¿Estás seguro de que deseas restaurar este proveedor?")) {
+            window.location.href = "{% url 'restaurar_proveedor' 0 %}".replace('0', id);
+        }
+    }
+</script>
+{% endblock extrajs %}    
+{% endblock %}
+

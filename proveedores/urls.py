@@ -19,6 +19,12 @@ proveedores_patterns = [
     path('carga_masiva_proveedor_save/',views.carga_masiva_proveedor_save,name="carga_masiva_proveedor_save"),
     path('import_file_proveedor/',views.import_file_proveedor,name="import_file_proveedor"),
     path('descarga_reporte/',views.descarga_reporte,name="descarga_reporte"),
+    path('proveedores/seleccion/', views.seleccion_proveedores, name='seleccion_proveedores'),
+    path('proveedores/activos/', views.proveedores_activos, name='proveedores_activos'),
+    path('proveedores/eliminados/', views.proveedores_eliminados, name='proveedores_eliminados'),
+    path('proveedores/eliminar/<int:proveedor_id>/', views.eliminar_proveedor, name='eliminar_proveedor'),
+    path('proveedores/restaurar/<int:proveedor_id>/', views.restaurar_proveedor, name='restaurar_proveedor'),
+
 
 #Órden de Compra
     path('orden_main', views.orden_main,name='orden_main'),

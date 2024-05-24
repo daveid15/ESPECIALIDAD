@@ -1,0 +1,151 @@
+{% extends 'core/base_admin.html' %}
+{% load static %}
+{% block title %}{% endblock %}
+{% block content %}
+{% block extra_css %}    
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<style>
+    .errorlist { color: red; }
+    .pagination { 
+        position: fixed;
+        bottom: 20px; /* Ajusta esta distancia según tus necesidades */
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex; 
+        justify-content: center; 
+        z-index: 999; /* Asegura que la paginación esté sobre otros elementos */
+        background-color: #9EB23B;
+        border-radius: 12px;
+        font-weight: bold;
+    }
+    .pagination .page-item { 
+        margin: 0 5px; 
+        list-style: none; /* Elimina los estilos de lista */
+        height: 30px; /* Altura fija para los elementos <li> */
+        display: flex; /* Para usar flexbox */
+        align-items: center; /* Centrar verticalmente el contenido */
+    } 
+    .pagination .page-link { 
+        text-decoration: none; 
+        color: #000; 
+        font-size: 18px; 
+        padding: 5px 10px; /* Añade un poco de espacio alrededor del número */
+    }
+    .pagination .page-item.active .page-link { 
+        background-color: #505c14; /* Cambia el color de fondo para la página activa */
+        color: #000; /* Cambia el color del texto para la página activa */
+        border-radius: 5px; /* Agrega bordes redondeados */
+    }
+</style>
+{% endblock extra_css %}    
+
+<header class='mb-5'>
+    <h2 class='h2 medium text-blue'>Lista de Proveedores Activos</h2>
+    <div class="row " style=" display: flex; justify-content: center;">
+        <div class="col-12 col-sm-3 mb-3">
+            <a href="{% url 'proveedores_crear' %}" class="boton form-control">Agregar proveedor</a>                 
+        </div>                                            
+    </div>
+    <div class="row " style=" display: flex; justify-content: center;">
+        <div class="col-12 col-sm-3 mb-3">
+            <a href="{% url 'carga_masiva_proveedor' %}" class="boton form-control">Carga masiva</a>               
+        </div>                                            
+    </div>
+</header>
+
+<div class="d-flex flex-column flex-lg-row my-5">
+    <div class="my-auto d-flex flex-column flex-lg-row ms-lg-auto">
+        <div class="feedback body--small normal"></div>
+    </div>
+    <form method="post" action="" class='col-12 col-lg-6 input-container-search my-auto me-3'>
+        {% csrf_token %}
+        <input name="search" id="search" type="text" placeholder='Buscar por Nombre'/>
+    </form>
+</div>
+
+<div class="table-container mt-5">
+    <table class="table table-user">
+        <thead>
+            <tr>
+                <th width="10%" scope="col">Nombre</th>
+                <th width="10%" scope="col">Apellido</th>
+                <th width="10%" scope="col">Teléfono de contacto</th>
+                <th width="10%" scope="col">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in p_list_paginate %} 
+                <tr>
+                    <td>{{ p.proveedor_name }}</td>
+                    <td>{{ p.proveedor_last_name }}</td>
+                    <td>{{ p.proveedor_phone }}</td>
+                    <td>
+                        <a href="{% url 'proveedor_ver' p.id %}">Ver</a>
+                        <a href="{% url 'proveedor_edit' p.id %}">Editar</a>
+                        <form action="{% url 'eliminar_proveedor' p.id %}" method="post" style="display:inline;">
+                            {% csrf_token %}
+                            <input type="submit" value="Eliminar" onclick="return confirm('¿Estás seguro de que deseas eliminar este proveedor?');">
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Paginación -->
+    {% if paginator.num_pages > 1 %}
+        <div class="d-flex justify-content-center mx-0-5--custom">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination pagination-table">
+                    {% if p_list_paginate.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ p_list_paginate.previous_page_number }}&search={{ search }}" aria-label="Previous">
+                                <i class="fas fa-chevron-left"></i>
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1">
+                                <i class="fas fa-chevron-left"></i>
+                            </a>
+                        </li>
+                    {% endif %}
+                    {% for i in paginator.page_range %}
+                        <li class="page-item {% if p_list_paginate.number == i %}active{% endif %}">
+                            <a class="page-link" href="?page={{ i }}&search={{ search }}">{{ i }}</a>
+                        </li>
+                    {% endfor %}
+                    {% if p_list_paginate.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ p_list_paginate.next_page_number }}&search={{ search }}">
+                                <i class="fas fa-chevron-right"></i>
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1">
+                                <i class="fas fa-chevron-right"></i>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    {% endif %}  
+    <!-- Paginación --> 
+    <div class="d-flex justify-content-center mx-0-5--custom">
+        <a href="{% url 'seleccion_proveedores' %}" class="button">Volver</a>
+    </div>    
+</div>
+
+{% block extrajs %}    
+<script>
+    function confirmDelete(id) {
+        if (confirm("¿Estás seguro de que deseas eliminar este proveedor?")) {
+            window.location.href = "{% url 'eliminar_proveedor' 0 %}".replace('0', id);
+        }
+    }
+</script>
+{% endblock extrajs %}    
+{% endblock %}
+

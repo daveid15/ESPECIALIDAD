@@ -1,9 +1,12 @@
 from django import forms
-from .models import Producto
+from .models import Proveedor  # Importa el modelo correcto
 
-class ProductoForm(forms.ModelForm):
+class ProveedorForm(forms.ModelForm):  # Cambia el nombre de la clase a ProveedorForm
     class Meta:
-        model = Producto
-        fields = ['nombre', 'proveedor', 'cantidad']
+        model = Proveedor  # Usa el modelo Proveedor
+        fields = ['proveedor_name', 'proveedor_last_name', 'proveedor_rut', 'proveedor_mail', 'proveedor_address', 'proveedor_region', 'proveedor_comuna', 'proveedor_phone', 'proveedor_insumo', 'activo']  # Lista de campos del modelo Proveedor que quieres incluir en el formulario
+
 
         
+
+

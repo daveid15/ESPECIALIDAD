@@ -25,25 +25,53 @@ from registration.models import Profile
 from proveedores.models import Proveedor, Orden_compra, Producto_Orden
 from inventario.models import Product
 from administrator.views import validar_email,validar_rut,validar_string,validar_numero
+from .forms import ProveedorForm
+from datetime import datetime
+
 # Create your views here.
 @login_required
 def proveedores_main(request):
-    profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 2:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
-        return redirect('check_group_main')
-    template_name = 'proveedores/proveedores_main.html'
-    return render(request,template_name,{'profiles':profiles})
+    current_month = datetime.now().month
+
+    proveedores_activos_count = Proveedor.objects.filter(activo=True).count()
+    proveedores_eliminados_count = Proveedor.objects.filter(activo=False).count()
+    total_proveedores_count = Proveedor.objects.count()
+
+    # Filtrar por los proveedores creados en el mes actual
+    proveedores_nuevos_count = Proveedor.objects.filter(created_at__month=current_month).count()
+
+    return render(request, 'proveedores/proveedores_main.html', {
+        'proveedores_activos_count': proveedores_activos_count,
+        'proveedores_eliminados_count': proveedores_eliminados_count,
+        'total_proveedores_count': total_proveedores_count,
+        'proveedores_nuevos_count': proveedores_nuevos_count,
+    })
 
 
 @login_required
 def proveedores_crear(request):
-    profiles = Profile.objects.get(user_id = request.user.id)
+    profiles = Profile.objects.get(user_id=request.user.id)
     if profiles.group_id != 1 and profiles.group_id != 2:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a un área para la que no tiene permisos')
         return redirect('check_group_main')
+
+    if request.method == 'POST':
+        # Procesar el formulario de creación del proveedor
+        proveedor_form = ProveedorForm(request.POST)
+        if proveedor_form.is_valid():
+            proveedor = proveedor_form.save(commit=False)
+            proveedor.activo = True  # Establecer el proveedor como activo
+            proveedor.save()
+            messages.success(request, 'Proveedor creado correctamente')
+            return redirect('proveedores_activos')  # Redirigir a la lista de proveedores activos
+
+    else:
+        # Renderizar el formulario de creación del proveedor
+        proveedor_form = ProveedorForm()
+
     template_name = 'proveedores/proveedores_crear.html'
-    return render(request,template_name,{'profiles':profiles})
+    return render(request, template_name, {'profiles': profiles, 'proveedor_form': proveedor_form})
+
 
 @login_required
 def proveedor_save(request):
@@ -94,7 +122,8 @@ def proveedor_save(request):
                     proveedor_comuna=proveedor_comuna,
                     proveedor_phone=proveedor_phone,
                     proveedor_insumo=proveedor_insumo
-                )
+              )
+
                 proveedor_save.save()
                 messages.add_message(request, messages.INFO, 'Proveedor ingresado con éxito')
                 return redirect('proveedores_main')
@@ -351,6 +380,83 @@ def descarga_reporte(request):
             traceback.print_exc()
             messages.add_message(request, messages.ERROR, 'Se produjo un error al generar el archivo Excel. Por favor, inténtelo de nuevo más tarde.')
             return redirect('proveedor_list')
+    
+@login_required   
+def seleccion_proveedores(request):
+    return render(request, 'seleccion_proveedores.html')
+
+from django.core.paginator import Paginator
+from .models import Proveedor
+
+@login_required
+def proveedores_activos(request):
+    # Obtener los proveedores activos
+    proveedores_activos = Proveedor.objects.filter(activo=True)
+
+    # Aplicar búsqueda si se proporciona un término de búsqueda
+    search = request.GET.get('search')
+    if search:
+        proveedores_activos = proveedores_activos.filter(proveedor_name__icontains=search)
+
+    # Paginar los resultados
+    paginator = Paginator(proveedores_activos, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    # Renderizar la plantilla con los datos de los proveedores activos
+    return render(request, 'proveedores_activos.html', {'p_list_paginate': page_obj, 'paginator': paginator, 'search': search})
+
+@login_required
+def proveedores_eliminados(request):
+    profiles = Profile.objects.get(user_id=request.user.id)
+    if profiles.group_id != 1:
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a un área para la que no tiene permisos')
+        return redirect('check_group_main')
+
+    proveedores_list = Proveedor.objects.filter(activo=False)
+    paginator = Paginator(proveedores_list, 10)  # Cambia 10 por el número de proveedores que deseas mostrar por página
+
+    page = request.GET.get('page')
+    proveedores_paginate = paginator.get_page(page)
+    
+    return render(request, 'proveedores_eliminados.html', {
+        'proveedores_eliminados': proveedores_paginate,
+        'paginator': paginator,
+        'search': request.GET.get('search', '')
+    })
+
+@login_required
+def restaurar_proveedor(request, proveedor_id):
+    profiles = Profile.objects.get(user_id=request.user.id)
+    if profiles.group_id != 1:
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a un área para la que no tiene permisos')
+        return redirect('check_group_main')
+
+    try:
+        proveedor = Proveedor.objects.get(pk=proveedor_id)
+        proveedor.activo = True
+        proveedor.save()
+        messages.add_message(request, messages.INFO, f'Proveedor {proveedor.proveedor_name} restaurado con éxito')
+    except Proveedor.DoesNotExist:
+        messages.add_message(request, messages.INFO, 'Proveedor no encontrado')
+
+    return redirect('proveedores_eliminados')
+
+@login_required
+def eliminar_proveedor(request, proveedor_id):
+    profiles = Profile.objects.get(user_id=request.user.id)
+    if profiles.group_id != 1:
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a un área para la que no tiene permisos')
+        return redirect('check_group_main')
+
+    proveedor = get_object_or_404(Proveedor, pk=proveedor_id)
+    
+    proveedor.activo = False
+    proveedor.save()
+    messages.add_message(request, messages.INFO, 'Proveedor ' + proveedor.proveedor_name + ' eliminado con éxito')
+    return redirect('proveedores_activos')
+
+
 
 #Órden de Compraa
 
