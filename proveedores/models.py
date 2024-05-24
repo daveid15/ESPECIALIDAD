@@ -21,10 +21,13 @@ class Proveedor(models.Model):
     proveedor_region = models.CharField(max_length=100, null=True, blank=True)
     proveedor_comuna = models.CharField(max_length=100, null=True, blank=True)
     proveedor_phone = models.CharField(max_length=100, null=True, blank=True)
+
     proveedor_insumo = ArrayField(models.CharField(max_length=100, null=True, blank=True))
     activo = models.BooleanField(default=True)
     created_at = models.DateTimeField(default=timezone.now)  # Campo de fecha de creación
 
+
+    
     def get_nombre_completo(self):
         return f'{self.proveedor_name} {self.proveedor_last_name}'
 

@@ -57,10 +57,11 @@
     <div class="my-auto d-flex flex-column flex-lg-row ms-lg-auto">
         <div class="feedback body--small normal"></div>
     </div>
-    <form method="post" action="" class='col-12 col-lg-6 input-container-search my-auto me-3'>
+    <<form method="get" action="{% url 'proveedor_list' %}" class='col-12 col-lg-6 input-container-search my-auto me-3'>
         {% csrf_token %}
         <input name="search" id="search" type="text" placeholder='Buscar por Nombre'/>
-        <form>
+        <button type="submit">Buscar</button>
+    </form>
 </div>
 
 <div class="table-container mt-5">
@@ -79,7 +80,7 @@
             </tr>
         </thead>
         <tbody>
-            {% for p in p_list_paginate %} 
+            {% for p in ordenes %} 
                 <tr>
                     <th scope="row">{{p.proveedor_name}}</th>
                     <th scope="row">{{p.proveedor_last_name}}</th>
@@ -95,45 +96,23 @@
         </tbody>
     </table>
     <!-- Paginación -->
-    {% if paginator.num_pages > 1 %}
-        <div class="d-flex justify-content-center mx-0-5--custom">
-            <nav aria-label="Page navigation example">
-                <ul class="pagination pagination-table">
-                    {% if p_list_paginate.has_previous %}
-                        <li class="page-item">
-                            <a class="page-link" href="?page={{ p_list_paginate.previous_page_number}}&search={{search}}" aria-label="Previous">
-                                <i class="fas fa-chevron-left"></i>
-                            </a>
-                        </li>
-                    {% else %}
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#" tabindex="-1">
-                                <i class="fas fa-chevron-left"></i>
-                            </a>
-                        </li>                        
-                    {% endif %}
-                    {% for i in paginator.page_range %}
-                        <li class="page-item {% if p_list_paginate.number == i %}active{% endif %}">
-                            <a class="page-link" href="?page={{ i }}&search={{search}}">{{ i }}</a>
-                        </li>                        
-                    {% endfor %}
-                    {% if p_list_paginate.has_next %}
-                        <li class="page-item ">
-                            <a class="page-link" href="?page={{ p_list_paginate.next_page_number }}&search={{search}}">
-                                <i class="fas fa-chevron-right"></i>
-                            </a>
-                        </li>
-                    {% else %}
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#" tabindex="-1">
-                                <i class="fas fa-chevron-right"></i>
-                            </a>
-                        </li>
-                    {% endif %}
-                </ul>
-            </nav>
-        </div>
-    {% endif %}  
+    <div class="pagination">
+        <span class="step-links">
+            {% if ordenes.has_previous %}
+                <a href="?pagina=1{% if search %}&search={{ search }}{% endif %}">&laquo; Primera</a>
+                <a href="?pagina={{ ordenes.previous_page_number }}{% if search %}&search={{ search }}{% endif %}">Anterior</a>
+            {% endif %}
+    
+            <span class="current">
+                Página {{ ordenes.number }} de {{ ordenes.paginator.num_pages }}.
+            </span>
+    
+            {% if ordenes.has_next %}
+                <a href="?pagina={{ ordenes.next_page_number }}{% if search %}&search={{ search }}{% endif %}">Siguiente</a>
+                <a href="?pagina={{ ordenes.paginator.num_pages }}{% if search %}&search={{ search }}{% endif %}">Última &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
     <!-- Paginación --> 
     <div class="d-flex justify-content-center mx-0-5--custom">
         <a href="{% url 'proveedores_main' %}" class="button">Volver</a>

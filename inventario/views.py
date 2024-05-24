@@ -222,7 +222,7 @@ def producto_delete(request, product_id):
     return redirect(reverse('producto_list'))
 
 
- #CARGA MASIVA   
+#CARGA MASIVA   
 @login_required
 def carga_masiva_producto(request):
     profile = Profile.objects.get(user_id=request.user.id)
@@ -246,10 +246,10 @@ def import_file_producto(request):
     ws = wb.active
     ws.title = 'carga_masiva'
 
-    columns = ['supply_name', 'supply_code', 'supply_unit', 'supply_stock_initial', 'supply_input', 'supply_output']
+    columns = ['supply_name', 'supply_code', 'supply_unit', 'supply_stock_initial']
     ws.append(columns)
 
-    example_data = ['ej: Nombre producto', 'SK1111', 'Kg', 10, 10, 1]
+    example_data = ['ej: Nombre producto', 'SK1111', 'Kg', 10]
     ws.append(example_data)
 
     wb.save(response)
@@ -264,7 +264,7 @@ def carga_masiva_producto_save(request):
 
     if request.method == 'POST':
         try:
-            data = pd.read_excel(request.FILES['myfile'], engine='openpyxl')
+            data = pd.read_excel(request.FILES['myfile'], engine='openpyxl',skiprows=1)
             df = pd.DataFrame(data)
             acc = 0
             for item in df.itertuples():
@@ -272,17 +272,25 @@ def carga_masiva_producto_save(request):
                 supply_code = str(item[2])
                 supply_unit = str(item[3])
                 supply_initial_stock = int(item[4])
-                supply_input = int(item[5])
-                supply_output = int(item[6])
 
+                #Valida que supply_name solo sean letras
+                if not supply_name.replace('','').isalpha():
+                    raise ValueError('El nombre del insumo solo puede contener letras')
+                
+                #Valida que supply_unit solo sean las opciones kg o LATA (330 ml)
+                if supply_unit not in ['kg','LATA (330 ml)']:
+                    raise ValueError('La unidad del suministro solo puede ser "kg" o "LATA (330 ml)"')
+                
+                #Valida que supply_initial_stock solo sean numeros
+                if not isinstance(supply_initial_stock, int):
+                    raise ValueError('El stock inicial debe ser un valor numérico')
+             
                 producto_save = Product(
                     supply_name=supply_name,
                     supply_code=supply_code,
                     supply_unit=supply_unit,
                     supply_initial_stock=supply_initial_stock,
-                    supply_input=supply_input,
-                    supply_output=supply_output,
-                    supply_total=supply_initial_stock + supply_input - supply_output,
+                  
                 )
                 producto_save.save()
                 acc += 1

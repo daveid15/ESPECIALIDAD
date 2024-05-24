@@ -13,7 +13,7 @@
         <div class="my-auto d-flex flex-column flex-lg-row ms-lg-auto">
             <div class="feedback body--small normal"></div>
         </div>
-        <form method="get" action="{% url 'orden_list_enviada' %}" class='col-12 col-lg-6 input-container-search my-auto me-3'>
+        <form method="get" action="{% url 'orden_list_aceptada' %}" class='col-12 col-lg-6 input-container-search my-auto me-3'>
             {% csrf_token %}
             <input name="search" id="search" type="text" placeholder='Buscar por Nombre'/>
             <button type="submit">Buscar</button>
