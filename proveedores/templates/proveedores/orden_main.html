@@ -2,34 +2,48 @@
 {% load static %}
 {% block content %}
     <main role="main">
-        <div class="container col-12 mt-3">
-            <!-- Otro contenido de la página -->
-            <div class="col-12  mt-3 border">
-                <h3 class="px-5 py-4" style="text-align: center;">Órden de compra </h3> 
-                {% if profiles.group_id == 1 %}
-                    <div class="col-12 col-sm-3 mb-3" style="text-align: center;">
-                        <a href="{% url 'orden_crear' %}" class="boton form-control">Nueva orden de compra</a>
-                    </div>
-                {% endif %}
-                <!-- Otro contenido de la página -->
-                <div class="col-12 col-sm-3 mb-3" style="text-align: center;">
-                    <a href="{% url 'carga_masiva_user' %}" class="boton form-control">Carga masiva</a>
-                </div>
-                <!-- Enlace al listado de órdenes -->
-                {% if profiles.group_id == 1 %}
-                    <div class="col-12 col-sm-3 mb-3" style="text-align: center;">
-                        <a href="{% url 'lista_orden' grupo_id=1 %}" class="boton form-control">Listado de ordenes</a>
-                    </div>
-                {% else %}
-                    <div class="col-12 col-sm-3 mb-3" style="text-align: center;">
-                        <p>grupo_id no definido</p>
-                    </div>
-                {% endif %}
-                <!-- Otro contenido de la página -->
-                <div class="col-12 col-sm-3 mb-3" style="text-align: center;">
-                    <a href="{% url 'admin_main' %}" class="botton form-control" style="padding: 4px; margin-top: 4px;">Volver</a>
-                </div>
+        <nav id="orderdash" class="orderdash">
+            <div class="menu">
+                <nav class="orderdash">
+                </nav>
             </div>
-        </div>
+        </nav>
+        <nav id="orderbar" class="orderbar">
+            <div class="menu">
+                <nav class="orderbar">
+                    <div class="menu_content">
+                        <ul class="menu_items">
+                            <li class="item">
+                                <a href="{% url 'orden_crear' %}" class="nav_link submenu_item">
+                                    </span>
+                                    <span class="navlink">Nueva orden de compra</span>
+                                </a>
+                                <ul class="menu_items submenu">
+                                    <li><a href="{% url 'orden_crear' %}" class="nav_link sublink">Orden crear</a></li>
+                                </ul>
+                                <a href="{% url 'carga_masiva_user' %}" class="nav_link submenu_item">
+                                    </span>
+                                    <span class="navlink">Carga masiva</span>
+                                </a>
+                                <ul class="menu_items submenu">
+                                    <li><a href="{% url 'carga_masiva_user' %}" class="nav_link sublink">Carga masiva user</a></li>
+                                </ul>
+                                <a href="{% url 'lista_orden' grupo_id=1 %}" class="nav_link submenu_item">
+                                    </span>
+                                    <span class="navlink">Listado de ordenes</span>
+                                </a>
+                            <ul class="menu_items submenu">
+                                <li><a href="{% url 'lista_orden' grupo_id=1 %}" class="nav_link sublink">Lista orden</a></li>
+                            </ul>                               
+                            <a href="{% url 'admin_main' %}" class="nav_link submenu_item">
+                                </span>
+                                    <span class="navlink">Volver</span>
+                            </a>
+                        <ul class="menu_items submenu">
+                            <li><a href="{% url 'admin_main' %}" class="nav_link sublink">Volver</a></li>
+                    </div>
+                </nav>
+            </div>
+        </nav>
     </main>
 {% endblock %}

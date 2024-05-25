@@ -122,6 +122,7 @@ body.dark {
   width: 80px;
 }
 
+
 .sidebar::-webkit-scrollbar {
   display: none;
 }
@@ -381,4 +382,49 @@ body.dark {
 /* CSS para el icono de usuario */
 .bi-person-square:before {
   content: "\e63e"; /* Código del icono de usuario */
+}
+
+/* orderbar styles */
+.orderbar {
+  background-color: var(--green-color);
+  width: 1000px; /* Ajusta el ancho según tus necesidades */
+  height: 10%; /* Ajusta la altura según tus necesidades */
+  position: fixed;
+  top: 540px; /* Ajusta la distancia desde la parte superior de la ventana */
+  left: 370px; /* Ajusta la distancia desde el lado izquierdo de la ventana */
+  border-radius: 15px; /* Redondea las esquinas */
+  padding: 5px; /* Ajusta el relleno interior */
+  z-index: 100;
+  overflow-y: auto; /* Ajusta la barra de desplazamiento si es necesario */
+  box-shadow: 0 0 10px var(--grey-color-light);
+  transition: all 0.5s ease;
+}
+
+.orderbar.close {
+  padding: 60px 0;
+  width: 80px;
+}
+.orderbar .nav_link {
+  align-items: center;
+  width: 25%;
+  padding: 4px 0px; /* del contenido dentro de la sidebar */
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--grey-color);
+  white-space: nowrap;
+}
+
+/* orderdash styles */
+.orderdash {
+  background-color: var(--light-green-color);
+  width: 1000px; /* Ajusta el ancho según tus necesidades */
+  height: 60%; /* Ajusta la altura según tus necesidades */
+  position: fixed;
+  top: 90px; /* Ajusta la distancia desde la parte superior de la ventana */
+  left: 370px; /* Ajusta la distancia desde el lado izquierdo de la ventana */
+  padding: 5px; /* Ajusta el relleno interior */
+  z-index: 100;
+  overflow-y: auto; /* Ajusta la barra de desplazamiento si es necesario */
+  box-shadow: 0 0 10px var(--grey-color-light);
+  transition: all 0.5s ease;
 }
