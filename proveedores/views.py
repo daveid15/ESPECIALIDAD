@@ -20,6 +20,9 @@ import traceback
 import os
 from django.db import transaction
 from django.views.decorators.csrf import csrf_protect
+import matplotlib.pyplot as plt
+import pandas as pd
+from django.http.response import JsonResponse
 
 from registration.models import Profile
 from proveedores.models import Proveedor, Orden_compra, Producto_Orden
@@ -485,6 +488,7 @@ def lista_orden(request, grupo_id):
     ordenes = Orden_compra.objects.filter(proveedor_orden=grupo_id)
     return render(request, 'proveedores/lista_orden.html', {'ordenes': ordenes})
 
+
 @login_required
 def orden_list_enviada(request, page=None):
     profile = Profile.objects.get(user_id=request.user.id)
@@ -493,7 +497,7 @@ def orden_list_enviada(request, page=None):
         return redirect('check_group_main')
     
     search = request.GET.get('search')
-    ordenes = Orden_compra.objects.filter(estado='enviado')
+    ordenes = Orden_compra.objects.filter(estado='enviado').order_by('id')
     
     if search:
         ordenes = ordenes.filter(Q(proveedor_orden__proveedor_name__icontains=search))
@@ -513,13 +517,14 @@ def orden_list_enviada(request, page=None):
 
 
 @login_required
-def orden_list_aceptada(request, page=None, search=None):
+def orden_list_aceptada(request, page=None):
     profile = Profile.objects.get(user_id=request.user.id)
     if profile.group_id != 1:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a un área para la que no tienes permisos')
         return redirect('check_group_main')
+    
     search = request.GET.get('search')
-    ordenes = Orden_compra.objects.filter(estado='aceptado')
+    ordenes = Orden_compra.objects.filter(estado='aceptado').order_by('id')
     
     if search:
         ordenes = ordenes.filter(Q(proveedor_orden__proveedor_name__icontains=search))
@@ -533,18 +538,20 @@ def orden_list_aceptada(request, page=None, search=None):
         ordenes = paginator.page(1)
     except EmptyPage:
         ordenes = paginator.page(paginator.num_pages)
+    
+    return render(request, 'proveedores/orden_list_aceptada.html', {'ordenes': ordenes, 'search': search, 'pagina_obj': ordenes})
 
-    return render(request, 'proveedores/orden_list_aceptada.html', {'ordenes': ordenes, 'search': search})
 
 
 @login_required
-def orden_list_rechazada(request, page=None, search=None):
+def orden_list_rechazada(request, page=None):
     profile = Profile.objects.get(user_id=request.user.id)
     if profile.group_id != 1:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a un área para la que no tienes permisos')
         return redirect('check_group_main')
+    
     search = request.GET.get('search')
-    ordenes = Orden_compra.objects.filter(estado='rechazado')
+    ordenes = Orden_compra.objects.filter(estado='rechazado').order_by('id')
     
     if search:
         ordenes = ordenes.filter(Q(proveedor_orden__proveedor_name__icontains=search))
@@ -558,23 +565,24 @@ def orden_list_rechazada(request, page=None, search=None):
         ordenes = paginator.page(1)
     except EmptyPage:
         ordenes = paginator.page(paginator.num_pages)
-
-    return render(request, 'proveedores/orden_list_rechazada.html', {'ordenes': ordenes, 'search': search})
+    
+    return render(request, 'proveedores/orden_list_rechazada.html', {'ordenes': ordenes, 'search': search, 'pagina_obj': ordenes})
 
 
 @login_required
-def orden_list_anulada(request, page=None, search=None):
+def orden_list_anulada(request, page=None):
     profile = Profile.objects.get(user_id=request.user.id)
     if profile.group_id != 1:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a un área para la que no tienes permisos')
         return redirect('check_group_main')
+    
     search = request.GET.get('search')
-    ordenes = Orden_compra.objects.filter(estado='anulado')
+    ordenes = Orden_compra.objects.filter(estado='anulado').order_by('id')
     
     if search:
         ordenes = ordenes.filter(Q(proveedor_orden__proveedor_name__icontains=search))
 
-    paginator = Paginator(ordenes, 2)
+    paginator = Paginator(ordenes, 5)
     pagina_numero = request.GET.get('pagina')
     
     try:
@@ -583,8 +591,8 @@ def orden_list_anulada(request, page=None, search=None):
         ordenes = paginator.page(1)
     except EmptyPage:
         ordenes = paginator.page(paginator.num_pages)
-
-    return render(request, 'proveedores/orden_list_anulada.html', {'ordenes': ordenes, 'search': search})
+    
+    return render(request, 'proveedores/orden_list_anulada.html', {'ordenes': ordenes, 'search': search, 'pagina_obj': ordenes})
 
 @login_required
 def orden_save(request):
@@ -600,6 +608,7 @@ def orden_save(request):
         proveedor_orden = request.POST.get('proveedor_orden')
         producto_orden = request.POST.getlist('producto_orden[]')
         cantidad_orden = request.POST.getlist('cantidad_orden[]')
+        monto_orden = request.POST.get('monto_orden')
 
         try:
             proveedor_instance = Proveedor.objects.get(proveedor_name=proveedor_orden)
@@ -613,7 +622,7 @@ def orden_save(request):
 
         try:
             with transaction.atomic():
-                orden = Orden_compra(proveedor_orden=proveedor_instance)
+                orden = Orden_compra(proveedor_orden=proveedor_instance, monto = monto_orden)
                 orden.save()
 
                 for prod, cant in zip(producto_orden, cantidad_orden):
@@ -759,10 +768,11 @@ def editar_orden(request, orden_id):
     productos_orden = Producto_Orden.objects.filter(orden_id=orden)
 
     if request.method == 'POST':
-        #proveedor_orden = request.POST.get('proveedor_orden')
+        # Proveedor_orden is not fetched from POST anymore
         producto_orden = request.POST.getlist('producto_orden[]')
         cantidad_orden = request.POST.getlist('cantidad_orden[]')
-
+        monto_orden = request.POST.get("monto_orden")
+        
         if not producto_orden or not cantidad_orden:
             messages.add_message(request, messages.INFO, 'Debes ingresar toda la información')
             return render(request, 'editar_orden.html', {
@@ -772,8 +782,11 @@ def editar_orden(request, orden_id):
 
         try:
             with transaction.atomic():
-                
-                # Borra los productos anteriores y añade los nuevos
+                # Update the amount only
+                orden.monto = monto_orden
+                orden.save()
+
+                # Delete old products and add the new ones
                 Producto_Orden.objects.filter(orden_id=orden).delete()
                 for prod, cant in zip(producto_orden, cantidad_orden):
                     producto = Product.objects.get(supply_name=prod)
@@ -783,6 +796,7 @@ def editar_orden(request, orden_id):
                         cantidad_orden=cant,
                     )
                     detalle.save()
+                
                 messages.add_message(request, messages.SUCCESS, 'Orden actualizada con éxito')
                 return redirect('editar_orden', orden_id=orden.id)
         except Exception as e:
@@ -796,3 +810,39 @@ def editar_orden(request, orden_id):
             'profiles': profile, 'proveedores': proveedores, 'productos': productos, 
             'orden': orden, 'productos_orden': productos_orden
         })
+        
+#DASHBOARDS
+
+@login_required
+def get_chart_oc_1(request):
+
+    proveedores = Proveedor.objects.all()
+    
+    # Lista para almacenar los nombres completos de los proveedores y montos acumulados
+    nombres_proveedor = []
+    montos = []
+    
+    for proveedor in proveedores:
+        nombre_completo = proveedor.get_nombre_completo()
+        nombres_proveedor.append(nombre_completo)
+        ordenes_proveedor = Orden_compra.objects.filter(proveedor_orden=proveedor)
+        monto_acumulado = sum(orden.monto for orden in ordenes_proveedor)
+        montos.append(monto_acumulado)
+    
+    chart_data = {
+        'xAxis': {
+            'type': 'category',
+            'data': nombres_proveedor
+        },
+        'yAxis': {
+            'type': 'value'
+        },
+        'series': [
+            {
+                'data': montos,
+                'type': 'bar'
+            }
+        ]
+    }
+
+    return JsonResponse(chart_data)

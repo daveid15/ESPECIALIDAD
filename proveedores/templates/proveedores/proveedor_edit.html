@@ -18,18 +18,18 @@ Editar Proveedor
                 <div class="col-12 col-lg-12 row row-cols-1 row-cols-md-1 g-2 p-lg-0-5">
                     <div class="mb-0 col-md-12">
                         <label for="proveedor_name" class="form-label">Nombre (*)</label>
-                        <input type="text" id="proveedor_name" name="proveedor_name" value="{{ proveedor_data.proveedor_name }}" class="form-control border border-danger" required/>
+                        <input type="text" id="proveedor_name" name="proveedor_name" value="{{ proveedor_data.proveedor_name }}" pattern="[A-Za-zÑñ]+" class="form-control border border-danger" required/>
                     </div>
                     <div class="mb-0 col-md-12">
                         <label for="proveedor_last_name">Apellido (*)</label>
-                        <input type="text" id="proveedor_last_name" name="proveedor_last_name" value="{{ proveedor_data.proveedor_last_name }}" class="form-control border border-danger" required/>
+                        <input type="text" id="proveedor_last_name" name="proveedor_last_name" value="{{ proveedor_data.proveedor_last_name }}" pattern="[A-Za-zÑñ]+" class="form-control border border-danger" required/>
                     </div>
                     <div class="mb-0 col-md-12">
                         <label for="email" class="form-label">Email (Campo no editable): </label>
                         <span class="form-control" id="email">{{proveedor_data.proveedor_mail}}</span>                    </div>
                     <div class="mb-0 col-md-12">
                         <label for="proveedor_phone" class="form-label">Número de contacto (*):</label>
-                        <input type="text" id="proveedor_phone" name="proveedor_phone" value="{{ proveedor_data.proveedor_phone }}" class="form-control border border-danger" required/>
+                        <input type="text" id="proveedor_phone" name="proveedor_phone" value="{{ proveedor_data.proveedor_phone }}" pattern="[0-9]{9}" class="form-control border border-danger" required/>
                     </div>                       
                     <div class="col-12 col-sm-4 mb-3">
                         <div class="col-12 col-sm-8 mb-3">

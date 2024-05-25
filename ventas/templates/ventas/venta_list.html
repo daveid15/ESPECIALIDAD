@@ -61,8 +61,13 @@
             </span>
         </div>
         <!-- Paginación --> 
-        <div class="d-flex justify-content-center mx-0-5--custom">
-            <a href="{% url 'ventas_main' %}" class="button">Regresar</a>
+        <div class="d-flex justify-content-between mx-0-5--custom">
+            <div>
+                <a href="{% url 'ventas_main' %}" class="button">Regresar</a>
+            </div>
+            <div>
+                <strong>VENTA TOTAL: {{ total_ventas }}</strong>
+            </div>
         </div>    
     </div>
 

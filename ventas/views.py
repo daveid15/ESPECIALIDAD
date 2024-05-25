@@ -59,6 +59,77 @@ def get_chart_data(_request):
     return JsonResponse(chart_data)
 
 
+from django.utils import timezone
+from django.core.cache import cache
+from django.db.models import Sum
+from django.http import JsonResponse
+from datetime import timedelta
+
+
+def get_chart_data_venta(_request):
+    # Tiempo actual
+    now = timezone.now()
+
+    # Obtener el tiempo de inicio almacenado en la caché
+    start_time = cache.get('start_time')
+
+    if start_time is None:
+        # Si no hay tiempo de inicio, establecerlo como el tiempo actual
+        start_time = now
+        cache.set('start_time', start_time)
+
+    # Calcular la diferencia de tiempo
+    time_elapsed = now - start_time
+
+    # Valor fijo de referencia (meta)
+    fixed_value = 1000000
+
+    if time_elapsed >= timedelta(minutes=1): #SE PUEDE CAMBIAR POR HOURS O MINUTES DEPENDIENDO DE LOQ SE BUSKE
+        # Si ha pasado más de un minuto, reiniciar el valor dinámico y el tiempo de inicio
+        dynamic_value = 0
+        cache.set('start_time', now)
+    else:
+        # Calcular el valor dinámico actual
+        dynamic_value = Orden_venta.objects.aggregate(total_ventas=Sum('total_venta'))['total_ventas'] or 0
+
+    empty_value = fixed_value - dynamic_value  # Valor restante para completar el 100%
+
+    chart_data = {
+        'title': {
+            'text': 'Meta: $1.000.000',
+            'left': 'center'
+        },
+        'tooltip': {
+            'trigger': 'item'
+        },
+        'legend': {
+            'top': '5%',
+            'left': 'center'
+        },
+        'series': [
+            {
+                'name': 'Ventas',
+                'type': 'pie',
+                'radius': ['40%', '70%'],
+                'center': ['50%', '70%'],
+                'startAngle': 180,
+                'endAngle': 360,
+                'label': {
+                    'show': True,
+                    'formatter': '{b}: {c} ({d}%)'
+                },
+                'data': [
+                    {'value': dynamic_value, 'name': 'Ganancias Totales'},
+                    {'value': empty_value, 'name': 'Ganancias Faltantes', 'itemStyle': {'color': '#cccccc'}}
+                ]
+            }
+        ]
+    }
+
+    return JsonResponse(chart_data)
+
+
+
 @login_required
 def venta_save(request):
     if request.method == 'POST':
@@ -111,6 +182,7 @@ def venta_list(request, page=None, search=None):
 
     search = request.GET.get('search')
     ordenes = Orden_venta.objects.all()
+    total_ventas = ordenes.aggregate(total_ventas=Sum('total_venta'))['total_ventas'] or 0  # Valor dinámico actual
     
     if search:
         ordenes = ordenes.filter(Q(cliente_venta__icontains=search))
@@ -125,7 +197,7 @@ def venta_list(request, page=None, search=None):
     except EmptyPage:
         ordenes = paginator.page(paginator.num_pages)
         
-    return render(request, 'ventas/venta_list.html', {'ordenes': ordenes, 'search': search, 'pagina_obj': ordenes})
+    return render(request, 'ventas/venta_list.html', {'ordenes': ordenes, 'search': search, 'pagina_obj': ordenes, 'total_ventas': total_ventas})
     
 @login_required
 def venta_crear(request):

@@ -16,11 +16,11 @@
                     <div class="col-12 col-lg-12 row row-cols-1 row-cols-md-1 g-2 p-lg-0-5">
                         <div class="mb-0 col-md-6">
                             <label for="proveedor_name" class="form-label">Nombre</label>
-                            <input type="text" class="form-control" name="proveedor_name" id="proveedor_name" placeholder="Nombre" style="text-transform: capitalize;" required>
+                            <input type="text" class="form-control" name="proveedor_name" pattern="[A-Za-zÑñ]+" id="proveedor_name" placeholder="Nombre" style="text-transform: capitalize;" required>
                         </div>
                         <div class="mb-0 col-md-6">
                             <label for="proveedor_last_name" class="form-label">Apellido</label>
-                            <input type="text" class="form-control" name="proveedor_last_name" id="proveedor_last_name" placeholder="Apellido" style="text-transform: capitalize;" required>
+                            <input type="text" class="form-control" name="proveedor_last_name" pattern="[A-Za-zÑñ]+" id="proveedor_last_name" placeholder="Apellido" style="text-transform: capitalize;" required>
                         </div>
                         <div class="mb-0 col-md-6">
                             <label for="proveedor_rut" class="form-label">Rut</label>
@@ -32,7 +32,7 @@
                         </div>
                         <div class="mb-0 col-md-6">
                             <label for="proveedor_phone" class="form-label">Teléfono</label>
-                            <input type="text" class="form-control" name="proveedor_phone" id="proveedor_phone" placeholder="Teléfono" required>
+                            <input type="text" class="form-control" name="proveedor_phone" id="proveedor_phone" pattern="[0-9]{9}" placeholder="Teléfono" required>
                         </div>
                         <div class="mb-0 col-md-12">
                             <label for="proveedor_address" class="form-label">Dirección</label>
