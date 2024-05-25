@@ -20,6 +20,9 @@ import traceback
 import os
 from django.db import transaction
 from django.views.decorators.csrf import csrf_protect
+import matplotlib.pyplot as plt
+import pandas as pd
+from django.http.response import JsonResponse
 
 from registration.models import Profile
 from proveedores.models import Proveedor, Orden_compra, Producto_Orden
@@ -807,3 +810,39 @@ def editar_orden(request, orden_id):
             'profiles': profile, 'proveedores': proveedores, 'productos': productos, 
             'orden': orden, 'productos_orden': productos_orden
         })
+        
+#DASHBOARDS
+
+@login_required
+def get_chart_oc_1(request):
+
+    proveedores = Proveedor.objects.all()
+    
+    # Lista para almacenar los nombres completos de los proveedores y montos acumulados
+    nombres_proveedor = []
+    montos = []
+    
+    for proveedor in proveedores:
+        nombre_completo = proveedor.get_nombre_completo()
+        nombres_proveedor.append(nombre_completo)
+        ordenes_proveedor = Orden_compra.objects.filter(proveedor_orden=proveedor)
+        monto_acumulado = sum(orden.monto for orden in ordenes_proveedor)
+        montos.append(monto_acumulado)
+    
+    chart_data = {
+        'xAxis': {
+            'type': 'category',
+            'data': nombres_proveedor
+        },
+        'yAxis': {
+            'type': 'value'
+        },
+        'series': [
+            {
+                'data': montos,
+                'type': 'bar'
+            }
+        ]
+    }
+
+    return JsonResponse(chart_data)

@@ -1,6 +1,13 @@
 {% extends 'core/base_admin.html' %}
 {% load static %}
 {% block content %}
+<style>
+    .chart {
+        width: 100%;
+        min-height: 400px;
+    }
+</style>
+
     <main role="main">
         <div class="container col-12 mt-3">
             <!-- Otro contenido de la página -->
@@ -25,6 +32,10 @@
                         <p>grupo_id no definido</p>
                     </div>
                 {% endif %}
+                <!--Gráfico Inversiones-->
+                <div class=chart>
+                    <div id = "chart_oc1" class="chart"></div>
+                </div>
                 <!-- Otro contenido de la página -->
                 <div class="col-12 col-sm-3 mb-3" style="text-align: center;">
                     <a href="{% url 'admin_main' %}" class="botton form-control" style="padding: 4px; margin-top: 4px;">Volver</a>
@@ -32,4 +43,9 @@
             </div>
         </div>
     </main>
+
+<!-- Apache ECharts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
+<!-- Custom JS -->
+<script src="{% static 'js/chart_oc_1.js' %}"></script>
 {% endblock %}
