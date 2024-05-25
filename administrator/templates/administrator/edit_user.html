@@ -16,13 +16,13 @@
                     <div class="row"> 
                         <div class="col-12 col-sm-8 mb-3">
                             <label for="name">Nombre (*)</label>
-                            <input type="text"  id="name" name="name" value="{{user_data.first_name}}" class="form-control border border-danger" required/>
+                            <input type="text"  id="name" name="name" value="{{user_data.first_name}}" pattern="[A-Za-zÑñ]+" class="form-control border border-danger" required/>
                             <label for="last_name">Apellido (*)</label>
-                            <input type="text" id="last_name1" name="last_name1" value="{{user_data.last_name}}" class="form-control border border-danger" required/>
+                            <input type="text" id="last_name1" name="last_name1" value="{{user_data.last_name}}" pattern="[A-Za-zÑñ]+" class="form-control border border-danger" required/>
                         </div>
                         <div class="col-12 col-sm-4 mb-3">
                             <label for="mobile">Número de contacto (*)</label>
-                            <input type="text" class="form-control border border-danger" value="{{profile_data.mobile}}" id="mobile" name="mobile" pattern="\d*">
+                            <input type="text" class="form-control border border-danger" value="{{profile_data.mobile}}" pattern="[0-9]{9}" id="mobile" name="mobile" pattern="\d*">
                         </div>
                         <div class="mb-0 col-md-12">
                             <label for="rut" class="form-label">Rut (Campo no editable): </label>
