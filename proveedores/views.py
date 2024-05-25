@@ -816,31 +816,27 @@ def editar_orden(request, orden_id):
 @login_required
 def get_chart_oc_1(request):
 
-    proveedores = Proveedor.objects.all()
+    ordenes = Orden_compra.objects.all()
     
-    # Lista para almacenar los nombres completos de los proveedores y montos acumulados
-    nombres_proveedor = []
-    montos = []
-    
-    for proveedor in proveedores:
-        nombre_completo = proveedor.get_nombre_completo()
-        nombres_proveedor.append(nombre_completo)
-        ordenes_proveedor = Orden_compra.objects.filter(proveedor_orden=proveedor)
-        monto_acumulado = sum(orden.monto for orden in ordenes_proveedor)
-        montos.append(monto_acumulado)
-    
+
+    Enviadas = int(ordenes.values("estado").filter(estado="Enviado").count())
+    Rechazadas = int(ordenes.values("estado").filter(estado="Rechazado").count())
+    Aceptadas = int(ordenes.values("estado").filter(estado="Aceptado").count())
+    Anuladas = int(ordenes.values("estado").filter(estado="Anulado").count())
+
     chart_data = {
         'xAxis': {
             'type': 'category',
-            'data': nombres_proveedor
+            'data': ['Enviadas',"Rechazadas","Aceptadas","Anuladas"],
         },
         'yAxis': {
             'type': 'value'
         },
         'series': [
             {
-                'data': montos,
-                'type': 'bar'
+                'data': [Enviadas,Rechazadas,Aceptadas,Anuladas],
+                'type': 'bar',
+
             }
         ]
     }
