@@ -59,6 +59,49 @@ def get_chart_data(_request):
     return JsonResponse(chart_data)
 
 
+def get_chart_data_venta(_request):
+    ordenes = Orden_venta.objects.all()
+    
+    fixed_value = 1000000  # Valor de referencia fija (meta)
+    dynamic_value = ordenes.aggregate(total_ventas=Sum('total_venta'))['total_ventas'] or 0  # Valor dinámico actual
+    empty_value = fixed_value - dynamic_value  # Valor restante para completar el 100%
+
+    chart_data = {
+        'title': {
+            'text': 'Meta: $1.000.000',
+            'left': 'center'
+        },
+        'tooltip': {
+            'trigger': 'item'
+        },
+        'legend': {
+            'top': '5%',
+            'left': 'center'
+        },
+        'series': [
+            {
+                'name': 'Ventas',
+                'type': 'pie',
+                'radius': ['40%', '70%'],
+                'center': ['50%', '70%'],
+                'startAngle': 180,
+                'endAngle': 360,
+                'label': {
+                    'show': True,
+                    'formatter': '{b}: {c} ({d}%)'
+                },
+                'data': [
+                    {'value': dynamic_value, 'name': 'Ganancias Totales'},
+                    {'value': empty_value, 'name': 'Ganancias Faltantes', 'itemStyle': {'color': '#cccccc'}}
+                ]
+            }
+        ]
+    }
+
+    return JsonResponse(chart_data)
+
+
+
 @login_required
 def venta_save(request):
     if request.method == 'POST':
@@ -111,6 +154,7 @@ def venta_list(request, page=None, search=None):
 
     search = request.GET.get('search')
     ordenes = Orden_venta.objects.all()
+    total_ventas = ordenes.aggregate(total_ventas=Sum('total_venta'))['total_ventas'] or 0  # Valor dinámico actual
     
     if search:
         ordenes = ordenes.filter(Q(cliente_venta__icontains=search))
@@ -125,7 +169,7 @@ def venta_list(request, page=None, search=None):
     except EmptyPage:
         ordenes = paginator.page(paginator.num_pages)
         
-    return render(request, 'ventas/venta_list.html', {'ordenes': ordenes, 'search': search, 'pagina_obj': ordenes})
+    return render(request, 'ventas/venta_list.html', {'ordenes': ordenes, 'search': search, 'pagina_obj': ordenes, 'total_ventas': total_ventas})
     
 @login_required
 def venta_crear(request):
