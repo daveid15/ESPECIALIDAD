@@ -30,6 +30,17 @@
                 <div class="card mb-4">
                     <div class="card-body">
                         <h5 class="card-title">Dashboard de Proveedores</h5>
+                        <div class="card-body">
+                            <h5 class="card-title">Contadores</h5>
+                            <div class="text-right text-white bg-info mb-3">
+                                <h6 class="card-subtitle mb-2">Proveedores Activos</h6>
+                                <p class="card-text">{{ proveedores_activos_count }}</p>
+                            </div>
+                            <div class="text-right text-white bg-danger">
+                                <h6 class="card-subtitle mb-2">Proveedores Eliminados</h6>
+                                <p class="card-text">{{ proveedores_eliminados_count }}</p>
+                            </div>
+                        </div>
                         <div style="width: 800px; height: 800px;">
                             <canvas id="proveedoresPieChart"></canvas>
                         </div>

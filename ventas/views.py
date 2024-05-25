@@ -59,11 +59,39 @@ def get_chart_data(_request):
     return JsonResponse(chart_data)
 
 
+from django.utils import timezone
+from django.core.cache import cache
+from django.db.models import Sum
+from django.http import JsonResponse
+from datetime import timedelta
+
+
 def get_chart_data_venta(_request):
-    ordenes = Orden_venta.objects.all()
-    
-    fixed_value = 1000000  # Valor de referencia fija (meta)
-    dynamic_value = ordenes.aggregate(total_ventas=Sum('total_venta'))['total_ventas'] or 0  # Valor dinámico actual
+    # Tiempo actual
+    now = timezone.now()
+
+    # Obtener el tiempo de inicio almacenado en la caché
+    start_time = cache.get('start_time')
+
+    if start_time is None:
+        # Si no hay tiempo de inicio, establecerlo como el tiempo actual
+        start_time = now
+        cache.set('start_time', start_time)
+
+    # Calcular la diferencia de tiempo
+    time_elapsed = now - start_time
+
+    # Valor fijo de referencia (meta)
+    fixed_value = 1000000
+
+    if time_elapsed >= timedelta(minutes=1): #SE PUEDE CAMBIAR POR HOURS O MINUTES DEPENDIENDO DE LOQ SE BUSKE
+        # Si ha pasado más de un minuto, reiniciar el valor dinámico y el tiempo de inicio
+        dynamic_value = 0
+        cache.set('start_time', now)
+    else:
+        # Calcular el valor dinámico actual
+        dynamic_value = Orden_venta.objects.aggregate(total_ventas=Sum('total_venta'))['total_ventas'] or 0
+
     empty_value = fixed_value - dynamic_value  # Valor restante para completar el 100%
 
     chart_data = {
