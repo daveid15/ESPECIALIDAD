@@ -22,7 +22,8 @@ class Proveedor(models.Model):
     proveedor_comuna = models.CharField(max_length=100, null=True, blank=True)
     proveedor_phone = models.CharField(max_length=100, null=True, blank=True)
 
-    proveedor_insumo = ArrayField(models.CharField(max_length=100, null=True, blank=True))
+    proveedor_insumo = ArrayField(models.CharField(max_length=100), default=list)
+
     activo = models.BooleanField(default=True)
     created_at = models.DateTimeField(default=timezone.now)  # Campo de fecha de creación
 
@@ -49,6 +50,7 @@ class Orden_compra(models.Model):
     ]
 
     estado = models.CharField(max_length=20, choices=ESTADOS_ORDEN, default='enviado')
+    monto = models.PositiveIntegerField(default=0)
 
 
 class Producto_Orden(models.Model):

@@ -26,8 +26,9 @@
                     <th width="10%" scope="col">Número de Orden</th>
                     <th width="10%" scope="col">Proveedor</th>
                     <th width="10%" scope="col">Cantidad de Productos</th>
+                    <th width="10%" scope="col">Monto</th>
                     <th width="10%" scope="col">Acciones</th>
-                    <th width="10%" scope="col">Estado</th>
+                    <th width="20%" scope="col">Estado</th>
                 </tr>
             </thead>
             <tbody>
@@ -36,6 +37,7 @@
                         <td>{{ orden.id }}</td>
                         <td>{{ orden.proveedor_orden }}</td>
                         <td>{{ orden.producto_orden_set.all|length }}</td>
+                        <td>{{ orden.monto }}</td>
                         <td>
                             <a href="{% url 'detalle_orden_de_compra_aceptada' orden_id=orden.id %}" class="btn btn-primary">Ver</a>
                         </td>
