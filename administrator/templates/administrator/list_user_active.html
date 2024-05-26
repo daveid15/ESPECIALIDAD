@@ -102,6 +102,12 @@
         align-items: center;
         justify-content: flex-start; /* Alinea elementos al inicio */
     }
+    .bulk-load-container {
+        align-items: right; /* Ajusta esta distancia según sea necesario */
+    }
+    .bulk-load {
+        white-space: nowrap; /* Evita que el texto del botón se divida en varias líneas */
+    }
 </style>
 {% endblock %}
 
@@ -109,9 +115,22 @@
     <header class='mb-5'>
         <div class="header-container">
             <h2 class='h2 medium text-blue mb-0'>Lista de Usuarios Activos</h2>
-            <a href="{% url 'new_user' %}" class="btn btn-success new-user-button">
-                <i class="fas fa-user-plus" style="color: #000000"></i> <!-- Icono de usuario con signo de más -->
-            </a>
+            <div class="ml-auto">
+                <a href="{% url 'new_user' %}" class="btn btn-success new-user-button">
+                    <i class="fas fa-user-plus" style="color: #000000"></i> <!-- Icono de usuario con signo de más -->
+                </a>
+            </div>
+            <div class="search-form">
+                <form method="get" action="" class='input-container-search my-auto'>
+                    <input name="search" id="search" type="text" placeholder='Buscar por Nombre'/>
+                    <button type="submit">Buscar</button>
+                </form>
+            </div>
+            <div class="bulk-load-container ml-auto">
+                <a href="{% url 'carga_masiva_user' %}" class="btn btn-info bulk-load">
+                    <i class="fas fa-upload" style="color: #000000"></i> <!-- Icono de carga con flecha hacia arriba -->
+                </a>
+            </div>
         </div>
     </header>
     <div class="container col-12">

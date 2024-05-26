@@ -5,6 +5,9 @@
 {% block extra_css %}    
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <style>
+        body {
+        background-color: rgb(236, 236, 236); /* Establece el fondo de la página a blanco */
+    }
     .errorlist { color: red; }
     .pagination { 
         position: fixed;
@@ -36,6 +39,44 @@
         color: #000; 
         border-radius: 5px; 
     }
+    .background-container {
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        position: relative;
+    }
+    .btn-volver {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+    }
+    .search-form {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    }
+    .search-form input[type="text"] {
+        border-radius: 15px;
+        background-color: #f0f0f0;
+        border: 1px solid #ccc;
+        padding: 5px 10px;
+        margin-right: 5px;
+    }
+    .search-form button {
+        border-radius: 15px;
+        background-color: #d3d3d3;
+        border: 1px solid #ccc;
+        padding: 5px 10px;
+    }
+    .action-buttons {
+        display: flex;
+        gap: 5px;
+    }
+
+    .table-container {
+        margin-top: 50px; /* Ajusta este valor según sea necesario */
+    }
 </style>
 {% endblock extra_css %}    
 
@@ -43,81 +84,93 @@
     <h2 class='h2 medium text-blue'>Lista de Proveedores Eliminados</h2>
 </header>
 
-<div class="table-container mt-5">
-    <table class="table table-user">
-        <thead>
-            <tr>
-                <th width="10%" scope="col">Nombre</th>
-                <th width="10%" scope="col">Apellido</th>
-                <th width="10%" scope="col">Teléfono de contacto</th>
-                <th width="10%" scope="col">Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for p in proveedores_eliminados %}
-                <tr>
-                    <td>{{ p.proveedor_name }}</td>
-                    <td>{{ p.proveedor_last_name }}</td>
-                    <td>{{ p.proveedor_phone }}</td>
-                    <td>
-                        <form action="{% url 'restaurar_proveedor' p.id %}" method="post" style="display:inline;">
-                            {% csrf_token %}
-                            <input type="submit" value="Restaurar" onclick="return confirm('¿Estás seguro de que deseas restaurar este proveedor?');">
-                        </form>
-                    </td>
-                </tr>
-            {% empty %}
-                <tr>
-                    <td colspan="4">No hay proveedores eliminados.</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+<div class="background-container">
+    <a href="{% url 'seleccion_proveedores' %}" class="btn btn-danger btn-volver"><i class="fas fa-arrow-left" style="color: #000000;"></i></a> <!-- Botón "Volver" con icono -->
+    <div class="search-form">
+        <form method="get" action="" class='input-container-search my-auto'>
+            <input name="search" id="search" type="text" placeholder='Buscar por Nombre'/>
+            <button type="submit">Buscar</button>
+        </form>
+    </div>
 
-    <!-- Paginación -->
-    {% if paginator.num_pages > 1 %}
-        <div class="d-flex justify-content-center mx-0-5--custom">
-            <nav aria-label="Page navigation example">
-                <ul class="pagination pagination-table">
-                    {% if proveedores_eliminados.has_previous %}
-                        <li class="page-item">
-                            <a class="page-link" href="?page={{ proveedores_eliminados.previous_page_number }}&search={{ search }}" aria-label="Previous">
-                                <i class="fas fa-chevron-left"></i>
-                            </a>
-                        </li>
-                    {% else %}
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#" tabindex="-1">
-                                <i class="fas fa-chevron-left"></i>
-                            </a>
-                        </li>
-                    {% endif %}
-                    {% for i in paginator.page_range %}
-                        <li class="page-item {% if proveedores_eliminados.number == i %}active{% endif %}">
-                            <a class="page-link" href="?page={{ i }}&search={{ search }}">{{ i }}</a>
-                        </li>
-                    {% endfor %}
-                    {% if proveedores_eliminados.has_next %}
-                        <li class="page-item">
-                            <a class="page-link" href="?page={{ proveedores_eliminados.next_page_number }}&search={{ search }}">
-                                <i class="fas fa-chevron-right"></i>
-                            </a>
-                        </li>
-                    {% else %}
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#" tabindex="-1">
-                                <i class="fas fa-chevron-right"></i>
-                            </a>
-                        </li>
-                    {% endif %}
-                </ul>
-            </nav>
-        </div>
-    {% endif %}  
-    <!-- Paginación --> 
-    <div class="d-flex justify-content-center mx-0-5--custom">
-        <a href="{% url 'seleccion_proveedores' %}" class="button">Volver</a>
-    </div>    
+    <div class="table-container mt-5">
+        
+        <table class="table table-user" style="vertical-align: middle;">
+
+            <thead>
+                <tr>
+                    <th width="10%" scope="col">Nombre</th>
+                    <th width="10%" scope="col">Apellido</th>
+                    <th width="10%" scope="col">Teléfono de contacto</th>
+                    <th width="10%" scope="col">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in proveedores_eliminados %}
+                    <tr>
+                        <td>{{ p.proveedor_name }}</td>
+                        <td>{{ p.proveedor_last_name }}</td>
+                        <td>{{ p.proveedor_phone }}</td>
+                        <td>
+                            <form action="{% url 'restaurar_proveedor' p.id %}" method="post" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" style="border: none; background: none;" onclick="return confirm('¿Estás seguro de que deseas restaurar este proveedor?');">
+                                    <i class="fas fa-undo-alt" style="color: #000000;"></i> <!-- Icono de restaurar -->
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="4">No hay proveedores eliminados.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Paginación -->
+        {% if paginator.num_pages > 1 %}
+            <div class="d-flex justify-content-center mx-0-5--custom">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination pagination-table">
+                        {% if proveedores_eliminados.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ proveedores_eliminados.previous_page_number }}&search={{ search }}" aria-label="Previous">
+                                    <i class="fas fa-chevron-left"></i>
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1">
+                                    <i class="fas fa-chevron-left"></i>
+                                </a>
+                            </li>
+                        {% endif %}
+                        {% for i in paginator.page_range %}
+                            <li class="page-item {% if proveedores_eliminados.number == i %}active{% endif %}">
+                                <a class="page-link" href="?page={{ i }}&search={{ search }}">{{ i }}</a>
+                            </li>
+                        {% endfor %}
+                        {% if proveedores_eliminados.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ proveedores_eliminados.next_page_number }}&search={{ search }}">
+                                    <i class="fas fa-chevron-right"></i>
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1">
+                                    <i class="fas fa-chevron-right"></i>
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+        {% endif %}  
+        <!-- Paginación --> 
+ 
+    </div>
 </div>
 
 {% block extrajs %}    

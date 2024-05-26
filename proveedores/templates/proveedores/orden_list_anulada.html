@@ -4,20 +4,62 @@
     <title>Listado de Ordenes de Compra</title>
 {% endblock %}
 {% block content %}
-    {% block extra_css %}    
-    {% endblock extra_css %}    
-    <header class='mb-5'>
-        <h2 class='h2 medium text-blue'>Ordenes de Compra Anuladas</h2>
-    </header>
-    <div class="d-flex flex-column flex-lg-row my-5">
-        <div class="my-auto d-flex flex-column flex-lg-row ms-lg-auto">
-            <div class="feedback body--small normal"></div>
-        </div>
-        <form method="get" action="{% url 'orden_list_anulada' %}" class='col-12 col-lg-6 input-container-search my-auto me-3'>
+{% block extrahead %}
+<style>
+                body {
+        background-color: rgb(236, 236, 236); /* Establece el fondo de la página a blanco */
+    }
+    .list-container {
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        position: relative;
+    }
+    .search-form {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    }
+    .search-form input[type="text"] {
+        border-radius: 15px; /* Bordes redondeados */
+        background-color: #f0f0f0; /* Color de fondo gris claro */
+        border: 1px solid #ccc; /* Borde gris claro */
+        padding: 5px 10px; /* Espaciado interno */
+        margin-right: 5px; /* Espacio entre el input y el botón */
+    }
+    .search-form button {
+        border-radius: 15px; /* Bordes redondeados */
+        background-color: #d3d3d3; /* Color de fondo gris claro */
+        border: 1px solid #ccc; /* Borde gris claro */
+        padding: 5px 10px; /* Espaciado interno */
+    }
+    .btn-volver {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+    }
+</style>
+{% endblock %}
+{% block extra_css %}    
+{% endblock extra_css %}  
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<header class='mb-5'>
+    <h2 class='h2 medium text-blue'>Ordenes de Compra Anuladas</h2>
+</header>
+<div class="list-container">
+    <a href="{% url 'lista_orden' grupo_id=1 %}" class="btn btn-danger btn-volver"><i class="fas fa-arrow-left" style="color: #000000;"></i></a> <!-- Botón "Volver" con icono -->
+    <div class="search-form">
+        <form method="get" action="{% url 'orden_list_anulada' %}">
             {% csrf_token %}
             <input name="search" id="search" type="text" placeholder='Buscar por Nombre'/>
             <button type="submit">Buscar</button>
         </form>
+    </div>
+    <div class="d-flex flex-column flex-lg-row my-5">
+        <div class="my-auto d-flex flex-column flex-lg-row ms-lg-auto">
+            <div class="feedback body--small normal"></div>
+        </div>
     </div>
     <div class="table-container mt-5">
         <table class="table table-user" style="text-align: center;">
@@ -39,7 +81,7 @@
                         <td>{{ orden.producto_orden_set.all|length }}</td>
                         <td>{{ orden.monto }}</td>
                         <td>
-                            <a href="{% url 'detalle_orden_de_compra_anulada' orden_id=orden.id %}" class="btn btn-primary">Ver</a>
+                            <a href="{% url 'detalle_orden_de_compra_anulada' orden_id=orden.id %}" class="btn btn-primary"><i class="fas fa-eye" style="color: #000000;"></i></a>
                         </td>
                         <td>
                             <!-- Modal -->
@@ -66,9 +108,7 @@
                 {% endfor %}
             </tbody>
         </table>
-        <div class="d-flex justify-content-center mx-0-5--custom">
-            <a href="{% url 'lista_orden' grupo_id=1 %}" class="button">Regresar</a>
-        </div>    
+  
     </div>
     <div class="pagination">
         <span class="step-links">
