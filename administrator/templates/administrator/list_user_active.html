@@ -3,8 +3,11 @@
 
 {% block content %}
 {% block extrahead %}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
+    body {
+        background-color: rgb(236, 236, 236); /* Establece el fondo de la página a blanco */
+    }
     .errorlist { color: red; }
     .pagination { 
         position: fixed;
@@ -36,24 +39,90 @@
         color: #000; /* Cambia el color del texto para la página activa */
         border-radius: 5px; /* Agrega bordes redondeados */
     }
+    table {
+        border: 2px solid white; /* Agrega un borde de color blanco a la tabla */
+        background-color: white; /* Establece el fondo de la tabla a blanco */
+        border-radius: 15px; /* Hace las esquinas de la tabla más ovaladas */
+        overflow: hidden; /* Asegura que el contenido de la tabla no sobresalga de las esquinas redondeadas */
+    }
+    table th, table td {
+        background-color: white; /* Establece el fondo de las celdas a blanco */
+    }
+    .header-row {
+        background-color: #d3d3d3; /* Establece el color de fondo de la fila de encabezados a gris */
+    }
+    .action-buttons {
+        display: flex;
+        align-items: center; /* Alinea los elementos verticalmente */
+    }
+    .action-buttons a {
+        margin-right: 10px; /* Ajusta el espacio entre los botones */
+    }
+    .btn-container {
+        display: flex;
+        justify-content: flex-start;
+        margin-bottom: 10px;
+    }
+    .back-button {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+    }
+    .search-form {
+        margin-top: 20px;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    }
+    .btn-volver {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        z-index: 1;
+    }
+    .search-form input[type="text"] {
+        border-radius: 15px; /* Bordes redondeados */
+        background-color: #f0f0f0; /* Color de fondo gris claro */
+        border: 1px solid #ccc; /* Borde gris claro */
+        padding: 5px 10px; /* Espaciado interno */
+        margin-right: 5px; /* Espacio entre el input y el botón */
+    }
+    .search-form button {
+        border-radius: 15px; /* Bordes redondeados */
+        background-color: #d3d3d3; /* Color de fondo gris claro */
+        border: 1px solid #ccc; /* Borde gris claro */
+        padding: 5px 10px; /* Espaciado interno */
+    }
+    .new-user-button {
+        margin-left: 15px; /* Espacio entre el título y el botón */
+        white-space: nowrap; /* Evita que el texto del botón se divida en varias líneas */
+    }
+    .header-container {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start; /* Alinea elementos al inicio */
+    }
 </style>
 {% endblock %}
 
 <main role="main">
     <header class='mb-5'>
-        <h2 class='h2 medium text-blue'>Lista de Usuarios Activos</h2>
-    </header>
-    <div class="d-flex flex-column flex-lg-row my-5">
-        <div class="my-auto d-flex flex-column flex-lg-row ms-lg-auto">
-            <div class="feedback body--small normal"></div>
+        <div class="header-container">
+            <h2 class='h2 medium text-blue mb-0'>Lista de Usuarios Activos</h2>
+            <a href="{% url 'new_user' %}" class="btn btn-success new-user-button">
+                <i class="fas fa-user-plus" style="color: #000000"></i> <!-- Icono de usuario con signo de más -->
+            </a>
         </div>
-        <form method="get" action="" class='col-12 col-lg-6 input-container-search my-auto me-3'>
-            <input name="search" id="search" type="text" placeholder='Buscar por Nombre'/>
-            <button type="submit">Buscar</button>
-        </form>
-    </div>
+    </header>
     <div class="container col-12">
-        <div class="col-12 border">
+        <div class="col-12 border" style="position: relative; background-color: white; border-radius: 15px; overflow: hidden;">
+            <a href="{% url 'list_main' group.id %}" class="btn btn-danger btn-volver"><i class="fas fa-arrow-left" style="color: #000000;"></i></a> <!-- Botón "Volver" con icono -->
+            <div class="search-form">
+                <form method="get" action="" class='input-container-search my-auto'>
+                    <input name="search" id="search" type="text" placeholder='Buscar por Nombre'/>
+                    <button type="submit">Buscar</button>
+                </form>
+            </div>
             <table id="service" class="table mt-2 table-hover table-sm table-bordered">      
                 <thead class="table-danger">
                     <tr>
@@ -66,12 +135,12 @@
                         <th colspan="1">
                             <div class="row">
                                 <div class="col-12 col-sm-12">
-                                    <a href="{% url 'list_main' group.id %}" class="btn btn-danger form-control">Volver</a>
+                                    <!-- Botón "Volver" dentro de la tabla -->
                                </div>
                             </div>
                         </th>
                     </tr>
-                    <tr class="text-center">
+                    <tr class="header-row text-center">
                         <th width="450" scope="col">Nombre</th>
                         <th width="300" scope="col">Correo</th>
                         <th width="150" scope="col">Acciones</th> <!-- Nuevo encabezado para el botón "Ver" -->
@@ -83,20 +152,21 @@
                             <th scope="row">{{s.name}}</th>
                             <th scope="row">{{s.mail}}</th>
                             {% if profiles.group_id == 1 %}
-                                <th scope="row">
-                                    {% if s.id != request.user.id %}
-                                        <a href="{% url 'user_detail' s.id %}"> <!-- Nuevo enlace para los detalles del usuario -->
-                                            Ver
+                            <th scope="row">
+                                {% if s.id != request.user.id %}
+                                    <div class="action-buttons">
+                                        <a href="{% url 'user_detail' s.id %}">
+                                            <i class="fas fa-eye" style="color: #000000;"></i> <!-- Icono de ojo para ver -->
                                         </a>
-                                    
+
                                         <a href="{% url 'edit_user' s.id %}">
-                                            Editar
+                                            <i class="fas fa-edit" style="color: #000000;"></i> <!-- Icono de lápiz para editar -->
                                         </a>
 
                                         <a href="#" onclick="confirmDelete('{{ s.id }}')">
-                                            Eliminar
+                                            <i class="fas fa-trash-alt" style="color: #000000;"></i> <!-- Icono de basura para eliminar -->
                                         </a>
-                                    
+                                    </div>
                                     {% endif %}
                                 </th>   
                             {% endif %}                            
