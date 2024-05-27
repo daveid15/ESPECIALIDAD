@@ -51,7 +51,7 @@ def inventario_main(request, page=None, search=None):
     # Filtrar los productos con bajo stock
     low_stock_products = []
     for p in p_list_array:
-        if p.supply_total < 5:  # Ajusta este valor según tu criterio para "bajo stock"
+        if (int(p.supply_total)) < 5:  # Ajusta este valor según tu criterio para "bajo stock"
             low_stock_products.append({
                 'id': p.id,
                 'supply_name': p.supply_name,
