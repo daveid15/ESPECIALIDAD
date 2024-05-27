@@ -23,6 +23,7 @@ from django.views.decorators.csrf import csrf_protect
 import matplotlib.pyplot as plt
 import pandas as pd
 from django.http.response import JsonResponse
+from django.db.models import Sum, Q
 
 from registration.models import Profile
 from proveedores.models import Proveedor, Orden_compra, Producto_Orden
@@ -819,12 +820,20 @@ def get_chart_oc_1(request):
     ordenes = Orden_compra.objects.all()
     
 
-    Enviadas = int(ordenes.values("estado").filter(estado="Enviado").count())
-    Rechazadas = int(ordenes.values("estado").filter(estado="Rechazado").count())
-    Aceptadas = int(ordenes.values("estado").filter(estado="Aceptado").count())
-    Anuladas = int(ordenes.values("estado").filter(estado="Anulado").count())
+    Enviadas = int(ordenes.values("estado").filter(estado="enviado").count())
+    Rechazadas = int(ordenes.values("estado").filter(estado="rechazado").count())
+    Aceptadas = int(ordenes.values("estado").filter(estado="aceptado").count())
+    Anuladas = int(ordenes.values("estado").filter(estado="anulado").count())
 
     chart_data = {
+        "title": {
+            "text": 'Cantidad de ordenes'
+        },   
+        'tooltip': {
+            'show': True,
+            'trigger': "axis",
+            'triggerOn': "mousemove|click"
+        },
         'xAxis': {
             'type': 'category',
             'data': ['Enviadas',"Rechazadas","Aceptadas","Anuladas"],
@@ -835,6 +844,53 @@ def get_chart_oc_1(request):
         'series': [
             {
                 'data': [Enviadas,Rechazadas,Aceptadas,Anuladas],
+                'type': 'bar',
+
+            }
+        ]
+    }
+
+    return JsonResponse(chart_data)
+
+@login_required
+def get_chart_oc_2(request):
+    
+    monto_por_estado = []
+
+    monto_por_estado = Orden_compra.objects.aggregate(
+        monto_enviadas=Sum('monto', filter=Q(estado='enviado')),
+        monto_aceptadas=Sum('monto', filter=Q(estado='aceptado')),
+        monto_rechazadas=Sum('monto', filter=Q(estado='rechazado')),
+        monto_anuladas=Sum('monto', filter=Q(estado='anulado'))
+    )
+    
+    suma_enviadas = monto_por_estado['monto_enviadas']
+    suma_aceptadas = monto_por_estado['monto_aceptadas'] or 0
+    suma_rechazadas = monto_por_estado['monto_rechazadas'] or 0
+    suma_anuladas = monto_por_estado['monto_anuladas'] or 0
+    
+    lista_sumas = [suma_enviadas, suma_aceptadas, suma_rechazadas, suma_anuladas]
+    print(lista_sumas)
+
+    chart_data = {
+        "title": {
+            "text": 'Inversiones por ordenes'
+        },
+        'tooltip': {
+            'show': True,
+            'trigger': "axis",
+            'triggerOn': "mousemove|click"
+        },
+        'xAxis': {
+            'type': 'category',
+            'data': ['Enviadas',"Rechazadas","Aceptadas","Anuladas"],
+        },
+        'yAxis': {
+            'type': 'value'
+        },
+        'series': [
+            {
+                'data': lista_sumas,
                 'type': 'bar',
 
             }

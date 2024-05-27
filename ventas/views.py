@@ -11,6 +11,12 @@ from django.db.models import F, ExpressionWrapper, DecimalField
 
 from registration.models import Profile
 from ventas.models import Prod_venta, Orden_venta, Venta_producto
+from django.utils import timezone
+from django.core.cache import cache
+from django.db.models import Sum
+from django.http import JsonResponse
+from datetime import timedelta
+from django.db.models.functions import TruncMinute
 
 def ventas_main(request):
     profiles = Profile.objects.get(user_id=request.user.id)
@@ -41,29 +47,31 @@ def get_chart_data(_request):
         ganancias_por_producto.append(ganancia_total)
     
     chart_data = {
+        "title": {
+            "text": 'Ganancias de Productos Vendidos'
+        },
+        "tooltip": {
+            "trigger": 'axis',
+            "axisPointer": {
+                "type": 'shadow'
+            }
+        },
         'xAxis': {
             'type': 'category',
-            'data': productos_venta
+            'data': productos_venta, 'itemStyle': {'color': '#c4a0ff'}
         },
         'yAxis': {
             'type': 'value'
         },
         'series': [
             {
-                'data': ganancias_por_producto,
+                'data': ganancias_por_producto, 'itemStyle': {'color': '#c4a0ff'},
                 'type': 'bar'
             }
         ]
     }
 
     return JsonResponse(chart_data)
-
-
-from django.utils import timezone
-from django.core.cache import cache
-from django.db.models import Sum
-from django.http import JsonResponse
-from datetime import timedelta
 
 
 def get_chart_data_venta(_request):
@@ -82,7 +90,7 @@ def get_chart_data_venta(_request):
     time_elapsed = now - start_time
 
     # Valor fijo de referencia (meta)
-    fixed_value = 1000000
+    fixed_value = 100000000
 
     if time_elapsed >= timedelta(minutes=1): #SE PUEDE CAMBIAR POR HOURS O MINUTES DEPENDIENDO DE LOQ SE BUSKE
         # Si ha pasado más de un minuto, reiniciar el valor dinámico y el tiempo de inicio
@@ -122,6 +130,47 @@ def get_chart_data_venta(_request):
                     {'value': dynamic_value, 'name': 'Ganancias Totales'},
                     {'value': empty_value, 'name': 'Ganancias Faltantes', 'itemStyle': {'color': '#cccccc'}}
                 ]
+            }
+        ]
+    }
+
+    return JsonResponse(chart_data)
+
+
+
+def get_chart_data_completos_bebidas(_request):
+    # Consulta los datos de la base de datos 
+    completos = Venta_producto.objects.filter(producto__nombre_producto='Completo Italiano').aggregate(total=Sum('cantidad'))['total'] or 0
+    completos_personalizados = Venta_producto.objects.filter(producto__nombre_producto='Completo Personalizado').aggregate(total=Sum('cantidad'))['total'] or 0
+    bebidas = Venta_producto.objects.filter(producto__nombre_producto='Bebida').aggregate(total=Sum('cantidad'))['total'] or 0
+
+    # Datos del gráfico
+    categorias = ['Completos', 'Personalizados', 'Bebidas']
+    cantidades = [completos, completos_personalizados, bebidas]
+
+    # Formatear datos para ECharts
+    chart_data = {
+        "title": {
+            "text": 'Cantidad Productos Vendidos'
+        },
+        "tooltip": {
+            "trigger": 'axis',
+            "axisPointer": {
+                "type": 'shadow'
+            }
+        },
+        "xAxis": {
+            "type": 'category',
+            "data": categorias
+        },
+        "yAxis": {
+            "type": 'value'
+        },
+        "series": [
+            {
+                "name": 'Ventas',
+                "type": 'bar',
+                "data": cantidades, 'itemStyle': {'color': '#f2a0ff'}
             }
         ]
     }
@@ -217,44 +266,3 @@ def detalle_orden_venta(request, orden_id):
     ventas_productos = orden.venta_producto_set.all()  # Utiliza el nombre del modelo en minúsculas seguido de _set para acceder a los objetos relacionados
     return render(request, 'detalle_orden_venta.html', {'orden': orden, 'ventas_productos': ventas_productos})
 
-#DASHBOARD
-
-@login_required
-def get_chart_ventas(request):
-    colors = ['blue', 'orange', 'red', 'black', 'yellow', 'green', 'magenta', 'lightblue', 'purple', 'brown']
-    random_color = colors[randrange(0, len(colors))]
-
-    serie = [randrange(100, 400) for _ in range(7)]
-
-    chart = {
-        'tooltip': {
-            'show': True,
-            'trigger': "axis",
-            'triggerOn': "mousemove|click"
-        },
-        'xAxis': [
-            {
-                'type': "category",
-                'data': ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
-            }
-        ],
-        'yAxis': [
-            {
-                'type': "value"
-            }
-        ],
-        'series': [
-            {
-                'data': serie,
-                'type': "line",
-                'itemStyle': {
-                    'color': random_color
-                },
-                'lineStyle': {
-                    'color': random_color
-                }
-            }
-        ]
-    }
-
-    return JsonResponse(chart)

@@ -40,6 +40,7 @@
         border-radius: 5px; /* Agrega bordes redondeados */
     }
     .list-container {
+        text-align: center;
         background-color: white;
         padding: 20px;
         border-radius: 8px;
@@ -107,6 +108,11 @@
                 <a href="{% url 'carga_masiva_producto' %}" class="btn btn-info bulk-load">
                     <i class="fas fa-upload" style="color: #000000"></i> <!-- Icono de carga con flecha hacia arriba -->
                 </a>
+                <a href="{% url 'descarga_reporte_producto' %}" title="Descarga Productos">
+                    <span class="material-icons-outlined"style="color: #000000;">
+                        cloud_download
+                    </span>
+                </a>
             </div>
         </div>
     </header>
@@ -140,18 +146,7 @@
                         <th width="10%" scope="col">Entradas</th>
                         <th width="10%" scope="col">Salidas</th>
                         <th width="10%" scope="col">Total</th>
-                        <th width="10%" scope="col">
-                            <a href="{% url 'descarga_reporte_producto' %}" title="Descarga Productos">
-                                <span class="material-icons-outlined"style="color: #000000;">
-                                    cloud_download
-                                </span>
-                            </a>
-                            &nbsp;&nbsp;
-                            <a href="{% url 'reportes_main_productos' %}" title="Otros Reportes">
-                                <span class="material-icons-outlined"style="color: #000000;">
-                                    content_paste
-                                </span>
-                            </a>    
+                        <th width="10%" scope="col">                        
                         </th>
                     </tr>
                 </thead>

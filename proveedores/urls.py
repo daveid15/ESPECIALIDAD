@@ -45,6 +45,7 @@ proveedores_patterns = [
     path('detalle_orden_de_compra_anulada/<int:orden_id>/', views.detalle_orden_de_compra_anulada, name='detalle_orden_de_compra_anulada'),
     path('editar_orden/<int:orden_id>/', views.editar_orden, name='editar_orden'),
     path('get_chart_oc_1', views.get_chart_oc_1, name = 'get_chart_oc_1'),
+    path('get_chart_oc_2', views.get_chart_oc_2, name = 'get_chart_oc_2'),
     
     
     #path('', views.listar_productos, name='listar_productos'),

@@ -1,22 +1,31 @@
 {% extends 'core/base_admin.html' %}
 {% load static %}
 {% block content %}
+{% block extrahead %}
 <style>
-    .chart {
-        width: 100%;
-        min-height: 400px;
+    body {
+        display: flex;
     }
+
+    .chart-container {
+        flex: 1; /* Esto hará que la chart-container ocupe el espacio disponible */
+        margin-top: 90px; /* Ajusta la distancia desde la parte superior de la ventana */
+        padding: 20px; /* Espacio alrededor del contenido del contenedor */
+        display: flex; /* Utiliza flexbox para colocar los gráficos en línea */
+        justify-content: space-between; /* Distribuye los gráficos uniformemente a lo largo del contenedor */
+    }
+
+    .chart {
+        width: 48%;
+        min-height: 300px;
+        background-color: #ffffff; /* Cambia el color de fondo del contenedor */
+        border-radius: 10px; /* Añade bordes redondeados al contenedor */
+    }
+    
 </style>
+{% endblock %}
     <main role="main">
-        <nav id="orderdash" class="orderdash">
-            <div class="menu">
-                <nav class="orderdash">
-                    <div class=chart>
-                        <div id = "chart_oc1" class="chart"></div>
-                    </div>
-                </nav>
-            </div>
-        </nav>
+        
         <nav id="orderbar" class="orderbar">
             <div class="menu">
                 <nav class="orderbar">
@@ -51,9 +60,14 @@
                         <ul class="menu_items submenu">
                             <li><a href="{% url 'admin_main' %}" class="nav_link sublink">Volver</a></li>
                     </div>
-
             </div>
         </nav>
+        <div class="chart-container">
+            <div id = "chart_oc1" class="chart"></div>
+        </div>
+        <div class="chart-container">
+            <div id = "chart_oc2" class="chart"></div>
+        </div>
     </main>
 
 <!-- Apache ECharts -->

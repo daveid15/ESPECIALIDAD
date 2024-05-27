@@ -11,6 +11,6 @@ ventas_patterns = [
     path('detalle_orden_venta/<int:orden_id>/', views.detalle_orden_venta, name='detalle_orden_venta'),
     path('get_chart_data', views.get_chart_data, name='get_chart_data'),
     path('get_chart_data_venta', views.get_chart_data_venta, name='get_chart_data_venta'),
-    
+    path('get_chart_data_completos_bebidas', views.get_chart_data_completos_bebidas, name='get_chart_data_completos_bebidas'),
 ]
  
