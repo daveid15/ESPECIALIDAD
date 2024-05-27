@@ -68,11 +68,10 @@
                         </div>
                     </div>
                 </div> 
-                <select name="proveedor_insumo" id="proveedor_insumo" >
-                    <option value="Palta">Palta</option>
-                    <option value="Tomate">Tomate</option>
-                    <option value="Pan">Pan</option>
-                </select>
+                    <label for="proveedor_insumo" ></label>
+                    <input type="text" class="form-control" name="proveedor_insumo" id="proveedor_insumo"required>
+                </div>  
+                    </div>  
                     </div>                        
                         <div class="mb-0 col-md-4">
                             <div class="d-flex justify-content-center mb-2">
@@ -82,7 +81,6 @@
                                 <div class="d-flex justify-content-center mx-0-5--custom">
                                     <a href="{% url 'proveedores_main' %}">Volver</a>
                                 </div>                                   
-                    </div>
                 </form>
                 <script src="{% static 'js/test.js' %}"></script> 
             </div>
