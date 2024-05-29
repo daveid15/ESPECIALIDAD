@@ -826,6 +826,12 @@ def get_chart_oc_1(request):
     Anuladas = int(ordenes.values("estado").filter(estado="anulado").count())
 
     chart_data = {
+<<<<<<< HEAD
+=======
+        "title": {
+            "text": 'Cantidad de ordenes'
+        },   
+>>>>>>> e0c6e704422306624f8c86091c81b4bfd79722f3
         'tooltip': {
             'show': True,
             'trigger': "axis",
@@ -870,6 +876,9 @@ def get_chart_oc_2(request):
     print(lista_sumas)
 
     chart_data = {
+        "title": {
+            "text": 'Inversiones por ordenes'
+        },
         'tooltip': {
             'show': True,
             'trigger': "axis",

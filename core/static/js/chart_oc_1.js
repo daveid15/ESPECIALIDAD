@@ -1,5 +1,5 @@
 const getOptionChart = async () => {
-    try {
+     try {
         const response = await fetch("http://127.0.0.1:8000/proveedores/get_chart_oc_1");
         return await response.json();
     } catch (ex) {
@@ -10,6 +10,7 @@ const getOptionChart = async () => {
 const getOptionChart2 = async () => {
   try {
       const response = await fetch("http://127.0.0.1:8000/proveedores/get_chart_oc_2");
+
       return await response.json();
   } catch (ex) {
       alert(ex);
@@ -30,4 +31,3 @@ const getOptionChart2 = async () => {
   window.addEventListener("load", async () => {
     await initChart();
   });
-  

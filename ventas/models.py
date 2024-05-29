@@ -21,6 +21,5 @@ class Venta_producto(models.Model):
     cantidad = models.PositiveIntegerField(null=True, blank=True, default=0)
     id_orden = models.ForeignKey(Orden_venta, on_delete=models.CASCADE, null=True, blank=True, default=0)
     precio_producto = models.PositiveIntegerField(null=True, blank=True, default=0)
-
     def __str__(self):
         return f'Venta {self.id} - {self.producto}'

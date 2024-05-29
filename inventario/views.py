@@ -209,7 +209,6 @@ def producto_edit(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     
     if request.method == 'POST':
-
         supply_name = request.POST.get('supply_name')
         supply_code = request.POST.get('supply_code')
         supply_unit = request.POST.get('supply_unit')
@@ -217,23 +216,28 @@ def producto_edit(request, product_id):
         supply_input = request.POST.get('supply_input')
         supply_output = request.POST.get('supply_output')
         
-        
         product.supply_name = supply_name
         product.supply_code = supply_code
         product.supply_unit = supply_unit
-        product.supply_initial_stock = supply_initial_stock
         product.supply_input = supply_input
         product.supply_output = supply_output
-        if supply_input=="0" and supply_output=="0":
-            product.supply_total = supply_initial_stock
+
+        # Comprobar si es la primera ediciÃ³n
+        if product.supply_total == product.supply_initial_stock:
+            product.supply_initial_stock = supply_initial_stock
         else:
-            if supply_input=="0":
-                product.supply_total= (int(supply_initial_stock))-(int(supply_output))
+            product.supply_initial_stock = product.supply_total
+
+        # Calcular supply_total en base a supply_initial_stock, supply_input y supply_output
+        if supply_input == "0" and supply_output == "0":
+            product.supply_total = product.supply_initial_stock
+        else:
+            if supply_input == "0":
+                product.supply_total = int(product.supply_initial_stock) - int(supply_output)
+            elif supply_output == "0":
+                product.supply_total = int(product.supply_initial_stock) + int(supply_input)
             else:
-                if supply_output=="0":
-                    product.supply_total= (int(supply_initial_stock))+(int(supply_input))
-                else:
-                    product.supply_total= (int(supply_initial_stock))+(int(supply_input))-(int(supply_output))
+                product.supply_total = int(product.supply_initial_stock) + int(supply_input) - int(supply_output)
 
         product.save()
         messages.success(request, 'Producto editado correctamente')
@@ -241,11 +245,9 @@ def producto_edit(request, product_id):
         return redirect('producto_ver', product_id=product.id)
     else:
         product_data = Product.objects.get(pk=product_id)
-        #categories = Category.objects.all()
+        template_name = 'inventario/producto_ver.html'
         
-        template_name= 'inventario/producto_ver.html'
-        
-        return render(request, template_name, {'product_data': product_data})#, 'categories': categories})
+        return render(request, template_name, {'product_data': product_data})
 
     
 #ELIMINAR PRODUCTO
@@ -358,7 +360,7 @@ def descarga_reporte_producto(request):
         ws = wb.add_sheet('Productos')
 
         row_num = 0
-        columns = ['Nombre', 'Precio', 'Estado','Categoria']
+        columns = ['Nombre', 'Código', 'Unidad']
         for col_num in range(len(columns)):
             ws.write(row_num, col_num, columns[col_num] ,font_style)
 
