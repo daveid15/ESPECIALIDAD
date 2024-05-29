@@ -315,12 +315,12 @@ def carga_masiva_proveedor_save(request):
                 if not validar_string(proveedor_region, request) or not validar_string(proveedor_comuna, request):
                     messages.add_message(request, messages.INFO, 'La comuna y/o región no son válidos.')
                     continue
-
+                '''
                 # Validación de insumo
                 if not validar_string(proveedor_insumo, request):
                     messages.add_message(request, messages.INFO, 'El insumo ingresado no es válido.')
                     continue
-
+                '''
                 # Validaci+on de telefono
                 if not validar_numero(proveedor_phone, request):
                     messages.add_message(request, messages.INFO, f'El número de teléfono "{proveedor_phone}" no es válido.')

@@ -4,7 +4,7 @@
 /* Reset styles */
 * {
   margin: 5px;
-  padding: 4px;
+  padding: 0px;
   box-sizing: border-box;
   font-family: "Poppins", sans-serif;
 }
@@ -104,8 +104,8 @@ body.dark {
 /* Sidebar styles */
 .sidebar {
   background-color: var(--green-color);
-  width: 330px; /* Ajusta el ancho según tus necesidades */
-  height: 70.8%; /* Ajusta la altura según tus necesidades */
+  width: 322px; /* Ajusta el ancho según tus necesidades */
+  height: 62%; /* Ajusta la altura según tus necesidades */
   position: fixed;
   top: 90px; /* Ajusta la distancia desde la parte superior de la ventana */
   left: 5px; /* Ajusta la distancia desde el lado izquierdo de la ventana */
@@ -193,6 +193,7 @@ body.dark {
 .navlink_icon:hover {
   background: var(--light-green-color);
 }
+
 
 .sidebar .nav_link {
   display: flex;

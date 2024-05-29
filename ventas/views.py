@@ -90,7 +90,7 @@ def get_chart_data_venta(_request):
     time_elapsed = now - start_time
 
     # Valor fijo de referencia (meta)
-    fixed_value = 100000000
+    fixed_value = 100000
 
     if time_elapsed >= timedelta(minutes=1): #SE PUEDE CAMBIAR POR HOURS O MINUTES DEPENDIENDO DE LOQ SE BUSKE
         # Si ha pasado más de un minuto, reiniciar el valor dinámico y el tiempo de inicio
@@ -213,7 +213,7 @@ def venta_save(request):
                 orden_venta.total_venta = total_venta
                 orden_venta.save()
 
-                messages.success(request, 'Orden de Venta creada con éxito')
+                messages.success(request, f'Orden de Venta #{orden_venta.numero_orden} creada con éxito')
                 return redirect('venta_crear')
         except Exception as e:
             messages.error(request, f'Error al crear la orden: {str(e)}')
@@ -257,6 +257,7 @@ def venta_crear(request):
     
     productos = Prod_venta.objects.all()
     template_name = 'ventas/venta_crear.html'
+    orden = Orden_venta.objects.all()
     
     return render(request, template_name, {'profiles': profiles, 'productos': productos})
 
