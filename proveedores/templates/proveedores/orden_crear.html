@@ -24,7 +24,7 @@
                         <select class="form-select" name="proveedor_orden" id="proveedor_orden" required>
                             <option value=""selected disabled>Selecciona un proveedor</option>
                             {% for proveedor in proveedores %}
-                                <option value="{{ proveedor.proveedor_name }}">{{ proveedor.get_nombre_completo }}</option>
+                                <option value="{{ proveedor.id }}">{{ proveedor.get_nombre_completo }}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -36,7 +36,7 @@
                                     <select class="form-select" name="producto_orden[]" required>
                                         <option value=""selected disabled>Selecciona un Producto</option>
                                         {% for producto in productos %}
-                                            <option value="{{ producto.supply_name }}">{{ producto.get_nombre_producto }}</option>
+                                            <option value="{{ producto.id }}">{{ producto.get_nombre_producto }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>

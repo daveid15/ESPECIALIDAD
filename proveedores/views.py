@@ -28,7 +28,7 @@ from django.db.models import Sum, Q
 from registration.models import Profile
 from proveedores.models import Proveedor, Orden_compra, Producto_Orden
 from inventario.models import Product
-from administrator.views import validar_email,validar_rut,validar_string,validar_numero
+from administrator.views import validar_email,validar_rut,validar_string,validar_numero,validar_int
 from .forms import ProveedorForm
 from datetime import datetime
 
@@ -610,9 +610,11 @@ def orden_save(request):
         producto_orden = request.POST.getlist('producto_orden[]')
         cantidad_orden = request.POST.getlist('cantidad_orden[]')
         monto_orden = request.POST.get('monto_orden')
+        
+        print(cantidad_orden)
 
         try:
-            proveedor_instance = Proveedor.objects.get(proveedor_name=proveedor_orden)
+            proveedor_instance = Proveedor.objects.get(id=proveedor_orden)
         except Proveedor.DoesNotExist:
             messages.add_message(request, messages.ERROR, 'Proveedor no encontrado')
             return render(request, 'proveedores/orden_crear.html', {'profiles': profile, 'proveedores': proveedores, 'productos': productos})
@@ -620,14 +622,14 @@ def orden_save(request):
         if not producto_orden or not cantidad_orden:
             messages.add_message(request, messages.INFO, 'Debes ingresar toda la información')
             return render(request, 'proveedores/orden_crear.html', {'profiles': profile, 'proveedores': proveedores, 'productos': productos})
-
+        
         try:
             with transaction.atomic():
                 orden = Orden_compra(proveedor_orden=proveedor_instance, monto = monto_orden)
                 orden.save()
 
                 for prod, cant in zip(producto_orden, cantidad_orden):
-                    producto = Product.objects.get(supply_name=prod)
+                    producto = Product.objects.get(id=prod)
                     detalle = Producto_Orden(
                         orden_id=orden,
                         producto=producto,
@@ -826,12 +828,9 @@ def get_chart_oc_1(request):
     Anuladas = int(ordenes.values("estado").filter(estado="anulado").count())
 
     chart_data = {
-<<<<<<< HEAD
-=======
         "title": {
             "text": 'Cantidad de ordenes'
         },   
->>>>>>> e0c6e704422306624f8c86091c81b4bfd79722f3
         'tooltip': {
             'show': True,
             'trigger': "axis",

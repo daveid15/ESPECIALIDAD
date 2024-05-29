@@ -64,6 +64,13 @@ def validar_rut(rut,request):
             return True
         else:
             return False
+        
+def validar_int(num, request):
+    if request.method == 'POST':
+        if num is int:
+            return False
+        else:
+            return True
 # ---------------------------------------------------FUNCIONES YA DE LOS TEMPLATES
 @login_required
 def perfil_main(request):
