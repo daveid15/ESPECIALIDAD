@@ -21,11 +21,11 @@
                     {% csrf_token %}
                     <div class="mb-0 col-md-6">
                         <label for="cliente_name" class="form-label">Nombre del cliente</label>
-                        <input type="text" class="form-control" name="cliente_name" id="cliente_name" placeholder="Nombre" required>
+                        <input type="text" class="form-control border border-danger" id="cliente_name" name="cliente_name" pattern="[A-Za-zÑñ]+" autofocus maxlength="254" required placeholder="Nombre"/>
                     </div>
                     <div class="mb-0 col-md-6">
                         <label for="cliente_last_name" class="form-label">Apellido del cliente</label>
-                        <input type="text" class="form-control" name="cliente_last_name" id="cliente_last_name" placeholder="Apellido" required>
+                        <input type="text" class="form-control border border-danger" id="cliente_last_name" name="cliente_last_name" pattern="[A-Za-zÑñ]+" autofocus maxlength="254" required placeholder="Apellido"/>
                     </div>
                     <div class="mb-0 col-md-6">
                         <label for="cantidad_italiano" class="form-label">Completos Italianos</label>

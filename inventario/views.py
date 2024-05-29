@@ -192,7 +192,7 @@ def producto_list(request, page=None, search=None):
             #'category_name': p.product_category.category_name, # aquí se obtiene el category_name asociado al producto
         })
 
-    paginator = Paginator(p_list, 1)
+    paginator = Paginator(p_list, 5)
     p_list_paginate = paginator.get_page(page)
 
     template_name = 'inventario/producto_list.html'

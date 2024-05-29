@@ -527,7 +527,7 @@ def carga_masiva_user_save(request):
 
     if request.method == 'POST':
         try:
-            data = pd.read_excel(request.FILES['myfile'], engine='openpyxl')
+            data = pd.read_excel(request.FILES['myfile'], engine='openpyxl', skiprows=1)
             df = pd.DataFrame(data)
             acc = 0
             for item in df.itertuples(index=False):  # Asegúrate de evitar el índice

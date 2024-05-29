@@ -25,8 +25,8 @@ Editar Proveedor
                         <input type="text" id="proveedor_last_name" name="proveedor_last_name" value="{{ proveedor_data.proveedor_last_name }}" pattern="[A-Za-zÑñ]+" class="form-control border border-danger" required/>
                     </div>
                     <div class="mb-0 col-md-12">
-                        <label for="email" class="form-label">Email (Campo no editable): </label>
-                        <span class="form-control" id="email">{{proveedor_data.proveedor_mail}}</span>                    </div>
+                        <label for="proveedor_mail" class="form-label">Email (Campo no editable): </label>
+                        <span class="form-control" id="proveedor_mail">{{proveedor_data.proveedor_mail}}</span>                    </div>
                     <div class="mb-0 col-md-12">
                         <label for="proveedor_phone" class="form-label">Número de contacto (*):</label>
                         <input type="text" id="proveedor_phone" name="proveedor_phone" value="{{ proveedor_data.proveedor_phone }}" pattern="[0-9]{9}" class="form-control border border-danger" required/>
