@@ -120,7 +120,7 @@
                             {% if profiles.group_id == 1 %}
                                 <th scope="row">
                                     {% if s.id != request.user.id %}
-                                        <a href="{% url 'user_activate' s.id %}">
+                                    <a href="#" onclick="confirmrecover('{{ s.id }}')">
                                             <i class="fa-solid fa-arrow-rotate-left" style="color: #000000;"></i>
                                         </a>
                                         <a href="#" onclick="confirmDelete('{{ s.id }}')">
@@ -176,6 +176,15 @@
     </div>
 </main>
 
+
+<script>
+    function confirmrecover(id) {
+        if (confirm("¿Estás seguro de que deseas recuperar este usuario?")) {
+            window.location.href = "{% url 'user_activate' 0 %}".replace('0', id);
+        }
+    }
+
+</script>
 <script>
     function confirmDelete(id) {
         if (confirm("¿Estás seguro de que deseas eliminar este usuario permanentemente?")) {
@@ -183,5 +192,7 @@
         }
     }
 </script>
+
+
 
 {% endblock %}

@@ -55,18 +55,19 @@ def inventario_main(request, page=None, search=None):
     # Filtrar los productos con bajo stock
     low_stock_products = []
     for p in p_list_array:
-        if (int(p.supply_total)) < 5:  # Ajusta este valor según tu criterio para "bajo stock"
-            low_stock_products.append({
-                'id': p.id,
-                'supply_name': p.supply_name,
-                'supply_code': p.supply_code,
-                'supply_unit': p.supply_unit,
-                'supply_initial_stock': p.supply_initial_stock,
-                'supply_input': p.supply_input,
-                'supply_output': p.supply_output,
-                'supply_total': p.supply_total,
-                'low_stock': True,
-            })
+        if p.supply_total is not None and str(p.supply_total).isdigit():
+            if int(p.supply_total) < 5:  # Ajusta este valor según tu criterio para "bajo stock"
+                low_stock_products.append({
+                    'id': p.id,
+                    'supply_name': p.supply_name,
+                    'supply_code': p.supply_code,
+                    'supply_unit': p.supply_unit,
+                    'supply_initial_stock': p.supply_initial_stock,
+                    'supply_input': p.supply_input,
+                    'supply_output': p.supply_output,
+                    'supply_total': p.supply_total,
+                    'low_stock': True,
+                })
             
 
     paginator = Paginator(low_stock_products, 10)  # Ajusta el número de elementos por página según sea necesario
@@ -353,12 +354,12 @@ def import_file_producto(request):
 def carga_masiva_producto_save(request):
     profiles = Profile.objects.get(user_id=request.user.id)
     if profiles.group_id != 1:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una área para la que no tiene permisos')
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a un área para la que no tiene permisos')
         return redirect('check_group_main')
 
     if request.method == 'POST':
         try:
-            data = pd.read_excel(request.FILES['myfile'], engine='openpyxl',skiprows=1)
+            data = pd.read_excel(request.FILES['myfile'], engine='openpyxl', skiprows=1)
             df = pd.DataFrame(data)
             acc = 0
             for item in df.itertuples():
@@ -366,34 +367,42 @@ def carga_masiva_producto_save(request):
                 supply_code = str(item[2])
                 supply_unit = str(item[3])
                 supply_initial_stock = int(item[4])
+                supply_input=0
+                supply_output=0
 
-                #Valida que supply_name solo sean letras
-                if not supply_name.replace('','').isalpha():
+                 #Valida que supply_name solo sean letras
+                if not supply_name.replace('', '').isalpha():
                     raise ValueError('El nombre del insumo solo puede contener letras')
-                
-                #Valida que supply_unit solo sean las opciones kg o LATA (330 ml)
-                if supply_unit not in ['kg','LATA (330 ml)']:
+
+                # Valida que supply_unit solo sean las opciones kg o LATA (330 ml)
+                if supply_unit not in ['kg', 'LATA (330 ml)']:
                     raise ValueError('La unidad del suministro solo puede ser "kg" o "LATA (330 ml)"')
-                
-                #Valida que supply_initial_stock solo sean numeros
+
+                # Valida que supply_initial_stock solo sean números
                 if not isinstance(supply_initial_stock, int):
                     raise ValueError('El stock inicial debe ser un valor numérico')
-             
+            
                 producto_save = Product(
                     supply_name=supply_name,
                     supply_code=supply_code,
                     supply_unit=supply_unit,
                     supply_initial_stock=supply_initial_stock,
-                  
+                    supply_output=supply_output,
+                    supply_input=supply_input,
+                    supply_total=supply_initial_stock,
+                    
                 )
                 producto_save.save()
                 acc += 1
 
-            messages.add_message(request, messages.INFO, 'Carga masiva finalizada, se importaron ' + str(acc) + ' registros')
+            messages.add_message(request, messages.INFO, f'Carga masiva finalizada, se importaron {acc} registros')
             return redirect('carga_masiva_producto')
         except Exception as e:
             messages.add_message(request, messages.ERROR, f'Error al procesar el archivo: {str(e)}')
             return redirect('carga_masiva_producto')
+
+    # Si la solicitud no es POST, redirige al usuario a alguna otra vista
+    return redirect('carga_masiva_producto')  # Esto puede ser cambiado dependiendo de tus necesidades
     
 @login_required
 def descarga_reporte_producto(request):
