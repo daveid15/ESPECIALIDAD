@@ -37,6 +37,14 @@ def validar_string(cadena, request):
             return True
         else:
             return False
+
+def validar_nombre(cadena, request):
+    if request.method == 'POST':
+        if re.fullmatch(r'[A-Za-zÑñÁÉÍÓÚáéíóú\s]+', cadena):
+            return True
+        else:
+            return False
+
         
 def validar_email(email,request):
     if request.method == 'POST':
@@ -65,12 +73,11 @@ def validar_rut(rut,request):
         else:
             return False
         
-def validar_int(num, request):
-    if request.method == 'POST':
-        if num is int:
-            return False
-        else:
-            return True
+def validar_int(num):
+    if isinstance(num, int):
+        return True
+    else:
+        return False
 # ---------------------------------------------------FUNCIONES YA DE LOS TEMPLATES
 @login_required
 def perfil_main(request):

@@ -17,6 +17,7 @@ from django.db.models import Sum
 from django.http import JsonResponse
 from datetime import timedelta
 from django.db.models.functions import TruncMinute
+from administrator.views import validar_string, validar_int
 
 def ventas_main(request):
     profiles = Profile.objects.get(user_id=request.user.id)
@@ -179,36 +180,56 @@ def get_chart_data_completos_bebidas(_request):
 
 
 
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.db import transaction
+from .models import Prod_venta, Orden_venta, Venta_producto
+from django.contrib.auth.decorators import login_required
+
 @login_required
 def venta_save(request):
     if request.method == 'POST':
         cliente_name = request.POST.get('cliente_name')
         cliente_last_name = request.POST.get('cliente_last_name')
-        producto_venta = ['Completo Italiano', 'Completo Personalizado', 'Bebida']  # Esto debería obtenerse del formulario: request.POST.getlist('producto_venta')
-        cantidad_venta = request.POST.getlist('cantidad_venta')
+        producto_venta = ['Completo Italiano', 'Completo Personalizado', 'Bebida']
+        cantidades = [
+            request.POST.get('cantidad_italiano'),
+            request.POST.get('cantidad_personalizado'),
+            request.POST.get('cantidad_bebida')
+        ]
         cliente_venta = f"{cliente_name} {cliente_last_name}"
         
-        # Comprobar si se ha proporcionado toda la información
-        if not all([cliente_name, cliente_last_name]):
-            messages.error(request, 'Debes ingresar toda la información')
+        # Validar que se ha proporcionado toda la información del cliente
+        if not cliente_name or not cliente_last_name:
+            messages.error(request, 'Debes ingresar toda la información del cliente')
+            return redirect('venta_crear')
+
+        try:
+            cantidades_validas = [int(cant) if cant else 0 for cant in cantidades]
+        except ValueError:
+            messages.error(request, 'Las cantidades deben ser números enteros válidos')
             return redirect('venta_crear')
         
         # Comprobar que al menos un producto tenga una cantidad mayor a 0
-        cantidades_validas = [int(cant) if cant else 0 for cant in cantidad_venta]
         if all(cant == 0 for cant in cantidades_validas):
-            messages.error(request, 'ERROR: Debe haber al menos un producto agregado cpara crear la venta')
+            messages.error(request, 'ERROR: Debe haber al menos un producto agregado para crear la venta')
             return redirect('venta_crear')
-        
+
         try:
             with transaction.atomic():
                 orden_venta = Orden_venta.objects.create(cliente_venta=cliente_venta)
                 total_venta = 0
 
                 for prod, cant in zip(producto_venta, cantidades_validas):
-                    producto_instancia = Prod_venta.objects.get(nombre_producto=prod)
-                    venta_producto = Venta_producto.objects.create(producto=producto_instancia, cantidad=cant, id_orden=orden_venta, precio_producto=producto_instancia.precio)
-                    venta_producto.save()
-                    total_venta += producto_instancia.precio * cant
+                    if cant > 0:
+                        producto_instancia = Prod_venta.objects.get(nombre_producto=prod)
+                        Venta_producto.objects.create(
+                            producto=producto_instancia,
+                            cantidad=cant,
+                            id_orden=orden_venta,
+                            precio_producto=producto_instancia.precio
+                        )
+                        total_venta += producto_instancia.precio * cant
 
                 orden_venta.total_venta = total_venta
                 orden_venta.save()

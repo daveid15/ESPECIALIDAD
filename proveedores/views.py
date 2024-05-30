@@ -315,12 +315,12 @@ def carga_masiva_proveedor_save(request):
                 if not validar_string(proveedor_region, request) or not validar_string(proveedor_comuna, request):
                     messages.add_message(request, messages.INFO, 'La comuna y/o región no son válidos.')
                     continue
-                '''
+
                 # Validación de insumo
                 if not validar_string(proveedor_insumo, request):
                     messages.add_message(request, messages.INFO, 'El insumo ingresado no es válido.')
                     continue
-                '''
+
                 # Validaci+on de telefono
                 if not validar_numero(proveedor_phone, request):
                     messages.add_message(request, messages.INFO, f'El número de teléfono "{proveedor_phone}" no es válido.')
@@ -595,11 +595,18 @@ def orden_list_anulada(request, page=None):
     
     return render(request, 'proveedores/orden_list_anulada.html', {'ordenes': ordenes, 'search': search, 'pagina_obj': ordenes})
 
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.db import transaction
+from django.contrib.auth.decorators import login_required
+from .models import Proveedor, Orden_compra, Producto_Orden
+from inventario.models import Product
+
 @login_required
 def orden_save(request):
     profile = Profile.objects.get(user_id=request.user.id)
     if profile.group_id != 1:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una área para la que no tiene permisos')
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a un área para la que no tiene permisos')
         return redirect('check_group_main')
 
     proveedores = Proveedor.objects.all()
@@ -610,40 +617,60 @@ def orden_save(request):
         producto_orden = request.POST.getlist('producto_orden[]')
         cantidad_orden = request.POST.getlist('cantidad_orden[]')
         monto_orden = request.POST.get('monto_orden')
-        
-        print(cantidad_orden)
 
+        # Validar que el proveedor existe
         try:
             proveedor_instance = Proveedor.objects.get(id=proveedor_orden)
         except Proveedor.DoesNotExist:
             messages.add_message(request, messages.ERROR, 'Proveedor no encontrado')
             return render(request, 'proveedores/orden_crear.html', {'profiles': profile, 'proveedores': proveedores, 'productos': productos})
 
+        # Validar que los productos y cantidades han sido proporcionados
         if not producto_orden or not cantidad_orden:
-            messages.add_message(request, messages.INFO, 'Debes ingresar toda la información')
+            messages.add_message(request, messages.INFO, 'Debes ingresar toda la información de los productos y sus cantidades')
             return render(request, 'proveedores/orden_crear.html', {'profiles': profile, 'proveedores': proveedores, 'productos': productos})
-        
+
+        # Validar cantidades y monto
+        try:
+            cantidades_validas = [int(cant) if cant else 0 for cant in cantidad_orden]
+            monto_valido = int(monto_orden)
+        except ValueError:
+            messages.add_message(request, messages.ERROR, 'Las cantidades y el monto deben ser números enteros válidos')
+            return render(request, 'proveedores/orden_crear.html', {'profiles': profile, 'proveedores': proveedores, 'productos': productos})
+
+        # Validar que al menos un producto tenga una cantidad mayor a 0
+        if all(cant == 0 for cant in cantidades_validas):
+            messages.add_message(request, messages.ERROR, 'Debe haber al menos un producto con una cantidad mayor a 0')
+            return render(request, 'proveedores/orden_crear.html', {'profiles': profile, 'proveedores': proveedores, 'productos': productos})
+
         try:
             with transaction.atomic():
-                orden = Orden_compra(proveedor_orden=proveedor_instance, monto = monto_orden)
+                orden = Orden_compra(proveedor_orden=proveedor_instance, monto=monto_valido)
                 orden.save()
 
-                for prod, cant in zip(producto_orden, cantidad_orden):
-                    producto = Product.objects.get(id=prod)
-                    detalle = Producto_Orden(
+                for prod, cant in zip(producto_orden, cantidades_validas):
+                    try:
+                        producto_instance = Product.objects.get(id=prod)
+                    except Product.DoesNotExist:
+                        messages.add_message(request, messages.ERROR, f'Producto con ID {prod} no encontrado')
+                        return render(request, 'proveedores/orden_crear.html', {'profiles': profile, 'proveedores': proveedores, 'productos': productos})
+
+                    Producto_Orden.objects.create(
                         orden_id=orden,
-                        producto=producto,
+                        producto=producto_instance,
                         cantidad_orden=cant,
                     )
-                    detalle.save()
-                messages.add_message(request, messages.SUCCESS, 'Orden creada con éxito')
-                return redirect('orden_crear')  # Redirige a la página de creación para limpiar el formulario
+                
+                messages.add_message(request, messages.SUCCESS, f'Orden de compra #{orden.id} creada con éxito')
+                return redirect('orden_crear')
         except Exception as e:
             messages.add_message(request, messages.ERROR, f'Error al crear la orden: {str(e)}')
-            return render(request, 'proveedores/orden_crear.html', {'profiles': profile, 'proveedores': proveedores, 'productos': productos})
+            return redirect('orden_crear')
+
     else:
         messages.add_message(request, messages.ERROR, 'Error en el método de envío')
         return redirect('orden_crear')
+
 
 
 @login_required
@@ -758,11 +785,18 @@ def detalle_orden_de_compra_anulada(request, orden_id):
     orden_productos = orden.producto_orden_set.all()
     return render(request, 'detalle_orden_de_compra_anulada.html', {'orden': orden, 'orden_productos': orden_productos})
 
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.db import transaction
+from .models import Proveedor, Orden_compra, Producto_Orden
+from inventario.models import Product
 @login_required
 def editar_orden(request, orden_id):
     profile = get_object_or_404(Profile, user_id=request.user.id)
     if profile.group_id != 1:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una área para la que no tiene permisos')
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a un área para la que no tiene permisos')
         return redirect('check_group_main')
 
     proveedores = Proveedor.objects.all()
@@ -771,48 +805,78 @@ def editar_orden(request, orden_id):
     productos_orden = Producto_Orden.objects.filter(orden_id=orden)
 
     if request.method == 'POST':
-        # Proveedor_orden is not fetched from POST anymore
         producto_orden = request.POST.getlist('producto_orden[]')
         cantidad_orden = request.POST.getlist('cantidad_orden[]')
         monto_orden = request.POST.get("monto_orden")
-        
+
         if not producto_orden or not cantidad_orden:
             messages.add_message(request, messages.INFO, 'Debes ingresar toda la información')
             return render(request, 'editar_orden.html', {
                 'profiles': profile, 'proveedores': proveedores, 'productos': productos, 
-                'orden': orden, 'productos_orden': productos_orden
+                'orden': orden, 'productos_orden': productos_orden,
+                'form_data': zip(producto_orden, cantidad_orden)
+            })
+
+        try:
+            cantidades_validas = [int(cant) if cant else 0 for cant in cantidad_orden]
+            monto_valido = int(monto_orden)
+        except ValueError:
+            messages.add_message(request, messages.ERROR, 'Las cantidades y el monto deben ser números enteros válidos')
+            return render(request, 'editar_orden.html', {
+                'profiles': profile, 'proveedores': proveedores, 'productos': productos, 
+                'orden': orden, 'productos_orden': productos_orden,
+                'form_data': zip(producto_orden, cantidad_orden)
+            })
+
+        if all(cant == 0 for cant in cantidades_validas):
+            messages.add_message(request, messages.ERROR, 'Debe haber al menos un producto con una cantidad mayor a 0')
+            return render(request, 'editar_orden.html', {
+                'profiles': profile, 'proveedores': proveedores, 'productos': productos, 
+                'orden': orden, 'productos_orden': productos_orden,
+                'form_data': zip(producto_orden, cantidad_orden)
             })
 
         try:
             with transaction.atomic():
-                # Update the amount only
-                orden.monto = monto_orden
+                orden.monto = monto_valido
                 orden.save()
 
-                # Delete old products and add the new ones
                 Producto_Orden.objects.filter(orden_id=orden).delete()
-                for prod, cant in zip(producto_orden, cantidad_orden):
-                    producto = Product.objects.get(supply_name=prod)
-                    detalle = Producto_Orden(
+                for prod, cant in zip(producto_orden, cantidades_validas):
+                    try:
+                        producto = Product.objects.get(id=prod)
+                    except Product.DoesNotExist:
+                        messages.add_message(request, messages.ERROR, f'Producto con ID {prod} no encontrado')
+                        return render(request, 'editar_orden.html', {
+                            'profiles': profile, 'proveedores': proveedores, 'productos': productos, 
+                            'orden': orden, 'productos_orden': productos_orden,
+                            'form_data': zip(producto_orden, cantidad_orden)
+                        })
+
+                    Producto_Orden.objects.create(
                         orden_id=orden,
                         producto=producto,
                         cantidad_orden=cant,
                     )
-                    detalle.save()
-                
+
                 messages.add_message(request, messages.SUCCESS, 'Orden actualizada con éxito')
                 return redirect('editar_orden', orden_id=orden.id)
         except Exception as e:
             messages.add_message(request, messages.ERROR, f'Error al actualizar la orden: {str(e)}')
             return render(request, 'editar_orden.html', {
                 'profiles': profile, 'proveedores': proveedores, 'productos': productos, 
-                'orden': orden, 'productos_orden': productos_orden
+                'orden': orden, 'productos_orden': productos_orden,
+                'form_data': zip(producto_orden, cantidad_orden)
             })
     else:
         return render(request, 'editar_orden.html', {
             'profiles': profile, 'proveedores': proveedores, 'productos': productos, 
-            'orden': orden, 'productos_orden': productos_orden
+            'orden': orden, 'productos_orden': productos_orden,
+            'form_data': zip([p.producto.id for p in productos_orden], [p.cantidad_orden for p in productos_orden])
         })
+
+
+
         
 #DASHBOARDS
 
