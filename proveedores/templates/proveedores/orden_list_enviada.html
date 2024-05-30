@@ -56,7 +56,7 @@
             <div class="feedback body--small normal"></div>
         </div>
     </div>
-    <div class="table-container mt-5">
+    <div class="table-container mt-5" style="margin-top: 30px;">
         <table class="table table-user" style="text-align: center;">
             <thead>
                 <tr>
@@ -107,23 +107,23 @@
             </tbody>
         </table>
     </div>
-</div>
-<div class="pagination">
-    <span class="step-links">
-        {% if ordenes.has_previous %}
-            <a href="?pagina=1{% if search %}&search={{ search }}{% endif %}">&laquo; Primera</a>
-            <a href="?pagina={{ ordenes.previous_page_number }}{% if search %}&search={{ search }}{% endif %}">Anterior</a>
-        {% endif %}
+    <div class="pagination">
+        <span class="step-links">
+            {% if ordenes.has_previous %}
+                <a href="?pagina=1{% if search %}&search={{ search }}{% endif %}">&laquo; Primera</a>
+                <a href="?pagina={{ ordenes.previous_page_number }}{% if search %}&search={{ search }}{% endif %}">Anterior</a>
+            {% endif %}
 
-        <span class="current">
-            Página {{ ordenes.number }} de {{ ordenes.paginator.num_pages }}.
+            <span class="current">
+                Página {{ ordenes.number }} de {{ ordenes.paginator.num_pages }}.
+            </span>
+
+            {% if ordenes.has_next %}
+                <a href="?pagina={{ ordenes.next_page_number }}{% if search %}&search={{ search }}{% endif %}">Siguiente</a>
+                <a href="?pagina={{ ordenes.paginator.num_pages }}{% if search %}&search={{ search }}{% endif %}">Última &raquo;</a>
+            {% endif %}
         </span>
-
-        {% if ordenes.has_next %}
-            <a href="?pagina={{ ordenes.next_page_number }}{% if search %}&search={{ search }}{% endif %}">Siguiente</a>
-            <a href="?pagina={{ ordenes.paginator.num_pages }}{% if search %}&search={{ search }}{% endif %}">Última &raquo;</a>
-        {% endif %}
-    </span>
+    </div>
 </div>
 
 <script>
