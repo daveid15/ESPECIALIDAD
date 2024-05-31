@@ -5,9 +5,9 @@
 {% block extrahead %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
-        body {
+    body {
         background-color: rgb(236, 236, 236); /* Establece el fondo de la página a blanco */
-        }
+    }
     .errorlist { color: red; }
     .pagination { 
         position: fixed;
@@ -75,18 +75,46 @@
         border: 1px solid #ccc; /* Borde gris claro */
         padding: 5px 10px; /* Espaciado interno */
     }
+    .nav-tabs {
+        display: flex;
+        gap: 20px;
+        padding-left: 0;
+        list-style: none; /* Elimina los puntos de la lista */
+    }
+    .nav-tabs .nav-item .nav-link {
+        border: 1px solid #000000;
+        border-radius: 0.25rem;
+        border-color: #000000 #000000 #000000;
+        padding: 10px 15px;
+        color: #000;
+        margin-right: -15px;
+        background-color: #c8d0a2;;
+        text-decoration: none;
+    }
+    .nav-tabs .nav-item .nav-link.active {
+        background-color: #ffffff;
+        border-color: #000000 #000000 #ffffff;
+    } 
 </style>
 {% endblock %}
 
 <main role="main">
     <header class='mb-5'>
-        <h2 class='h2 medium text-blue'>Lista de Usuarios Eliminados</h2>
+        <ul class="nav nav-tabs">
+
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'list_user_active' group.id %}">Lista de Usuarios Activos</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="#">Lista de Usuarios Eliminados</a>
+            </li>
+        </ul>
     </header>
     <div class="container col-12">
         <div class="col-12 border" style="position: relative;">
             <div class="btn-container">
                 <div class="action-buttons">
-                    <a href="{% url 'list_main' group.id %}" class="btn btn-danger btn-volver"><i class="fas fa-arrow-left" style="color: #000000;"></i></a>
+                    <a href="{% url 'list_user_active' group.id %}" class="btn btn-danger btn-volver"><i class="fas fa-arrow-left" style="color: #000000;"></i></a>
                     <div class="search-form">
                         <form method="get" action="" class='input-container-search'>
                             <input name="search" id="search" type="text" placeholder='Buscar por Nombre' />
