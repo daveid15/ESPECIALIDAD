@@ -1,142 +1,139 @@
 {% extends 'core/base_admin.html' %}
 {% load static %}
-{% block title %}Proveedores Eliminados{% endblock %}
+
 {% block content %}
-{% block extra_css %}    
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+{% block extrahead %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
-        body {
+    body {
         background-color: rgb(236, 236, 236); /* Establece el fondo de la página a blanco */
     }
     .errorlist { color: red; }
     .pagination { 
         position: fixed;
-        bottom: 20px; 
+        bottom: 20px; /* Ajusta esta distancia según tus necesidades */
         left: 50%;
         transform: translateX(-50%);
         display: flex; 
         justify-content: center; 
-        z-index: 999; 
+        z-index: 999; /* Asegura que la paginación esté sobre otros elementos */
         background-color: #9EB23B;
         border-radius: 12px;
         font-weight: bold;
     }
     .pagination .page-item { 
         margin: 0 5px; 
-        list-style: none; 
-        height: 30px; 
-        display: flex; 
-        align-items: center; 
+        list-style: none; /* Elimina los estilos de lista */
+        height: 30px; /* Altura fija para los elementos <li> */
+        display: flex; /* Para usar flexbox */
+        align-items: center; /* Centrar verticalmente el contenido */
     } 
     .pagination .page-link { 
         text-decoration: none; 
         color: #000; 
         font-size: 18px; 
-        padding: 5px 10px; 
+        padding: 5px 10px; /* Añade un poco de espacio alrededor del número */
     }
     .pagination .page-item.active .page-link { 
-        background-color: #505c14; 
-        color: #000; 
-        border-radius: 5px; 
+        background-color: #505c14; /* Cambia el color de fondo para la página activa */
+        color: #000; /* Cambia el color del texto para la página activa */
+        border-radius: 5px; /* Agrega bordes redondeados */
     }
-    .background-container {
-        background-color: white;
+
+    .header-row {
+        background-color: #d3d3d3; /* Establece el color de fondo de la fila de encabezados a gris */
+    }
+    .action-buttons {
+        display: inline-block; /* Cambia a inline-block para dejar ambos botones uno al lado del otro */
+        align-items: center; /* Alinea los elementos verticalmente */
+    }
+    .action-buttons a {
+        margin-right: 10px; /* Ajusta el espacio entre los botones */
+    }
+    .container {
+        border: 2px solid white;
+        border-radius: 15px;
         padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         position: relative;
-    }
-    .btn-volver {
-        position: absolute;
-        top: 10px;
-        left: 10px;
+        background-color: white; /* Ajusta el fondo del contenedor */
     }
     .search-form {
         position: absolute;
         top: 10px;
-        right: 10px;
+        right: 10px; /* Ajusta la posición a la esquina superior derecha */
     }
     .search-form input[type="text"] {
-        border-radius: 15px;
-        background-color: #f0f0f0;
-        border: 1px solid #ccc;
-        padding: 5px 10px;
-        margin-right: 5px;
+        border-radius: 15px; /* Bordes redondeados */
+        background-color: #f0f0f0; /* Color de fondo gris claro */
+        border: 1px solid #ccc; /* Borde gris claro */
+        padding: 5px 10px; /* Espaciado interno */
+        margin-right: 5px; /* Espacio entre el input y el botón */
     }
     .search-form button {
-        border-radius: 15px;
-        background-color: #d3d3d3;
-        border: 1px solid #ccc;
-        padding: 5px 10px;
-    }
-    .action-buttons {
-        display: flex;
-        gap: 5px;
-    }
-
-    .table-container {
-        margin-top: 50px; /* Ajusta este valor según sea necesario */
+        border-radius: 15px; /* Bordes redondeados */
+        background-color: #d3d3d3; /* Color de fondo gris claro */
+        border: 1px solid #ccc; /* Borde gris claro */
+        padding: 5px 10px; /* Espaciado interno */
     }
 </style>
-{% endblock extra_css %}    
+{% endblock %}
 
-<header class='mb-5'>
-    <h2 class='h2 medium text-blue'>Lista de Proveedores Eliminados</h2>
-</header>
-
-<div class="background-container">
-    <a href="{% url 'seleccion_proveedores' %}" class="btn btn-danger btn-volver"><i class="fas fa-arrow-left" style="color: #000000;"></i></a> <!-- Botón "Volver" con icono -->
-    <div class="search-form">
-        <form method="get" action="" class='input-container-search my-auto'>
-            <input name="search" id="search" type="text" placeholder='Buscar por Nombre'/>
-            <button type="submit">Buscar</button>
-        </form>
-    </div>
-
-    <div class="table-container mt-5">
-        
-        <table class="table table-user" style="vertical-align: middle;">
-
-            <thead>
-                <tr>
-                    <th width="10%" scope="col">Nombre</th>
-                    <th width="10%" scope="col">Apellido</th>
-                    <th width="10%" scope="col">Teléfono de contacto</th>
-                    <th width="10%" scope="col">Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for p in proveedores_eliminados %}
+<main role="main">
+    <header class='mb-5'>
+        <h2 class='h2 medium text-blue'>Lista de Proveedores Eliminados</h2>
+    </header>
+    <div class="container col-12">
+        <div class="col-12 border" style="position: relative;">
+            <div class="btn-container">
+                <div class="action-buttons">
+                    <a href="{% url 'seleccion_proveedores' %}" class="btn btn-danger btn-volver"><i class="fas fa-arrow-left" style="color: #000000;"></i></a>
+                    <div class="search-form">
+                        <form method="get" action="" class='input-container-search'>
+                            <input name="search" id="search" type="text" placeholder='Buscar por Nombre' />
+                            <button type="submit">Buscar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <table id="service" class="table mt-2 table-hover table-sm table-bordered">      
+                <thead class="table-danger">
                     <tr>
-                        <td>{{ p.proveedor_name }}</td>
-                        <td>{{ p.proveedor_last_name }}</td>
-                        <td>{{ p.proveedor_phone }}</td>
-                        <td>
-                            <form action="{% url 'restaurar_proveedor' p.id %}" method="post" style="display:inline;">
-                                {% csrf_token %}
-                                <button type="submit" style="border: none; background: none;" onclick="return confirm('¿Estás seguro de que deseas restaurar este proveedor?');">
-                                    <i class="fas fa-undo-alt" style="color: #000000;"></i> <!-- Icono de restaurar -->
-                                </button>
-                            </form>
-                        </td>
+                        <th colspan="4"><h3>Proveedores Eliminados</h3></th>
+                        <th colspan="1"></th>
                     </tr>
-                {% empty %}
-                    <tr>
-                        <td colspan="4">No hay proveedores eliminados.</td>
+                    <tr class="text-center">
+                        <th width="450" scope="col">Nombre</th>
+                        <th width="300" scope="col">Apellido</th>
+                        <th width="300" scope="col">Teléfono de contacto</th>
+                        <th width="150" scope="col">Acciones</th>
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-
-        <!-- Paginación -->
-        {% if paginator.num_pages > 1 %}
-            <div class="d-flex justify-content-center mx-0-5--custom">
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination pagination-table">
+                </thead>
+                <tbody>
+                    {% for p in proveedores_eliminados %}
+                        <tr>
+                            <th scope="row">{{ p.proveedor_name }}</th>
+                            <th scope="row">{{ p.proveedor_last_name }}</th>
+                            <th scope="row">{{ p.proveedor_phone }}</th>
+                            <th scope="row">
+                                <a href="{% url 'restaurar_proveedor' p.id %}">
+                                    <i class="fa-solid fa-arrow-rotate-left" style="color: #000000;"></i>
+                                </a>
+                                <a href="#" onclick="confirmDelete('{{ p.id }}')">
+                                    <i class="fa-solid fa-trash-can" style="color: #000000;"></i>
+                                </a>
+                            </th>                           
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <!-- Paginación -->
+            {% if paginator.num_pages > 1 %}
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">
                         {% if proveedores_eliminados.has_previous %}
-                            <li class="page-item">
-                                <a class="page-link" href="?page={{ proveedores_eliminados.previous_page_number }}&search={{ search }}" aria-label="Previous">
-                                    <i class="fas fa-chevron-left"></i>
+                            <li class="page-item ">
+                                <a class="page-link" href="?page={{ proveedores_eliminados.previous_page_number }}{% if search %}&search={{ search }}{% endif %}">
+                                    <i class="fas fa-chevron-left"></i> <!-- Icono de flecha hacia la izquierda -->
                                 </a>
                             </li>
                         {% else %}
@@ -148,13 +145,13 @@
                         {% endif %}
                         {% for i in paginator.page_range %}
                             <li class="page-item {% if proveedores_eliminados.number == i %}active{% endif %}">
-                                <a class="page-link" href="?page={{ i }}&search={{ search }}">{{ i }}</a>
+                                <a class="page-link" href="?page={{ i }}{% if search %}&search={{ search }}{% endif %}">{{ i }}</a>
                             </li>
                         {% endfor %}
                         {% if proveedores_eliminados.has_next %}
-                            <li class="page-item">
-                                <a class="page-link" href="?page={{ proveedores_eliminados.next_page_number }}&search={{ search }}">
-                                    <i class="fas fa-chevron-right"></i>
+                            <li class="page-item ">
+                                <a class="page-link" href="?page={{ proveedores_eliminados.next_page_number }}{% if search %}&search={{ search }}{% endif %}">
+                                    <i class="fas fa-chevron-right"></i> <!-- Icono de flecha hacia la derecha -->
                                 </a>
                             </li>
                         {% else %}
@@ -166,21 +163,19 @@
                         {% endif %}
                     </ul>
                 </nav>
-            </div>
-        {% endif %}  
-        <!-- Paginación --> 
- 
+            {% endif %}
+            <!-- Paginación -->                    
+        </div>
     </div>
-</div>
+</main>
 
-{% block extrajs %}    
 <script>
-    function confirmRestore(id) {
-        if (confirm("¿Estás seguro de que deseas restaurar este proveedor?")) {
-            window.location.href = "{% url 'restaurar_proveedor' 0 %}".replace('0', id);
+    function confirmDelete(id) {
+        if (confirm("¿Estás seguro de que deseas eliminar este proveedor permanentemente?")) {
+            window.location.href = "{% url 'eliminar_proveedor' 0 %}".replace('0', id);
         }
     }
 </script>
-{% endblock extrajs %}    
+
 {% endblock %}
 

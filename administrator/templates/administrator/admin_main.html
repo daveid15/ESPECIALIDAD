@@ -1,20 +1,356 @@
-{% extends 'core/base_admin.html' %}
 {% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tu Título Aquí</title>
+    {% block extrahead %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOMy65R2bqU2BqJ/Ex2+ip0EXn1Huxf1W6hJ6gD" crossorigin="anonymous">
+        <style>
+            body {
+                margin: 0;
+                padding: 0;
+                background-image: url('{% static "assets/img/verde.jpg" %}');
+                background-size: cover;
+                background-repeat: no-repeat;
+                background-position: center;
+                background-attachment: fixed;
+                font-family: Arial, sans-serif;
+                color: white;
+                position: relative;
+            }
 
-{% block extrahead %}
-<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
-<link rel="stylesheet" href="{% static 'css/admin_main_styles.css' %}" />
-{% endblock %}
+            .welcome-banner {
+                background-color: rgba(158, 178, 59, 0.8);
+                color: white;
+                padding: 100px 20px;
+                text-align: center;
+                border-radius: 10px;
+                margin: auto;
+                max-width: 800px;
+                font-size: 2.5em;
+                position: relative;
+                z-index: 1;
+            }
 
-{% block content %}
-<div class="container mt-3">
-    <div class="row">
-        <div class="col-12 border">
-            <h3 class="px-5 py-4" style="text-align: center;">
-                Contenido de la  // Dashboard de inicio
-            </h3>
-            <!-- Aquí va el contenido de la página -->
+            .main-content {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding: 50px;
+                text-align: center;
+                background-color: rgba(255, 255, 255, 0.8);
+                border-radius: 10px;
+                margin: 20px;
+                color: #333;
+                position: relative;
+                z-index: 1;
+            }
+
+            .section {
+                margin-top: 50px;
+            }
+
+            .section h2 {
+                font-size: 2em;
+                color: #333;
+            }
+
+            .section p {
+                font-size: 1.2em;
+                color: #666;
+            }
+
+            .custom-complete {
+                margin-top: 50px;
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                color: white;
+                text-align: center;
+            }
+
+            .custom-complete h2 {
+                font-size: 2.5em;
+                margin-bottom: 15px;
+            }
+
+            .custom-complete p {
+                font-size: 1.5em;
+                margin-bottom: 20px;
+            }
+
+            .custom-complete a {
+                display: inline-block;
+                padding: 15px 30px;
+                font-size: 1.5em;
+                color: white;
+                background-color: #ff5722; /* Color más llamativo */
+                border-radius: 5px;
+                text-decoration: none;
+                transition: background-color 0.3s, transform 0.3s, color 0.3s;
+                font-weight: bold; /* Letra más llamativa */
+            }
+
+            .custom-complete a:hover {
+                background-color: #ff8a50;
+                transform: scale(1.05);
+                color: #333;
+            }
+
+            .menu-icon {
+                position: fixed;
+                top: 20px;
+                left: 20px;
+                font-size: 2em;
+                color: white;
+                cursor: pointer;
+                z-index: 1000;
+                background-color: rgba(0, 0, 0, 0.5);
+                padding: 10px;
+                border-radius: 50%;
+                transition: background-color 0.3s;
+            }
+
+            .menu-icon:hover {
+                background-color: rgba(0, 0, 0, 0.7);
+            }
+
+            .nav-panel {
+                position: fixed;
+                top: 0;
+                left: -250px;
+                width: 250px;
+                height: 100%;
+                background-color: #fff;
+                transition: left 0.3s ease;
+                z-index: 1001;
+                overflow-y: auto;
+                box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+                color: #333;
+                border-top-right-radius: 20px;
+                border-bottom-right-radius: 20px;
+            }
+
+            .nav-panel.open {
+                left: 0;
+            }
+
+            .nav-panel-content {
+                padding: 20px;
+                display: flex;
+                flex-direction: column;
+                height: 100%;
+            }
+
+            .nav-title {
+                font-size: 1.8em;
+                color: #333;
+                margin-bottom: 20px;
+                text-align: center;
+                font-family: 'Arial Black', sans-serif;
+            }
+
+            .nav-menu {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+                flex-grow: 1;
+            }
+
+            .nav-menu li {
+                margin-bottom: 10px;
+            }
+
+            .nav-menu a {
+                display: block;
+                text-decoration: none;
+                color: #333;
+                font-size: 1.2em;
+                padding: 10px 20px;
+                transition: background-color 0.3s, transform 0.3s;
+                border-radius: 10px;
+                text-align: center;
+                background-color: rgba(158, 178, 59, 0.8);
+            }
+
+            .nav-menu a:hover {
+                background-color: rgba(158, 178, 59, 1);
+                transform: scale(1.05);
+            }
+
+            .search-container {
+                display: flex;
+                align-items: center;
+                background-color: rgba(158, 178, 59, 0.8);
+                padding: 10px;
+                border-radius: 10px;
+                margin-bottom: 20px;
+                transition: background-color 0.3s, transform 0.3s;
+            }
+
+            .search-container:hover {
+                background-color: rgba(158, 178, 59, 1);
+                transform: scale(1.05);
+            }
+
+            .search-container input {
+                border: none;
+                background: none;
+                color: #333;
+                font-size: 1.2em;
+                margin-left: 10px;
+                width: 100%;
+            }
+
+            .search-container input:focus {
+                outline: none;
+            }
+
+            .close-button {
+                position: absolute;
+                top: 20px;
+                right: 20px;
+                font-size: 1.5em;
+                color: #333;
+                cursor: pointer;
+            }
+
+            .logout-button {
+                display: block;
+                text-align: center;
+                margin-top: 20px;
+                padding: 10px;
+                color: #333;
+                font-size: 1.2em;
+                border: none;
+                background-color: rgba(158, 178, 59, 0.8);
+                cursor: pointer;
+                transition: background-color 0.3s, transform 0.3s;
+                border-radius: 10px;
+            }
+
+            .logout-button:hover {
+                background-color: rgba(158, 178, 59, 1);
+                transform: scale(1.05);
+            }
+
+            .footer {
+                background-color: #9EB23B;
+                color: white;
+                padding: 5px 10px;
+                text-align: left;
+                position: fixed;
+                bottom: 0;
+                right: 0;
+                font-size: 0.9em;
+                border-top-left-radius: 10px;
+                z-index: 1;
+            }
+
+            .footer p {
+                margin: 0;
+            }
+
+            .footer a {
+                color: white;
+                text-decoration: underline;
+            }
+
+            .logo {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                max-width: 100px;
+                z-index: 1000;
+            }
+
+            .panel-logo {
+                display: block;
+                margin: 0 auto 20px;
+                max-width: 80%;
+            }
+        </style>
+    {% endblock %}
+</head>
+<body>
+    {% block content %}
+    <img src="{% static 'assets/img/logo.png' %}" alt="Logo de la Empresa" class="logo">
+    <div class="welcome-banner">
+        <h1>Bienvenidos a nuestro sitio web</h1>
+        <p>Descubre lo mejor en completos, promociones especiales y más.</p>
+    </div>
+
+    <div class="main-content">
+        <div class="section custom-complete">
+            <h2>Crea tu Completo Personalizado</h2>
+            <p>¡Elige los ingredientes que más te gusten y crea el completo perfecto para ti!</p>
+            <a href="{% url 'ventas_main' %}">Personaliza tu Completo</a>
         </div>
     </div>
-</div>
-{% endblock %}
+
+    <!-- Icono de menú -->
+    <div class="menu-icon" onclick="toggleNavPanel()">☰</div>
+
+    <!-- Panel de Navegación -->
+    <div class="nav-panel" id="navPanel">
+        <div class="nav-panel-content">
+            <!-- Logo de la empresa en el panel -->
+            <img src="{% static 'assets/img/logo.png' %}" alt="Logo de la Empresa" class="panel-logo">
+            <div class="nav-title">Menú Principal</div>
+            <div class="search-container">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Buscar..." id="searchInput">
+            </div>
+            <ul class="nav-menu">
+                <li><a href="{% url 'users_main' %}">Gestión de Usuarios</a></li>
+                <li><a href="{% url 'inventario_main' %}">Gestión de Inventario</a></li>
+                <li><a href="{% url 'proveedores_main' %}">Gestión de Proveedores</a></li>
+                <li><a href="{% url 'orden_main' %}">Gestión de Orden de Compra</a></li>
+                <li><a href="{% url 'ventas_main' %}">Gestión de Ventas</a></li>
+                <!-- Agrega más enlaces según sea necesario -->
+            </ul>
+            <!-- Botón de cierre -->
+            <span class="close-button" onclick="toggleNavPanel()">✖</span>
+            <!-- Botón de cerrar sesión con icono más minimalista -->
+            <button class="logout-button" onclick="confirmLogout()">
+                <i class="logout-icon">🔓</i> Cerrar Sesión
+            </button>
+        </div>
+    </div>
+    {% endblock %}
+
+    <!-- Pie de página -->
+    <div class="footer">
+        <p>Contacto: ¿Tienes alguna pregunta o comentario? <a href="mailto:info@ejemplo.com">¡Contáctanos!</a></p>
+    </div>
+
+    <script>
+        function toggleNavPanel() {
+            var navPanel = document.getElementById('navPanel');
+            navPanel.classList.toggle('open');
+        }
+
+        function confirmLogout() {
+            if (confirm("¿Estás seguro de que deseas cerrar sesión?")) {
+                window.location.href = '{% url "logout" %}';
+            }
+        }
+
+        // Lógica de búsqueda
+        document.getElementById('searchInput').addEventListener('input', function() {
+            var filter = this.value.toLowerCase();
+            var items = document.querySelectorAll('.nav-menu li');
+            items.forEach(function(item) {
+                if (item.textContent.toLowerCase().includes(filter)) {
+                    item.style.display = '';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
