@@ -18,23 +18,33 @@
         border-radius: 10px; /* Añade bordes redondeados al contenedor */
     }
     
+    
 </style>
 {% endblock %}
 <main role="main">
     <div class="container mt-3">
         <div class="border px-3 py-4">
-            <h3 class="text-center">Gestión de proveedores</h3> 
-            <div class="row justify-content-center mt-3">
-                <div class="col-12 col-sm-3 mb-3">
-                    <a href="{% url 'seleccion_proveedores' %}" class="btn btn-primary btn-block">Listado de proveedores</a>               
-                </div>
-                <div class="col-12 col-sm-3 mb-3">
-                    <a href="{% url 'proveedores_crear' %}" class="btn btn-primary btn-block">Crear Proveedor</a>
+            <nav id="proveedorbar" class="proveedorbar">
+                <div class="col-12 mt-3 border">
+                    <div class="row mt-4 mb-4">
+                        <div class="col-12 col-sm-3 mb-3" style="text-align: center;">
+                            <li class="item">
+                                <a href="{% url 'proveedores_activos' %}" class="nav_link submenu_item">
+                                    </span>
+                                    <span class="navlink">Listado de proveedores</span>
+                                </a>
+                                <a href="{% url 'proveedores_crear' %}" class="nav_link submenu_item">
+                                    </span>
+                                    <span class="navlink">Crear Proveedor</span>
+                                </a>
+                                    <a href="{% url 'admin_main' %}" class="nav_link submenu_item">
+                                    </span>
+                                    <span class="navlink">Volver</span>
+                                </a>
+                        </div>
+                    </div> 
                 </div> 
-                <div class="col-12 col-sm-3 mb-3">
-                    <a href="{% url 'admin_main' %}" class="btn btn-primary btn-block">Volver</a>               
-                </div>  
-            </div>  
+            </nav>
         </div>
     </div>
     <tr>
@@ -45,6 +55,7 @@
     <td>
     <div class="container mt-4">
         <div class="row">
+            <nav id="proveedordash" class="proveedordash">
             <div class="col-md-8">
                 <div class="card mb-4">
                     <div class="card-body">
@@ -65,7 +76,9 @@
                         </div>
                     </div>
                 </div>
+            </nav>
             </div>
+
         </td>
 </main>
 
