@@ -3,23 +3,113 @@
 {% block content %}
 {% block extrahead %}
 {% endblock %}
+<style>
+    .errorlist {
+        color: red;
+    }
+
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f7f7f7;
+    }
+
+    section {
+        background-color: white;
+        max-width: 900px;
+        margin: 50px auto;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        display: flex;
+    }
+
+    .avatar {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        margin-right: 10px;
+    }
+
+    .titulo {
+        font-family: 'Sigmar', sans-serif;
+        color: #333;
+        font-size: 36px;
+        margin: 0;
+    }
+
+    .form-label {
+        font-size: 16px;
+        color: #333;
+    }
+
+    .form-control {
+        width: 100%;
+        height: 40px;
+        padding: 10px;
+        margin-top: 5px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+
+    .button {
+        background-color: #87963C;
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        width: 100%;
+        margin-top: 10px;
+        font-size: 16px;
+    }
+
+    .button:hover {
+        background-color: #65702d;
+        color: white;
+    }
+
+    .message {
+        color: green;
+        text-align: center;
+    }
+
+    .error-message {
+        color: red;
+        text-align: center;
+    }
+
+    @media (max-width: 768px) {
+        section {
+            flex-direction: column;
+            align-items: center;
+        }
+    }
+    </style>
     <main role="main">
         <div class="container col-12 mt-3">
-            <div class="col-12 mt-3 border">
-                <h3 class="px-5 py-4" style="text-align: center;">Gestión de usuarios</h3> 
-                <div class="row mt-4 mb-4">
-                    <div class="col-12 col-sm-3 mb-3" style="text-align: center;">
-                        <a href="{% url 'edit_perfil' %}" class="boton form-control">Editar perfil</a>
-                    </div>
-                    <div class="d-flex justify-content-end mb-3" style="text-align: center;">
-                        <a href="{% url 'password_reset' %}" class="body-normal text-blue text-decoration-underline cursor-pointer">Cambiar contraseña</a>
-                    </div>
-                    <!--REUTILICÉ EL CÓDIGO DE OLVIDASTE TU CONTRASEÑA PERO NECESITO CONFIRMACIÓN!!¡¡-->
-                    <div class="col-12 col-sm-3 mb-3" style="text-align: center;">
-                        <a href="{% url 'admin_main' %}" class="botton form-control" style="padding: 4px; margin-top: 4px;">Volver</a>
-                    </div> <!-- Cerrando el div col-12 col-sm-3 -->
-                </div> <!-- Cerrando el div row -->
-            </div> <!-- Cerrando el div col-12 mt-3 border -->
+            <nav id="profilebar" class="profilebar">
+                <div class="col-12 mt-3 border">
+                    <div class="row mt-4 mb-4">
+                        <div class="col-12 col-sm-3 mb-3" style="text-align: center;">
+                            <li class="item">
+                                <a href="{% url 'edit_perfil' %}" class="nav_link submenu_item">
+                                    </span>
+                                    <span class="navlink">Editar perfil</span>
+                                </a>
+                                <a href="{% url 'password_reset' %}" class="nav_link submenu_item">
+                                    </span>
+                                    <span class="navlink">Cambiar contraseña</span>
+                                </a>
+                                    <a href="{% url 'admin_main' %}" class="nav_link submenu_item">
+                                    </span>
+                                    <span class="navlink">Volver</span>
+                                </a>
+                        </div>
+                    </div> <!-- Cerrando el div row -->
+                </div> <!-- Cerrando el div col-12 mt-3 border -->
+            </nav>
         </div> <!-- Cerrando el div container -->
     </main>
 {% endblock %}
