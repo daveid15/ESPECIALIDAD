@@ -93,8 +93,14 @@ def proveedor_save(request):
         proveedor_comuna = request.POST.get('proveedor_comuna')
         proveedor_phone = request.POST.get('proveedor_phone')
         template_name = 'proveedores/proveedores_crear.html'
-        producto_orden = request.POST.getlist('producto_orden[]')
+        producto = request.POST.getlist('producto_orden[]')
+        producto_nuevo = request.POST.getlist('producto_nuevo[]')
+        codigo_nuevo = request.POST.getlist('codigo_nuevo[]')
+        unidad_nuevo = request.POST.getlist('unidad_nuevo[]')
         
+        print(producto_nuevo)
+        print(codigo_nuevo)
+        print(unidad_nuevo)
         # Validaciones
         if not validar_string(proveedor_name, request):
             errores.append('Nombre inválido')
@@ -121,34 +127,51 @@ def proveedor_save(request):
         if not rut_exist:
             if not mail_exist:
                 
-                proveedor_save = Proveedor(
-                    proveedor_name=proveedor_name,
-                    proveedor_last_name=proveedor_last_name,
-                    proveedor_rut=proveedor_rut,
-                    proveedor_mail=proveedor_mail,
-                    proveedor_address=proveedor_address,
-                    proveedor_region=proveedor_region,
-                    proveedor_comuna=proveedor_comuna,
-                    proveedor_phone=proveedor_phone,
-                )
-                proveedor_save.save()
+                try:
+                    with transaction.atomic():
+                        proveedor_save = Proveedor(
+                            proveedor_name=proveedor_name,
+                            proveedor_last_name=proveedor_last_name,
+                            proveedor_rut=proveedor_rut,
+                            proveedor_mail=proveedor_mail,
+                            proveedor_address=proveedor_address,
+                            proveedor_region=proveedor_region,
+                            proveedor_comuna=proveedor_comuna,
+                            proveedor_phone=proveedor_phone,
+                        )
+                        proveedor_save.save()
+                        
+                        for prod_id in producto:
+                            try:
+                                prod_id = int(prod_id)  # Convertir prod_id a entero
+                                producto_instance = Product.objects.get(id=prod_id)
+                            except Product.DoesNotExist:
+                                messages.add_message(request, messages.ERROR, f'Producto con ID {prod_id} no encontrado')
+                                return render(request, template_name)
+                            except ValueError:
+                                messages.add_message(request, messages.ERROR, 'Error en los datos de los productos.')
+                                return render(request, template_name)
+                            
+                            Prov_prod.objects.create(
+                                proveedor=proveedor_save,
+                                producto=producto_instance,
+                            )
                 
-                for prod_id in producto_orden:
-                    try:
-                        prod_id = int(prod_id)  # Convertir prod_id a entero
-                        producto_instance = Product.objects.get(id=prod_id)
-                    except Product.DoesNotExist:
-                        messages.add_message(request, messages.ERROR, f'Producto con ID {prod_id} no encontrado')
-                        return render(request, template_name)
-                    except ValueError:
-                        messages.add_message(request, messages.ERROR, 'Error en los datos de los productos.')
-                        return render(request, template_name)
-                    
-                    Prov_prod.objects.create(
-                        proveedor=proveedor_save,
-                        producto=producto_instance,
-                    )
-                
+                        for producto, codigo, unidad in zip(producto_nuevo, codigo_nuevo, unidad_nuevo):
+                            Product.objects.create(
+                                supply_name=producto,
+                                supply_code=codigo,
+                                supply_unit=unidad,
+                                supply_initial_stock=0,
+                                supply_input=0,
+                                supply_output=0,
+                                supply_total=0
+                            )
+                    messages.add_message(request, messages.INFO, 'Productos guardados con éxito')
+                except Exception as e:
+                    messages.add_message(request, messages.ERROR, f'Error al guardar productos: {str(e)}')
+                        
+                        
                 messages.add_message(request, messages.INFO, 'Proveedor ingresado con éxito')
                 return redirect('proveedores_main')
             else:
@@ -199,47 +222,95 @@ def proveedor_ver(request, proveedor_id):
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
         return redirect('check_group_main')
     proveedor_data = Proveedor.objects.get(pk=proveedor_id)
+    proveedor = get_object_or_404(Proveedor, id=proveedor_id)
+    proveedor_productos = proveedor.prov_prod_set.all()
     template_name = 'proveedores/proveedor_ver.html'
-    return render(request, template_name, {'profile': profile, 'proveedor_data': proveedor_data,})
+    return render(request, template_name, {'profile': profile, 'proveedor_data': proveedor_data, 'proveedor':proveedor, 'proveedor_productos':proveedor_productos})
 
 @login_required
 def proveedor_edit(request, proveedor_id):
     profile = Profile.objects.get(user_id=request.user.id)
+    productos = Product.objects.all()
     if profile.group_id != 1:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a una área para la que no tiene permisos')
         return redirect('check_group_main')
-    
-    proveedor = get_object_or_404(Proveedor, id=proveedor_id)
-    
-    if request.method == 'POST':
 
+    proveedor = get_object_or_404(Proveedor, id=proveedor_id)
+
+    if request.method == 'POST':
         proveedor_name = request.POST.get('proveedor_name')
         proveedor_last_name = request.POST.get('proveedor_last_name')
         proveedor_mail = request.POST.get('proveedor_mail')
         proveedor_phone = request.POST.get('proveedor_phone')
         proveedor_address = request.POST.get('proveedor_address')
-        proveedor_region = request.POST.get('proveedor_region') 
+        proveedor_region = request.POST.get('proveedor_region')
         proveedor_comuna = request.POST.get('proveedor_comuna')
-        proveedor_insumo = request.POST.getlist('proveedor_insumo')
+        producto = request.POST.getlist('producto_orden[]')
+        producto_nuevo = request.POST.getlist('producto_nuevo[]')
+        codigo_nuevo = request.POST.getlist('codigo_nuevo[]')
+        unidad_nuevo = request.POST.getlist('unidad_nuevo[]')
 
-        proveedor.proveedor_name = proveedor_name
-        proveedor.proveedor_last_name = proveedor_last_name
-        proveedor.proveedor_mail = proveedor_mail
-        proveedor.proveedor_phone = proveedor_phone
-        proveedor.proveedor_address = proveedor_address
-        proveedor.proveedor_region = proveedor_region
-        proveedor.proveedor_comuna = proveedor_comuna
-        proveedor.proveedor_insumo = proveedor_insumo
-        
-        proveedor.save()
-        
-        return redirect('proveedor_edit', proveedor_id=proveedor.id)
+        mail_exist = Proveedor.objects.filter(proveedor_mail=proveedor_mail).exclude(id=proveedor_id).exists()
+        if not mail_exist:
+            try:
+                with transaction.atomic():
+                    proveedor.proveedor_name = proveedor_name
+                    proveedor.proveedor_last_name = proveedor_last_name
+                    proveedor.proveedor_mail = proveedor_mail
+                    proveedor.proveedor_phone = proveedor_phone
+                    proveedor.proveedor_address = proveedor_address
+                    proveedor.proveedor_region = proveedor_region
+                    proveedor.proveedor_comuna = proveedor_comuna
+                    proveedor.save()
+
+                    # Limpiar productos actuales y volver a asignarlos
+                    Prov_prod.objects.filter(proveedor=proveedor).delete()
+
+                    # Agregar productos existentes
+                    for prod_id in producto:
+                        try:
+                            prod_id = int(prod_id)  # Convertir prod_id a entero
+                            producto_instance = Product.objects.get(id=prod_id)
+                        except Product.DoesNotExist:
+                            messages.add_message(request, messages.ERROR, f'Producto con ID {prod_id} no encontrado')
+                            return render(request, 'proveedores/proveedor_edit.html', {'proveedor_data': proveedor})
+                        except ValueError:
+                            messages.add_message(request, messages.ERROR, 'Error en los datos de los productos.')
+                            return render(request, 'proveedores/proveedor_edit.html', {'proveedor_data': proveedor})
+
+                        Prov_prod.objects.create(
+                            proveedor=proveedor,
+                            producto=producto_instance,
+                        )
+
+                    # Crear y agregar productos nuevos
+                    for producto, codigo, unidad in zip(producto_nuevo, codigo_nuevo, unidad_nuevo):
+                        nuevo_producto = Product.objects.create(
+                            supply_name=producto,
+                            supply_code=codigo,
+                            supply_unit=unidad,
+                            supply_initial_stock=0,
+                            supply_input=0,
+                            supply_output=0,
+                            supply_total=0
+                        )
+                        Prov_prod.objects.create(
+                            proveedor=proveedor,
+                            producto=nuevo_producto,
+                        )
+
+                messages.add_message(request, messages.INFO, 'Proveedor editado con éxito')
+            except Exception as e:
+                messages.add_message(request, messages.ERROR, f'Error al guardar productos: {str(e)}')
+                return render(request, 'proveedores/proveedor_edit.html', {'proveedor_data': proveedor, 'productos':productos})
+
+            return redirect('proveedores_main')
+        else:
+            messages.add_message(request, messages.INFO, 'El correo que está tratando de ingresar, ya existe en nuestros registros')
+            return render(request, 'proveedores/proveedor_edit.html', {'proveedor_data': proveedor, 'productos':productos})
+
     else:
-        proveedor_data = Proveedor.objects.get(pk=proveedor_id)
-        
-        template_name= 'proveedores/proveedor_edit.html'
-        
-        return render(request, template_name, {'proveedor_data': proveedor_data})
+        return render(request, 'proveedores/proveedor_edit.html', {'proveedor_data': proveedor, 'productos':productos})
 
 def proveedor_delete(request, proveedor_id):
     profile = Profile.objects.get(user_id=request.user.id)
