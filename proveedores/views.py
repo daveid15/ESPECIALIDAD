@@ -26,7 +26,7 @@ from django.http.response import JsonResponse
 from django.db.models import Sum, Q
 
 from registration.models import Profile
-from proveedores.models import Proveedor, Orden_compra, Producto_Orden
+from proveedores.models import Proveedor, Orden_compra, Producto_Orden, Prov_prod
 from inventario.models import Product
 from administrator.views import validar_email,validar_rut,validar_string,validar_numero,validar_int
 from .forms import ProveedorForm
@@ -58,24 +58,22 @@ def proveedores_crear(request):
     if profiles.group_id != 1 and profiles.group_id != 2:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a un área para la que no tiene permisos')
         return redirect('check_group_main')
+    
+    productos = Product.objects.all()
 
     if request.method == 'POST':
-        # Procesar el formulario de creación del proveedor
         proveedor_form = ProveedorForm(request.POST)
         if proveedor_form.is_valid():
             proveedor = proveedor_form.save(commit=False)
             proveedor.activo = True  # Establecer el proveedor como activo
             proveedor.save()
-            messages.success(request, 'Proveedor creado correctamente')
-            return redirect('proveedores_activos')  # Redirigir a la lista de proveedores activos
-
+            
+            messages.success(request, 'Proveedor y productos asociados creados exitosamente.')
+            return redirect('proveedores/proveedores_crear.html')  # Redirige a la vista deseada
     else:
-        # Renderizar el formulario de creación del proveedor
         proveedor_form = ProveedorForm()
-
-    template_name = 'proveedores/proveedores_crear.html'
-    return render(request, template_name, {'profiles': profiles, 'proveedor_form': proveedor_form})
-
+    
+    return render(request, 'proveedores/proveedores_crear.html', {'proveedor_form': proveedor_form, 'productos': productos})
 
 @login_required
 def proveedor_save(request):
@@ -85,7 +83,7 @@ def proveedor_save(request):
         return redirect('check_group_main')
     
     if request.method == 'POST':
-        errores=[]
+        errores = []
         proveedor_name = request.POST.get('proveedor_name')
         proveedor_last_name = request.POST.get('proveedor_last_name')
         proveedor_rut = request.POST.get('proveedor_rut')
@@ -94,28 +92,35 @@ def proveedor_save(request):
         proveedor_region = request.POST.get('proveedor_region')
         proveedor_comuna = request.POST.get('proveedor_comuna')
         proveedor_phone = request.POST.get('proveedor_phone')
-        proveedor_insumo = request.POST.getlist('proveedor_insumo')
-        template_name = 'proveedores/proveedores_main.html'
-        if not validar_string(proveedor_name,request):
+        template_name = 'proveedores/proveedores_crear.html'
+        producto_orden = request.POST.getlist('producto_orden[]')
+        
+        # Validaciones
+        if not validar_string(proveedor_name, request):
             errores.append('Nombre inválido')
-        if not validar_string(proveedor_last_name,request):
+        if not validar_string(proveedor_last_name, request):
             errores.append('Apellido inválido')
-        if not validar_numero(proveedor_phone,request):
+        if not validar_numero(proveedor_phone, request):
             errores.append('Número de teléfono inválido')
-        if not validar_email(proveedor_mail,request):
+        if not validar_email(proveedor_mail, request):
             errores.append('Correo electrónico inválido')
-        if not validar_rut(proveedor_rut,request):
+        if not validar_rut(proveedor_rut, request):
             errores.append('RUT inválido')
+        
         if errores:
             messages.add_message(request, messages.INFO, 'Hubo algunos errores al crear el proveedor: ' + ', '.join(errores))
-            return render(request,template_name)
-        if proveedor_name == '' or proveedor_last_name == '' or proveedor_rut == '' or proveedor_mail == '' or proveedor_address == '' or proveedor_region == '' or proveedor_comuna == '' or proveedor_phone ==  '':
+            return render(request, template_name)
+        
+        if any(field == '' for field in [proveedor_name, proveedor_last_name, proveedor_rut, proveedor_mail, proveedor_address, proveedor_region, proveedor_comuna, proveedor_phone]):
             messages.add_message(request, messages.INFO, 'Debes ingresar toda la información')
             return redirect('proveedores_main')
-        rut_exist = Proveedor.objects.filter(proveedor_rut=proveedor_rut).count() 
-        mail_exist = Proveedor.objects.filter(proveedor_mail=proveedor_mail).count()
-        if rut_exist == 0:
-            if mail_exist == 0:
+        
+        rut_exist = Proveedor.objects.filter(proveedor_rut=proveedor_rut).exists()
+        mail_exist = Proveedor.objects.filter(proveedor_mail=proveedor_mail).exists()
+        
+        if not rut_exist:
+            if not mail_exist:
+                
                 proveedor_save = Proveedor(
                     proveedor_name=proveedor_name,
                     proveedor_last_name=proveedor_last_name,
@@ -125,21 +130,37 @@ def proveedor_save(request):
                     proveedor_region=proveedor_region,
                     proveedor_comuna=proveedor_comuna,
                     proveedor_phone=proveedor_phone,
-                    proveedor_insumo=proveedor_insumo
-              )
-
+                )
                 proveedor_save.save()
+                
+                for prod_id in producto_orden:
+                    try:
+                        prod_id = int(prod_id)  # Convertir prod_id a entero
+                        producto_instance = Product.objects.get(id=prod_id)
+                    except Product.DoesNotExist:
+                        messages.add_message(request, messages.ERROR, f'Producto con ID {prod_id} no encontrado')
+                        return render(request, template_name)
+                    except ValueError:
+                        messages.add_message(request, messages.ERROR, 'Error en los datos de los productos.')
+                        return render(request, template_name)
+                    
+                    Prov_prod.objects.create(
+                        proveedor=proveedor_save,
+                        producto=producto_instance,
+                    )
+                
                 messages.add_message(request, messages.INFO, 'Proveedor ingresado con éxito')
                 return redirect('proveedores_main')
             else:
-                messages.add_message(request, messages.INFO, 'El correo que esta tratando de ingresar, ya existe en nuestros registros')
-                return redirect('proveedores_main') 
+                messages.add_message(request, messages.INFO, 'El correo que está tratando de ingresar, ya existe en nuestros registros')
+                return redirect('proveedores_main')
         else:
-            messages.add_message(request, messages.INFO, 'El rut que esta tratando de ingresar, ya existe en nuestros registros')  
+            messages.add_message(request, messages.INFO, 'El RUT que está tratando de ingresar, ya existe en nuestros registros')
             return redirect('proveedores_main')
     else:
         messages.add_message(request, messages.INFO, 'Error en el método de envío')
         return redirect('check_group_main')
+
 
 
     
