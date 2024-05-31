@@ -4,9 +4,99 @@
 {% block content %}
     {% block extra_css %}    
     {% endblock extra_css %}    
+    <style>
+        .errorlist {
+            color: red;
+        }
+    
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f7f7f7;
+        }
+    
+        section {
+            background-color: white;
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+        }
+    
+        .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+    
+        .titulo {
+            font-family: 'Sigmar', sans-serif;
+            color: #333;
+            font-size: 36px;
+            margin: 0;
+        }
+    
+        .form-label {
+            width: 100px;
+            font-size: 16px;
+            margin-bottom: 30px;
+            color: #333;
+        }
+    
+        .form-control {
+            width: 30%;
+            height: 40px;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+    
+        .button {
+            background-color: #87963C;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 20%;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+    
+        .button:hover {
+            background-color: #65702d;
+            color: white;
+        }
+    
+        .message {
+            color: green;
+            text-align: center;
+        }
+    
+        .error-message {
+            color: red;
+            text-align: center;
+        }
+
+        
+    
+        @media (max-width: 768px) {
+            section {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
     <header class='mb-4'>
         <h2 class='h2 medium text-blue'>Nuevo Proveedor</h2>
     </header>
+    <nav id="proveedoredit" class="proveedoredit">
     <div class="col-md-11">
         <div class="mb-3">
             <div class="d-flex flex-column align-items-center align-items-lg-start">
@@ -61,31 +151,96 @@
                                     </optgroup>
                                 </select>
                             </select>
+<<<<<<< HEAD
+                        </div>
+                        <div id="productos-container" class="col-12 col-lg-12 row row-cols-1 row-cols-md-1 g-2 p-lg-0-5">
+                            <div class="producto-item mb-3 col-12">
+                                <div class="row">
+                                    <div class="mb-0 col-md-6">
+                                        <label for="producto_orden_0" class="form-label">Producto</label>
+                                        <select class="form-select" name="producto_orden[]" id="producto_orden_0" required>
+                                            <option value="" selected disabled>Selecciona un Producto</option>
+                                            {% for producto in productos %}
+                                                <option value="{{ producto.id }}">{{ producto.get_nombre_producto }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="mb-0 col-md-1 d-flex align-items-end">
+                                        <button type="button" class="btn btn-danger btn-delete-producto" disabled>Borrar Producto</button>
+                                    </div>
+                                </div>
+=======
                             <div class="mb-0 col-md-6">
                                 <label class="form-label">Insumos</label>
-                                <button onclick="test()" type="button" id="Añadir">Añadir</button>
+                                <button type="button" id="add-insumo" class="button">Agregar Insumo</button>
+>>>>>>> 3c36b0140e8e55c7ed3601f7063ec902c37c0df9
                             </div>
                         </div>
-                    </div>
-                </div> 
-                    <label for="proveedor_insumo" ></label>
-                    <input type="text" class="form-control" name="proveedor_insumo" id="proveedor_insumo"required>
-                </div>  
-                    </div>  
+                        <div class="mb-3">
+                            <button type="button" id="add-producto" class="btn btn-secondary">Agregar Producto</button>
+                        </div>
                     </div>                        
                         <div class="mb-0 col-md-4">
                             <div class="d-flex justify-content-center mb-2">
                                 <div class="d-flex justify-content-center mx-0-5--custom">
-                                    <button type="submit">Crear</button>
+                                    <button type="submit" class="button">Crear</button>
                                 </div>
                                 <div class="d-flex justify-content-center mx-0-5--custom">
-                                    <a href="{% url 'proveedores_main' %}">Volver</a>
+                                    <a href="{% url 'proveedores_main' %}" class="button">Volver</a>
                                 </div>                                   
                 </form>
-                <script src="{% static 'js/test.js' %}"></script> 
             </div>
         </div>
     </div>
+</nav>
+<script>
+    document.getElementById('add-insumo').addEventListener('click', function() {
+        var item= document.getElementById('proveedor_insumo');
+        var clone = item.cloneNode(true);
+        container.appendChild(clone);
+    });
+    </script>
     {% block extrajs %}    
+    <script>
+        document.getElementById('add-producto').addEventListener('click', function() {
+            var container = document.getElementById('productos-container');
+            var item = container.querySelector('.producto-item');
+            var clone = item.cloneNode(true);
+            var index = container.querySelectorAll('.producto-item').length;
+
+            clone.querySelectorAll('input').forEach(input => {
+                input.value = '';
+                input.id = input.id.replace(/\d+$/, index);
+            });
+            clone.querySelectorAll('select').forEach(select => {
+                select.id = select.id.replace(/\d+$/, index);
+            });
+            container.appendChild(clone);
+            updateDeleteButtons();
+        });
+
+        document.addEventListener('click', function(event) {
+            if (event.target.classList.contains('btn-delete-producto')) {
+                if (document.querySelectorAll('.producto-item').length > 1) {
+                    event.target.closest('.producto-item').remove();
+                    updateDeleteButtons();
+                } else {
+                    alert("No puedes eliminar el único producto.");
+                }
+            }
+        });
+
+        function updateDeleteButtons() {
+            var deleteButtons = document.querySelectorAll('.btn-delete-producto');
+            if (deleteButtons.length === 1) {
+                deleteButtons[0].setAttribute('disabled', true);
+            } else {
+                deleteButtons.forEach(function(button) {
+                    button.removeAttribute('disabled');
+                });
+            }
+        }
+    </script>
+
     {% endblock extrajs %}    
 {% endblock %}

@@ -4,9 +4,123 @@
 {% block content %}
     {% block extra_css %}
     {% endblock extra_css %}
+    <style>
+        .errorlist {
+            color: red;
+        }
+    
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f7f7f7;
+        }
+    
+        section {
+            background-color: white;
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+        }
+    
+        .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+    
+        .titulo {
+            font-family: 'Sigmar', sans-serif;
+            color: #333;
+            font-size: 36px;
+            margin: 0;
+        }
+    
+        .form-label {
+            font-size: 16px;
+            color: #333;
+        }
+    
+        .form-control {
+            width: 100%;
+            height: 40px;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        .form-select {
+            width: 100%;
+            height: 40px;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        
+    
+        .button {
+            background-color: #87963C;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 30%;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+    
+        .button:hover {
+            background-color: #65702d;
+            color: white;
+        }
+    
+        .message {
+            color: green;
+            text-align: center;
+        }
+    
+        .error-message {
+            color: red;
+            text-align: center;
+        }
+        .logoutbutton {
+            background-color: #87963C;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 30%;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            font-size: 16px;
+            }
+
+        .logoutbutton:hover {
+            background-color: #65702d;
+            color: white;
+        }
+    
+        @media (max-width: 768px) {
+            section {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style> 
     <header class='mb-4'>
         <h2 class='h2 medium text-blue'>Nueva orden de compra</h2>
     </header>
+    <section>
     <div class="col-md-11">
         <div class="mb-3">
             <div class="d-flex flex-column align-items-center align-items-lg-start">
@@ -22,9 +136,9 @@
                     <div class="mb-0 col-md-6">
                         <label for="proveedor_orden" class="form-label">Proveedor</label>
                         <select class="form-select" name="proveedor_orden" id="proveedor_orden" required>
-                            <option value=""selected disabled>Selecciona un proveedor</option>
+                            <option value="" selected disabled>Selecciona un proveedor</option>
                             {% for proveedor in proveedores %}
-                                <option value="{{ proveedor.proveedor_name }}">{{ proveedor.get_nombre_completo }}</option>
+                                <option value="{{ proveedor.id }}">{{ proveedor.get_nombre_completo }}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -32,20 +146,19 @@
                         <div class="producto-item mb-3 col-12">
                             <div class="row">
                                 <div class="mb-0 col-md-6">
-                                    <label for="producto_orden" class="form-label">Producto</label>
-                                    <select class="form-select" name="producto_orden[]" required>
-                                        <option value=""selected disabled>Selecciona un Producto</option>
+                                    <label for="producto_orden_0" class="form-label">Producto</label>
+                                    <select class="form-select" name="producto_orden[]" id="producto_orden_0" required>
+                                        <option value="" selected disabled>Selecciona un Producto</option>
                                         {% for producto in productos %}
-                                            <option value="{{ producto.supply_name }}">{{ producto.get_nombre_producto }}</option>
+                                            <option value="{{ producto.id }}">{{ producto.get_nombre_producto }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
                                 <div class="mb-0 col-md-5">
-                                    <label for="cantidad_orden" class="form-label">Cantidad</label>
-                                    <input type="number" min="0" class="form-control" name="cantidad_orden[]" placeholder="Cantidad" style="text-transform: capitalize;" required>
+                                    <label for="cantidad_orden_0" class="form-label">Cantidad</label>
+                                    <input type="number" min="0" class="form-control" name="cantidad_orden[]" id="cantidad_orden_0" placeholder="Cantidad" required>
                                 </div>
                                 <div class="mb-0 col-md-1 d-flex align-items-end">
-                                    <!-- Botón de "Borrar Producto" con atributo disabled -->
                                     <button type="button" class="btn btn-danger btn-delete-producto" disabled>Borrar Producto</button>
                                 </div>
                             </div>
@@ -56,7 +169,7 @@
                     </div>
                     <div class="mb-0 col-md-5">
                         <label for="monto_orden" class="form-label">Monto</label>
-                        <input type="number" min="0" class="form-control" name="monto_orden" placeholder="Monto" style="text-transform: capitalize;" required>
+                        <input type="number" min="0" class="form-control" name="monto_orden" id="monto_orden" placeholder="Monto" required>
                     </div>
                     <div class="d-flex justify-content-center mx-0-5--custom">
                         <button type="submit" class="button">Crear</button>
@@ -68,13 +181,22 @@
             </div>
         </div>
     </div>
+</section>
     {% block extrajs %}
     <script>
         document.getElementById('add-producto').addEventListener('click', function() {
             var container = document.getElementById('productos-container');
             var item = container.querySelector('.producto-item');
             var clone = item.cloneNode(true);
-            clone.querySelectorAll('input').forEach(input => input.value = '');
+            var index = container.querySelectorAll('.producto-item').length;
+
+            clone.querySelectorAll('input').forEach(input => {
+                input.value = '';
+                input.id = input.id.replace(/\d+$/, index);
+            });
+            clone.querySelectorAll('select').forEach(select => {
+                select.id = select.id.replace(/\d+$/, index);
+            });
             container.appendChild(clone);
             updateDeleteButtons();
         });

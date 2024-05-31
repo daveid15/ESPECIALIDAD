@@ -22,8 +22,6 @@ class Proveedor(models.Model):
     proveedor_comuna = models.CharField(max_length=100, null=True, blank=True)
     proveedor_phone = models.CharField(max_length=100, null=True, blank=True)
 
-    proveedor_insumo = ArrayField(models.CharField(max_length=100), default=list)
-
     activo = models.BooleanField(default=True)
     created_at = models.DateTimeField(default=timezone.now)  # Campo de fecha de creación
 
@@ -32,13 +30,14 @@ class Proveedor(models.Model):
     def get_nombre_completo(self):
         return f'{self.proveedor_name} {self.proveedor_last_name}'
 
-    class Meta:
-        verbose_name = 'Proveedor'
-        verbose_name_plural = 'Proveedores'
-        ordering = ['proveedor_name']
-
     def __str__(self):
         return self.get_nombre_completo()
+    
+class Prov_prod(models.Model):
+    proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE)
+    producto = models.ForeignKey(Product, on_delete=models.CASCADE)
+
+    
 class Orden_compra(models.Model):
     proveedor_orden = models.ForeignKey(Proveedor, on_delete=models.CASCADE)
     

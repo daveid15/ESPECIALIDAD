@@ -34,4 +34,10 @@ def check_profile(request):
         return redirect('admin_main') #TAMBIEN COMENTADA??? kreo ke no
     else:
         return redirect('logout')
+    
+def list_user_active(request, group_id):
+
+    users = User.objects.filter(is_active=True, profile__group_id=group_id)
+
+    return render(request, 'list_user_active', {'users': users})
 

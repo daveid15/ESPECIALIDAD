@@ -26,9 +26,14 @@
                     <span class="username">{{ request.user.first_name }}</span>
                 </div>
                 <div class="navbar_content">
+                    <div class="logout">
+                        <a onclick="confirmLogout()" class="logout-link" >
+                            <img src="{% static 'assets/img/logout.png' %}">
+                        </a>
+                    </div>
                     <div class="settings">
-                        <a href="{% url 'perfil_main' %}" class="settings-link">
-                            <i class="bi bi-gear-wide-connected"></i>
+                        <a href="{% url 'edit_perfil' %}" class="settings-link">
+                            <img src="{% static 'assets/img/gear.png' %}">
                         </a>
                     </div>
                 </div>
@@ -49,16 +54,13 @@
                             </ul>
                         </li>
                         <li class="item">
-                            <a href="{% url 'users_main' %}" class="nav_link submenu_item">
+                            <a href="{% url 'list_user_active' group_id=1 %}" class="nav_link submenu_item">
                                 <span class="navlink_icon">
                                     <i class="bx bx-buildings"></i>
                                 </span>
                                 <span class="navlink">Gestión de usuarios</span>
                                 <i class="bx bx-chevron-right arrow-left"></i>
                             </a>
-                            <ul class="menu_items submenu">
-                                <li><a href="{% url 'users_main' %}" class="nav_link sublink">Users Main</a></li>
-                            </ul>
                         </li>
                         <li class="item">
                             <a href="{% url 'proveedores_main' %}" class="nav_link submenu_item">
@@ -114,7 +116,6 @@
                             <div class="logo_item">
                                 <i class="bx bx-menu" id="sidebarOpen"></i>
                                 <img src="{% static 'assets/img/logo.png' %}" alt="Logo" style="width: 150px; height: auto;">
-                                <button class="button" onclick="confirmLogout()">Cerrar Sesión</button>
                             </div>
                         </footer>
                     </ul>

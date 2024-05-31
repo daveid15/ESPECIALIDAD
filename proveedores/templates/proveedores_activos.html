@@ -69,33 +69,95 @@
         top: 10px;
         left: 10px;
     }
-    .h2.medium.text-blue {
-        margin-bottom: 0;
+    .search-form input[type="text"] {
+        border-radius: 15px; /* Bordes redondeados */
+        background-color: #f0f0f0; /* Color de fondo gris claro */
+        border: 1px solid #ccc; /* Borde gris claro */
+        padding: 5px 10px; /* Espaciado interno */
+        margin-right: 5px; /* Espacio entre el input y el botón */
+        margin-top: 5px;
+    }
+    .search-form button {
+        border-radius: 15px; /* Bordes redondeados */
+        background-color: #d3d3d3; /* Color de fondo gris claro */
+        border: 1px solid #ccc; /* Borde gris claro */
+        padding: 5px 10px; /* Espaciado interno */
+    }
+    .new-user-button {
+        margin-left: 15px; /* Espacio entre el título y el botón */
+        white-space: nowrap; /* Evita que el texto del botón se divida en varias líneas */
+    }
+    .header-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between; /* Alinea elementos al inicio */
+        margin-bottom: -10px; /* Espacio entre los tabs y el contenedor */
+    }
+    .bulk-load-container {
+        align-items: right; /* Ajusta esta distancia según sea necesario */
+    }
+    .bulk-load {
+        white-space: nowrap; /* Evita que el texto del botón se divida en varias líneas */
+    }
+    .nav-tabs {
+        display: flex;
+        gap: 20px;
+        padding-left: 0;
+        list-style: none; /* Elimina los puntos de la lista */
+    }
+    .nav-tabs .nav-item .nav-link {
+        border: 1px solid #000000;
+        border-radius: 0.25rem;
+        border-color: #000000 #000000 #000000;
+        padding: 10px 15px;
+        color: #000;
+        margin-right: -15px;
+        background-color: #c8d0a2;;
+        text-decoration: none;
+    }
+    .nav-tabs .nav-item .nav-link.active {
+        background-color: #ffffff;
+        border-color: #000000 #000000 #ffffff;
+    }
+    .tabs-and-button-container {
+        display: flex;
+        justify-content: space-between; /* Alinea los elementos al principio y al final */
+        align-items: center; /* Alinea los elementos verticalmente */
+    }
+    .btn-carga-masiva-container{
+        width: 40px;
+        height: 40px;
     }
 </style>
 {% endblock extra_css %}    
 
 <header class='mb-5'>
-    <h2 class='h2 medium text-blue' style="display: flex; align-items: center; justify-content: space-between;">Lista de Proveedores Activos
-        <div>
-            <a href="{% url 'proveedores_crear' %}" class="boton"><i class="fas fa-user-plus" style="color: #000000"></i></a>  
-            <a href="{% url 'carga_masiva_proveedor' %}" class="boton" style="margin-left: 10px;"><i class="fas fa-upload" style="color: #000000"></i></a>
+        <div class="header-container">
+            <!-- Componente de Tabs y botón -->
+            <div class="tabs-and-button-container">
+                <!-- Componente de Tabs -->
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Lista de Proveedores Activos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'proveedores_eliminados' %}">Lista de Proveedores Eliminados</a>
+                    </li>
+                </ul>
+            </div>
         </div>
-    </h2>
-</header>
+    </header>
 <div class="list-container">
-    <a href="{% url 'seleccion_proveedores' %}" class="btn btn-danger btn-volver"><i class="fas fa-arrow-left" style="color: #000000;"></i></a> <!-- Botón "Volver" con icono -->
+    <a href="{% url 'proveedores_main' %}" class="btn btn-danger btn-volver"><i class="fas fa-arrow-left" style="color: #000000;"></i></a> <!-- Botón "Volver" con icono -->
+    <div>
+        <a href="{% url 'proveedores_crear' %}" class="boton"><i class="fas fa-user-plus" style="color: #000000"></i></a>  
+        <a href="{% url 'carga_masiva_proveedor' %}" class="boton" style="margin-left: 10px;"><i class="fas fa-upload" style="color: #000000"></i></a>
+    </div>
     <div class="search-form">
         <form method="get" action="" class='input-container-search my-auto'>
             <input name="search" id="search" type="text" placeholder='Buscar por Nombre'/>
             <button type="submit">Buscar</button>
         </form>
-    </div>
-    
-    <div class="d-flex flex-column flex-lg-row my-5">
-        <div class="my-auto d-flex flex-column flex-lg-row ms-lg-auto">
-            <div class="feedback body--small normal"></div>
-        </div>
     </div>
 
     <div class="table-container mt-5">

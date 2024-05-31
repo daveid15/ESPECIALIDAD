@@ -3,8 +3,115 @@
 {% block content %}
 {% block extrahead %}
 {% endblock %}
+<style>
+    .errorlist {
+        color: red;
+    }
+
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f7f7f7;
+    }
+
+    section {
+        background-color: white;
+        max-width: 900px;
+        margin: 50px auto;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        display: flex;
+    }
+
+    .avatar {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        margin-right: 10px;
+    }
+
+    .titulo {
+        font-family: 'Sigmar', sans-serif;
+        color: #333;
+        font-size: 36px;
+        margin: 0;
+    }
+
+    .form-label {
+        font-size: 16px;
+        color: #333;
+    }
+
+    .form-control {
+        width: 30%;
+        height: 40px;
+        padding: 10px;
+        margin-top: 5px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+
+    .button {
+        background-color: #87963C;
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        width: 20%;
+        margin-top: 10px;
+        font-size: 16px;
+    }
+
+    .button:hover {
+        background-color: #65702d;
+        color: white;
+    }
+
+    .message {
+        color: green;
+        text-align: center;
+    }
+
+    .error-message {
+        color: red;
+        text-align: center;
+    }
+
+    @media (max-width: 768px) {
+        section {
+            flex-direction: column;
+            align-items: center;
+        }
+    }
+</style>
     <main role="main">
+        <nav id="profilebar" class="profilebar">
+            <div class="col-12 mt-3 border">
+                <div class="row mt-4 mb-4">
+                    <div class="col-12 col-sm-3 mb-3" style="text-align: center;">
+                        <li class="item">
+                            <a href="{% url 'edit_perfil' %}" class="nav_link submenu_item">
+                                </span>
+                                <span class="navlink">Editar perfil</span>
+                            </a>
+                            <a href="{% url 'password_reset' %}" class="nav_link submenu_item">
+                                </span>
+                                <span class="navlink">Cambiar contraseña</span>
+                            </a>
+                                <a href="{% url 'admin_main' %}" class="nav_link submenu_item">
+                                </span>
+                                <span class="navlink">Volver</span>
+                            </a>
+                    </div>
+                </div> 
+            </div> 
+        </nav>
+        <section>
         <div class="container col-12 mt-3">
+            <nav id="profileedit" class="profileedit">
             <div class="col-12  mt-3 border">
                 <h3>Editar perfil</h3> 
                 <form action="" method="post">
@@ -18,20 +125,20 @@
                             <label for="last_name">Apellido (*)</label>
                             <input type="text" id="last_name1" name="last_name1" value="{{user_data.last_name}}" pattern="[A-Za-zÑñ]+" class="form-control border border-danger" required/>
                         </div>
-                        <div class="col-12 col-sm-4 mb-3"> <!--EDITAR NUMERO DE TELEFONO EN PROCESO AUNNNNNNNNNN!!!!!¡¡¡¡¡¡-->
+                        <div class="col-12 col-sm-4 mb-3"> 
                             <label for="phone">Número de contacto (*)</label>
                             <input type="tel" id="phone" name="phone" pattern="[0-9]{9}" value="{{profile_data.mobile}}" class="form-control border border-danger" required/>
                         </div> 
                         <div class="mb-0 col-md-12">
                             <label for="proveedor_name" class="form-label">Rut (Campo no editable): </label>
-                            <span class="form-control" id="proveedor_name">{{profile_data.rut}}</span>
+                            <span class="form-label" id="proveedor_name">{{profile_data.rut}}</span>
                         </div>
                         <div class="mb-0 col-md-12">
                             <label for="proveedor_name" class="form-label">Email (Campo no editable): </label>
-                            <span class="form-control" id="proveedor_name">{{profile_data.email}}</span>
+                            <span class="form-label" id="proveedor_name">{{profile_data.email}}</span>
                         </div>                       
                     
-                        <div class="col-12 col-sm-4 mb-3"> <!--EDITAR DIRECCIÓN EN PROCESO AUNNNNNNNNNN!!!!!¡¡¡¡¡¡-->
+                        <div class="col-12 col-sm-4 mb-3"> 
                         <label for="address">Dirección</label>
                         <input type="text" id="address" name="address" value="{{profile_data.address}}" class="form-control border border-danger" required/>
                         </div>
@@ -57,16 +164,18 @@
                         </div>               
                         <div class="row"> 
                             <div class="col-12 col-sm-6 mb-3">
-                                <input type="submit" value="Editar Usuario" class="btn btn-danger form-control">
+                                <input type="submit" value="Editar Usuario" class="button form-control">
                             </div>
                             <div class="col-12 col-sm-6 mb-3">
-                                <a href="{% url 'perfil_main'%}" class="btn btn-danger form-control">Volver</a>
+                                <a href="{% url 'perfil_main'%}" class="button form-control">Volver</a>
                             </div>
                         </div>
                     </div>
                 </form>
             </div>
+        </nav>
         </div>
+    </section>
     </main>
 
     {% endblock %}

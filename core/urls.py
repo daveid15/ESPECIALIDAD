@@ -11,4 +11,5 @@ usaremos para la url consultada, esta debe existir, el tercer parametro el nombr
 core_urlpatterns = [
     path('', views.home, name='home'),
     path('check_profile', views.check_profile, name='check_profile'),
+    path('list_user_active/<group_id>/', views.list_user_active, name='list_user_active'),
     ]

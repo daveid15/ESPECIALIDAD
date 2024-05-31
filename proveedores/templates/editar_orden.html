@@ -24,24 +24,24 @@
                         <label for="proveedor_orden" class="form-label">{{orden.proveedor_orden}}</label>
                     </div>
                     <div id="productos-container" class="col-12 col-lg-12 row row-cols-1 row-cols-md-1 g-2 p-lg-0-5">
-                        {% for producto_orden in productos_orden %}
+                        {% for prod, cant in form_data %}
                             <div class="producto-item mb-3 col-12">
                                 <div class="row">
                                     <div class="mb-0 col-md-6">
                                         <label for="producto_orden" class="form-label">Producto</label>
                                         <select class="form-select" name="producto_orden[]" required>
-                                            <option value="{{ producto_orden.producto.supply_name }}">{{ producto_orden.producto.get_nombre_producto }}</option>
                                             {% for producto in productos %}
-                                                <option value="{{ producto.supply_name }}">{{ producto.get_nombre_producto }}</option>
+                                                <option value="{{ producto.id }}" {% if producto.id == prod %}selected{% endif %}>
+                                                    {{ producto.get_nombre_producto }}
+                                                </option>
                                             {% endfor %}
                                         </select>
                                     </div>
                                     <div class="mb-0 col-md-6">
                                         <label for="cantidad_orden" class="form-label">Cantidad</label>
-                                        <input type="number" min="0" class="form-control" name="cantidad_orden[]" value="{{ producto_orden.cantidad_orden }}" placeholder="Cantidad" style="text-transform: capitalize;" required>
+                                        <input type="number" min="0" class="form-control" name="cantidad_orden[]" value="{{ cant }}" placeholder="Cantidad" required>
                                     </div>
                                     <div class="mb-0 col-md-1 d-flex align-items-end">
-                                        <!-- Botón de "Borrar Producto" habilitado por defecto -->
                                         <button type="button" class="btn btn-danger btn-delete-producto">Borrar Producto</button>
                                     </div>
                                 </div>
@@ -53,7 +53,7 @@
                     </div>
                     <div class="mb-0 col-md-5">
                         <label for="monto_orden" class="form-label">Monto</label>
-                        <input type="number" min="0" class="form-control" name="monto_orden" placeholder={{orden.monto}} style="text-transform: capitalize;" required>
+                        <input type="number" min="0" class="form-control" name="monto_orden" placeholder="{{orden.monto}}" value="{{orden.monto}}" required>
                     </div>
                     <div class="d-flex justify-content-center mx-0-5--custom">
                         <button type="submit" class="button">Guardar</button>

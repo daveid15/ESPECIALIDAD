@@ -5,9 +5,95 @@
 {% endblock %}
 
 {% block content %}
+<style>
+    .errorlist {
+        color: red;
+    }
+
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f7f7f7;
+    }
+
+    section {
+        background-color: white;
+        max-width: 900px;
+        margin: 50px auto;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        display: flex;
+    }
+
+    .avatar {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        margin-right: 10px;
+    }
+
+    .titulo {
+        font-family: 'Sigmar', sans-serif;
+        color: #333;
+        font-size: 36px;
+        margin: 0;
+    }
+
+    .form-label {
+        font-size: 16px;
+        color: #333;
+    }
+
+    .form-control {
+        width: 100%;
+        height: 40px;
+        padding: 10px;
+        margin-top: 5px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+
+    .button {
+        background-color: #87963C;
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        width: 30%;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        font-size: 16px;
+    }
+
+    .button:hover {
+        background-color: #65702d;
+        color: white;
+    }
+
+    .message {
+        color: green;
+        text-align: center;
+    }
+
+    .error-message {
+        color: red;
+        text-align: center;
+    }
+
+    @media (max-width: 768px) {
+        section {
+            flex-direction: column;
+            align-items: center;
+        }
+    }
+</style> 
 <header class='mb-4'>
     <h2 class='h2 medium text-blue'>Editar Producto</h2>
 </header>
+<section>
 <div class="col-md-11">
     <div class="mb-3">
         <div class="d-flex flex-column align-items-center align-items-lg-start">
@@ -15,16 +101,20 @@
                 {% csrf_token %}
                 <div class="col-12 col-lg-12 row row-cols-1 row-cols-md-1 g-2 p-lg-0-5">
                     <div class="mb-0 col-md-12">
-                        <label class="form-label" for="supply_name">Insumo</label>
-                        <input type="text" class="form-control" name="supply_name" id="supply_name" value="{{product_data.supply_name}}" style="text-transform: capitalize;" required/>
+                        <label for="supply_name" class="form-label">Producto</label>
+                        <input type="text" class="form-control border border-danger" id="supply_name" name="supply_name" value={{product_data.supply_name}} pattern="[A-Za-záéíóúÁÉÍÓÚüÜñÑ\s]+" autofocus maxlength="254" required placeholder="Nombre Producto"/>
                         <div class="feedback body--small normal"></div>
                     </div>
-                    </div>
+
                     <div class="mb-0 col-md-12">
                         <label for="supply_code" class="form-label">Código</label>
-                        <input type="text" class="form-control" name="supply_code" id="supply_code" value="{{product_data.supply_code}}" style="text-transform: capitalize;" required/>
+                        <div style="position: relative;">
+                            <span style="position: absolute; top: 35%; transform: translateY(-50%); left: 1px; color: gray;">SKU</span>
+                            <input type="text" class="form-control" name="supply_code" id="supply_code" value = {{supply_code}} placeholder="XXXX" style="padding-left: 30px; text-transform: capitalize;" required>
+                        </div>
                         <div class="feedback body--small normal"></div>
                     </div>
+
                     <div class="mb-0 col-md-12">
                         <label for="supply_unit">Unidad</label>
                         <select name="supply_unit" id="supply_unit" value="{{product_data.supply_unit}}" class="form-control border border-danger" required>
@@ -41,22 +131,22 @@
                     </div> 
                     <div class="mb-0 col-md-12">
                         <label for="supply_input" class="form-label">Entradas</label>
-                        <input type="number" min="0" class="form-control" name="supply_input" id="supply_input" value="{{product_data.supply_input}}" style="text-transform: capitalize;" required/>
+                        <input type="number" min="0" class="form-control" name="supply_input" id="supply_input" value="0" style="text-transform: capitalize;" required/>
                         <div class="feedback body--small normal"></div>
                     </div> 
                     <div class="mb-0 col-md-12">
                         <label for="supply_output" class="form-label">Salidas</label>
-                        <input type="number" min="0" class="form-control" name="supply_output" id="supply_output" value="{{product_data.supply_output}}" style="text-transform: capitalize;" required/>
+                        <input type="number" min="0" class="form-control" name="supply_output" id="supply_output" value="0" style="text-transform: capitalize;" required/>
                         <div class="feedback body--small normal"></div>
                     </div> 
                     
                     <div class="mb-0 col-md-12">
                         <div class="d-flex justify-content-center mb-2">
                             <div class="d-flex justify-content-center mx-0-5--custom">
-                                <button type="submit">Editar</button>
+                                <button type="submit"class="button">Editar</button>
                             </div> 
                             <div class="d-flex justify-content-center mx-0-5--custom">
-                                <a href="{% url 'producto_list' %}">Volver</a>
+                                <a href="{% url 'producto_list' %}" class="button">Volver</a>
                             </div>  
                                                           
                         </div>
@@ -66,7 +156,22 @@
         </div>
     </div>
 </div>
+</section>
+
+<script>
+    document.getElementById('supply_code').addEventListener('input', function(event) {
+        // Obtener el valor actual del campo
+        var value = event.target.value;
+
+        // Eliminar cualquier carácter que no sea un número
+        var newValue = value.replace(/\D/g, '');
+
+        // Limitar el campo a 4 caracteres
+        newValue = newValue.slice(0, 4);
+
+        // Actualizar el valor del campo
+        event.target.value = newValue;
+    });
+</script>
+
 {% endblock %}
-<div class="col-12 col-sm-6 mb-3">
-    <input type="submit" value="Editar" class="btn btn-danger form-control">
-</div>

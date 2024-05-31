@@ -11,6 +11,13 @@ from django.db.models import F, ExpressionWrapper, DecimalField
 
 from registration.models import Profile
 from ventas.models import Prod_venta, Orden_venta, Venta_producto
+from django.utils import timezone
+from django.core.cache import cache
+from django.db.models import Sum
+from django.http import JsonResponse
+from datetime import timedelta
+from django.db.models.functions import TruncMinute
+from administrator.views import validar_string, validar_int
 
 def ventas_main(request):
     profiles = Profile.objects.get(user_id=request.user.id)
@@ -41,29 +48,31 @@ def get_chart_data(_request):
         ganancias_por_producto.append(ganancia_total)
     
     chart_data = {
+        "title": {
+            "text": 'Ganancias de Productos Vendidos'
+        },
+        "tooltip": {
+            "trigger": 'axis',
+            "axisPointer": {
+                "type": 'shadow'
+            }
+        },
         'xAxis': {
             'type': 'category',
-            'data': productos_venta
+            'data': productos_venta, 'itemStyle': {'color': '#c4a0ff'}
         },
         'yAxis': {
             'type': 'value'
         },
         'series': [
             {
-                'data': ganancias_por_producto,
+                'data': ganancias_por_producto, 'itemStyle': {'color': '#c4a0ff'},
                 'type': 'bar'
             }
         ]
     }
 
     return JsonResponse(chart_data)
-
-
-from django.utils import timezone
-from django.core.cache import cache
-from django.db.models import Sum
-from django.http import JsonResponse
-from datetime import timedelta
 
 
 def get_chart_data_venta(_request):
@@ -82,7 +91,7 @@ def get_chart_data_venta(_request):
     time_elapsed = now - start_time
 
     # Valor fijo de referencia (meta)
-    fixed_value = 1000000
+    fixed_value = 100000
 
     if time_elapsed >= timedelta(minutes=1): #SE PUEDE CAMBIAR POR HOURS O MINUTES DEPENDIENDO DE LOQ SE BUSKE
         # Si ha pasado más de un minuto, reiniciar el valor dinámico y el tiempo de inicio
@@ -130,41 +139,102 @@ def get_chart_data_venta(_request):
 
 
 
+def get_chart_data_completos_bebidas(_request):
+    # Consulta los datos de la base de datos 
+    completos = Venta_producto.objects.filter(producto__nombre_producto='Completo Italiano').aggregate(total=Sum('cantidad'))['total'] or 0
+    completos_personalizados = Venta_producto.objects.filter(producto__nombre_producto='Completo Personalizado').aggregate(total=Sum('cantidad'))['total'] or 0
+    bebidas = Venta_producto.objects.filter(producto__nombre_producto='Bebida').aggregate(total=Sum('cantidad'))['total'] or 0
+
+    # Datos del gráfico
+    categorias = ['Completos', 'Personalizados', 'Bebidas']
+    cantidades = [completos, completos_personalizados, bebidas]
+
+    # Formatear datos para ECharts
+    chart_data = {
+        "title": {
+            "text": 'Cantidad Productos Vendidos'
+        },
+        "tooltip": {
+            "trigger": 'axis',
+            "axisPointer": {
+                "type": 'shadow'
+            }
+        },
+        "xAxis": {
+            "type": 'category',
+            "data": categorias
+        },
+        "yAxis": {
+            "type": 'value'
+        },
+        "series": [
+            {
+                "name": 'Ventas',
+                "type": 'bar',
+                "data": cantidades, 'itemStyle': {'color': '#f2a0ff'}
+            }
+        ]
+    }
+
+    return JsonResponse(chart_data)
+
+
+
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.db import transaction
+from .models import Prod_venta, Orden_venta, Venta_producto
+from django.contrib.auth.decorators import login_required
+
 @login_required
 def venta_save(request):
     if request.method == 'POST':
         cliente_name = request.POST.get('cliente_name')
         cliente_last_name = request.POST.get('cliente_last_name')
-        producto_venta = ['Completo Italiano', 'Completo Personalizado', 'Bebida']  # Esto debería obtenerse del formulario: request.POST.getlist('producto_venta')
-        cantidad_venta = request.POST.getlist('cantidad_venta')
+        producto_venta = ['Completo Italiano', 'Completo Personalizado', 'Bebida']
+        cantidades = [
+            request.POST.get('cantidad_italiano'),
+            request.POST.get('cantidad_personalizado'),
+            request.POST.get('cantidad_bebida')
+        ]
         cliente_venta = f"{cliente_name} {cliente_last_name}"
         
-        # Comprobar si se ha proporcionado toda la información
-        if not all([cliente_name, cliente_last_name]):
-            messages.error(request, 'Debes ingresar toda la información')
+        # Validar que se ha proporcionado toda la información del cliente
+        if not cliente_name or not cliente_last_name:
+            messages.error(request, 'Debes ingresar toda la información del cliente')
+            return redirect('venta_crear')
+
+        try:
+            cantidades_validas = [int(cant) if cant else 0 for cant in cantidades]
+        except ValueError:
+            messages.error(request, 'Las cantidades deben ser números enteros válidos')
             return redirect('venta_crear')
         
         # Comprobar que al menos un producto tenga una cantidad mayor a 0
-        cantidades_validas = [int(cant) if cant else 0 for cant in cantidad_venta]
         if all(cant == 0 for cant in cantidades_validas):
-            messages.error(request, 'ERROR: Debe haber al menos un producto agregado cpara crear la venta')
+            messages.error(request, 'ERROR: Debe haber al menos un producto agregado para crear la venta')
             return redirect('venta_crear')
-        
+
         try:
             with transaction.atomic():
                 orden_venta = Orden_venta.objects.create(cliente_venta=cliente_venta)
                 total_venta = 0
 
                 for prod, cant in zip(producto_venta, cantidades_validas):
-                    producto_instancia = Prod_venta.objects.get(nombre_producto=prod)
-                    venta_producto = Venta_producto.objects.create(producto=producto_instancia, cantidad=cant, id_orden=orden_venta, precio_producto=producto_instancia.precio)
-                    venta_producto.save()
-                    total_venta += producto_instancia.precio * cant
+                    if cant > 0:
+                        producto_instancia = Prod_venta.objects.get(nombre_producto=prod)
+                        Venta_producto.objects.create(
+                            producto=producto_instancia,
+                            cantidad=cant,
+                            id_orden=orden_venta,
+                            precio_producto=producto_instancia.precio
+                        )
+                        total_venta += producto_instancia.precio * cant
 
                 orden_venta.total_venta = total_venta
                 orden_venta.save()
 
-                messages.success(request, 'Orden de Venta creada con éxito')
+                messages.success(request, f'Orden de Venta #{orden_venta.numero_orden} creada con éxito')
                 return redirect('venta_crear')
         except Exception as e:
             messages.error(request, f'Error al crear la orden: {str(e)}')
@@ -208,6 +278,7 @@ def venta_crear(request):
     
     productos = Prod_venta.objects.all()
     template_name = 'ventas/venta_crear.html'
+    orden = Orden_venta.objects.all()
     
     return render(request, template_name, {'profiles': profiles, 'productos': productos})
 
@@ -217,44 +288,3 @@ def detalle_orden_venta(request, orden_id):
     ventas_productos = orden.venta_producto_set.all()  # Utiliza el nombre del modelo en minúsculas seguido de _set para acceder a los objetos relacionados
     return render(request, 'detalle_orden_venta.html', {'orden': orden, 'ventas_productos': ventas_productos})
 
-#DASHBOARD
-
-@login_required
-def get_chart_ventas(request):
-    colors = ['blue', 'orange', 'red', 'black', 'yellow', 'green', 'magenta', 'lightblue', 'purple', 'brown']
-    random_color = colors[randrange(0, len(colors))]
-
-    serie = [randrange(100, 400) for _ in range(7)]
-
-    chart = {
-        'tooltip': {
-            'show': True,
-            'trigger': "axis",
-            'triggerOn': "mousemove|click"
-        },
-        'xAxis': [
-            {
-                'type': "category",
-                'data': ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
-            }
-        ],
-        'yAxis': [
-            {
-                'type': "value"
-            }
-        ],
-        'series': [
-            {
-                'data': serie,
-                'type': "line",
-                'itemStyle': {
-                    'color': random_color
-                },
-                'lineStyle': {
-                    'color': random_color
-                }
-            }
-        ]
-    }
-
-    return JsonResponse(chart)

@@ -23,11 +23,12 @@ from django.views.decorators.csrf import csrf_protect
 import matplotlib.pyplot as plt
 import pandas as pd
 from django.http.response import JsonResponse
+from django.db.models import Sum, Q
 
 from registration.models import Profile
-from proveedores.models import Proveedor, Orden_compra, Producto_Orden
+from proveedores.models import Proveedor, Orden_compra, Producto_Orden, Prov_prod
 from inventario.models import Product
-from administrator.views import validar_email,validar_rut,validar_string,validar_numero
+from administrator.views import validar_email,validar_rut,validar_string,validar_numero,validar_int
 from .forms import ProveedorForm
 from datetime import datetime
 
@@ -57,24 +58,22 @@ def proveedores_crear(request):
     if profiles.group_id != 1 and profiles.group_id != 2:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a un área para la que no tiene permisos')
         return redirect('check_group_main')
+    
+    productos = Product.objects.all()
 
     if request.method == 'POST':
-        # Procesar el formulario de creación del proveedor
         proveedor_form = ProveedorForm(request.POST)
         if proveedor_form.is_valid():
             proveedor = proveedor_form.save(commit=False)
             proveedor.activo = True  # Establecer el proveedor como activo
             proveedor.save()
-            messages.success(request, 'Proveedor creado correctamente')
-            return redirect('proveedores_activos')  # Redirigir a la lista de proveedores activos
-
+            
+            messages.success(request, 'Proveedor y productos asociados creados exitosamente.')
+            return redirect('proveedores/proveedores_crear.html')  # Redirige a la vista deseada
     else:
-        # Renderizar el formulario de creación del proveedor
         proveedor_form = ProveedorForm()
-
-    template_name = 'proveedores/proveedores_crear.html'
-    return render(request, template_name, {'profiles': profiles, 'proveedor_form': proveedor_form})
-
+    
+    return render(request, 'proveedores/proveedores_crear.html', {'proveedor_form': proveedor_form, 'productos': productos})
 
 @login_required
 def proveedor_save(request):
@@ -84,7 +83,7 @@ def proveedor_save(request):
         return redirect('check_group_main')
     
     if request.method == 'POST':
-        errores=[]
+        errores = []
         proveedor_name = request.POST.get('proveedor_name')
         proveedor_last_name = request.POST.get('proveedor_last_name')
         proveedor_rut = request.POST.get('proveedor_rut')
@@ -93,28 +92,35 @@ def proveedor_save(request):
         proveedor_region = request.POST.get('proveedor_region')
         proveedor_comuna = request.POST.get('proveedor_comuna')
         proveedor_phone = request.POST.get('proveedor_phone')
-        proveedor_insumo = request.POST.getlist('proveedor_insumo')
-        template_name = 'proveedores/proveedores_main.html'
-        if not validar_string(proveedor_name,request):
+        template_name = 'proveedores/proveedores_crear.html'
+        producto_orden = request.POST.getlist('producto_orden[]')
+        
+        # Validaciones
+        if not validar_string(proveedor_name, request):
             errores.append('Nombre inválido')
-        if not validar_string(proveedor_last_name,request):
+        if not validar_string(proveedor_last_name, request):
             errores.append('Apellido inválido')
-        if not validar_numero(proveedor_phone,request):
+        if not validar_numero(proveedor_phone, request):
             errores.append('Número de teléfono inválido')
-        if not validar_email(proveedor_mail,request):
+        if not validar_email(proveedor_mail, request):
             errores.append('Correo electrónico inválido')
-        if not validar_rut(proveedor_rut,request):
+        if not validar_rut(proveedor_rut, request):
             errores.append('RUT inválido')
+        
         if errores:
             messages.add_message(request, messages.INFO, 'Hubo algunos errores al crear el proveedor: ' + ', '.join(errores))
-            return render(request,template_name)
-        if proveedor_name == '' or proveedor_last_name == '' or proveedor_rut == '' or proveedor_mail == '' or proveedor_address == '' or proveedor_region == '' or proveedor_comuna == '' or proveedor_phone ==  '':
+            return render(request, template_name)
+        
+        if any(field == '' for field in [proveedor_name, proveedor_last_name, proveedor_rut, proveedor_mail, proveedor_address, proveedor_region, proveedor_comuna, proveedor_phone]):
             messages.add_message(request, messages.INFO, 'Debes ingresar toda la información')
             return redirect('proveedores_main')
-        rut_exist = Proveedor.objects.filter(proveedor_rut=proveedor_rut).count() 
-        mail_exist = Proveedor.objects.filter(proveedor_mail=proveedor_mail).count()
-        if rut_exist == 0:
-            if mail_exist == 0:
+        
+        rut_exist = Proveedor.objects.filter(proveedor_rut=proveedor_rut).exists()
+        mail_exist = Proveedor.objects.filter(proveedor_mail=proveedor_mail).exists()
+        
+        if not rut_exist:
+            if not mail_exist:
+                
                 proveedor_save = Proveedor(
                     proveedor_name=proveedor_name,
                     proveedor_last_name=proveedor_last_name,
@@ -124,21 +130,37 @@ def proveedor_save(request):
                     proveedor_region=proveedor_region,
                     proveedor_comuna=proveedor_comuna,
                     proveedor_phone=proveedor_phone,
-                    proveedor_insumo=proveedor_insumo
-              )
-
+                )
                 proveedor_save.save()
+                
+                for prod_id in producto_orden:
+                    try:
+                        prod_id = int(prod_id)  # Convertir prod_id a entero
+                        producto_instance = Product.objects.get(id=prod_id)
+                    except Product.DoesNotExist:
+                        messages.add_message(request, messages.ERROR, f'Producto con ID {prod_id} no encontrado')
+                        return render(request, template_name)
+                    except ValueError:
+                        messages.add_message(request, messages.ERROR, 'Error en los datos de los productos.')
+                        return render(request, template_name)
+                    
+                    Prov_prod.objects.create(
+                        proveedor=proveedor_save,
+                        producto=producto_instance,
+                    )
+                
                 messages.add_message(request, messages.INFO, 'Proveedor ingresado con éxito')
                 return redirect('proveedores_main')
             else:
-                messages.add_message(request, messages.INFO, 'El correo que esta tratando de ingresar, ya existe en nuestros registros')
-                return redirect('proveedores_main') 
+                messages.add_message(request, messages.INFO, 'El correo que está tratando de ingresar, ya existe en nuestros registros')
+                return redirect('proveedores_main')
         else:
-            messages.add_message(request, messages.INFO, 'El rut que esta tratando de ingresar, ya existe en nuestros registros')  
+            messages.add_message(request, messages.INFO, 'El RUT que está tratando de ingresar, ya existe en nuestros registros')
             return redirect('proveedores_main')
     else:
         messages.add_message(request, messages.INFO, 'Error en el método de envío')
         return redirect('check_group_main')
+
 
 
     
@@ -594,11 +616,18 @@ def orden_list_anulada(request, page=None):
     
     return render(request, 'proveedores/orden_list_anulada.html', {'ordenes': ordenes, 'search': search, 'pagina_obj': ordenes})
 
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.db import transaction
+from django.contrib.auth.decorators import login_required
+from .models import Proveedor, Orden_compra, Producto_Orden
+from inventario.models import Product
+
 @login_required
 def orden_save(request):
     profile = Profile.objects.get(user_id=request.user.id)
     if profile.group_id != 1:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una área para la que no tiene permisos')
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a un área para la que no tiene permisos')
         return redirect('check_group_main')
 
     proveedores = Proveedor.objects.all()
@@ -610,37 +639,59 @@ def orden_save(request):
         cantidad_orden = request.POST.getlist('cantidad_orden[]')
         monto_orden = request.POST.get('monto_orden')
 
+        # Validar que el proveedor existe
         try:
-            proveedor_instance = Proveedor.objects.get(proveedor_name=proveedor_orden)
+            proveedor_instance = Proveedor.objects.get(id=proveedor_orden)
         except Proveedor.DoesNotExist:
             messages.add_message(request, messages.ERROR, 'Proveedor no encontrado')
             return render(request, 'proveedores/orden_crear.html', {'profiles': profile, 'proveedores': proveedores, 'productos': productos})
 
+        # Validar que los productos y cantidades han sido proporcionados
         if not producto_orden or not cantidad_orden:
-            messages.add_message(request, messages.INFO, 'Debes ingresar toda la información')
+            messages.add_message(request, messages.INFO, 'Debes ingresar toda la información de los productos y sus cantidades')
+            return render(request, 'proveedores/orden_crear.html', {'profiles': profile, 'proveedores': proveedores, 'productos': productos})
+
+        # Validar cantidades y monto
+        try:
+            cantidades_validas = [int(cant) if cant else 0 for cant in cantidad_orden]
+            monto_valido = int(monto_orden)
+        except ValueError:
+            messages.add_message(request, messages.ERROR, 'Las cantidades y el monto deben ser números enteros válidos')
+            return render(request, 'proveedores/orden_crear.html', {'profiles': profile, 'proveedores': proveedores, 'productos': productos})
+
+        # Validar que al menos un producto tenga una cantidad mayor a 0
+        if all(cant == 0 for cant in cantidades_validas):
+            messages.add_message(request, messages.ERROR, 'Debe haber al menos un producto con una cantidad mayor a 0')
             return render(request, 'proveedores/orden_crear.html', {'profiles': profile, 'proveedores': proveedores, 'productos': productos})
 
         try:
             with transaction.atomic():
-                orden = Orden_compra(proveedor_orden=proveedor_instance, monto = monto_orden)
+                orden = Orden_compra(proveedor_orden=proveedor_instance, monto=monto_valido)
                 orden.save()
 
-                for prod, cant in zip(producto_orden, cantidad_orden):
-                    producto = Product.objects.get(supply_name=prod)
-                    detalle = Producto_Orden(
+                for prod, cant in zip(producto_orden, cantidades_validas):
+                    try:
+                        producto_instance = Product.objects.get(id=prod)
+                    except Product.DoesNotExist:
+                        messages.add_message(request, messages.ERROR, f'Producto con ID {prod} no encontrado')
+                        return render(request, 'proveedores/orden_crear.html', {'profiles': profile, 'proveedores': proveedores, 'productos': productos})
+
+                    Producto_Orden.objects.create(
                         orden_id=orden,
-                        producto=producto,
+                        producto=producto_instance,
                         cantidad_orden=cant,
                     )
-                    detalle.save()
-                messages.add_message(request, messages.SUCCESS, 'Orden creada con éxito')
-                return redirect('orden_crear')  # Redirige a la página de creación para limpiar el formulario
+                
+                messages.add_message(request, messages.SUCCESS, f'Orden de compra #{orden.id} creada con éxito')
+                return redirect('orden_crear')
         except Exception as e:
             messages.add_message(request, messages.ERROR, f'Error al crear la orden: {str(e)}')
-            return render(request, 'proveedores/orden_crear.html', {'profiles': profile, 'proveedores': proveedores, 'productos': productos})
+            return redirect('orden_crear')
+
     else:
         messages.add_message(request, messages.ERROR, 'Error en el método de envío')
         return redirect('orden_crear')
+
 
 
 @login_required
@@ -755,11 +806,18 @@ def detalle_orden_de_compra_anulada(request, orden_id):
     orden_productos = orden.producto_orden_set.all()
     return render(request, 'detalle_orden_de_compra_anulada.html', {'orden': orden, 'orden_productos': orden_productos})
 
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.db import transaction
+from .models import Proveedor, Orden_compra, Producto_Orden
+from inventario.models import Product
 @login_required
 def editar_orden(request, orden_id):
     profile = get_object_or_404(Profile, user_id=request.user.id)
     if profile.group_id != 1:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una área para la que no tiene permisos')
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a un área para la que no tiene permisos')
         return redirect('check_group_main')
 
     proveedores = Proveedor.objects.all()
@@ -768,48 +826,78 @@ def editar_orden(request, orden_id):
     productos_orden = Producto_Orden.objects.filter(orden_id=orden)
 
     if request.method == 'POST':
-        # Proveedor_orden is not fetched from POST anymore
         producto_orden = request.POST.getlist('producto_orden[]')
         cantidad_orden = request.POST.getlist('cantidad_orden[]')
         monto_orden = request.POST.get("monto_orden")
-        
+
         if not producto_orden or not cantidad_orden:
             messages.add_message(request, messages.INFO, 'Debes ingresar toda la información')
             return render(request, 'editar_orden.html', {
                 'profiles': profile, 'proveedores': proveedores, 'productos': productos, 
-                'orden': orden, 'productos_orden': productos_orden
+                'orden': orden, 'productos_orden': productos_orden,
+                'form_data': zip(producto_orden, cantidad_orden)
+            })
+
+        try:
+            cantidades_validas = [int(cant) if cant else 0 for cant in cantidad_orden]
+            monto_valido = int(monto_orden)
+        except ValueError:
+            messages.add_message(request, messages.ERROR, 'Las cantidades y el monto deben ser números enteros válidos')
+            return render(request, 'editar_orden.html', {
+                'profiles': profile, 'proveedores': proveedores, 'productos': productos, 
+                'orden': orden, 'productos_orden': productos_orden,
+                'form_data': zip(producto_orden, cantidad_orden)
+            })
+
+        if all(cant == 0 for cant in cantidades_validas):
+            messages.add_message(request, messages.ERROR, 'Debe haber al menos un producto con una cantidad mayor a 0')
+            return render(request, 'editar_orden.html', {
+                'profiles': profile, 'proveedores': proveedores, 'productos': productos, 
+                'orden': orden, 'productos_orden': productos_orden,
+                'form_data': zip(producto_orden, cantidad_orden)
             })
 
         try:
             with transaction.atomic():
-                # Update the amount only
-                orden.monto = monto_orden
+                orden.monto = monto_valido
                 orden.save()
 
-                # Delete old products and add the new ones
                 Producto_Orden.objects.filter(orden_id=orden).delete()
-                for prod, cant in zip(producto_orden, cantidad_orden):
-                    producto = Product.objects.get(supply_name=prod)
-                    detalle = Producto_Orden(
+                for prod, cant in zip(producto_orden, cantidades_validas):
+                    try:
+                        producto = Product.objects.get(id=prod)
+                    except Product.DoesNotExist:
+                        messages.add_message(request, messages.ERROR, f'Producto con ID {prod} no encontrado')
+                        return render(request, 'editar_orden.html', {
+                            'profiles': profile, 'proveedores': proveedores, 'productos': productos, 
+                            'orden': orden, 'productos_orden': productos_orden,
+                            'form_data': zip(producto_orden, cantidad_orden)
+                        })
+
+                    Producto_Orden.objects.create(
                         orden_id=orden,
                         producto=producto,
                         cantidad_orden=cant,
                     )
-                    detalle.save()
-                
+
                 messages.add_message(request, messages.SUCCESS, 'Orden actualizada con éxito')
                 return redirect('editar_orden', orden_id=orden.id)
         except Exception as e:
             messages.add_message(request, messages.ERROR, f'Error al actualizar la orden: {str(e)}')
             return render(request, 'editar_orden.html', {
                 'profiles': profile, 'proveedores': proveedores, 'productos': productos, 
-                'orden': orden, 'productos_orden': productos_orden
+                'orden': orden, 'productos_orden': productos_orden,
+                'form_data': zip(producto_orden, cantidad_orden)
             })
     else:
         return render(request, 'editar_orden.html', {
             'profiles': profile, 'proveedores': proveedores, 'productos': productos, 
-            'orden': orden, 'productos_orden': productos_orden
+            'orden': orden, 'productos_orden': productos_orden,
+            'form_data': zip([p.producto.id for p in productos_orden], [p.cantidad_orden for p in productos_orden])
         })
+
+
+
         
 #DASHBOARDS
 
@@ -819,12 +907,20 @@ def get_chart_oc_1(request):
     ordenes = Orden_compra.objects.all()
     
 
-    Enviadas = int(ordenes.values("estado").filter(estado="Enviado").count())
-    Rechazadas = int(ordenes.values("estado").filter(estado="Rechazado").count())
-    Aceptadas = int(ordenes.values("estado").filter(estado="Aceptado").count())
-    Anuladas = int(ordenes.values("estado").filter(estado="Anulado").count())
+    Enviadas = int(ordenes.values("estado").filter(estado="enviado").count())
+    Rechazadas = int(ordenes.values("estado").filter(estado="rechazado").count())
+    Aceptadas = int(ordenes.values("estado").filter(estado="aceptado").count())
+    Anuladas = int(ordenes.values("estado").filter(estado="anulado").count())
 
     chart_data = {
+        "title": {
+            "text": 'Cantidad de ordenes'
+        },   
+        'tooltip': {
+            'show': True,
+            'trigger': "axis",
+            'triggerOn': "mousemove|click"
+        },
         'xAxis': {
             'type': 'category',
             'data': ['Enviadas',"Rechazadas","Aceptadas","Anuladas"],
@@ -835,6 +931,53 @@ def get_chart_oc_1(request):
         'series': [
             {
                 'data': [Enviadas,Rechazadas,Aceptadas,Anuladas],
+                'type': 'bar',
+
+            }
+        ]
+    }
+
+    return JsonResponse(chart_data)
+
+@login_required
+def get_chart_oc_2(request):
+    
+    monto_por_estado = []
+
+    monto_por_estado = Orden_compra.objects.aggregate(
+        monto_enviadas=Sum('monto', filter=Q(estado='enviado')),
+        monto_aceptadas=Sum('monto', filter=Q(estado='aceptado')),
+        monto_rechazadas=Sum('monto', filter=Q(estado='rechazado')),
+        monto_anuladas=Sum('monto', filter=Q(estado='anulado'))
+    )
+    
+    suma_enviadas = monto_por_estado['monto_enviadas']
+    suma_aceptadas = monto_por_estado['monto_aceptadas'] or 0
+    suma_rechazadas = monto_por_estado['monto_rechazadas'] or 0
+    suma_anuladas = monto_por_estado['monto_anuladas'] or 0
+    
+    lista_sumas = [suma_enviadas, suma_aceptadas, suma_rechazadas, suma_anuladas]
+    print(lista_sumas)
+
+    chart_data = {
+        "title": {
+            "text": 'Inversiones por ordenes'
+        },
+        'tooltip': {
+            'show': True,
+            'trigger': "axis",
+            'triggerOn': "mousemove|click"
+        },
+        'xAxis': {
+            'type': 'category',
+            'data': ['Enviadas',"Rechazadas","Aceptadas","Anuladas"],
+        },
+        'yAxis': {
+            'type': 'value'
+        },
+        'series': [
+            {
+                'data': lista_sumas,
                 'type': 'bar',
 
             }

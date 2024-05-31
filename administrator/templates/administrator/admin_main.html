@@ -65,6 +65,7 @@
 
             .custom-complete {
                 margin-top: 50px;
+                background-color: #9EB23B;
                 padding: 20px;
                 border-radius: 10px;
                 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -87,17 +88,15 @@
                 padding: 15px 30px;
                 font-size: 1.5em;
                 color: white;
-                background-color: #ff5722; /* Color más llamativo */
+                background-color: #333;
                 border-radius: 5px;
                 text-decoration: none;
-                transition: background-color 0.3s, transform 0.3s, color 0.3s;
-                font-weight: bold; /* Letra más llamativa */
+                transition: background-color 0.3s, transform 0.3s;
             }
 
             .custom-complete a:hover {
-                background-color: #ff8a50;
+                background-color: #555;
                 transform: scale(1.05);
-                color: #333;
             }
 
             .menu-icon {
@@ -284,6 +283,11 @@
     </div>
 
     <div class="main-content">
+        <div class="section">
+            <h2>Página de Inicio</h2>
+            <p>Aquí encontrarás las últimas novedades y productos destacados.</p>
+        </div>
+
         <div class="section custom-complete">
             <h2>Crea tu Completo Personalizado</h2>
             <p>¡Elige los ingredientes que más te gusten y crea el completo perfecto para ti!</p>
@@ -305,11 +309,11 @@
                 <input type="text" placeholder="Buscar..." id="searchInput">
             </div>
             <ul class="nav-menu">
-                <li><a href="{% url 'users_main' %}">Gestión de Usuarios</a></li>
-                <li><a href="{% url 'inventario_main' %}">Gestión de Inventario</a></li>
-                <li><a href="{% url 'proveedores_main' %}">Gestión de Proveedores</a></li>
-                <li><a href="{% url 'orden_main' %}">Gestión de Orden de Compra</a></li>
                 <li><a href="{% url 'ventas_main' %}">Gestión de Ventas</a></li>
+                <li><a href="{% url 'proveedores_main' %}">Gestión de Proveedores</a></li>
+                <li><a href="{% url 'orden_main' %}">Gestión Orden de Compra</a></li>
+                <li><a href="{% url 'inventario_main' %}">Gestión de Inventario</a></li>
+                <li><a href="{% url 'users_main' %}">Gestión de Usuarios</a></li>
                 <!-- Agrega más enlaces según sea necesario -->
             </ul>
             <!-- Botón de cierre -->

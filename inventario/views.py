@@ -26,6 +26,10 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText 
 from email.mime.base import MIMEBase 
 from email import encoders 
+from administrator.views import validar_string, validar_nombre
+from .forms import ProductForm
+from django.db.models import Max
+import re
 
 
 # Create your views here.
@@ -51,18 +55,19 @@ def inventario_main(request, page=None, search=None):
     # Filtrar los productos con bajo stock
     low_stock_products = []
     for p in p_list_array:
-        if (int(p.supply_total)) < 5:  # Ajusta este valor según tu criterio para "bajo stock"
-            low_stock_products.append({
-                'id': p.id,
-                'supply_name': p.supply_name,
-                'supply_code': p.supply_code,
-                'supply_unit': p.supply_unit,
-                'supply_initial_stock': p.supply_initial_stock,
-                'supply_input': p.supply_input,
-                'supply_output': p.supply_output,
-                'supply_total': p.supply_total,
-                'low_stock': True,
-            })
+        if p.supply_total is not None and str(p.supply_total).isdigit():
+            if int(p.supply_total) < 5:  # Ajusta este valor según tu criterio para "bajo stock"
+                low_stock_products.append({
+                    'id': p.id,
+                    'supply_name': p.supply_name,
+                    'supply_code': p.supply_code,
+                    'supply_unit': p.supply_unit,
+                    'supply_initial_stock': p.supply_initial_stock,
+                    'supply_input': p.supply_input,
+                    'supply_output': p.supply_output,
+                    'supply_total': p.supply_total,
+                    'low_stock': True,
+                })
             
 
     paginator = Paginator(low_stock_products, 10)  # Ajusta el número de elementos por página según sea necesario
@@ -95,28 +100,50 @@ def producto_save(request):
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una área para la que no tiene permisos')
         return redirect('check_group_main')
     if request.method == 'POST':
+
         supply_name = request.POST.get('supply_name')
-        supply_code = request.POST.get('supply_code')  
         supply_unit = request.POST.get('supply_unit')
+        supply_code = request.POST.get('supply_code')
         supply_initial_stock = request.POST.get('supply_initial_stock')
         supply_input = request.POST.get('supply_input')
         supply_output = request.POST.get('supply_output')
         
+        supply_code = f'SKU{supply_code}'
    
-        #product_category_id = request.POST.get('category_name') 
-        if supply_name == '' or supply_code == '' or supply_unit == '' or supply_input == ''or supply_output == '':
+        if supply_name == '' or supply_unit == '' or supply_initial_stock == '' or supply_input == '' or supply_output == '':
             messages.add_message(request, messages.INFO, 'Debes ingresar toda la información')
             return redirect('crear_producto')
-        #category =Category.objects.get(id=product_category_id)
+        
+        if not validar_nombre(supply_name, request):
+            messages.add_message(request, messages.INFO, 'Debes ingresar un nombre válido')
+            return redirect('crear_producto')
+        
+        if supply_unit not in ['kg', 'LATA (330 ml)']:
+            messages.add_message(request, messages.INFO, 'La unidad no es válida')
+            return redirect('crear_producto')
+        
+        if not supply_initial_stock.isdigit():
+            messages.add_message(request, messages.INFO, 'El stock inicial debe ser un número entero')
+            return redirect('crear_producto')
+        
+        if not re.match(r'^SKU\d{4}$', supply_code):
+            messages.add_message(request, messages.INFO, 'El código del producto debe tener el formato SKU seguido de 4 dígitos')
+            return redirect('crear_producto')
+        
+        if supply_input is None:
+            supply_input = 0
+        if supply_output is None:
+            supply_output = 0
+
         producto_save = Product(
             supply_name=supply_name,
             supply_code=supply_code,
             supply_unit=supply_unit,
             supply_initial_stock=supply_initial_stock,
-            supply_input=int("0"),
-            supply_output=int("0"),
-            supply_total=supply_initial_stock,
-        )
+            supply_input=int(supply_input),
+            supply_output=int(supply_output),
+            supply_total=int(supply_initial_stock) + int(supply_input) - int(supply_output),
+)
         producto_save.save()
         messages.add_message(request, messages.INFO, 'Producto ingresado con éxito')
         return redirect('inventario_main')
@@ -133,10 +160,11 @@ def producto_ver(request, product_id):
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
         return redirect('check_group_main')
     product_data = Product.objects.get(pk=product_id)
+    supply_code = re.sub(r'\D', '', product_data.supply_code)
     #category_list = Category.objects.all()
     #selected_category = product_data.product_category
     template_name = 'inventario/producto_ver.html'
-    return render(request, template_name, {'profile': profile, 'product_data': product_data}) #'category_list': category_list, 'selected_category': selected_category})
+    return render(request, template_name, {'profile': profile, 'product_data': product_data, 'supply_code':supply_code}) #'category_list': category_list, 'selected_category': selected_category})
 
 
 
@@ -192,7 +220,7 @@ def producto_list(request, page=None, search=None):
             #'category_name': p.product_category.category_name, # aquí se obtiene el category_name asociado al producto
         })
 
-    paginator = Paginator(p_list, 1)
+    paginator = Paginator(p_list, 5)
     p_list_paginate = paginator.get_page(page)
 
     template_name = 'inventario/producto_list.html'
@@ -209,7 +237,6 @@ def producto_edit(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     
     if request.method == 'POST':
-
         supply_name = request.POST.get('supply_name')
         supply_code = request.POST.get('supply_code')
         supply_unit = request.POST.get('supply_unit')
@@ -217,23 +244,55 @@ def producto_edit(request, product_id):
         supply_input = request.POST.get('supply_input')
         supply_output = request.POST.get('supply_output')
         
+        supply_code = f'SKU{supply_code}'
+   
+        if supply_name == '' or supply_unit == '' or supply_initial_stock == '' or supply_input == '' or supply_output == '':
+            messages.add_message(request, messages.INFO, 'Debes ingresar toda la información')
+            return redirect('producto_ver', product_id=product.id)
+        
+        if not validar_nombre(supply_name, request):
+            messages.add_message(request, messages.INFO, 'Debes ingresar un nombre de producto válido')
+            return redirect('producto_ver', product_id=product.id)
+        
+        if supply_unit not in ['kg', 'LATA (330 ml)']:
+            messages.add_message(request, messages.INFO, 'La unidad no es válida')
+            return redirect('producto_ver', product_id=product.id)
+        
+        if not supply_initial_stock.isdigit() or not supply_input.isdigit() or not supply_output.isdigit():
+            messages.add_message(request, messages.INFO, 'El stock inicial, entrada y salida deben ser números enteros')
+            return redirect('producto_ver', product_id=product.id)
+        
+        if not re.match(r'^SKU\d{4}$', supply_code):
+            messages.add_message(request, messages.INFO, 'El código del producto debe tener el formato SKU seguido de 4 dígitos')
+            return redirect('producto_ver', product_id=product.id)
+        
+        if supply_input is None:
+            supply_input = 0
+        if supply_output is None:
+            supply_output = 0
         
         product.supply_name = supply_name
         product.supply_code = supply_code
         product.supply_unit = supply_unit
-        product.supply_initial_stock = supply_initial_stock
         product.supply_input = supply_input
         product.supply_output = supply_output
-        if supply_input=="0" and supply_output=="0":
-            product.supply_total = supply_initial_stock
+
+        # Comprobar si es la primera ediciÃ³n
+        if product.supply_total == product.supply_initial_stock:
+            product.supply_initial_stock = supply_initial_stock
         else:
-            if supply_input=="0":
-                product.supply_total= (int(supply_initial_stock))-(int(supply_output))
+            product.supply_initial_stock = product.supply_total
+
+        # Calcular supply_total en base a supply_initial_stock, supply_input y supply_output
+        if supply_input == "0" and supply_output == "0":
+            product.supply_total = product.supply_initial_stock
+        else:
+            if supply_input == "0":
+                product.supply_total = int(product.supply_initial_stock) - int(supply_output)
+            elif supply_output == "0":
+                product.supply_total = int(product.supply_initial_stock) + int(supply_input)
             else:
-                if supply_output=="0":
-                    product.supply_total= (int(supply_initial_stock))+(int(supply_input))
-                else:
-                    product.supply_total= (int(supply_initial_stock))+(int(supply_input))-(int(supply_output))
+                product.supply_total = int(product.supply_initial_stock) + int(supply_input) - int(supply_output)
 
         product.save()
         messages.success(request, 'Producto editado correctamente')
@@ -241,11 +300,9 @@ def producto_edit(request, product_id):
         return redirect('producto_ver', product_id=product.id)
     else:
         product_data = Product.objects.get(pk=product_id)
-        #categories = Category.objects.all()
+        template_name = 'inventario/producto_ver.html'
         
-        template_name= 'inventario/producto_ver.html'
-        
-        return render(request, template_name, {'product_data': product_data})#, 'categories': categories})
+        return render(request, template_name, {'product_data': product_data})
 
     
 #ELIMINAR PRODUCTO
@@ -297,12 +354,12 @@ def import_file_producto(request):
 def carga_masiva_producto_save(request):
     profiles = Profile.objects.get(user_id=request.user.id)
     if profiles.group_id != 1:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una área para la que no tiene permisos')
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a un área para la que no tiene permisos')
         return redirect('check_group_main')
 
     if request.method == 'POST':
         try:
-            data = pd.read_excel(request.FILES['myfile'], engine='openpyxl',skiprows=1)
+            data = pd.read_excel(request.FILES['myfile'], engine='openpyxl', skiprows=1)
             df = pd.DataFrame(data)
             acc = 0
             for item in df.itertuples():
@@ -310,34 +367,42 @@ def carga_masiva_producto_save(request):
                 supply_code = str(item[2])
                 supply_unit = str(item[3])
                 supply_initial_stock = int(item[4])
+                supply_input=0
+                supply_output=0
 
-                #Valida que supply_name solo sean letras
-                if not supply_name.replace('','').isalpha():
+                 #Valida que supply_name solo sean letras
+                if not supply_name.replace('', '').isalpha():
                     raise ValueError('El nombre del insumo solo puede contener letras')
-                
-                #Valida que supply_unit solo sean las opciones kg o LATA (330 ml)
-                if supply_unit not in ['kg','LATA (330 ml)']:
+
+                # Valida que supply_unit solo sean las opciones kg o LATA (330 ml)
+                if supply_unit not in ['kg', 'LATA (330 ml)']:
                     raise ValueError('La unidad del suministro solo puede ser "kg" o "LATA (330 ml)"')
-                
-                #Valida que supply_initial_stock solo sean numeros
+
+                # Valida que supply_initial_stock solo sean números
                 if not isinstance(supply_initial_stock, int):
                     raise ValueError('El stock inicial debe ser un valor numérico')
-             
+            
                 producto_save = Product(
                     supply_name=supply_name,
                     supply_code=supply_code,
                     supply_unit=supply_unit,
                     supply_initial_stock=supply_initial_stock,
-                  
+                    supply_output=supply_output,
+                    supply_input=supply_input,
+                    supply_total=supply_initial_stock,
+                    
                 )
                 producto_save.save()
                 acc += 1
 
-            messages.add_message(request, messages.INFO, 'Carga masiva finalizada, se importaron ' + str(acc) + ' registros')
+            messages.add_message(request, messages.INFO, f'Carga masiva finalizada, se importaron {acc} registros')
             return redirect('carga_masiva_producto')
         except Exception as e:
             messages.add_message(request, messages.ERROR, f'Error al procesar el archivo: {str(e)}')
             return redirect('carga_masiva_producto')
+
+    # Si la solicitud no es POST, redirige al usuario a alguna otra vista
+    return redirect('carga_masiva_producto')  # Esto puede ser cambiado dependiendo de tus necesidades
     
 @login_required
 def descarga_reporte_producto(request):
@@ -358,7 +423,7 @@ def descarga_reporte_producto(request):
         ws = wb.add_sheet('Productos')
 
         row_num = 0
-        columns = ['Nombre', 'Precio', 'Estado','Categoria']
+        columns = ['Nombre', 'Código', 'Unidad']
         for col_num in range(len(columns)):
             ws.write(row_num, col_num, columns[col_num] ,font_style)
 

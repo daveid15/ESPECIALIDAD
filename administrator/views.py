@@ -37,6 +37,14 @@ def validar_string(cadena, request):
             return True
         else:
             return False
+
+def validar_nombre(cadena, request):
+    if request.method == 'POST':
+        if re.fullmatch(r'[A-Za-zÑñÁÉÍÓÚáéíóú\s]+', cadena):
+            return True
+        else:
+            return False
+
         
 def validar_email(email,request):
     if request.method == 'POST':
@@ -64,6 +72,12 @@ def validar_rut(rut,request):
             return True
         else:
             return False
+        
+def validar_int(num):
+    if isinstance(num, int):
+        return True
+    else:
+        return False
 # ---------------------------------------------------FUNCIONES YA DE LOS TEMPLATES
 @login_required
 def perfil_main(request):
@@ -374,7 +388,7 @@ def list_user_block(request, group_id, page=None):
         name = us.first_name + ' ' + us.last_name
         user_all.append({'id': us.id, 'user_name': us.username, 'name': name, 'mail': us.email})
 
-    paginator = Paginator(user_all, 1)
+    paginator = Paginator(user_all, 8)
     user_list = paginator.get_page(page)
     template_name = 'administrator/list_user_block.html'
     return render(request, template_name, {'profiles': profiles, 'group': group, 'user_list': user_list, 'paginator': paginator, 'page': page, 'search': search})
@@ -527,7 +541,7 @@ def carga_masiva_user_save(request):
 
     if request.method == 'POST':
         try:
-            data = pd.read_excel(request.FILES['myfile'], engine='openpyxl')
+            data = pd.read_excel(request.FILES['myfile'], engine='openpyxl', skiprows=1)
             df = pd.DataFrame(data)
             acc = 0
             for item in df.itertuples(index=False):  # Asegúrate de evitar el índice

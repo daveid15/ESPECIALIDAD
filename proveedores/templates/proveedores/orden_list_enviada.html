@@ -7,43 +7,127 @@
 {% block extrahead %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
-        body {
-        background-color: rgb(236, 236, 236); /* Establece el fondo de la página a blanco */
-    }
-    .list-container {
-        background-color: white;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        position: relative;
-    }
-    .search-form {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-    }
-    .search-form input[type="text"] {
-        border-radius: 15px; /* Bordes redondeados */
-        background-color: #f0f0f0; /* Color de fondo gris claro */
-        border: 1px solid #ccc; /* Borde gris claro */
-        padding: 5px 10px; /* Espaciado interno */
-        margin-right: 5px; /* Espacio entre el input y el botón */
-    }
-    .search-form button {
-        border-radius: 15px; /* Bordes redondeados */
-        background-color: #d3d3d3; /* Color de fondo gris claro */
-        border: 1px solid #ccc; /* Borde gris claro */
-        padding: 5px 10px; /* Espaciado interno */
-    }
+    body {
+    background-color: rgb(236, 236, 236); /* Establece el fondo de la página a blanco */
+}
+.list-container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+.search-form {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+.search-form input[type="text"] {
+    border-radius: 15px; /* Bordes redondeados */
+    background-color: #f0f0f0; /* Color de fondo gris claro */
+    border: 1px solid #ccc; /* Borde gris claro */
+    padding: 5px 10px; /* Espaciado interno */
+    margin-right: 5px; /* Espacio entre el input y el botón */
+}
+.search-form button {
+    border-radius: 15px; /* Bordes redondeados */
+    background-color: #d3d3d3; /* Color de fondo gris claro */
+    border: 1px solid #ccc; /* Borde gris claro */
+    padding: 5px 10px; /* Espaciado interno */
+}
+.btn-volver {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+.search-form input[type="text"] {
+    border-radius: 15px; /* Bordes redondeados */
+    background-color: #f0f0f0; /* Color de fondo gris claro */
+    border: 1px solid #ccc; /* Borde gris claro */
+    padding: 5px 10px; /* Espaciado interno */
+    margin-right: 5px; /* Espacio entre el input y el botón */
+    margin-top: 5px;
+}
+.search-form button {
+    border-radius: 15px; /* Bordes redondeados */
+    background-color: #d3d3d3; /* Color de fondo gris claro */
+    border: 1px solid #ccc; /* Borde gris claro */
+    padding: 5px 10px; /* Espaciado interno */
+}
+.new-user-button {
+    margin-left: 15px; /* Espacio entre el título y el botón */
+    white-space: nowrap; /* Evita que el texto del botón se divida en varias líneas */
+}
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Alinea elementos al inicio */
+    margin-bottom: -10px; /* Espacio entre los tabs y el contenedor */
+}
+.bulk-load-container {
+    align-items: right; /* Ajusta esta distancia según sea necesario */
+}
+.bulk-load {
+    white-space: nowrap; /* Evita que el texto del botón se divida en varias líneas */
+}
+.nav-tabs {
+    display: flex;
+    gap: 20px;
+    padding-left: 0;
+    list-style: none; /* Elimina los puntos de la lista */
+}
+.nav-tabs .nav-item .nav-link {
+    border: 1px solid #000000;
+    border-radius: 0.25rem;
+    border-color: #000000 #000000 #000000;
+    padding: 10px 15px;
+    color: #000;
+    margin-right: -15px;
+    background-color: #c8d0a2;;
+    text-decoration: none;
+}
+.nav-tabs .nav-item .nav-link.active {
+    background-color: #ffffff;
+    border-color: #000000 #000000 #ffffff;
+}
+.tabs-and-button-container {
+    display: flex;
+    justify-content: space-between; /* Alinea los elementos al principio y al final */
+    align-items: center; /* Alinea los elementos verticalmente */
+}
+.btn-carga-masiva-container{
+    width: 40px;
+    height: 40px;
+}
+
 </style>
 {% endblock %}
 {% block extra_css %}    
 {% endblock extra_css %}    
 <header class='mb-5'>
-    <h2 class='h2 medium text-blue'>Ordenes de Compra Enviadas</h2>
+    <div class="header-container">
+        <!-- Componente de Tabs y botón -->
+        <div class="tabs-and-button-container">
+            <!-- Componente de Tabs -->
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#">Lista de Ordenes Enviadas</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'orden_list_aceptada' %}">Lista de Ordenes Aceptadas</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'orden_list_rechazada' %}">Lista de Ordenes Rechazadas</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'orden_list_anulada' %}">Lista de Ordenes Anuladas</a>
+                </li>
+            </ul>
+        </div>
+    </div>
 </header>
 <div class="list-container">
-    <a href="{% url 'lista_orden' grupo_id=1 %}" class="btn btn-danger btn-volver"><i class="fas fa-arrow-left" style="color: #000000;"></i></a> <!-- Botón "Volver" con icono -->
+    <a href="{% url 'orden_main' %}" class="btn btn-danger btn-volver"><i class="fas fa-arrow-left" style="color: #000000;"></i></a> <!-- Botón "Volver" con icono -->
     <div class="search-form">
         <form method="get" action="{% url 'orden_list_enviada' %}">
             {% csrf_token %}
@@ -56,7 +140,7 @@
             <div class="feedback body--small normal"></div>
         </div>
     </div>
-    <div class="table-container mt-5">
+    <div class="table-container mt-5" style="margin-top: 30px;">
         <table class="table table-user" style="text-align: center;">
             <thead>
                 <tr>
@@ -107,23 +191,23 @@
             </tbody>
         </table>
     </div>
-</div>
-<div class="pagination">
-    <span class="step-links">
-        {% if ordenes.has_previous %}
-            <a href="?pagina=1{% if search %}&search={{ search }}{% endif %}">&laquo; Primera</a>
-            <a href="?pagina={{ ordenes.previous_page_number }}{% if search %}&search={{ search }}{% endif %}">Anterior</a>
-        {% endif %}
+    <div class="pagination">
+        <span class="step-links">
+            {% if ordenes.has_previous %}
+                <a href="?pagina=1{% if search %}&search={{ search }}{% endif %}">&laquo; Primera</a>
+                <a href="?pagina={{ ordenes.previous_page_number }}{% if search %}&search={{ search }}{% endif %}">Anterior</a>
+            {% endif %}
 
-        <span class="current">
-            Página {{ ordenes.number }} de {{ ordenes.paginator.num_pages }}.
+            <span class="current">
+                Página {{ ordenes.number }} de {{ ordenes.paginator.num_pages }}.
+            </span>
+
+            {% if ordenes.has_next %}
+                <a href="?pagina={{ ordenes.next_page_number }}{% if search %}&search={{ search }}{% endif %}">Siguiente</a>
+                <a href="?pagina={{ ordenes.paginator.num_pages }}{% if search %}&search={{ search }}{% endif %}">Última &raquo;</a>
+            {% endif %}
         </span>
-
-        {% if ordenes.has_next %}
-            <a href="?pagina={{ ordenes.next_page_number }}{% if search %}&search={{ search }}{% endif %}">Siguiente</a>
-            <a href="?pagina={{ ordenes.paginator.num_pages }}{% if search %}&search={{ search }}{% endif %}">Última &raquo;</a>
-        {% endif %}
-    </span>
+    </div>
 </div>
 
 <script>

@@ -21,26 +21,25 @@
                     {% csrf_token %}
                     <div class="mb-0 col-md-6">
                         <label for="cliente_name" class="form-label">Nombre del cliente</label>
-                        <input type="text" class="form-control" name="cliente_name" id="cliente_name" placeholder="Nombre" required>
+                        <input type="text" class="form-control border border-danger" id="cliente_name" name="cliente_name" pattern="[A-Za-záéíóúÁÉÍÓÚüÜñÑ\s]+" autofocus maxlength="254" required placeholder="Nombre cliente"/>
                     </div>
                     <div class="mb-0 col-md-6">
                         <label for="cliente_last_name" class="form-label">Apellido del cliente</label>
-                        <input type="text" class="form-control" name="cliente_last_name" id="cliente_last_name" placeholder="Apellido" required>
+                        <input type="text" class="form-control border border-danger" id="cliente_last_name" name="cliente_last_name" pattern="[A-Za-zÑñ]+" autofocus maxlength="254" required placeholder="Apellido"/>
                     </div>
                     <div class="mb-0 col-md-6">
                         <label for="cantidad_italiano" class="form-label">Completos Italianos</label>
-                        <input type="number" min ="0" class="form-control" name="cantidad_venta" id="cantidad_venta" placeholder="0">
+                        <input type="number" min="0" class="form-control" name="cantidad_italiano" id="cantidad_italiano" placeholder="0">
                     </div>
                     <div class="mb-0 col-md-6">
                         <label for="cantidad_personalizado" class="form-label">Completos Personalizados</label>
-                        <input type="number" min ="0" class="form-control" name="cantidad_venta" id="cantidad_venta" placeholder="0">
+                        <input type="number" min="0" class="form-control" name="cantidad_personalizado" id="cantidad_personalizado" placeholder="0">
                     </div>
                     <div class="mb-0 col-md-6">
                         <label for="cantidad_bebida" class="form-label">Bebidas</label>
-                        <input type="number" min ="0" class="form-control" name="cantidad_venta" id="cantidad_venta" placeholder="0">
+                        <input type="number" min="0" class="form-control" name="cantidad_bebida" id="cantidad_bebida" placeholder="0">
                     </div>
-                        <button type="submit" class="button">Crear</button>
-                    </div>
+                    <button type="submit" class="button">Crear</button>
                     <div class="d-flex justify-content-center mx-0-5--custom">
                         <a href="{% url 'ventas_main' %}" class="button">Regresar</a>
                     </div>
