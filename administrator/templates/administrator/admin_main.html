@@ -28,11 +28,7 @@
             body {
                 margin: 0;
                 padding: 0;
-<<<<<<< HEAD
                 background-color: #F7F7F7;
-=======
-                background-color: white;
->>>>>>> 541e4d4d6f4b7bd002f3f0d85429d1071872dde0
                 background-size: cover;
                 background-repeat: no-repeat;
                 background-position: center;
@@ -343,6 +339,27 @@
             .sidebutton button:hover {
                 background-color: #555;
             }
+
+            .button {
+                display: inline-block;
+                padding: 10px 20px;
+                margin: 5px 0;
+                height: 10%;
+                width: 100%;
+                background-color: #333;
+                color: white;
+                text-align: center;
+                text-decoration: none;
+                border-radius: 10px;
+                font-family: "Poppins", sans-serif; /* Cambia la fuente aquí */
+                font-size: 16px;
+            }
+
+            .button:hover {
+                background-color: #555;
+            }
+            
+
             .main {
                 flex: 3;
             }
@@ -395,10 +412,9 @@
         <div class="container">
             <div class="sidebutton">
                 <h3>Atajos Rápidos</h3>
-                <button>Nueva venta</button>
-                <button>Nueva compra</button>
-                <button>Nuevo proveedor</button>
-                
+                <a class="button" href="{% url 'venta_crear' %}">Nueva venta</a>
+                <a class="button" href="{% url 'orden_crear' %}">Nueva compra</a>
+                <a class="button" href="{% url 'proveedores_crear' %}">Nuevo proveedor</a>
             </div>
             <div class="main">
                 <h3>Dashboard</h3>
@@ -506,13 +522,8 @@
     {% endblock %}
 
     <!-- Pie de página -->
-<<<<<<< HEAD
     <div class="pie">
-        <p>Contacto: ¿Tienes alguna pregunta o comentario? <a href="mailto:info@ejemplo.com">¡Contáctanos!</a></p>
-=======
-    <div class="footer">
         <p>Contacto: ¿Tienes alguna pregunta o comentario? <a href="mailto:compl@gmail.com">¡Contáctanos!</a></p>
->>>>>>> 541e4d4d6f4b7bd002f3f0d85429d1071872dde0
     </div>
 
     <script>
