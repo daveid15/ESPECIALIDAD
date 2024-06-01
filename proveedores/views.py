@@ -298,79 +298,78 @@ def import_file_proveedor(request):
 def carga_masiva_proveedor_save(request):
     profiles = Profile.objects.get(user_id=request.user.id)
     if profiles.group_id != 1:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a una área para la que no tiene permisos')
         return redirect('check_group_main')
 
     if request.method == 'POST':
         try:
-            data = pd.read_excel(request.FILES['myfile'], engine='openpyxl', skiprows=1)
+            # Leer el archivo Excel
+            data = pd.read_excel(request.FILES['myfile'], engine='openpyxl')
             df = pd.DataFrame(data)
+            print("Contenido del DataFrame:")
+            print(df)  # Mostrar el contenido del DataFrame para verificar los datos
+
             acc = 0
-            for item in df.itertuples():
-                proveedor_rut = str(item[1])
-                proveedor_name = str(item[2])
-                proveedor_last_name = str(item[3])
-                proveedor_mail = str(item[4])
-                proveedor_phone = str(item[5])
-                proveedor_address = str(item[6])
-                proveedor_region = str(item[7])
-                proveedor_comuna = str(item[8])
-                proveedor_insumo = str(item[9])
+
+            # Obtener los proveedores activos una vez antes de iterar
+            proveedores_activos = Proveedor.objects.filter(activo=True).values_list('proveedor_rut', 'proveedor_mail')
+            ruts_activos = {proveedor[0] for proveedor in proveedores_activos}
+            correos_activos = {proveedor[1] for proveedor in proveedores_activos}
+
+            for item in df.itertuples(index=False):
+                proveedor_rut = str(item[0])
+                proveedor_name = str(item[1])
+                proveedor_last_name = str(item[2])
+                proveedor_mail = str(item[3])
+                proveedor_phone = str(item[4])
+                proveedor_address = str(item[5])
+                proveedor_region = str(item[6])
+                proveedor_comuna = str(item[7])
+                proveedor_insumo = str(item[8])  # Asegúrate de que este campo exista en tu modelo
                 
-                # Validación de rut
-                if not validar_rut(proveedor_rut, request):
-                    messages.add_message(request, messages.INFO, f'El RUT "{proveedor_rut}" no es válido.')
+                # Mensaje de depuración para cada registro
+                print(f"Procesando RUT: {proveedor_rut}, Correo: {proveedor_mail}")
+
+                # Validación de RUT y correo
+                if proveedor_rut in ruts_activos:
+                    messages.add_message(request, messages.INFO, f'El RUT "{proveedor_rut}" ya existe en nuestros registros.')
+                    print(f'El RUT "{proveedor_rut}" ya existe en nuestros registros.')
                     continue
 
-                # Validación de correp
-                if not validar_email(proveedor_mail, request):
-                    messages.add_message(request, messages.INFO, f'El correo electrónico "{proveedor_mail}" no es válido.')
+                if proveedor_mail in correos_activos:
+                    messages.add_message(request, messages.INFO, f'El correo electrónico "{proveedor_mail}" ya existe en nuestros registros.')
+                    print(f'El correo electrónico "{proveedor_mail}" ya existe en nuestros registros.')
                     continue
 
-                # Validación de nombre
-                if not validar_string(proveedor_name, request) or not validar_string(proveedor_last_name, request):
-                    messages.add_message(request, messages.INFO, 'El nombre y/o apellido no son válidos.')
-                    continue
-                
-                # Validación de direccion
-                if not validar_string(proveedor_region, request) or not validar_string(proveedor_comuna, request):
-                    messages.add_message(request, messages.INFO, 'La comuna y/o región no son válidos.')
-                    continue
+                # Guardar proveedor si pasa todas las validaciones
+                proveedor_save = Proveedor(
+                    proveedor_rut=proveedor_rut,
+                    proveedor_name=proveedor_name,
+                    proveedor_last_name=proveedor_last_name,
+                    proveedor_mail=proveedor_mail,
+                    proveedor_phone=proveedor_phone,
+                    proveedor_address=proveedor_address,
+                    proveedor_region=proveedor_region,
+                    proveedor_comuna=proveedor_comuna,
+                    proveedor_insumo=proveedor_insumo,
+                    activo=True
+                )
+                proveedor_save.save()
+                acc += 1
+                print(f'Registro guardado: RUT {proveedor_rut}, Correo {proveedor_mail}')
 
-                # Validación de insumo
-                if not validar_string(proveedor_insumo, request):
-                    messages.add_message(request, messages.INFO, 'El insumo ingresado no es válido.')
-                    continue
+            messages.add_message(request, messages.INFO, f'Carga masiva finalizada, se importaron {acc} registros')
+            print(f'Carga masiva finalizada, se importaron {acc} registros')
+            return redirect('carga_masiva_proveedor')
 
-                # Validaci+on de telefono
-                if not validar_numero(proveedor_phone, request):
-                    messages.add_message(request, messages.INFO, f'El número de teléfono "{proveedor_phone}" no es válido.')
-                    continue
-
-                rut_exist = Proveedor.objects.filter(proveedor_rut=proveedor_rut).count() 
-                if rut_exist== 0:
-                    proveedor_save = Proveedor(
-                        proveedor_rut=proveedor_rut,
-                        proveedor_name=proveedor_name,
-                        proveedor_last_name=proveedor_last_name,
-                        proveedor_mail=proveedor_mail,
-                        proveedor_phone=proveedor_phone,
-                        proveedor_address=proveedor_address,
-                        proveedor_region=proveedor_region,
-                        proveedor_comuna=proveedor_comuna,
-                        proveedor_insumo=proveedor_insumo
-                    )
-                    proveedor_save.save()
-                    acc += 1
-                    messages.add_message(request, messages.INFO, 'Carga masiva finalizada, se importaron ' + str(acc) + ' registros')
-                    return redirect('carga_masiva_proveedor')
-                else:
-                    messages.add_message(request, messages.INFO, 'El rut que esta tratando de ingresar, ya existe en nuestros registros')   
-                    return redirect('carga_masiva_user')
         except Exception as e:
             messages.add_message(request, messages.ERROR, f'Error al procesar el archivo: {str(e)}')
+            print(f'Error al procesar el archivo: {str(e)}')
             return redirect('carga_masiva_proveedor')
+
     return HttpResponseRedirect(reverse('carga_masiva_proveedor'))
+
+
 
 @login_required
 def descarga_reporte(request):

@@ -15,23 +15,23 @@ from django.utils import timezone
 class Proveedor(models.Model):
     proveedor_name = models.CharField(max_length=100, null=True, blank=True)
     proveedor_last_name = models.CharField(max_length=100, null=True, blank=True)
-    proveedor_rut = models.CharField(max_length=100, null=True, blank=True)
-    proveedor_mail = models.CharField(max_length=100, null=True, blank=True)
+    proveedor_rut = models.CharField(max_length=100, unique=True, null=True, blank=True)
+    proveedor_mail = models.EmailField(max_length=100, unique=True, null=True, blank=True)
     proveedor_address = models.CharField(max_length=100, null=True, blank=True)
     proveedor_region = models.CharField(max_length=100, null=True, blank=True)
     proveedor_comuna = models.CharField(max_length=100, null=True, blank=True)
     proveedor_phone = models.CharField(max_length=100, null=True, blank=True)
+    proveedor_insumo = models.CharField(max_length=100, null=True, blank=True)  # Asegúrate de que este campo exista
 
     activo = models.BooleanField(default=True)
-    created_at = models.DateTimeField(default=timezone.now)  # Campo de fecha de creación
+    created_at = models.DateTimeField(default=timezone.now)
 
-
-    
     def get_nombre_completo(self):
         return f'{self.proveedor_name} {self.proveedor_last_name}'
 
     def __str__(self):
         return self.get_nombre_completo()
+    
     
 class Prov_prod(models.Model):
     proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE)

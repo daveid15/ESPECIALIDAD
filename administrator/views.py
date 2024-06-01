@@ -18,6 +18,9 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.http import HttpResponse
+from django.urls import reverse
+from django.http import HttpResponseRedirect
+
 #TABLAS
 from registration.models import Profile
 from django.contrib.auth.models import Group,User
@@ -541,10 +544,31 @@ def carga_masiva_user_save(request):
 
     if request.method == 'POST':
         try:
-            data = pd.read_excel(request.FILES['myfile'], engine='openpyxl', skiprows=1)
+            # Leer el archivo Excel
+            uploaded_file = request.FILES['myfile']
+            print("Archivo recibido: ", uploaded_file.name)
+            print("Tamaño del archivo: ", uploaded_file.size)
+            print("Tipo de contenido del archivo: ", uploaded_file.content_type)
+
+            data = pd.read_excel(uploaded_file, engine='openpyxl', skiprows=0)
             df = pd.DataFrame(data)
+            print("Contenido del DataFrame después de la lectura:")
+            print(df)  # Mostrar el contenido del DataFrame para verificar los datos
+
+            if df.empty:
+                messages.add_message(request, messages.ERROR, 'El archivo Excel está vacío o no contiene datos válidos.')
+                return redirect('carga_masiva_user_form')
+
             acc = 0
-            for item in df.itertuples(index=False):  # Asegúrate de evitar el índice
+
+            # Obtener los usuarios activos una vez antes de iterar
+            usuarios_activos = User.objects.filter(is_active=True).values_list('username', 'profile__rut')
+            emails_activos = {usuario[0] for usuario in usuarios_activos}
+            ruts_activos = {usuario[1] for usuario in usuarios_activos}
+            print("RUTs Activos: ", ruts_activos)
+            print("Emails Activos: ", emails_activos)
+
+            for item in df.itertuples(index=False):
                 rut = str(item[0])
                 email = str(item[1])
                 nombre = str(item[2])
@@ -552,68 +576,64 @@ def carga_masiva_user_save(request):
                 mobile = str(item[4])
                 address = str(item[5])
                 region = str(item[6])
-                comuna = str(item[7])  # Añadido comuna
-                # Validación de RUT
+                comuna = str(item[7])
+
+                print(f"Procesando RUT: {rut}, Email: {email}")
+
+                if rut in ruts_activos:
+                    messages.add_message(request, messages.INFO, f'El RUT "{rut}" ya existe en nuestros registros.')
+                    continue
+
+                if email in emails_activos:
+                    messages.add_message(request, messages.INFO, f'El correo electrónico "{email}" ya existe en nuestros registros.')
+                    continue
+
                 if not validar_rut(rut, request):
                     messages.add_message(request, messages.INFO, f'El RUT "{rut}" no es válido.')
                     continue
-                
-                # Validación de correo electrónico
+
                 if not validar_email(email, request):
                     messages.add_message(request, messages.INFO, f'El correo electrónico "{email}" no es válido.')
                     continue
-                
-                # Validación de nombres
+
                 if not validar_string(nombre, request) or not validar_string(apellido, request):
                     messages.add_message(request, messages.INFO, 'El nombre y/o apellido no son válidos.')
                     continue
-                
-                # Validación de número de teléfono
+
                 if not validar_numero(mobile, request):
                     messages.add_message(request, messages.INFO, f'El número de teléfono "{mobile}" no es válido.')
                     continue
 
-                # Aquí puedes realizar más validaciones si lo deseas
+                new_user = User.objects.create_user(
+                    username=email,
+                    email=email,
+                    first_name=nombre,
+                    last_name=apellido,
+                    password=User.objects.make_random_password(),
+                    is_active=True
+                )
 
-                # Crear usuario y perfil si pasa todas las validaciones
-                if not User.objects.filter(username=email).exists():
-                    new_user = User.objects.create_user(
-                        username=email,
-                        email=email,
-                        first_name=nombre,
-                        last_name=apellido,
-                        password=User.objects.make_random_password(),  # Generar una contraseña aleatoria
-                        is_active=True
-                    )
+                new_profile = Profile(
+                    user=new_user,
+                    group_id=1,
+                    mobile=mobile,
+                    address=address,
+                    region=region,
+                    comuna=comuna,
+                    rut=rut
+                )
+                new_profile.save()
 
-                    new_profile = Profile(
-                        user=new_user,
-                        group_id=1,  # Verifica que este ID de grupo sea correcto
-                        mobile=mobile,
-                        address=address,
-                        region=region,
-                        comuna=comuna,  # Añadido comuna
-                        rut=rut,
-                        email=email,  # Añadido email
-                        username=email,  # Añadido username
-                        first_name=nombre,  # Añadido first_name
-                        last_name=apellido  # Añadido last_name
-                    )
-                    new_profile.save()
-
-                    acc += 1
-                else:
-                    messages.add_message(request, messages.INFO, f'El RUT "{rut}" ya existe en nuestros registros')
+                acc += 1
 
             messages.add_message(request, messages.INFO, f'Carga masiva finalizada, se importaron {acc} registros')
-            return redirect('carga_masiva_user')
-        
+            return redirect('carga_masiva_user_form')
+
         except Exception as e:
             messages.add_message(request, messages.ERROR, f'Error al procesar el archivo: {str(e)}')
-            return redirect('carga_masiva_user')
+            return redirect('carga_masiva_user_form')
 
-
-
+    return HttpResponseRedirect(reverse('carga_masiva_user_form'))
 
 
 
@@ -636,21 +656,6 @@ def new_group(request):
         return render(request,template_name,{'profiles':profile})
 
        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
