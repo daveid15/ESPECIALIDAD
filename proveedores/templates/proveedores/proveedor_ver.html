@@ -119,10 +119,20 @@
                         <label for="proveedor_addres" class="form-label">Dirección:</label>
                         <span class="form-label" id="proveedor_address">{{proveedor_data.proveedor_address}}, {{proveedor_data.proveedor_comuna}}, {{proveedor_data.proveedor_region}}.</span>
                     </div>
-                    <div class="mb-0 col-md-12">
-                        <label for="supply_name" class="form-label">Productos: </label>
-                        <span class="form-label" id="proveedor_insumo">{{proveedor_data.proveedor_insumo}}.</span>
-                    </div>
+                    <table class="product-list">
+                        <thead>
+                            <tr>
+                                <th>Productos Asociados</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for producto in proveedor_productos %}
+                            <tr>
+                                <td>{{ producto.producto.supply_name }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                     <div class="col-12 col-sm-6 mb-3">
                             <a href="{% url 'proveedores_activos' %}" class="button">Volver</a>
                     </div>
