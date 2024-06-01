@@ -89,11 +89,11 @@
     var myPieChart = new Chart(ctx, {
         type: 'pie',
         data: {
-            labels: ['Activos', 'Eliminados', 'Total'],
+            labels: ['Activos', 'Eliminados'],
             datasets: [{
                 label: 'Distribución de Proveedores',
-                data: [{{ proveedores_activos_count }}, {{ proveedores_eliminados_count }}, {{ total_proveedores_count }}],
-                backgroundColor: ['#85E0A3', '#99BEBE', '#EAFB6B']
+                data: [{{ proveedores_activos_count }}, {{ proveedores_eliminados_count }}],
+                backgroundColor: ['#85E0A3', '#99BEBE']
             }]
         },
         options: {

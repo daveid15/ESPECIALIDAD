@@ -546,7 +546,7 @@ def restaurar_proveedor(request, proveedor_id):
 
     return redirect('proveedores_eliminados')
 
-@login_required
+@login_required #FUNCION QUE BORRA EL PROVEEDOR PARA SIEMPRE 
 def eliminar_proveedor(request, proveedor_id):
     profiles = Profile.objects.get(user_id=request.user.id)
     if profiles.group_id != 1:
@@ -560,7 +560,16 @@ def eliminar_proveedor(request, proveedor_id):
     messages.add_message(request, messages.INFO, 'Proveedor ' + proveedor.proveedor_name + ' eliminado con éxito')
     return redirect('proveedores_activos')
 
-
+def proveedor_delete(request, proveedor_id):
+    profile = Profile.objects.get(user_id=request.user.id)
+    if profile.group_id != 1:
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+        return redirect('check_group_main')
+    proveedor = get_object_or_404(Proveedor, id=proveedor_id)
+    proveedor.delete()
+    messages.success(request, 'Proveedor eliminado correctamente')
+    return redirect(reverse('proveedores_activos'))
+ 
 
 #Órden de Compraa
 

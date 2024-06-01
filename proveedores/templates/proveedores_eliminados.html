@@ -201,7 +201,7 @@
 <script>
     function confirmDelete(id) {
         if (confirm("¿Estás seguro de que deseas eliminar este proveedor permanentemente?")) {
-            window.location.href = "{% url 'eliminar_proveedor' 0 %}".replace('0', id);
+            window.location.href = "{% url 'proveedor_delete' 0 %}".replace('0', id);
         }
     }
 </script>

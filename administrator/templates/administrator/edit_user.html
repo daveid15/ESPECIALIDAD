@@ -44,16 +44,17 @@
     }
 
     .button {
-        background-color: #87963C;
+        background-color: #6B7E0E;
         color: white;
         padding: 12px 20px;
         border: none;
         border-radius: 5px;
         cursor: pointer;
-        width: 100%;
+        width: 9.5%;
         margin-top: 10px;
         font-size: 16px;
     }
+    
 
     .button:hover {
         background-color: #65702d;
@@ -73,6 +74,7 @@
 </style>
 <!---->
     <main role="main">
+        <nav id="useredit" class="useredit">
         <div class="container col-12 mt-3">
             <div class="col-12  mt-3 border">
                 <h3>Editar usuario</h3> 
@@ -83,9 +85,9 @@
                     <div class="row"> 
                         <div class="col-12 col-sm-8 mb-3">
                             <label for="name">Nombre (*)</label>
-                            <input type="text"  id="name" name="name" value="{{user_data.first_name}}" pattern="[A-Za-zÑñ]+" class="form-control border border-danger" required/>
+                            <input type="text"  id="name" name="name" value="{{user_data.first_name}}" pattern="[A-Za-zÑñÁÉÍÓÚáéíóú\s]+" class="form-control border border-danger" required/>
                             <label for="last_name">Apellido (*)</label>
-                            <input type="text" id="last_name1" name="last_name1" value="{{user_data.last_name}}" pattern="[A-Za-zÑñ]+" class="form-control border border-danger" required/>
+                            <input type="text" id="last_name1" name="last_name1" value="{{user_data.last_name}}" pattern="[A-Za-zÑñÁÉÍÓÚáéíóú\s]+" class="form-control border border-danger" required/>
                         </div>
                         <div class="col-12 col-sm-4 mb-3">
                             <label for="mobile">Número de contacto (*)</label>
@@ -93,11 +95,11 @@
                         </div>
                         <div class="mb-0 col-md-12">
                             <label for="rut" class="form-label">Rut (Campo no editable): </label>
-                            <span class="form-control" id="rut">{{profile_data.rut}}</span>
+                            <span class="form-label" id="rut">{{profile_data.rut}}</span>
                         </div>
                         <div class="mb-0 col-md-12">
                             <label for="email" class="form-label">Email (Campo no editable): </label>
-                            <span class="form-control" id="email">{{profile_data.email}}</span>
+                            <span class="form-label" id="email">{{profile_data.email}}</span>
                         </div>
                         
                     </div> 
@@ -133,15 +135,14 @@
                     </div>
                     </div>
                     <div class="row"> 
-                        <div class="col-12 col-sm-6 mb-3">
+                        <div class="col-12 col-sm-6 mb-4">
                             <input type="submit" value="Editar" class="button">
-                        </div>
-                        <div class="col-12 col-sm-6 mb-3">
                             <a href="{% url 'list_user_active' groups.id %}" class="button">Volver</a>
                         </div>
                     </div>
                 </form>
             </div>
         </div>
+    </nav>
     </main>
 {% endblock %}
