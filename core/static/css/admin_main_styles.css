@@ -640,3 +640,169 @@ body.dark .header {
   background-color: #65702d;
   color: white;
 }
+
+/* orderbar styles */
+.orderbar {
+  background-color: var(--green-color);
+  width: 1010px; /* Ajusta el ancho según tus necesidades */
+  height: 6%; /* Ajusta la altura según tus necesidades */
+  position: fixed;
+  top: 70px; /* Ajusta la distancia desde la parte superior de la ventana */
+  left: 315px; /* Ajusta la distancia desde el lado izquierdo de la ventana */
+  border-radius: 15px; /* Redondea las esquinas */
+  padding: 5px; /* Ajusta el relleno interior */
+  z-index: 100;
+  box-shadow: 0 0 10px var(--grey-color-light);
+  transition: all 0.5s ease;
+}
+
+.orderbar:-webkit-scrollbar {
+  display: none;
+}
+
+.orderbar.close {
+  padding: 60px 0;
+  width: 80px;
+}
+.orderbar .nav_link {
+  align-items: center;
+  width: 25%;
+  padding: 4px 0px; /* del contenido dentro de la sidebar */
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--grey-color);
+  white-space: nowrap;
+}
+
+/* orderdash styles */
+.orderdash {
+  background-color: var(--white-color);
+  width: 1010px; /* Ajusta el ancho según tus necesidades */
+  height: 85%; /* Ajusta la altura según tus necesidades */
+  position: fixed;
+  top: 130px; /* Ajusta la distancia desde la parte superior de la ventana */
+  left: 320px; /* Ajusta la distancia desde el lado izquierdo de la ventana */
+  padding: 5px; /* Ajusta el relleno interior */
+  z-index: 100;
+  overflow-y: auto; /* Ajusta la barra de desplazamiento si es necesario */
+  box-shadow: 0 0 10px var(--grey-color-light);
+  transition: all 0.5s ease;
+}
+
+.orderdash:-webkit-scrollbar {
+  display: none;
+}
+
+/* proveedoredit styles */
+.orderedit {
+  background-color: var(--white-color);
+  width: 1000px; /* Ajusta el ancho según tus necesidades */
+  height: 60%; /* Ajusta la altura según tus necesidades */
+  position: fixed;
+  top: 140px; /* Ajusta la distancia desde la parte superior de la ventana */
+  left: 60%px; /* Ajusta la distancia desde el lado izquierdo de la ventana */
+  padding: 5px; /* Ajusta el relleno interior */
+  z-index: 100;
+  overflow-y: auto; /* Ajusta la barra de desplazamiento si es necesario */
+  box-shadow: 0 0 10px var(--grey-color-light);
+  transition: all 0.5s ease;
+}
+
+.orderedit:-webkit-scrollbar {
+  display: none;
+}
+
+
+/* ventasbar styles */
+.ventasbar {
+  background-color: var(--green-color);
+  width: 90%; /* Ajusta el ancho de manera relativa */
+  max-width: 1010px; /* Ancho máximo */
+  height: 6%; /* Ajusta la altura según tus necesidades */
+  position: fixed;
+  top: 70px; /* Ajusta la distancia desde la parte superior de la ventana */
+  left: 60%; /* Centra el contenedor */
+  transform: translateX(-50%); /* Centra el contenedor */
+  border-radius: 10px; /* Redondea las esquinas */
+  padding: 5px; /* Ajusta el relleno interior */
+  z-index: 100;
+  overflow-y: auto; /* Ajusta la barra de desplazamiento si es necesario */
+  box-shadow: 0 0 10px var(--grey-color-light);
+  transition: all 0.5s ease;
+}
+.ventasbar::-webkit-scrollbar {
+  display: none;
+}
+
+.ventasbar.close {
+  padding: 60px 0;
+  width: 80px;
+}
+.ventasbar .nav_link {
+  align-items: center;
+  width: 25%;
+  padding: 4px 0px; /* del contenido dentro de la sidebar */
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--grey-color);
+  white-space: nowrap;
+}
+
+/* ventasdash styles */
+.ventasdash {
+  background-color: var(--white-color);
+  width: 980px; /* Ajusta el ancho según tus necesidades  PENSARLO BIEN SI QUEDA ASÍ O NO */ 
+  height: 78%; /* Ajusta la altura según tus necesidades */
+  position: fixed;
+  top: 125px; /* Ajusta la distancia desde la parte superior de la ventana */
+  left: 24%; /* Ajusta la distancia desde el lado izquierdo de la ventana */
+  padding: 5px; /* Ajusta el relleno interior */
+  z-index: 100;
+  border-radius: 10px;
+  overflow-y: auto; /* Ajusta la barra de desplazamiento si es necesario */
+  box-shadow: 0 0 10px var(--grey-color-light);
+  transition: all 0.5s ease;
+}
+
+.ventasdash:-webkit-scrollbar {
+  display: default;
+}
+
+/* ventasver styles */
+.ventasver {
+  background-color: var(--white-color);
+  width: 1010px; /* Ajusta el ancho según tus necesidades */
+  height: 60%; /* Ajusta la altura según tus necesidades */
+  position: fixed;
+  top: 100px; /* Ajusta la distancia desde la parte superior de la ventana */
+  left: 330px; /* Ajusta la distancia desde el lado izquierdo de la ventana */
+  padding: 5px; /* Ajusta el relleno interior */
+  z-index: 100;
+  border-radius: 15px;
+  overflow-y: auto; /* Ajusta la barra de desplazamiento si es necesario */
+  box-shadow: 0 0 10px var(--grey-color-light);
+  transition: all 0.5s ease;
+}
+
+.ventasver:-webkit-scrollbar {
+  display: none;
+}
+
+/* ventasedit styles */
+.ventasedit {
+  background-color: var(--white-color);
+  width: 1000px; /* Ajusta el ancho según tus necesidades */
+  height: 65%; /* Ajusta la altura según tus necesidades */
+  position: fixed;
+  top: 140px; /* Ajusta la distancia desde la parte superior de la ventana */
+  left: 330px; /* Ajusta la distancia desde el lado izquierdo de la ventana */
+  padding: 5px; /* Ajusta el relleno interior */
+  z-index: 100;
+  border-radius: 15px;/* Ajusta la barra de desplazamiento si es necesario */
+  box-shadow: 0 0 10px var(--grey-color-light);
+  transition: all 0.5s ease;
+}
+
+.ventasedit:-webkit-scrollbar {
+  display: none;
+}

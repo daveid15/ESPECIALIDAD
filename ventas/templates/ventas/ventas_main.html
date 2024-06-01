@@ -23,48 +23,41 @@
 
 <main role="main">
     <div class="container col-12 mt-3">
-        <!-- Otro contenido de la página -->
-        <div class="col-12  mt-3 border">
-            <h3 class="px-5 py-4" style="text-align: center;">Ventas </h3>
-            {% if profiles.group_id == 1 %}
-                <div class="col-12 col-sm-3 mb-3" style="text-align: center;">
-                    <a href="{% url 'venta_crear' %}" class="boton form-control">Crear nueva venta</a>
-                </div>
-            {% endif %}
-            <!-- Enlace al listado de órdenes -->
-            {% if profiles.group_id == 1 %}
-                <div class="col-12 col-sm-3 mb-3" style="text-align: center;">
-                    <a href="{% url 'venta_list' %}" class="boton form-control">Listado de ventas</a>
-                </div>
-            {% else %}
-                <div class="col-12 col-sm-3 mb-3" style="text-align: center;">
-                    <p>grupo_id no definido</p>
-                </div>
-            {% endif %}
-            <!-- Gráfico de barras -->
-            <div class="chart-container">
-       
-                <div id="chart2" class="chart"></div>
-                <div id="chart3" class="chart"></div>
-            </div> 
-            <div class="chart-container">
-                <div id="chart" class="chart" ></div> 
+        <div class="container mt-3">
+            <div class="border px-3 py-4">
+                <nav id="ventasbar" class="ventasbar">
+                    {% if profiles.group_id == 1 %}
+                            <a href="{% url 'venta_crear' %}" class="boton form-control">Crear nueva venta</a>
+                    {% endif %}
+                    <!-- Enlace al listado de órdenes -->
+                    {% if profiles.group_id == 1 %}
+                            <a href="{% url 'venta_list' %}" class="boton form-control">Listado de ventas</a>
+                    {% else %}
+                            <p>grupo_id no definido</p>
+                    {% endif %}
+                        <a href="{% url 'admin_main' %}" class="botton form-control" style="padding: 4px; margin-top: 4px;">Volver</a>
+                </nav>
+                <div class="container mt-4">
+                    <div class="row">
+                        <nav id="ventasdash" class="ventasdash">
+                        <div class="col-md-8">
+                            <div class="card mb-4">
+                                <div class="card-body">
+                                    <div class="chart-container">
+                            
+                                        <div id="chart2" class="chart"></div>
+                                        <div id="chart3" class="chart"></div>
+                                    </div> 
+                                    <div class="chart-container">
+                                        <div id="chart" class="chart" ></div> 
 
-            </div>   
-                     
-                        
+                                    </div>   
+                                </div>
+                            </div>
+                        </main>
 
-
-            <!-- Enlace para volver -->
-            <div class="col-12 col-sm-3 mb-3" style="text-align: center;">
-                <a href="{% url 'admin_main' %}" class="botton form-control" style="padding: 4px; margin-top: 4px;">Volver</a>
-            </div>
-        </div>
-    </div>
-</main>
-
-<!-- Apache ECharts -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
-<!-- Custom JS -->
-<script src="{% static 'js/main2.js' %}"></script>
-{% endblock %}
+                        <!-- Apache ECharts -->
+                        <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
+                        <!-- Custom JS -->
+                        <script src="{% static 'js/main2.js' %}"></script>
+                        {% endblock %}
