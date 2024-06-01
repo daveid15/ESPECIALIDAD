@@ -3,20 +3,37 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <title>TU PANEL</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Icons+Outlined" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Icons+Round" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Icons+Sharp" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Icons+Two+Tone" rel="stylesheet">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/admin_main_styles.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="{% static 'css/admin_main_styles.css' %}">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>COMPLETOPIA</title>
     {% block extrahead %}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOMy65R2bqU2BqJ/Ex2+ip0EXn1Huxf1W6hJ6gD" crossorigin="anonymous">
         <style>
+            /* Import Google font - Poppins */
+            @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
+
             body {
                 margin: 0;
                 padding: 0;
-                background-color: white;
+                background-color: #F7F7F7;
                 background-size: cover;
                 background-repeat: no-repeat;
                 background-position: center;
                 background-attachment: fixed;
-                font-family: Arial, sans-serif;
+                font-family: "Poppins", sans-serif;
                 color: white;
                 position: relative;
             }
@@ -24,12 +41,14 @@
             .welcome-banner {
                 background-color: rgba(158, 178, 59, 0.8);
                 color: white;
-                padding: 100px 20px;
+                height: 260px;
+                padding: 10px 20px;
+                align-items: center;
                 text-align: center;
                 border-radius: 10px;
                 margin: auto;
                 max-width: 800px;
-                font-size: 2.5em;
+                font-size: 1.5em;
                 position: relative;
                 z-index: 1;
             }
@@ -47,21 +66,27 @@
                 color: #333;
                 position: relative;
                 z-index: 1;
+                box-shadow: 0 0 1px #333;
             }
 
             .section {
-                margin-top: 50px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             }
 
             .section h2 {
                 font-size: 2em;
                 color: #333;
+                display: inline-block;
+                margin-right: 100px;
             }
 
             .section p {
                 font-size: 1.2em;
                 color: #666;
             }
+
 
             .custom-complete {
                 margin-top: 50px;
@@ -108,7 +133,7 @@
                 cursor: pointer;
                 z-index: 1000;
                 background-color: rgba(0, 0, 0, 0.5);
-                padding: 10px;
+                padding: 1px 10px;
                 border-radius: 50%;
                 transition: background-color 0.3s;
             }
@@ -117,39 +142,40 @@
                 background-color: rgba(0, 0, 0, 0.7);
             }
 
-            .nav-panel {
+            .sidebar {
+                background-color: #9eb23b;
+                width: 322px; /* Ajusta el ancho según tus necesidades */
+                height: 62%; /* Ajusta la altura según tus necesidades */
                 position: fixed;
-                top: 0;
-                left: -250px;
-                width: 250px;
-                height: 100%;
-                background-color: rgba(158, 178, 59, 0.8);
+                top: 90px; /* Ajusta la distancia desde la parte superior de la ventana */
+                left: -350px; /* Ajusta la distancia desde el lado izquierdo de la ventana */
+                border-radius: 15px; /* Redondea las esquinas */
+                padding: 5px; /* Ajusta el relleno interior */
+                z-index: 100;
+                overflow-y: auto; /* Ajusta la barra de desplazamiento si es necesario */
+                box-shadow: 0 0 10px var(--grey-color-light);
                 transition: left 0.3s ease;
-                z-index: 1001;
-                overflow-y: auto;
-                box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
-                color: #333;
-                border-top-right-radius: 20px;
-                border-bottom-right-radius: 20px;
             }
 
-            .nav-panel.open {
+            .sidebar.open {
                 left: 0;
             }
 
-            .nav-panel-content {
+            .sidebar-content {
                 padding: 20px;
                 display: flex;
                 flex-direction: column;
                 height: 100%;
             }
 
+
+
             .nav-title {
                 font-size: 1.8em;
                 color: #333;
                 margin-bottom: 20px;
                 text-align: center;
-                font-family: 'Arial Black', sans-serif;
+                font-family: "Poppins", sans-serif;
             }
 
             .nav-menu {
@@ -236,7 +262,7 @@
                 transform: scale(1.05);
             }
 
-            .footer {
+            .pie {
                 background-color: #9EB23B;
                 color: white;
                 padding: 5px 10px;
@@ -249,11 +275,11 @@
                 z-index: 1;
             }
 
-            .footer p {
+            .pie p {
                 margin: 0;
             }
 
-            .footer a {
+            .pie a {
                 color: white;
                 text-decoration: underline;
             }
@@ -271,63 +297,232 @@
                 margin: 0 auto 20px;
                 max-width: 80%;
             }
+            .header {
+                background-color: #c5d18a;
+                color: white;
+                text-align: center;
+                padding: 20px;
+            }
+            .container {
+                display: flex;
+                flex-wrap: wrap;
+                padding: 20px;
+                width: 100%;
+            }
+            .sidebutton {
+                flex: 1;
+                max-width: 200px;
+                margin-right: 110px;
+            }
+            .sidebutton h3 {
+                text-align: center;
+            }
+            .sidebutton button {
+                display: block;
+                height: 10%;
+                width: 100%;
+                
+                margin: 10px 0;
+                background-color: #333;
+                color: white;
+                border: none;
+                cursor: pointer;
+                text-align: center;
+                border-radius: 10px;
+                text-align: center;
+                font-family: "Poppins", sans-serif; /* Cambia la fuente aquí */
+                font-size: 16px;
+                
+                align-items: center;
+
+            }
+            .sidebutton button:hover {
+                background-color: #555;
+            }
+
+            .button {
+                display: inline-block;
+                padding: 10px 20px;
+                margin: 5px 0;
+                height: 10%;
+                width: 100%;
+                background-color: #333;
+                color: white;
+                text-align: center;
+                text-decoration: none;
+                border-radius: 10px;
+                font-family: "Poppins", sans-serif; /* Cambia la fuente aquí */
+                font-size: 16px;
+            }
+
+            .button:hover {
+                background-color: #555;
+            }
+            
+
+            .main {
+                flex: 3;
+            }
+            .dashboard {
+                display: flex;
+                border-radius: 10px;
+                justify-content: space-between;
+                
+            }
+            .dashboard div {
+                border-radius: 10px;
+                background-color: #e0e0e0;
+                width: 48%;
+                height: 380px;
+            }
+            @media screen and (max-width: 768px) {
+                .container {
+                    flex-direction: column;
+                    padding: 0;
+                    width: 100%;
+                }
+                .sidebutton {
+                    max-width: 100%;
+                    margin: 0 0 20px 0;
+                }
+                .main {
+                    width: 100%;
+                    padding: 0;
+                }
+                .dashboard {
+                    flex-direction: column;
+                    align-items: center;
+                }
+                .dashboard div {
+                    width: 90%;
+                    margin-bottom: 20px;
+                }
+            }
         </style>
     {% endblock %}
 </head>
 <body>
     {% block content %}
-    <img src="{% static 'assets/img/logo.png' %}" alt="Logo de la Empresa" class="logo">
     <div class="welcome-banner">
-        <h1>Bienvenidos a nuestro sitio web</h1>
-        <p>Descubre lo mejor en completos, promociones especiales y más.</p>
+        <h1>¡Bienvenido a Completopia, {{request.user.first_name}}!</h1>
+        <p>La utopía de los completos</p>
     </div>
 
     <div class="main-content">
-        <div class="section">
-            <h2>Página de Inicio</h2>
-            <p>Aquí encontrarás las últimas novedades y productos destacados.</p>
-        </div>
-
-        <div class="section custom-complete">
-            <h2>Crea tu Completo Personalizado</h2>
-            <p>¡Elige los ingredientes que más te gusten y crea el completo perfecto para ti!</p>
-            <a href="{% url 'ventas_main' %}">Personaliza tu Completo</a>
+        <div class="container">
+            <div class="sidebutton">
+                <h3>Atajos Rápidos</h3>
+                <a class="button" href="{% url 'venta_crear' %}">Nueva venta</a>
+                <a class="button" href="{% url 'orden_crear' %}">Nueva compra</a>
+                <a class="button" href="{% url 'proveedores_crear' %}">Nuevo proveedor</a>
+            </div>
+            <div class="main">
+                <h3>Dashboard</h3>
+                <div class="dashboard">
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
         </div>
     </div>
+    
 
     <!-- Icono de menú -->
-    <div class="menu-icon" onclick="toggleNavPanel()">☰</div>
+<div class="menu-icon" onclick="toggleNavPanel()">☰</div>
 
     <!-- Panel de Navegación -->
-    <div class="nav-panel" id="navPanel">
-        <div class="nav-panel-content">
-            <!-- Logo de la empresa en el panel -->
-            <img src="{% static 'assets/img/logo.png' %}" alt="Logo de la Empresa" class="panel-logo">
-            <div class="nav-title">Menú Principal</div>
-            <div class="search-container">
-                <i class="fas fa-search"></i>
-                <input type="text" placeholder="Buscar..." id="searchInput">
-            </div>
-            <ul class="nav-menu">
-                <li><a href="{% url 'users_main' %}">Gestión de Usuarios</a></li>
-                <li><a href="{% url 'inventario_main' %}">Gestión de Inventario</a></li>
-                <li><a href="{% url 'proveedores_main' %}">Gestión Proveedores</a></li>
-                <li><a href="{% url 'orden_main' %}">Gestión de Orden de Compra</a></li>
-                <li><a href="{% url 'ventas_main' %}">Gestión de Ventas</a></li>
-                <!-- Agrega más enlaces según sea necesario -->
-            </ul>
-            <!-- Botón de cierre -->
-            <span class="close-button" onclick="toggleNavPanel()">✖</span>
-            <!-- Botón de cerrar sesión con icono más minimalista -->
-            <button class="logout-button" onclick="confirmLogout()">
-                <i class="logout-icon">🔓</i> Cerrar Sesión
-            </button>
+    <nav class="side-bar to-left">
+        <div class="menu">
+            <!--=== Menu Inicio ===-->
+            <nav class="sidebar">
+                <div class="sidebar" id="navPanel">
+                    <ul class="menu_items">
+                        <li class="item">
+                            <a href="{% url 'admin_main' %}" class="nav_link submenu_item">
+                                <span class="navlink_icon">
+                                    <i class="bx bx-buildings"></i>
+                                </span>
+                                <span class="navlink">Inicio</span>
+                                <i class="bx bx-chevron-right arrow-left"></i>
+                            </a>
+                            <ul class="menu_items submenu">
+                                <li><a href="{% url 'admin_main' %}" class="nav_link sublink">Inicio</a></li>
+                            </ul>
+                        </li>
+                        <li class="item">
+                            <a href="{% url 'list_user_active' group_id=1 %}" class="nav_link submenu_item">
+                                <span class="navlink_icon">
+                                    <i class="bx bx-buildings"></i>
+                                </span>
+                                <span class="navlink">Gestión de usuarios</span>
+                                <i class="bx bx-chevron-right arrow-left"></i>
+                            </a>
+                        </li>
+                        <li class="item">
+                            <a href="{% url 'proveedores_main' %}" class="nav_link submenu_item">
+                                <span class="navlink_icon">
+                                    <i class="bx bx-buildings"></i>
+                                </span>
+                                <span class="navlink">Gestión de proveedores</span>
+                                <i class="bx bx-chevron-right arrow-left"></i>
+                            </a>
+                            <ul class="menu_items submenu">
+                                <li><a href="{% url 'proveedores_main' %}" class="nav_link sublink">Proveedores Main</a></li>
+                            </ul>
+                        </li>
+                        <li class="item">
+                            <a href="{% url 'inventario_main' %}" class="nav_link submenu_item">
+                                <span class="navlink_icon">
+                                    <i class="bx bx-archive"></i>
+                                </span>
+                                <span class="navlink">Gestión de inventario</span>
+                                <i class="bx bx-chevron-right arrow-left"></i>
+                            </a>
+                            <ul class="menu_items submenu">
+                                <li><a href="{% url 'inventario_main' %}" class="nav_link sublink">Inventario Main</a></li>
+                            </ul>
+                        </li>
+                        <li class="item">
+                            <a href="{% url 'orden_main' %}" class="nav_link submenu_item">
+                                <span class="navlink_icon">
+                                    <i class="bx bx-shopping-bag"></i>
+                                </span>
+                                <span class="navlink">Ordenes de compra</span>
+                                <i class="bx bx-chevron-right arrow-left"></i>
+                            </a>
+                            <ul class="menu_items submenu">
+                                <li><a href="{% url 'orden_main' %}" class="nav_link sublink">Órden Main</a></li>
+                            </ul>
+                        </li>
+    
+                        <li class="item">
+                            <a href="{% url 'ventas_main' %}" class="nav_link submenu_item">
+                                <span class="navlink_icon">
+                                    <i class="bx bx-shopping-bag"></i>
+                                </span>
+                                <span class="navlink">Ordenes de venta</span>
+                                <i class="bx bx-chevron-right arrow-left"></i>
+                            </a>
+                            <ul class="menu_items submenu">
+                                <li><a href="{% url 'ventas_main' %}" class="nav_link sublink">Ventas Main</a></li>
+                            </ul>
+                        </li>
+                        <!-- Más ítems del menú -->
+                        <footer class="footer">
+                            <div class="logo_item">
+                                <i class="bx bx-menu" id="sidebarOpen"></i>
+                                <img src="{% static 'assets/img/logo.png' %}" alt="Logo" style="width: 150px; height: auto;">
+                            </div>
+                        </footer>
+                    </ul>
+                </div>
+            </nav>
         </div>
-    </div>
+    </nav>
     {% endblock %}
 
     <!-- Pie de página -->
-    <div class="footer">
+    <div class="pie">
         <p>Contacto: ¿Tienes alguna pregunta o comentario? <a href="mailto:compl@gmail.com">¡Contáctanos!</a></p>
     </div>
 
