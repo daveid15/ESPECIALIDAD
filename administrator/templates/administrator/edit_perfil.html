@@ -13,16 +13,6 @@
         background-color: #f7f7f7;
     }
 
-    section {
-        background-color: white;
-        max-width: 900px;
-        margin: 50px auto;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        display: flex;
-    }
-
     .avatar {
         width: 100px;
         height: 100px;
@@ -48,7 +38,7 @@
         padding: 10px;
         margin-top: 5px;
         margin-bottom: 15px;
-        border: 1px solid #ccc;
+        border: 1px solid black;
         border-radius: 5px;
         box-sizing: border-box;
     }
@@ -86,6 +76,8 @@
             align-items: center;
         }
     }
+
+
 </style>
     <main role="main">
         <nav id="profilebar" class="profilebar">
@@ -118,14 +110,15 @@
                     {% csrf_token %}
                     <input type="hidden" value="{{ user_data.id }}" name="user_id" id="user_id">
                     <input type="hidden" value="{{ groups.id }}" name="grupo" id="grupo"> 
-                    <div class="row">                       
-                        <div class="col-12 col-sm-4 mb-3">
+                    <div class="row">
+                        <div class="col-10 col-sm-4 mb-3">
                             <label for="name">Nombre (*)</label>
-                            <input type="text"  id="name" name="name" value="{{user_data.first_name}}" pattern="[A-Za-zÑñ]+" class="form-control border border-danger" required/>
+                            <input type="text" id="name" name="name" value="{{user_data.first_name}}" pattern="[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+" class="form-control border border-danger" required/>
                             <label for="last_name">Apellido (*)</label>
-                            <input type="text" id="last_name1" name="last_name1" value="{{user_data.last_name}}" pattern="[A-Za-zÑñ]+" class="form-control border border-danger" required/>
+                            <input type="text" id="last_name1" name="last_name1" value="{{user_data.last_name}}" pattern="[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+" class="form-control border border-danger" required/>
                         </div>
-                        <div class="col-12 col-sm-4 mb-3"> 
+                        
+                        <div class="col-11 col-sm-4 mb-3"> 
                             <label for="phone">Número de contacto (*)</label>
                             <input type="tel" id="phone" name="phone" pattern="[0-9]{9}" value="{{profile_data.mobile}}" class="form-control border border-danger" required/>
                         </div> 
@@ -138,18 +131,18 @@
                             <span class="form-label" id="proveedor_name">{{profile_data.email}}</span>
                         </div>                       
                     
-                        <div class="col-12 col-sm-4 mb-3"> 
+                        <div class="col-11 col-sm-4 mb-3"> 
                         <label for="address">Dirección</label>
                         <input type="text" id="address" name="address" value="{{profile_data.address}}" class="form-control border border-danger" required/>
                         </div>
-                        <div class="col-12 col-sm-4 mb-3">
+                        <div class="col-11 col-sm-4 mb-3">
                         <label for="region">Región</label>
                         <select name="region" id="region" value = "{profile_data.region}" class="form-control border border-danger" required>
                             <option value="">Seleccione una región</option>
                             <option value="Region Metropolitana de Santiago" {% if profile_data.region == "Region Metropolitana de Santiago" %}selected{% endif %}>Región Metropolitana de Santiago</option>
                         </select>      
                         </div>
-                        <div class="col-12 col-sm-4 mb-3">
+                        <div class="col-11 col-sm-4 mb-3">
                         <label for="comuna">Comuna</label>
                         <select name="comuna" id="comuna" class="form-control border border-danger" required>
                             <option value="">Seleccione una comuna</option>
@@ -163,10 +156,10 @@
                         </select>
                         </div>               
                         <div class="row"> 
-                            <div class="col-12 col-sm-6 mb-3">
+                            <div class="col-11 col-sm-6 mb-3">
                                 <input type="submit" value="Editar Usuario" class="button form-control">
                             </div>
-                            <div class="col-12 col-sm-6 mb-3">
+                            <div class="col-11 col-sm-6 mb-3">
                                 <a href="{% url 'perfil_main'%}" class="button form-control">Volver</a>
                             </div>
                         </div>

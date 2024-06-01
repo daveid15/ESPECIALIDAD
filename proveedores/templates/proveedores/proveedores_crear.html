@@ -282,22 +282,7 @@
         }
     }
 
-    document.getElementById('proveedor_rut').addEventListener('input', function(event) {
-        // Obtener el valor actual del campo
-        var value = event.target.value;
 
-        // Eliminar cualquier carácter que no sea un número
-        var newValue = value.replace(/\D/g, '');
-
-        // Limitar el campo a 12 caracteres (considerando el formato de un RUT)
-        newValue = newValue.slice(0, 12);
-
-        // Formatear el RUT agregando puntos y guión
-        newValue = newValue.replace(/^(\d{1,2})(\d{3})(\d{3})(\w{1})$/, '$1.$2.$3-$4');
-
-        // Actualizar el valor del campo
-        event.target.value = newValue;
-    });
 
     document.getElementById('proveedor_phone').addEventListener('input', function(event) {
         // Obtener el valor actual del campo
@@ -308,9 +293,6 @@
 
         // Limitar el campo a 9 caracteres (considerando el formato de un número telefónico)
         newValue = newValue.slice(0, 9);
-
-        // Formatear el número telefónico agregando guiones
-        newValue = newValue.replace(/^(\d{2})(\d{3})(\d{4})$/, '$1-$2-$3');
 
         // Actualizar el valor del campo
         event.target.value = newValue;

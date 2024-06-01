@@ -117,9 +117,8 @@
         list-style: none; /* Elimina los puntos de la lista */
     }
     .nav-tabs .nav-item .nav-link {
-        border: 1px solid #000000;
+        border: 5px;
         border-radius: 0.25rem;
-        border-color: #000000 #000000 #000000;
         padding: 10px 15px;
         color: #000;
         margin-right: -15px;
@@ -128,7 +127,6 @@
     }
     .nav-tabs .nav-item .nav-link.active {
         background-color: #ffffff;
-        border-color: #000000 #000000 #ffffff;
     }
     .tabs-and-button-container {
         display: flex;
@@ -153,12 +151,9 @@
                         <a class="nav-link active" href="#">Lista de Usuarios Activos</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'list_user_block' group.id %}">Lista de Usuarios Bloqueados</a>
+                        <a class="nav-link" href="{% url 'list_user_block' group.id %}">Lista de Usuarios Eliminados</a>
                     </li>
                 </ul>
-                <a href="{% url 'new_user' %}" class="btn btn-success new-user-button">
-                    <i class="fas fa-user-plus" style="color: #000000"></i> <!-- Icono de usuario con signo de más -->
-                </a>
             </div>
         </div>
     </header>
@@ -182,8 +177,10 @@
             <table id="service" class="table mt-2 table-hover table-sm table-bordered">      
                 <thead class="table-danger">
                     <tr>
-                        {% if profiles.group_id == 1 %}
-                            <th colspan="5"><h3>Usuarios</h3></th>
+                        {% if profiles.group_id == 1 %} <!--NO SÉ SI ES LEGAL DEJAR EL LOGO ASI PERO QUEDO AL LADO-->
+                            <th colspan="5"><h3>Usuarios <a href="{% url 'new_user' %}" class="btn btn-success new-user-button">
+                                <i class="fas fa-user-plus" style="color: #000000"></i> <!-- Icono de usuario con signo de más -->
+                            </a></h3></th> 
                         {% endif %}
                         {% if profiles.group_id == 2 %}
                             <th colspan="4"><h3>Usuarios</h3></th>
