@@ -13,6 +13,7 @@ administrator_patterns = [
     path('proveedores_main', proveedores_views.proveedores_main,name="proveedores_main"),
     path('orden_main', proveedores_views.orden_main,name="orden_main"),
     path('ventas_main', ventas_views.ventas_main,name="ventas_main"),
+    path('inventario_main', inventario_views.inventario_main,name="inventario_main"),
     
     #PARA INICIO
     path('venta_crear', ventas_views.venta_crear, name='venta_crear'), #crear venta

@@ -28,7 +28,7 @@
             body {
                 margin: 0;
                 padding: 0;
-                background-color: #F7F7F7;
+                background-color: #a6ba535c;
                 background-size: cover;
                 background-repeat: no-repeat;
                 background-position: center;
@@ -375,6 +375,28 @@
                 width: 48%;
                 height: 380px;
             }
+
+            .logout-icon {
+                position: fixed;
+                align-items: flex-end;
+                top: 1.5%;
+                left: 95%;
+                font-size: 2em;
+                color: white;
+                cursor: pointer;
+                z-index: 1000;
+                
+                padding: 1px 10px;
+                border-radius: 50%;
+                transition: background-color 0.3s;
+            }
+
+            .logout-link img {
+                width: 25px; /* Define el ancho deseado */
+                height: 25px; /* Define la altura deseada */
+            } 
+
+
             @media screen and (max-width: 768px) {
                 .container {
                     flex-direction: column;
@@ -419,13 +441,45 @@
             <div class="main">
                 <h3>Dashboard</h3>
                 <div class="dashboard">
-                    <div></div>
+                    <div>
+                        <table class="table table-user">
+                            <thead>
+                                <tr>
+                                    <th width="10%" scope="col">Producto</th>
+                                    <th width="12%" scope="col">Codigo</th>
+                                    <th width="10%" scope="col">Unidad</th>
+                                    <th width="10%" scope="col">Stock Actual</th>
+                                    <th width="10%" scope="col">Alarma Establecida (>5 KG o Packs de latas)</th>
+                                    <th width="10%" scope="col"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for p in p_list_paginate %}
+                                    <tr>
+                                        <td>{{ p.supply_name }}</td>
+                                        <td>{{ p.supply_code }}</td>
+                                        <td>{{ p.supply_unit }}</td>
+                                        <td>{{ p.supply_total }}</td>
+                                        <td><span class="low-stock-alert">⚠️ ¡Stock bajo!</span></td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+
+
+                    </div>
                     <div></div>
                 </div>
             </div>
         </div>
     </div>
-    
+
+<div class="logout-icon">
+    <a onclick="confirmLogout()" class="logout-link" >
+        <img src="{% static 'assets/img/logout.png' %}">
+    </a>
+</div>
 
     <!-- Icono de menú -->
 <div class="menu-icon" onclick="toggleNavPanel()">☰</div>
@@ -518,7 +572,7 @@
 
     <!-- Pie de página -->
     <div class="pie">
-        <p>Contacto: ¿Tienes alguna pregunta o comentario? <a href="mailto:compl@gmail.com">¡Contáctanos!</a></p>
+        <p>Contacto: ¿Tienes alguna pregunta o comentario? <a href="mailto:completopia@gmail.com">¡Contáctanos!</a></p>
     </div>
 
     <script>

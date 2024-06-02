@@ -26,6 +26,8 @@ from registration.models import Profile
 from django.contrib.auth.models import Group,User
 from .models import Usuario
 from django.contrib.auth.models import User
+from inventario.models import Product
+
 import re
 def validar_numero(numero,request):
     if request.method == 'POST':
@@ -93,13 +95,43 @@ def perfil_main(request):
 
 
 @login_required
-def admin_main(request):
+def admin_main(request, page=None, search=None):
     profiles = Profile.objects.get(user_id = request.user.id)
     if profiles.group_id != 1 and profiles.group_id != 2:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
         return redirect('check_group_main')
     template_name = 'administrator/admin_main.html'
-    return render(request,template_name,{'profiles':profiles})
+    page = request.GET.get('page', page)
+    search = request.GET.get('search', search)
+
+    if request.method == 'POST':
+        search = request.POST.get('search')
+        page = None
+
+    if search is None or search == "None":
+        p_list_array = Product.objects.all().order_by('supply_name')
+    else:
+        p_list_array = Product.objects.filter(supply_name__icontains=search).order_by('supply_name')
+
+    # Filtrar los productos con bajo stock
+    low_stock_products = []
+    for p in p_list_array:
+        if p.supply_total is not None and str(p.supply_total).isdigit():
+            if int(p.supply_total) < 5:  # Ajusta este valor según tu criterio para "bajo stock"
+                low_stock_products.append({
+                    'id': p.id,
+                    'supply_name': p.supply_name,
+                    'supply_code': p.supply_code,
+                    'supply_unit': p.supply_unit,
+                    'supply_initial_stock': p.supply_initial_stock,
+                    'supply_input': p.supply_input,
+                    'supply_output': p.supply_output,
+                    'supply_total': p.supply_total,
+                    'low_stock': True,
+                })  
+    paginator = Paginator(low_stock_products, 10)  # Ajusta el número de elementos por página según sea necesario
+    p_list_paginate = paginator.get_page(page)   
+    return render(request,template_name,{'profiles':profiles, 'p_list_paginate':p_list_paginate})
 
 #Flujo usuarios
 @login_required
