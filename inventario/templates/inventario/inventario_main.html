@@ -82,8 +82,8 @@
             }
             .top-right-link {
                 position: absolute;
-                top: 20px;
-                right: 20px;
+                top: 120px;
+                right: 50px;
                 background-color: white; 
                 color: #000;
                 padding: 10px 15px;
@@ -99,7 +99,7 @@
             .alert-text {
             position: absolute;
             top: 0;
-            left: 0;
+            left: 100;
             margin: 20px; /* Ajusta el margen para separarlo del borde superior e izquierdo */
             font-weight: bold;
             font-size: 18px;
@@ -114,8 +114,9 @@
     {% endblock extra_css %}
     <body>
         <h1>Dashboard inventario</h1>
+        <a href="{% url 'producto_list' %}" class="top-right-link">Listado de inventario</a>
         <section>
-            <a href="{% url 'producto_list' %}" class="top-right-link">Listado de inventario</a>
+            
             <div class="alert-text">Alerta Inventario</div>
             <div class="table-container mt-5">
                 <table class="table table-user">
@@ -132,7 +133,7 @@
                     <tbody>
                         {% for p in p_list_paginate %}
                             <tr>
-                                <td>{{ p.supply_name }}</td>
+                                <td style="padding: 15px;">{{ p.supply_name }}</td>
                                 <td>{{ p.supply_code }}</td>
                                 <td>{{ p.supply_unit }}</td>
                                 <td>{{ p.supply_total }}</td>

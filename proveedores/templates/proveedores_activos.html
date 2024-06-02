@@ -173,9 +173,9 @@
             <tbody>
                 {% for p in p_list_paginate %} 
                     <tr>
-                        <td>{{ p.proveedor_name }}</td>
-                        <td>{{ p.proveedor_last_name }}</td>
-                        <td>{{ p.proveedor_phone }}</td>
+                        <td style="text-align: center; padding: 15px;">{{ p.proveedor_name }}</td>
+                        <td style="text-align: center;">{{ p.proveedor_last_name }}</td>
+                        <td style="text-align: center;">{{ p.proveedor_phone }}</td>
                         <td>
                             <div class="action-buttons">
                                 <a href="{% url 'proveedor_ver' p.id %}">

@@ -7,6 +7,7 @@
   padding: 0px;
   box-sizing: border-box;
   font-family: "Poppins", sans-serif;
+  text-decoration: none;
 }
 
 /* Define custom properties */
@@ -700,7 +701,7 @@ body.dark .header {
   height: 60%; /* Ajusta la altura según tus necesidades */
   position: fixed;
   top: 140px; /* Ajusta la distancia desde la parte superior de la ventana */
-  left: 60%px; /* Ajusta la distancia desde el lado izquierdo de la ventana */
+  left: 60%; /* Ajusta la distancia desde el lado izquierdo de la ventana */
   padding: 5px; /* Ajusta el relleno interior */
   z-index: 100;
   overflow-y: auto; /* Ajusta la barra de desplazamiento si es necesario */

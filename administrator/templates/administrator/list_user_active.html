@@ -47,6 +47,7 @@
     }
     table th, table td {
         background-color: white; /* Establece el fondo de las celdas a blanco */
+        padding-top: 15px;
     }
     .header-row {
         background-color: #d3d3d3; /* Establece el color de fondo de la fila de encabezados a gris */
@@ -137,6 +138,18 @@
         width: 40px;
         height: 40px;
     }
+    h3 {
+        display: flex;
+        font-size: 1.17em;
+        margin-block-start: 1em;
+        margin-block-end: 1em;
+        margin-inline-start: 100px;
+        margin-inline-end: 100px;
+        font-weight: bold;
+        padding: 15px;
+
+}
+
 </style>
 {% endblock %}
 
@@ -202,8 +215,8 @@
                 <tbody>
                     {% for s in user_list %}
                         <tr>
-                            <th scope="row">{{s.name}}</th>
-                            <th scope="row">{{s.mail}}</th>
+                            <th scope="row" style="font-weight:400;">{{s.name}}</th>
+                            <th scope="row" style="font-weight:400;">{{s.mail}}</th>
                             {% if profiles.group_id == 1 %}
                             <th scope="row">
                                 {% if s.id != request.user.id %}

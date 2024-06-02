@@ -93,6 +93,11 @@
     .nav-tabs .nav-item .nav-link.active {
         background-color: #ffffff;
     } 
+
+    table th, table td {
+        background-color: white; /* Establece el fondo de las celdas a blanco */
+        padding-top: 15px;
+    }
 </style>
 {% endblock %}
 
@@ -141,8 +146,8 @@
                 <tbody>
                     {% for s in user_list %}
                         <tr>
-                            <th scope="row">{{s.name}}</th>
-                            <th scope="row">{{s.mail}}</th>
+                            <th scope="row" style="font-weight:400;">{{s.name}}</th>
+                            <th scope="row" style="font-weight:400;">{{s.mail}}</th>
                             {% if profiles.group_id == 1 %}
                                 <th scope="row">
                                     {% if s.id != request.user.id %}
