@@ -13,6 +13,13 @@ administrator_patterns = [
     path('proveedores_main', proveedores_views.proveedores_main,name="proveedores_main"),
     path('orden_main', proveedores_views.orden_main,name="orden_main"),
     path('ventas_main', ventas_views.ventas_main,name="ventas_main"),
+    path('inventario_main', inventario_views.inventario_main,name="inventario_main"),
+    
+    #PARA INICIO
+    path('venta_crear', ventas_views.venta_crear, name='venta_crear'), #crear venta
+    path('orden_crear/', proveedores_views.orden_crear, name='orden_crear'), #Crear compra
+    path('proveedores_crear', proveedores_views.proveedores_crear,name='proveedores_crear'), #Nuevo proveedor
+
     #flujo usuarios
     path('perfil_main', views.perfil_main,name="perfil_main"),
     path('users_main', views.users_main,name="users_main"),
@@ -34,7 +41,10 @@ administrator_patterns = [
 
     path('carga_masiva_user_save/',views.carga_masiva_user_save,name="carga_masiva_user_save"),
     path('import_file_user/',views.import_file_user,name="import_file_user"),
+    path('carga_masiva_user_form/', views.carga_masiva_user, name='carga_masiva_user_form'),
+
     
     #BORRAR
     path('ejemplo_query_set/',views.ejemplo_query_set, name='ejemplo_query_set'),  
-    ]  
+        
+            ]  

@@ -150,11 +150,11 @@
 <div class="list-container">
     <a href="{% url 'proveedores_main' %}" class="btn btn-danger btn-volver"><i class="fas fa-arrow-left" style="color: #000000;"></i></a> <!-- Botón "Volver" con icono -->
     <div>
-        <a href="{% url 'proveedores_crear' %}" class="boton"><i class="fas fa-user-plus" style="color: #000000"></i></a>  
-        <a href="{% url 'carga_masiva_proveedor' %}" class="boton" style="margin-left: 10px;"><i class="fas fa-upload" style="color: #000000"></i></a>
+        <a href="{% url 'proveedores_crear' %}" class="boton"><i class="fas fa-user-plus"  style="color: #000000"></i></a><strong>Proveedores</strong> 
     </div>
     <div class="search-form">
         <form method="get" action="" class='input-container-search my-auto'>
+            <a href="{% url 'carga_masiva_proveedor' %}" class="boton" style="margin-left: 10px;"><i class="fas fa-upload" style="color: #000000"></i></a>
             <input name="search" id="search" type="text" placeholder='Buscar por Nombre'/>
             <button type="submit">Buscar</button>
         </form>
@@ -181,11 +181,9 @@
                                 <a href="{% url 'proveedor_ver' p.id %}">
                                     <i class="fas fa-eye" style="color: #000000;"></i> <!-- Icono de ojo para ver -->
                                 </a>
-                        
                                 <a href="{% url 'proveedor_edit' p.id %}">
                                     <i class="fas fa-edit" style="color: #000000;"></i> <!-- Icono de lápiz para editar -->
                                 </a>
-                        
                                 <a href="#" onclick="confirmDelete('{{ p.id }}')">
                                     <i class="fas fa-trash-alt" style="color: #000000;"></i> <!-- Icono de basura para eliminar -->
                                 </a>

@@ -1,20 +1,604 @@
-{% extends 'core/base_admin.html' %}
 {% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>TU PANEL</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Icons+Outlined" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Icons+Round" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Icons+Sharp" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Icons+Two+Tone" rel="stylesheet">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/admin_main_styles.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="{% static 'css/admin_main_styles.css' %}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COMPLETOPIA</title>
+    {% block extrahead %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOMy65R2bqU2BqJ/Ex2+ip0EXn1Huxf1W6hJ6gD" crossorigin="anonymous">
+        <style>
+            /* Import Google font - Poppins */
+            @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
 
-{% block extrahead %}
-<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
-<link rel="stylesheet" href="{% static 'css/admin_main_styles.css' %}" />
-{% endblock %}
+            body {
+                margin: 0;
+                padding: 0;
+                background-color: #a6ba535c;
+                background-size: cover;
+                background-repeat: no-repeat;
+                background-position: center;
+                background-attachment: fixed;
+                font-family: "Poppins", sans-serif;
+                color: white;
+                position: relative;
+            }
 
-{% block content %}
-<div class="container mt-3">
-    <div class="row">
-        <div class="col-12 border">
-            <h3 class="px-5 py-4" style="text-align: center;">
-                Contenido de la  // Dashboard de inicio
-            </h3>
-            <!-- Aquí va el contenido de la página -->
+            .welcome-banner {
+                background-color: rgba(158, 178, 59, 0.8);
+                color: white;
+                height: 260px;
+                padding: 10px 20px;
+                align-items: center;
+                text-align: center;
+                border-radius: 10px;
+                margin: auto;
+                max-width: 800px;
+                font-size: 1.5em;
+                position: relative;
+                z-index: 1;
+            }
+
+            .main-content {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding: 50px;
+                text-align: center;
+                background-color: rgba(255, 255, 255, 0.8);
+                border-radius: 10px;
+                margin: 20px;
+                color: #333;
+                position: relative;
+                z-index: 1;
+                box-shadow: 0 0 1px #333;
+            }
+
+            .section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            }
+
+            .section h2 {
+                font-size: 2em;
+                color: #333;
+                display: inline-block;
+                margin-right: 100px;
+            }
+
+            .section p {
+                font-size: 1.2em;
+                color: #666;
+            }
+
+
+            .custom-complete {
+                margin-top: 50px;
+                background-color: #9EB23B;
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                color: white;
+                text-align: center;
+            }
+
+            .custom-complete h2 {
+                font-size: 2.5em;
+                margin-bottom: 15px;
+            }
+
+            .custom-complete p {
+                font-size: 1.5em;
+                margin-bottom: 20px;
+            }
+
+            .custom-complete a {
+                display: inline-block;
+                padding: 15px 30px;
+                font-size: 1.5em;
+                color: white;
+                background-color: #333;
+                border-radius: 5px;
+                text-decoration: none;
+                transition: background-color 0.3s, transform 0.3s;
+            }
+
+            .custom-complete a:hover {
+                background-color: #555;
+                transform: scale(1.05);
+            }
+
+            .menu-icon {
+                position: fixed;
+                top: 20px;
+                left: 20px;
+                font-size: 2em;
+                color: white;
+                cursor: pointer;
+                z-index: 1000;
+                background-color: rgba(0, 0, 0, 0.5);
+                padding: 1px 10px;
+                border-radius: 50%;
+                transition: background-color 0.3s;
+            }
+
+            .menu-icon:hover {
+                background-color: rgba(0, 0, 0, 0.7);
+            }
+
+            .sidebar {
+                background-color: #9eb23b;
+                width: 322px; /* Ajusta el ancho según tus necesidades */
+                height: 62%; /* Ajusta la altura según tus necesidades */
+                position: fixed;
+                top: 90px; /* Ajusta la distancia desde la parte superior de la ventana */
+                left: -350px; /* Ajusta la distancia desde el lado izquierdo de la ventana */
+                border-radius: 15px; /* Redondea las esquinas */
+                padding: 5px; /* Ajusta el relleno interior */
+                z-index: 100;
+                overflow-y: auto; /* Ajusta la barra de desplazamiento si es necesario */
+                box-shadow: 0 0 10px var(--grey-color-light);
+                transition: left 0.3s ease;
+            }
+
+            .sidebar.open {
+                left: 0;
+            }
+
+            .sidebar-content {
+                padding: 20px;
+                display: flex;
+                flex-direction: column;
+                height: 100%;
+            }
+
+
+
+            .nav-title {
+                font-size: 1.8em;
+                color: #333;
+                margin-bottom: 20px;
+                text-align: center;
+                font-family: "Poppins", sans-serif;
+            }
+
+            .nav-menu {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+                flex-grow: 1;
+            }
+
+            .nav-menu li {
+                margin-bottom: 10px;
+            }
+
+            .nav-menu a {
+                display: block;
+                text-decoration: none;
+                color: #333;
+                font-size: 1.2em;
+                padding: 10px 20px;
+                transition: background-color 0.3s, transform 0.3s;
+                border-radius: 10px;
+                text-align: center;
+                background-color: rgba(158, 178, 59, 0.8);
+            }
+
+            .nav-menu a:hover {
+                background-color: rgba(158, 178, 59, 1);
+                transform: scale(1.05);
+            }
+
+            .search-container {
+                display: flex;
+                align-items: center;
+                background-color: rgba(158, 178, 59, 0.8);
+                padding: 10px;
+                border-radius: 10px;
+                margin-bottom: 20px;
+                transition: background-color 0.3s, transform 0.3s;
+            }
+
+            .search-container:hover {
+                background-color: rgba(158, 178, 59, 1);
+                transform: scale(1.05);
+            }
+
+            .search-container input {
+                border: none;
+                background: none;
+                color: #333;
+                font-size: 1.2em;
+                margin-left: 10px;
+                width: 100%;
+            }
+
+            .search-container input:focus {
+                outline: none;
+            }
+
+            .close-button {
+                position: absolute;
+                top: 20px;
+                right: 20px;
+                font-size: 1.5em;
+                color: #333;
+                cursor: pointer;
+            }
+
+            .logout-button {
+                display: block;
+                text-align: center;
+                margin-top: 20px;
+                padding: 10px;
+                color: #333;
+                font-size: 1.2em;
+                border: none;
+                background-color: rgba(158, 178, 59, 0.8);
+                cursor: pointer;
+                transition: background-color 0.3s, transform 0.3s;
+                border-radius: 10px;
+            }
+
+            .logout-button:hover {
+                background-color: rgba(158, 178, 59, 1);
+                transform: scale(1.05);
+            }
+
+            .pie {
+                background-color: #9EB23B;
+                color: white;
+                padding: 5px 10px;
+                text-align: left;
+                position: fixed;
+                bottom: 0;
+                right: 0;
+                font-size: 0.9em;
+                border-top-left-radius: 10px;
+                z-index: 1;
+            }
+
+            .pie p {
+                margin: 0;
+            }
+
+            .pie a {
+                color: white;
+                text-decoration: underline;
+            }
+
+            .logo {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                max-width: 100px;
+                z-index: 1000;
+            }
+
+            .panel-logo {
+                display: block;
+                margin: 0 auto 20px;
+                max-width: 80%;
+            }
+            .header {
+                background-color: #c5d18a;
+                color: white;
+                text-align: center;
+                padding: 20px;
+            }
+            .container {
+                display: flex;
+                flex-wrap: wrap;
+                padding: 20px;
+                width: 100%;
+            }
+            .sidebutton {
+                flex: 1;
+                max-width: 200px;
+                margin-right: 110px;
+            }
+            .sidebutton h3 {
+                text-align: center;
+            }
+            .sidebutton button {
+                display: block;
+                height: 10%;
+                width: 100%;
+                
+                margin: 10px 0;
+                background-color: #333;
+                color: white;
+                border: none;
+                cursor: pointer;
+                text-align: center;
+                border-radius: 10px;
+                text-align: center;
+                font-family: "Poppins", sans-serif; /* Cambia la fuente aquí */
+                font-size: 16px;
+                
+                align-items: center;
+
+            }
+            .sidebutton button:hover {
+                background-color: #555;
+            }
+
+            .button {
+                display: inline-block;
+                padding: 10px 20px;
+                margin: 5px 0;
+                height: 10%;
+                width: 100%;
+                background-color: #333;
+                color: white;
+                text-align: center;
+                text-decoration: none;
+                border-radius: 10px;
+                font-family: "Poppins", sans-serif; /* Cambia la fuente aquí */
+                font-size: 16px;
+            }
+
+            .button:hover {
+                background-color: #555;
+            }
+            
+
+            .main {
+                flex: 3;
+            }
+            .dashboard {
+                display: flex;
+                border-radius: 10px;
+                justify-content: space-between;
+                
+            }
+            .dashboard div {
+                border-radius: 10px;
+                background-color: #e0e0e0;
+                width: 48%;
+                height: 380px;
+            }
+
+            .logout-icon {
+                position: fixed;
+                align-items: flex-end;
+                top: 1.5%;
+                left: 95%;
+                font-size: 2em;
+                color: white;
+                cursor: pointer;
+                z-index: 1000;
+                
+                padding: 1px 10px;
+                border-radius: 50%;
+                transition: background-color 0.3s;
+            }
+
+            .logout-link img {
+                width: 25px; /* Define el ancho deseado */
+                height: 25px; /* Define la altura deseada */
+            } 
+
+
+            @media screen and (max-width: 768px) {
+                .container {
+                    flex-direction: column;
+                    padding: 0;
+                    width: 100%;
+                }
+                .sidebutton {
+                    max-width: 100%;
+                    margin: 0 0 20px 0;
+                }
+                .main {
+                    width: 100%;
+                    padding: 0;
+                }
+                .dashboard {
+                    flex-direction: column;
+                    align-items: center;
+                }
+                .dashboard div {
+                    width: 90%;
+                    margin-bottom: 20px;
+                }
+            }
+        </style>
+    {% endblock %}
+</head>
+<body>
+    {% block content %}
+    <div class="welcome-banner">
+        <h1>¡Bienvenido a Completopia, {{request.user.first_name}}!</h1>
+        <p>La utopía de los completos</p>
+    </div>
+
+    <div class="main-content">
+        <div class="container">
+            <div class="sidebutton">
+                <h3>Atajos Rápidos</h3>
+                <a class="button" href="{% url 'venta_crear' %}">Nueva venta</a>
+                <a class="button" href="{% url 'orden_crear' %}">Nueva compra</a>
+                <a class="button" href="{% url 'proveedores_crear' %}">Nuevo proveedor</a>
+            </div>
+            <div class="main">
+                <h3>Dashboard</h3>
+                <div class="dashboard">
+                    <div>
+                        <table class="table table-user">
+                            <thead>
+                                <tr>
+                                    <th width="10%" scope="col">Producto</th>
+                                    <th width="12%" scope="col">Codigo</th>
+                                    <th width="10%" scope="col">Unidad</th>
+                                    <th width="10%" scope="col">Stock Actual</th>
+                                    <th width="10%" scope="col">Alarma Establecida (>5 KG o Packs de latas)</th>
+                                    <th width="10%" scope="col"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for p in p_list_paginate %}
+                                    <tr>
+                                        <td>{{ p.supply_name }}</td>
+                                        <td>{{ p.supply_code }}</td>
+                                        <td>{{ p.supply_unit }}</td>
+                                        <td>{{ p.supply_total }}</td>
+                                        <td><span class="low-stock-alert">⚠️ ¡Stock bajo!</span></td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+
+
+                    </div>
+                    <div></div>
+                </div>
+            </div>
         </div>
     </div>
+
+<div class="logout-icon">
+    <a onclick="confirmLogout()" class="logout-link" >
+        <img src="{% static 'assets/img/logout.png' %}">
+    </a>
 </div>
-{% endblock %}
+
+    <!-- Icono de menú -->
+<div class="menu-icon" onclick="toggleNavPanel()">☰</div>
+
+    <!-- Panel de Navegación -->
+    <nav class="side-bar to-left">
+        <div class="menu">
+            <!--=== Menu Inicio ===-->
+            <nav class="sidebar">
+                <div class="sidebar" id="navPanel">
+                    <ul class="menu_items">
+                        <li class="item">
+                            <a href="{% url 'admin_main' %}" class="nav_link submenu_item">
+                                <span class="navlink_icon">
+                                    <i class="bx bx-buildings"></i>
+                                </span>
+                                <span class="navlink">Inicio</span>
+                                <i class="bx bx-chevron-right arrow-left"></i>
+                            </a>
+                            <ul class="menu_items submenu">
+                                <li><a href="{% url 'admin_main' %}" class="nav_link sublink">Inicio</a></li>
+                            </ul>
+                        </li>
+                        <li class="item">
+                            <a href="{% url 'list_user_active' group_id=1 %}" class="nav_link submenu_item">
+                                <span class="navlink_icon">
+                                    <i class="bx bx-buildings"></i>
+                                </span>
+                                <span class="navlink">Gestión de usuarios</span>
+                                <i class="bx bx-chevron-right arrow-left"></i>
+                            </a>
+                        </li>
+                        <li class="item">
+                            <a href="{% url 'proveedores_main' %}" class="nav_link submenu_item">
+                                <span class="navlink_icon">
+                                    <i class="bx bx-buildings"></i>
+                                </span>
+                                <span class="navlink">Gestión de proveedores</span>
+                                <i class="bx bx-chevron-right arrow-left"></i>
+                            </a>
+                            <ul class="menu_items submenu">
+                                <li><a href="{% url 'proveedores_main' %}" class="nav_link sublink">Proveedores Main</a></li>
+                            </ul>
+                        </li>
+                        <li class="item">
+                            <a href="{% url 'inventario_main' %}" class="nav_link submenu_item">
+                                <span class="navlink_icon">
+                                    <i class="bx bx-archive"></i>
+                                </span>
+                                <span class="navlink">Gestión de inventario</span>
+                                <i class="bx bx-chevron-right arrow-left"></i>
+                            </a>
+                            <ul class="menu_items submenu">
+                                <li><a href="{% url 'inventario_main' %}" class="nav_link sublink">Inventario Main</a></li>
+                            </ul>
+                        </li>
+                        <li class="item">
+                            <a href="{% url 'orden_main' %}" class="nav_link submenu_item">
+                                <span class="navlink_icon">
+                                    <i class="bx bx-shopping-bag"></i>
+                                </span>
+                                <span class="navlink">Ordenes de compra</span>
+                                <i class="bx bx-chevron-right arrow-left"></i>
+                            </a>
+                            <ul class="menu_items submenu">
+                                <li><a href="{% url 'orden_main' %}" class="nav_link sublink">Órden Main</a></li>
+                            </ul>
+                        </li>
+    
+                        <li class="item">
+                            <a href="{% url 'ventas_main' %}" class="nav_link submenu_item">
+                                <span class="navlink_icon">
+                                    <i class="bx bx-shopping-bag"></i>
+                                </span>
+                                <span class="navlink">Ordenes de venta</span>
+                                <i class="bx bx-chevron-right arrow-left"></i>
+                            </a>
+                            <ul class="menu_items submenu">
+                                <li><a href="{% url 'ventas_main' %}" class="nav_link sublink">Ventas Main</a></li>
+                            </ul>
+                        </li>
+                        <!-- Más ítems del menú -->
+                        
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </nav>
+    {% endblock %}
+
+    <!-- Pie de página -->
+    <div class="pie">
+        <p>Contacto: ¿Tienes alguna pregunta o comentario? <a href="mailto:completopia@gmail.com">¡Contáctanos!</a></p>
+    </div>
+
+    <script>
+        function toggleNavPanel() {
+            var navPanel = document.getElementById('navPanel');
+            navPanel.classList.toggle('open');
+        }
+
+        function confirmLogout() {
+            if (confirm("¿Estás seguro de que deseas cerrar sesión?")) {
+                window.location.href = '{% url "logout" %}';
+            }
+        }
+
+        // Lógica de búsqueda
+        document.getElementById('searchInput').addEventListener('input', function() {
+            var filter = this.value.toLowerCase();
+            var items = document.querySelectorAll('.nav-menu li');
+            items.forEach(function(item) {
+                if (item.textContent.toLowerCase().includes(filter)) {
+                    item.style.display = '';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

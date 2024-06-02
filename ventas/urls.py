@@ -14,3 +14,4 @@ ventas_patterns = [
     path('get_chart_data_completos_bebidas', views.get_chart_data_completos_bebidas, name='get_chart_data_completos_bebidas'),
 ]
  
+ 

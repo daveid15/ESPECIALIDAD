@@ -20,7 +20,7 @@
 
 /* General body styles */
 body {
-  background-color: #e7f2fd;
+  background-color: #F7F7F7;
   transition: all 0.5s ease;
 }
 body.dark {
@@ -34,10 +34,10 @@ body.dark {
 }
 
 /* Navbar styles */
-.navbar {
+.navbar { /*BARRA DE ARRIBA QUE DICE NOMBRE E ICONOS CERRAR SESION CONFIG*/
   position: fixed;
   top: 0;
-  height: 100; /* Ajusta la altura según tus necesidades */
+  height: 60px; /* Ajusta la altura según tus necesidades */
   width: 100%;
   left: 0;
   background-color: var(--green-color);
@@ -102,13 +102,13 @@ body.dark {
 }
 
 /* Sidebar styles */
-.sidebar {
+.sidebar { /*BARRA MENÚ PRINCIPAL*/
   background-color: var(--green-color);
-  width: 322px; /* Ajusta el ancho según tus necesidades */
-  height: 62%; /* Ajusta la altura según tus necesidades */
+  width: 310px; /* Ajusta el ancho según tus necesidades */
+  height: calc(65% - 60px); /* Ajusta la altura según tus necesidades */
   position: fixed;
-  top: 90px; /* Ajusta la distancia desde la parte superior de la ventana */
-  left: 5px; /* Ajusta la distancia desde el lado izquierdo de la ventana */
+  top: 70px; /* Ajusta la distancia desde la parte superior de la ventana */
+  left: 0; /* Ajusta la distancia desde el lado izquierdo de la ventana */
   border-radius: 15px; /* Redondea las esquinas */
   padding: 5px; /* Ajusta el relleno interior */
   z-index: 100;
@@ -121,7 +121,6 @@ body.dark {
   padding: 60px 0;
   width: 80px;
 }
-
 
 .sidebar::-webkit-scrollbar {
   display: none;
@@ -194,7 +193,6 @@ body.dark {
   background: var(--light-green-color);
 }
 
-
 .sidebar .nav_link {
   display: flex;
   align-items: center;
@@ -220,8 +218,11 @@ body.dark {
 }
 
 .submenu_item {
+  position: relative; /* Asegúrate de que tenga una posición */
+  left: -10px; /* Ajusta este valor según sea necesario */
   cursor: pointer;
 }
+
 
 .submenu {
   display: none;
@@ -229,7 +230,7 @@ body.dark {
 
 .submenu_item .arrow-left {
   position: absolute;
-  right: 10px;
+  right: 5px;
   display: inline-block;
   margin-right: auto;
 }
@@ -252,9 +253,9 @@ body.dark {
 
 .bottom_content {
   position: fixed;
-  bottom: 60px;
+  bottom: 0;
   left: 0;
-  width: 310px; /* Ajusta el ancho según tus necesidades */
+  width: 300px; /* Ajusta el ancho según tus necesidades */
   cursor: pointer;
   transition: all 0.5s ease;
 }
@@ -282,8 +283,8 @@ body.dark {
 }
 
 .sidebar.close .bottom_content {
-  width: 50px;
-  left: 15px;
+  width: 80px;
+  left: 0;
 }
 
 .sidebar.close .bottom span {
@@ -351,109 +352,55 @@ body.dark {
   position: fixed;
   bottom: 5px;
   left: 5px;
-  opacity: 65%;
-}
-
-.settings {
-  position: relative;
-}
-
-.settings .settings-link {
-  color: #212529;
-}
-
-.settings .settings-link:hover {
-  color: #007bff;
-}
-
-.logo {
-  font-size: 24px;
-  font-weight: bold;
-}
-
-.completopia {
-  display: none; /* Esto oculta el texto "Completopia" en la barra de navegación */
-}
-
-/* CSS para el icono de configuración */
-.bi-gear-wide-connected:before {
-  content: "\e6e1"; /* Código del icono de engranaje */
-}
-
-/* CSS para el icono de usuario */
-.bi-person-square:before {
-  content: "\e63e"; /* Código del icono de usuario */
-}
-
-/* orderbar styles */
-.orderbar {
-  background-color: var(--green-color);
-  width: 1100px; /* Ajusta el ancho según tus necesidades */
-  height: 6%; /* Ajusta la altura según tus necesidades */
-  position: fixed;
-  top: 90px; /* Ajusta la distancia desde la parte superior de la ventana */
-  left: 370px; /* Ajusta la distancia desde el lado izquierdo de la ventana */
-  border-radius: 15px; /* Redondea las esquinas */
-  padding: 5px; /* Ajusta el relleno interior */
-  z-index: 100;
-  overflow-y: auto; /* Ajusta la barra de desplazamiento si es necesario */
-  box-shadow: 0 0 10px var(--grey-color-light);
-  transition: all 0.5s ease;
-}
-
-.orderbar.close {
-  padding: 60px 0;
-  width: 80px;
-}
-.orderbar .nav_link {
-  align-items: center;
-  width: 25%;
-  padding: 4px 0px; /* del contenido dentro de la sidebar */
+  width: 90%;
+  text-align: center;
+  padding: 10px;
+  font-size: 14px;
   border-radius: 8px;
-  text-decoration: none;
-  color: var(--grey-color);
-  white-space: nowrap;
 }
 
-/* orderdash styles */
-.orderdash {
-  background-color: var(--white-color);
-  width: 1100px; /* Ajusta el ancho según tus necesidades */
-  height: 60%; /* Ajusta la altura según tus necesidades */
-  position: fixed;
-  top: 140px; /* Ajusta la distancia desde la parte superior de la ventana */
-  left: 370px; /* Ajusta la distancia desde el lado izquierdo de la ventana */
-  padding: 5px; /* Ajusta el relleno interior */
-  z-index: 100;
-  overflow-y: auto; /* Ajusta la barra de desplazamiento si es necesario */
-  box-shadow: 0 0 10px var(--grey-color-light);
-  transition: all 0.5s ease;
+.footer p {
+  margin: 0;
+  color: var(--green-color);
 }
 
-.orderdash:-webkit-scrollbar {
-  display: none;
+/* Ajustes adicionales */
+body.dark .header,
+body.dark .footer {
+  background-color: #333;
+}
+
+body.dark .header {
+  border-bottom: 1px solid #444;
 }
 
 /* profilebar styles */
 .profilebar {
   background-color: var(--green-color);
-  width: 1100px; /* Ajusta el ancho según tus necesidades */
+  width: 90%; /* Ajusta el ancho de manera relativa */
+  max-width: 1010px; /* Ancho máximo */
   height: 6%; /* Ajusta la altura según tus necesidades */
   position: fixed;
-  top: 90px; /* Ajusta la distancia desde la parte superior de la ventana */
-  left: 370px; /* Ajusta la distancia desde el lado izquierdo de la ventana */
+  top: 70px; /* Ajusta la distancia desde la parte superior de la ventana */
+  left: 60%; /* Centra el contenedor */
+  transform: translateX(-50%); /* Centra el contenedor */
   border-radius: 15px; /* Redondea las esquinas */
   padding: 5px; /* Ajusta el relleno interior */
   z-index: 100;
   overflow-y: auto; /* Ajusta la barra de desplazamiento si es necesario */
   box-shadow: 0 0 10px var(--grey-color-light);
   transition: all 0.5s ease;
+}
+
+.profilebar::-webkit-scrollbar {
+  display: none;
 }
 
 .profilebar.close {
   padding: 60px 0;
   width: 80px;
 }
+
 .profilebar .nav_link {
   align-items: center;
   width: 25%;
@@ -464,39 +411,118 @@ body.dark {
   white-space: nowrap;
 }
 
-/* profileedit styles */
+/* useredit styles */
 .profileedit {
   background-color: var(--white-color);
-  width: 1100px; /* Ajusta el ancho según tus necesidades */
-  height: 60%; /* Ajusta la altura según tus necesidades */
+  width: 90%; /* Ajusta el ancho de manera relativa */
+  max-width: 1000px; /* Ancho máximo */
+  height: 70%; /* Ajusta la altura según tus necesidades */
   position: fixed;
-  top: 140px; /* Ajusta la distancia desde la parte superior de la ventana */
-  left: 370px; /* Ajusta la distancia desde el lado izquierdo de la ventana */
+  top: 120px; /* Ajusta la distancia desde la parte superior de la ventana */
+  left: 60%; /* Centra el contenedor */
+  transform: translateX(-50%); /* Centra el contenedor */
   padding: 5px; /* Ajusta el relleno interior */
   z-index: 100;
   overflow-y: auto; /* Ajusta la barra de desplazamiento si es necesario */
   box-shadow: 0 0 10px var(--grey-color-light);
   transition: all 0.5s ease;
+  border-radius: 15px;
 }
 
-.profileedit:-webkit-scrollbar {
-  display: none;
+.profileedit::-webkit-scrollbar {
+  display: default;
 }
 
+/* Media Queries para pantallas más pequeñas */
+@media screen and (max-width: 768px) {
+  .profilebar {
+    width: 60%; /* Ajusta el ancho para pantallas más pequeñas */
+    top: 80px; /* Ajusta la distancia desde la parte superior */
+  }
+
+  .profileedit {
+    width: 30%; /* Ajusta el ancho para pantallas más pequeñas */
+    top: 110px; /* Ajusta la distancia desde la parte superior */
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .profilebar {
+    width: 100%; /* Ajusta el ancho para pantallas muy pequeñas */
+    top: 50px; /* Ajusta la distancia desde la parte superior */
+  }
+
+  .profileedit {
+    width: 30%; /* Ajusta el ancho para pantallas muy pequeñas */
+    top: 90px; /* Ajusta la distancia desde la parte superior */
+  }
+}
+
+/* useredit styles */
+.useredit {
+  background-color: var(--white-color);
+  width: 90%; /* Ajusta el ancho de manera relativa */
+  max-width: 1000px; /* Ancho máximo */
+  height: 80%; /* Ajusta la altura según tus necesidades */
+  position: fixed;
+  top: 75px; /* Ajusta la distancia desde la parte superior de la ventana */
+  left: 60%; /* Centra el contenedor */
+  transform: translateX(-50%); /* Centra el contenedor */
+  padding: 5px; /* Ajusta el relleno interior */
+  z-index: 100;
+  overflow-y: auto; /* Ajusta la barra de desplazamiento si es necesario */
+  box-shadow: 0 0 10px var(--grey-color-light);
+  transition: all 0.5s ease;
+  border-radius: 15px;
+}
+
+.useredit::-webkit-scrollbar {
+  display: default;
+}
+
+/* Media Queries para pantallas más pequeñas */
+@media screen and (max-width: 768px) {
+  .profilebar {
+    width: 60%; /* Ajusta el ancho para pantallas más pequeñas */
+    top: 80px; /* Ajusta la distancia desde la parte superior */
+  }
+
+  .useredit {
+    width: 30%; /* Ajusta el ancho para pantallas más pequeñas */
+    top: 110px; /* Ajusta la distancia desde la parte superior */
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .profilebar {
+    width: 100%; /* Ajusta el ancho para pantallas muy pequeñas */
+    top: 50px; /* Ajusta la distancia desde la parte superior */
+  }
+
+  .useredit {
+    width: 30%; /* Ajusta el ancho para pantallas muy pequeñas */
+    top: 90px; /* Ajusta la distancia desde la parte superior */
+  }
+}
 /* proveedorbar styles */
 .proveedorbar {
   background-color: var(--green-color);
-  width: 1100px; /* Ajusta el ancho según tus necesidades */
+  width: 90%; /* Ajusta el ancho de manera relativa */
+  max-width: 1010px; /* Ancho máximo */
   height: 6%; /* Ajusta la altura según tus necesidades */
   position: fixed;
-  top: 90px; /* Ajusta la distancia desde la parte superior de la ventana */
-  left: 370px; /* Ajusta la distancia desde el lado izquierdo de la ventana */
+  top: 70px; /* Ajusta la distancia desde la parte superior de la ventana */
+  left: 60%; /* Centra el contenedor */
+  transform: translateX(-50%); /* Centra el contenedor */
   border-radius: 15px; /* Redondea las esquinas */
   padding: 5px; /* Ajusta el relleno interior */
   z-index: 100;
   overflow-y: auto; /* Ajusta la barra de desplazamiento si es necesario */
   box-shadow: 0 0 10px var(--grey-color-light);
   transition: all 0.5s ease;
+}
+.proveedorbar::-webkit-scrollbar {
+  display: none;
 }
 
 .proveedorbar.close {
@@ -516,32 +542,34 @@ body.dark {
 /* proveedordash styles */
 .proveedordash {
   background-color: var(--white-color);
-  width: 1100px; /* Ajusta el ancho según tus necesidades */
+  width: 980px; /* Ajusta el ancho según tus necesidades  PENSARLO BIEN SI QUEDA ASÍ O NO */ 
   height: 78%; /* Ajusta la altura según tus necesidades */
   position: fixed;
-  top: 140px; /* Ajusta la distancia desde la parte superior de la ventana */
-  left: 370px; /* Ajusta la distancia desde el lado izquierdo de la ventana */
+  top: 125px; /* Ajusta la distancia desde la parte superior de la ventana */
+  left: 380px; /* Ajusta la distancia desde el lado izquierdo de la ventana */
   padding: 5px; /* Ajusta el relleno interior */
   z-index: 100;
+  border-radius: 15px;
   overflow-y: auto; /* Ajusta la barra de desplazamiento si es necesario */
   box-shadow: 0 0 10px var(--grey-color-light);
   transition: all 0.5s ease;
 }
 
 .proveedordash:-webkit-scrollbar {
-  display: none;
+  display: default;
 }
 
 /* proveedorver styles */
 .proveedorver {
   background-color: var(--white-color);
-  width: 1100px; /* Ajusta el ancho según tus necesidades */
+  width: 1010px; /* Ajusta el ancho según tus necesidades */
   height: 60%; /* Ajusta la altura según tus necesidades */
   position: fixed;
-  top: 140px; /* Ajusta la distancia desde la parte superior de la ventana */
-  left: 370px; /* Ajusta la distancia desde el lado izquierdo de la ventana */
+  top: 100px; /* Ajusta la distancia desde la parte superior de la ventana */
+  left: 330px; /* Ajusta la distancia desde el lado izquierdo de la ventana */
   padding: 5px; /* Ajusta el relleno interior */
   z-index: 100;
+  border-radius: 15px;
   overflow-y: auto; /* Ajusta la barra de desplazamiento si es necesario */
   box-shadow: 0 0 10px var(--grey-color-light);
   transition: all 0.5s ease;
@@ -554,13 +582,14 @@ body.dark {
 /* proveedoredit styles */
 .proveedoredit {
   background-color: var(--white-color);
-  width: 1100px; /* Ajusta el ancho según tus necesidades */
-  height: 60%; /* Ajusta la altura según tus necesidades */
+  width: 1000px; /* Ajusta el ancho según tus necesidades */
+  height: 75%; /* Ajusta la altura según tus necesidades */
   position: fixed;
   top: 140px; /* Ajusta la distancia desde la parte superior de la ventana */
-  left: 370px; /* Ajusta la distancia desde el lado izquierdo de la ventana */
+  left: 330px; /* Ajusta la distancia desde el lado izquierdo de la ventana */
   padding: 5px; /* Ajusta el relleno interior */
   z-index: 100;
+  border-radius: 15px;
   overflow-y: auto; /* Ajusta la barra de desplazamiento si es necesario */
   box-shadow: 0 0 10px var(--grey-color-light);
   transition: all 0.5s ease;
@@ -568,6 +597,30 @@ body.dark {
 
 .proveedoredit:-webkit-scrollbar {
   display: none;
+}
+/* Media Queries para pantallas más pequeñas */
+@media screen and (max-width: 768px) {
+  .proveedorbar {
+    width: 100%; /* Ajusta el ancho para pantallas más pequeñas */
+    top: 80px; /* Ajusta la distancia desde la parte superior */
+  }
+
+  .proveedordash {
+    width: 30%; /* Ajusta el ancho para pantallas más pequeñas */
+    top: 110px; /* Ajusta la distancia desde la parte superior */
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .proveedorbar {
+    width: 100%; /* Ajusta el ancho para pantallas muy pequeñas */
+    top: 50px; /* Ajusta la distancia desde la parte superior */
+  }
+
+  .proveedordash {
+    width: 30%; /* Ajusta el ancho para pantallas muy pequeñas */
+    top: 90px; /* Ajusta la distancia desde la parte superior */
+  }
 }
 
 .logoutbutton {
@@ -586,4 +639,170 @@ body.dark {
 .logoutbutton:hover {
   background-color: #65702d;
   color: white;
+}
+
+/* orderbar styles */
+.orderbar {
+  background-color: var(--green-color);
+  width: 1010px; /* Ajusta el ancho según tus necesidades */
+  height: 6%; /* Ajusta la altura según tus necesidades */
+  position: fixed;
+  top: 70px; /* Ajusta la distancia desde la parte superior de la ventana */
+  left: 315px; /* Ajusta la distancia desde el lado izquierdo de la ventana */
+  border-radius: 15px; /* Redondea las esquinas */
+  padding: 5px; /* Ajusta el relleno interior */
+  z-index: 100;
+  box-shadow: 0 0 10px var(--grey-color-light);
+  transition: all 0.5s ease;
+}
+
+.orderbar:-webkit-scrollbar {
+  display: none;
+}
+
+.orderbar.close {
+  padding: 60px 0;
+  width: 80px;
+}
+.orderbar .nav_link {
+  align-items: center;
+  width: 25%;
+  padding: 4px 0px; /* del contenido dentro de la sidebar */
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--grey-color);
+  white-space: nowrap;
+}
+
+/* orderdash styles */
+.orderdash {
+  background-color: var(--white-color);
+  width: 1010px; /* Ajusta el ancho según tus necesidades */
+  height: 85%; /* Ajusta la altura según tus necesidades */
+  position: fixed;
+  top: 130px; /* Ajusta la distancia desde la parte superior de la ventana */
+  left: 320px; /* Ajusta la distancia desde el lado izquierdo de la ventana */
+  padding: 5px; /* Ajusta el relleno interior */
+  z-index: 100;
+  overflow-y: auto; /* Ajusta la barra de desplazamiento si es necesario */
+  box-shadow: 0 0 10px var(--grey-color-light);
+  transition: all 0.5s ease;
+}
+
+.orderdash:-webkit-scrollbar {
+  display: none;
+}
+
+/* proveedoredit styles */
+.orderedit {
+  background-color: var(--white-color);
+  width: 1000px; /* Ajusta el ancho según tus necesidades */
+  height: 60%; /* Ajusta la altura según tus necesidades */
+  position: fixed;
+  top: 140px; /* Ajusta la distancia desde la parte superior de la ventana */
+  left: 60%px; /* Ajusta la distancia desde el lado izquierdo de la ventana */
+  padding: 5px; /* Ajusta el relleno interior */
+  z-index: 100;
+  overflow-y: auto; /* Ajusta la barra de desplazamiento si es necesario */
+  box-shadow: 0 0 10px var(--grey-color-light);
+  transition: all 0.5s ease;
+}
+
+.orderedit:-webkit-scrollbar {
+  display: none;
+}
+
+
+/* ventasbar styles */
+.ventasbar {
+  background-color: var(--green-color);
+  width: 90%; /* Ajusta el ancho de manera relativa */
+  max-width: 1010px; /* Ancho máximo */
+  height: 6%; /* Ajusta la altura según tus necesidades */
+  position: fixed;
+  top: 70px; /* Ajusta la distancia desde la parte superior de la ventana */
+  left: 60%; /* Centra el contenedor */
+  transform: translateX(-50%); /* Centra el contenedor */
+  border-radius: 10px; /* Redondea las esquinas */
+  padding: 5px; /* Ajusta el relleno interior */
+  z-index: 100;
+  overflow-y: auto; /* Ajusta la barra de desplazamiento si es necesario */
+  box-shadow: 0 0 10px var(--grey-color-light);
+  transition: all 0.5s ease;
+}
+.ventasbar::-webkit-scrollbar {
+  display: none;
+}
+
+.ventasbar.close {
+  padding: 60px 0;
+  width: 80px;
+}
+.ventasbar .nav_link {
+  align-items: center;
+  width: 25%;
+  padding: 4px 0px; /* del contenido dentro de la sidebar */
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--grey-color);
+  white-space: nowrap;
+}
+
+/* ventasdash styles */
+.ventasdash {
+  background-color: var(--white-color);
+  width: 980px; /* Ajusta el ancho según tus necesidades  PENSARLO BIEN SI QUEDA ASÍ O NO */ 
+  height: 78%; /* Ajusta la altura según tus necesidades */
+  position: fixed;
+  top: 125px; /* Ajusta la distancia desde la parte superior de la ventana */
+  left: 24%; /* Ajusta la distancia desde el lado izquierdo de la ventana */
+  padding: 5px; /* Ajusta el relleno interior */
+  z-index: 100;
+  border-radius: 10px;
+  overflow-y: auto; /* Ajusta la barra de desplazamiento si es necesario */
+  box-shadow: 0 0 10px var(--grey-color-light);
+  transition: all 0.5s ease;
+}
+
+.ventasdash:-webkit-scrollbar {
+  display: default;
+}
+
+/* ventasver styles */
+.ventasver {
+  background-color: var(--white-color);
+  width: 1010px; /* Ajusta el ancho según tus necesidades */
+  height: 60%; /* Ajusta la altura según tus necesidades */
+  position: fixed;
+  top: 100px; /* Ajusta la distancia desde la parte superior de la ventana */
+  left: 330px; /* Ajusta la distancia desde el lado izquierdo de la ventana */
+  padding: 5px; /* Ajusta el relleno interior */
+  z-index: 100;
+  border-radius: 15px;
+  overflow-y: auto; /* Ajusta la barra de desplazamiento si es necesario */
+  box-shadow: 0 0 10px var(--grey-color-light);
+  transition: all 0.5s ease;
+}
+
+.ventasver:-webkit-scrollbar {
+  display: none;
+}
+
+/* ventasedit styles */
+.ventasedit {
+  background-color: var(--white-color);
+  width: 1000px; /* Ajusta el ancho según tus necesidades */
+  height: 65%; /* Ajusta la altura según tus necesidades */
+  position: fixed;
+  top: 140px; /* Ajusta la distancia desde la parte superior de la ventana */
+  left: 330px; /* Ajusta la distancia desde el lado izquierdo de la ventana */
+  padding: 5px; /* Ajusta el relleno interior */
+  z-index: 100;
+  border-radius: 15px;/* Ajusta la barra de desplazamiento si es necesario */
+  box-shadow: 0 0 10px var(--grey-color-light);
+  transition: all 0.5s ease;
+}
+
+.ventasedit:-webkit-scrollbar {
+  display: none;
 }

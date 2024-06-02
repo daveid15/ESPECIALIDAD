@@ -169,6 +169,7 @@
                                     </div>
                                 </div>
                             </div>
+<<<<<<< HEAD
                         <div class="mb-3">
                             <button type="button" id="add-producto" class="btn btn-secondary">Agregar Producto</button>
                         </div>
@@ -204,6 +205,12 @@
                                     <button type="submit" class="button">Crear</button>
                                 </div>
                                 <div class="d-flex justify-content-center mx-0-5--custom">
+=======
+                            <div class="mb-0 col-md-4">
+                                <div class="d-flex justify-content-center mb-2">
+                                    <div class="d-flex justify-content-center mx-0-5--custom">
+                                        <button type="submit" class="button">Crear</button>
+>>>>>>> 687712b577c6447ac976a7a363140c4d302d118f
                                     <a href="{% url 'proveedores_main' %}" class="button">Volver</a>
                                 </div>
                 </form>
@@ -254,6 +261,7 @@
             }
         }
 
+<<<<<<< HEAD
         //PRODUCTOS NUEVOS
 
         document.getElementById('add-producto_nuevo').addEventListener('click', function() {
@@ -294,6 +302,9 @@
                 });
             }
         }
+=======
+
+>>>>>>> 687712b577c6447ac976a7a363140c4d302d118f
 
 
         document.getElementById('supply_code').addEventListener('input', function(event) {
@@ -310,6 +321,16 @@
             event.target.value = newValue;
         });
 
+<<<<<<< HEAD
+=======
+        // Limitar el campo a 9 caracteres (considerando el formato de un número telefónico)
+        newValue = newValue.slice(0, 9);
+
+        // Actualizar el valor del campo
+        event.target.value = newValue;
+    });
+    {% endblock extrajs %}    
+>>>>>>> 687712b577c6447ac976a7a363140c4d302d118f
 </script>
 
     {% endblock extrajs %}    

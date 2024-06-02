@@ -15,11 +15,11 @@
         }
     
         section {
-            background-color: white;
+            background-color: whiten;
             max-width: 900px;
-            margin: 50px auto;
-            padding: 20px;
-            border-radius: 10px;
+            margin: 10px auto;
+            padding: 10px;
+            border-radius: 15px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             display: flex;
         }
@@ -60,10 +60,9 @@
             padding: 12px 20px;
             border: none;
             border-radius: 5px;
-            cursor: pointer;
-            width: 25%;
-            margin-top: 10px;
-            margin-bottom: 10px;
+            cursor: 10%;
+            margin-top: -30px;
+            margin-bottom: 20px;
             font-size: 16px;
         }
     
@@ -81,6 +80,12 @@
             color: red;
             text-align: center;
         }
+        .casillas {
+                display: flex;
+                border-radius: 10px;
+                justify-content: space-between;
+
+            }
     
         @media (max-width: 768px) {
             section {
@@ -99,13 +104,10 @@
                 <form method="post" action="{% url 'producto_save' %}">
                     {% csrf_token %}
                     <div class="col-12 col-lg-12 row row-cols-1 row-cols-md-1 g-2 p-lg-0-5">
-                        <div class="mb-0 col-md-12">
+                        <div class="casillas">
                             <label for="supply_name" class="form-label">Producto</label>
                             <input type="text" class="form-control border border-danger" id="supply_name" name="supply_name" pattern="[A-Za-záéíóúÁÉÍÓÚüÜñÑ\s]+" autofocus maxlength="254" required placeholder="Nombre Producto"/>
                             <div class="feedback body--small normal"></div>
-                        </div>
-
-                        <div class="mb-0 col-md-12">
                             <label for="supply_code" class="form-label">Código</label>
                             <div style="position: relative;">
                                 <span style="position: absolute; top: 35%; transform: translateY(-50%); left: 1px; color: gray;">SKU</span>
@@ -114,7 +116,7 @@
                             <div class="feedback body--small normal"></div>
                         </div>
 
-                        <div class="mb-0 col-md-12">
+                        <div class="casillas">
                             <label for="supply_unit">Unidad</label>
                             <select name="supply_unit" id="supply_unit" value="{{product_data.supply_unit}}"class="form-control border border-danger" required>
                                 <option value="">Seleccione la unidad</option>
@@ -124,8 +126,6 @@
                                 <option value="kg">kg</option>   
                                 <option value="LATA (330 ml)">LATA (330 ml)</option>
                                 </select>
-                        </div>    
-                        <div class="mb-0 col-md-12">
                             <label for="supply_input" class="form-label">Cantidad Agregada</label>
                             <input type="number" min="0" class="form-control" name="supply_initial_stock" id="supply_initial_stock" placeholder="Cantidad" style="text-transform: capitalize;" required>
                             <div class="feedback body--small normal"></div>
@@ -135,10 +135,7 @@
                             <div class="d-flex justify-content-center mb-2">
                                 <div class="d-flex justify-content-center mx-0-5--custom">
                                     <button type="submit" class="button">Crear</button>
-                                </div>
-                                <div class="d-flex justify-content-center mx-0-5--custom">
                                     <a href="{% url 'inventario_main' %}" class="button">Regresar</a>
-                                    <a href="{% url 'carga_masiva_producto' %}" class="button">Carga Masiva</a>
                                 </div>  
                             </div>                                  
                         </div>

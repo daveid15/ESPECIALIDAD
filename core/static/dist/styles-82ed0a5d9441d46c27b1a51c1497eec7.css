@@ -817,7 +817,7 @@ progress {
 .container-lg,
 .container-md,
 .container-sm {
-  width: 100%;
+  width: 50%;
   padding-right: var(--bs-gutter-x, 0.75rem);
   padding-left: var(--bs-gutter-x, 0.75rem);
   margin-right: auto;

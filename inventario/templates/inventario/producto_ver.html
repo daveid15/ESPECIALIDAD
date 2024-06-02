@@ -62,7 +62,7 @@
         border: none;
         border-radius: 5px;
         cursor: pointer;
-        width: 30%;
+        width: 10%;
         margin-top: 10px;
         margin-bottom: 10px;
         font-size: 16px;
@@ -82,6 +82,12 @@
         color: red;
         text-align: center;
     }
+    .casillas {
+                display: flex;
+                border-radius: 10px;
+                justify-content: space-between;
+
+            }
 
     @media (max-width: 768px) {
         section {
@@ -100,22 +106,16 @@
             <form method="post" action="{% url 'producto_edit' product_id=product_data.id %}">
                 {% csrf_token %}
                 <div class="col-12 col-lg-12 row row-cols-1 row-cols-md-1 g-2 p-lg-0-5">
-                    <div class="mb-0 col-md-12">
+                    <div class="casillas">
                         <label for="supply_name" class="form-label">Producto</label>
                         <input type="text" class="form-control border border-danger" id="supply_name" name="supply_name" value={{product_data.supply_name}} pattern="[A-Za-záéíóúÁÉÍÓÚüÜñÑ\s]+" autofocus maxlength="254" required placeholder="Nombre Producto"/>
                         <div class="feedback body--small normal"></div>
-                    </div>
-
-                    <div class="mb-0 col-md-12">
                         <label for="supply_code" class="form-label">Código</label>
                         <div style="position: relative;">
                             <span style="position: absolute; top: 35%; transform: translateY(-50%); left: 1px; color: gray;">SKU</span>
                             <input type="text" class="form-control" name="supply_code" id="supply_code" value = {{supply_code}} placeholder="XXXX" style="padding-left: 30px; text-transform: capitalize;" required>
                         </div>
                         <div class="feedback body--small normal"></div>
-                    </div>
-
-                    <div class="mb-0 col-md-12">
                         <label for="supply_unit">Unidad</label>
                         <select name="supply_unit" id="supply_unit" value="{{product_data.supply_unit}}" class="form-control border border-danger" required>
                             <option value="">Seleccione la unidad</option>
@@ -124,17 +124,13 @@
                         </select> 
                     </div>
                     
-                    <div class="mb-0 col-md-12">
+                    <div class="casillas">
                         <label for="supply_input" class="form-label">Stock Inicial</label>
                         <input type="number" min="0" class="form-control" name="supply_initial_stock" id="supply_initial_stock" value="{{product_data.supply_initial_stock}}" style="text-transform: capitalize;" required/>
                         <div class="feedback body--small normal"></div>
-                    </div> 
-                    <div class="mb-0 col-md-12">
                         <label for="supply_input" class="form-label">Entradas</label>
                         <input type="number" min="0" class="form-control" name="supply_input" id="supply_input" value="0" style="text-transform: capitalize;" required/>
                         <div class="feedback body--small normal"></div>
-                    </div> 
-                    <div class="mb-0 col-md-12">
                         <label for="supply_output" class="form-label">Salidas</label>
                         <input type="number" min="0" class="form-control" name="supply_output" id="supply_output" value="0" style="text-transform: capitalize;" required/>
                         <div class="feedback body--small normal"></div>
@@ -144,8 +140,6 @@
                         <div class="d-flex justify-content-center mb-2">
                             <div class="d-flex justify-content-center mx-0-5--custom">
                                 <button type="submit"class="button">Editar</button>
-                            </div> 
-                            <div class="d-flex justify-content-center mx-0-5--custom">
                                 <a href="{% url 'producto_list' %}" class="button">Volver</a>
                             </div>  
                                                           
