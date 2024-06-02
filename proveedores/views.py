@@ -158,7 +158,8 @@ def proveedor_save(request):
                             )
                 
                         for producto, codigo, unidad in zip(producto_nuevo, codigo_nuevo, unidad_nuevo):
-                            Product.objects.create(
+                            # Crear el nuevo producto
+                            nuevo_producto = Product.objects.create(
                                 supply_name=producto,
                                 supply_code=codigo,
                                 supply_unit=unidad,
@@ -167,6 +168,19 @@ def proveedor_save(request):
                                 supply_output=0,
                                 supply_total=0
                             )
+                            
+                            # Imprimir la ID del nuevo producto
+                            print(nuevo_producto.id)
+                            
+                            # Obtener la instancia del producto recién creado
+                            producto_instance_nuevo = Product.objects.get(id=nuevo_producto.id)
+                            
+                            # Crear la relación en Prov_prod
+                            Prov_prod.objects.create(
+                                proveedor=proveedor_save,
+                                producto=producto_instance_nuevo,
+                            )
+
                     messages.add_message(request, messages.INFO, 'Productos guardados con éxito')
                 except Exception as e:
                     messages.add_message(request, messages.ERROR, f'Error al guardar productos: {str(e)}')

@@ -2,18 +2,18 @@
 {% load static %}
 {% block title %}{% endblock %}
 {% block content %}
-    {% block extra_css %}    
-    {% endblock extra_css %}    
+    {% block extra_css %}
+    {% endblock extra_css %}
     <style>
         .errorlist {
             color: red;
         }
-    
+
         body {
             font-family: 'Arial', sans-serif;
             background-color: #f7f7f7;
         }
-    
+
         section {
             background-color: white;
             max-width: 900px;
@@ -21,32 +21,30 @@
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            display: flex;
         }
-    
+
         .avatar {
             width: 100px;
             height: 100px;
             border-radius: 50%;
             margin-right: 10px;
         }
-    
+
         .titulo {
             font-family: 'Sigmar', sans-serif;
             color: #333;
             font-size: 36px;
             margin: 0;
         }
-    
+
         .form-label {
-            width: 100px;
             font-size: 16px;
-            margin-bottom: 30px;
+            margin-bottom: 10px;
             color: #333;
         }
-    
+
         .form-control {
-            width: 30%;
+            width: 100%;
             height: 40px;
             padding: 10px;
             margin-top: 5px;
@@ -55,7 +53,7 @@
             border-radius: 5px;
             box-sizing: border-box;
         }
-    
+
         .button {
             background-color: #87963C;
             color: white;
@@ -63,33 +61,39 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            width: 20%;
+            width: 21%;
             margin-top: 10px;
             margin-bottom: 10px;
             font-size: 16px;
         }
-    
+
         .button:hover {
             background-color: #65702d;
             color: white;
         }
-    
+
         .message {
             color: green;
             text-align: center;
         }
-    
+
         .error-message {
             color: red;
             text-align: center;
         }
 
-        
-    
+        .product-item,
+        .product-nuevo-item {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #f9f9f9;
+        }
+
         @media (max-width: 768px) {
             section {
-                flex-direction: column;
-                align-items: center;
+                padding: 10px;
             }
         }
     </style>
@@ -97,241 +101,198 @@
         <h2 class='h2 medium text-blue'>Nuevo Proveedor</h2>
     </header>
     <nav id="proveedoredit" class="proveedoredit">
-    <div class="col-md-11">
-        <div class="mb-3">
-            <div class="d-flex flex-column align-items-center align-items-lg-start">
-                <form method="post" action="{% url 'proveedor_save' %}">
-                    {% csrf_token %}
-                    <div id ="container">
-                    <div class="col-12 col-lg-12 row row-cols-1 row-cols-md-1 g-2 p-lg-0-5">
-                        <div class="mb-0 col-md-6">
-                            <label for="proveedor_name" class="form-label">Nombre</label>
-                            <input type="text" class="form-control" name="proveedor_name" pattern="[A-Za-zÑñ]+" id="proveedor_name" placeholder="Nombre" style="text-transform: capitalize;" required>
-                        </div>
-                        <div class="mb-0 col-md-6">
-                            <label for="proveedor_last_name" class="form-label">Apellido</label>
-                            <input type="text" class="form-control" name="proveedor_last_name" pattern="[A-Za-zÑñ]+" id="proveedor_last_name" placeholder="Apellido" style="text-transform: capitalize;" required>
-                        </div>
-                        <div class="mb-0 col-md-6">
-                            <label for="proveedor_rut" class="form-label">Rut</label>
-                            <input type="text" class="form-control" name="proveedor_rut" id="proveedor_rut" placeholder="Rut" required>
-                        </div>
-                        <div class="mb-0 col-md-6">
-                            <label for="proveedor_mail" class="form-label">Correo electrónico</label>
-                            <input type="text" class="form-control" name="proveedor_mail" id="proveedor_mail" placeholder="nombre@gmail.com" required>
-                        </div>
-                        <div class="mb-0 col-md-6">
-                            <label for="proveedor_phone" class="form-label">Teléfono</label>
-                            <input type="text" class="form-control" name="proveedor_phone" id="proveedor_phone" pattern="[0-9]{9}" placeholder="Teléfono" required>
-                        </div>
-                        <div class="mb-0 col-md-12">
-                            <label for="proveedor_address" class="form-label">Dirección</label>
-                            <input type="text" class="form-control" name="proveedor_address" id="proveedor_address" placeholder="Dirección" required>
-                        <div class="col-12 col-sm-4 mb-3">
-                            <label for="proveedor_region">Región</label>
-                            <select name="proveedor_region" id="proveedor_region" class="form-control border border-danger" required>
-                                <option value="">Seleccione una región</option>
-                                {% for region in regions %}
-                                <option value="{{ region }}">{{ región }}</option>
-                                {% endfor %}
-                                <option value="Region Metropolitana de Santiago">Región Metropolitana de Santiago
-                            </select>
-                            <label for="proveedor_comuna">Comuna</label>
-                                <select name="proveedor_comuna" id="proveedor_comuna" class="form-control border border-danger" required>
-                                    <option value="">Seleccione una comuna</option>
-                                    {% for comuna in comunas %}
+        <div class="col-md-11">
+            <div class="mb-3">
+                <div class="d-flex flex-column align-items-center align-items-lg-start">
+                    <form method="post" action="{% url 'proveedor_save' %}">
+                        {% csrf_token %}
+                        <div id="container">
+                            <div class="col-12 col-lg-12 row row-cols-1 row-cols-md-1 g-2 p-lg-0-5">
+                                <div class="mb-0 col-md-6">
+                                    <label for="proveedor_name" class="form-label">Nombre</label>
+                                    <input type="text" class="form-control" name="proveedor_name" pattern="[A-Za-zÑñ]+" id="proveedor_name" placeholder="Nombre" style="text-transform: capitalize;" required>
+                                </div>
+                                <div class="mb-0 col-md-6">
+                                    <label for="proveedor_last_name" class="form-label">Apellido</label>
+                                    <input type="text" class="form-control" name="proveedor_last_name" pattern="[A-Za-zÑñ]+" id="proveedor_last_name" placeholder="Apellido" style="text-transform: capitalize;" required>
+                                </div>
+                                <div class="mb-0 col-md-6">
+                                    <label for="proveedor_rut" class="form-label">Rut</label>
+                                    <input type="text" class="form-control" name="proveedor_rut" id="proveedor_rut" placeholder="Rut" required>
+                                </div>
+                                <div class="mb-0 col-md-6">
+                                    <label for="proveedor_mail" class="form-label">Correo electrónico</label>
+                                    <input type="email" class="form-control" name="proveedor_mail" id="proveedor_mail" placeholder="nombre@gmail.com" required>
+                                </div>
+                                <div class="mb-0 col-md-6">
+                                    <label for="proveedor_phone" class="form-label">Teléfono</label>
+                                    <input type="text" class="form-control" name="proveedor_phone" id="proveedor_phone" pattern="[0-9]{9}" placeholder="Teléfono" required>
+                                </div>
+                                <div class="mb-0 col-md-12">
+                                    <label for="proveedor_address" class="form-label">Dirección</label>
+                                    <input type="text" class="form-control" name="proveedor_address" id="proveedor_address" placeholder="Dirección" required>
+                                </div>
+                                <div class="col-12 col-sm-4 mb-3">
+                                    <label for="proveedor_region">Región</label>
+                                    <select name="proveedor_region" id="proveedor_region" class="form-control border border-danger" required>
+                                        <option value="">Seleccione una región</option>
+                                        {% for region in regions %}
+                                        <option value="{{ region }}">{{ region }}</option>
+                                        {% endfor %}
+                                        <option value="Region Metropolitana de Santiago">Región Metropolitana de Santiago
+                                    </select>
+                                    <label for="proveedor_comuna">Comuna</label>
+                                    <select name="proveedor_comuna" id="proveedor_comuna" class="form-control border border-danger" required>
+                                        <option value="">Seleccione una comuna</option>
+                                        {% for comuna in comunas %}
                                         <option value="{{ comuna }}">{{ comuna }}</option>
-                                    {% endfor %}
+                                        {% endfor %}
                                         <optgroup label="Región Metropolitana de Santiago">
-                                        <option value="Providencia">Providencia</option>
-                                        <option value="Santiago">Santiago</option>
-                                        <option value="San Bernardo">San Bernardo</option>
-                                        <option value="Maipú">Maipú</option>
-                                        <option value="Buin">Buin</option>
-                                    </optgroup>
-                                </select>
-                            </select>
-                        </div>
-                        <div id="productos-container" class="col-12 col-lg-12 row row-cols-1 row-cols-md-1 g-2 p-lg-0-5">
-                            <div class="producto-item mb-3 col-12">
-                                <div class="row">
-                                    <div class="mb-0 col-md-6">
-                                        <label for="producto_orden_0" class="form-label">Producto</label>
-                                        <select class="form-select" name="producto_orden[]" id="producto_orden_0" required>
-                                            <option value="" selected disabled>Selecciona un Producto</option>
-                                            {% for producto in productos %}
-                                                <option value="{{ producto.id }}">{{ producto.get_nombre_producto }}</option>
-                                            {% endfor %}
-                                        </select>
+                                            <option value="Providencia">Providencia</option>
+                                            <option value="Santiago">Santiago</option>
+                                            <option value="San Bernardo">San Bernardo</option>
+                                            <option value="Maipú">Maipú</option>
+                                            <option value="Buin">Buin</option>
+                                        </optgroup>
+                                    </select>
+                                </div>
+                                <div id="productos-container" class="col-12 col-lg-12 row row-cols-1 row-cols-md-1 g-2 p-lg-0-5">
+                                    <h3>Productos Existentes</h3>
+                                    <div class="product-item mb-3 col-12">
+                                        <div class="row">
+                                            <div class="mb-0 col-md-11">
+                                                <label for="producto_orden_0" class="form-label">Producto</label>
+                                                <select class="form-select" name="producto_orden[]" id="producto_orden_0" required>
+                                                    <option value="" selected disabled>Selecciona un Producto</option>
+                                                    {% for producto in productos %}
+                                                    <option value="{{ producto.id }}">{{ producto.get_nombre_producto }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                            <div class="mb-0 col-md-1 d-flex align-items-end">
+                                                <button type="button" class="btn btn-danger btn-delete-producto" disabled>Borrar Producto</button>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="mb-0 col-md-1 d-flex align-items-end">
-                                        <button type="button" class="btn btn-danger btn-delete-producto" disabled>Borrar Producto</button>
+                                    <div class="mb-3">
+                                        <button type="button" id="add-producto" class="btn btn-secondary">Agregar Producto</button>
                                     </div>
                                 </div>
+                                <div id="productos_nuevos-container" class="col-12 col-lg-12 row row-cols-1 row-cols-md-1 g-2 p-lg-0-5">
+                                    <h3>Crear Productos Nuevos</h3>
+                                    <div class="product-nuevo-item mb-3 col-12">
+                                        <div class="row">
+                                            <div class="mb-0 col-md-11">
+                                                <label for="producto_nuevo_0" class="form-label">Producto</label>
+                                                <input type="text" class="form-control" name="producto_nuevo[]" pattern="[A-Za-zÑñ]+" id="producto_nuevo_0" placeholder="Producto" style="text-transform: capitalize;">
+                                                <input type="text" class="form-control" name="codigo_nuevo[]" id="codigo_nuevo_0" placeholder="Código en formato XXXX" style="text-transform: capitalize;">
+                                                <select name="unidad_nuevo[]" id="unidad_nuevo_0" class="form-control border border-danger">
+                                                    <option value="">Seleccione la unidad</option>
+                                                    {% for supply_unit in supply_unit %}
+                                                    <option value="{{ supply_unit }}">{{ supply_unit }}</option>
+                                                    {% endfor %}
+                                                    <option value="kg">kg</option>
+                                                    <option value="LATA (330 ml)">LATA (330 ml)</option>
+                                                </select>
+                                            </div>
+                                            <div class="mb-0 col-md-1 d-flex align-items-end">
+                                                <button type="button" class="btn btn-danger btn-delete-producto_nuevo" disabled>Borrar Producto</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <button type="button" id="add-producto_nuevo" class="btn btn-secondary">Agregar Producto Nuevo</button>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-center">
+                                    <button class="button" type="submit">Guardar</button>
+                                </div>
+                                {% if message %}
+                                <p class="message">{{ message }}</p>
+                                {% endif %}
+                                {% if error_message %}
+                                <p class="error-message">{{ error_message }}</p>
+                                {% endif %}
                             </div>
-<<<<<<< HEAD
-                        <div class="mb-3">
-                            <button type="button" id="add-producto" class="btn btn-secondary">Agregar Producto</button>
                         </div>
-                        <div id = "productos_nuevos-container" class="mb-0 col-md-6">
-                            <div class="producto_nuevo-item mb-3 col-12">
-                                <div class="row">
-                                    <div class="mb-0 col-md-6">
-                                        <label for="producto_nuevo" class="form-label">Crear Producto</label>
-                                        <input type="text" class="form-control" name="producto_nuevo[]" pattern="[A-Za-zÑñ]+" id="producto_nuevo_0" placeholder="Producto" style="text-transform: capitalize;">
-                                        <input type="text" class="form-control" name="codigo_nuevo[]" id="codigo_nuevo_0" placeholder="Código en formato XXXX" style="padding-left: 30px; text-transform: capitalize;">
-                                        <select name="unidad_nuevo[]" id="unidad_nuevo_0" class="form-control border border-danger">
-                                            <option value="">Seleccione la unidad</option>
-                                            {% for supply_unit in supply_unit %}
-                                                <option value="{{supply_unit}}">{{ supply_unit }}</option>
-                                            {% endfor %} 
-                                            <option value="kg">kg</option>   
-                                            <option value="LATA (330 ml)">LATA (330 ml)</option>
-                                        </select>
-                                    </div>
-                                    <div class="mb-0 col-md-1 d-flex align-items-end">
-                                        <button type="button" class="btn btn-danger btn-delete-producto_nuevo" disabled>Borrar Producto</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <button type="button" id="add-producto_nuevo" class="btn btn-secondary">Agregar Producto Nuevo</button>
-                            </div>
-                        </div>
-                    </div>                        
-                        <div class="mb-0 col-md-4">
-                            <div class="d-flex justify-content-center mb-2">
-                                <div class="d-flex justify-content-center mx-0-5--custom">
-                                    <button type="submit" class="button">Crear</button>
-                                </div>
-                                <div class="d-flex justify-content-center mx-0-5--custom">
-=======
-                            <div class="mb-0 col-md-4">
-                                <div class="d-flex justify-content-center mb-2">
-                                    <div class="d-flex justify-content-center mx-0-5--custom">
-                                        <button type="submit" class="button">Crear</button>
->>>>>>> 687712b577c6447ac976a7a363140c4d302d118f
-                                    <a href="{% url 'proveedores_main' %}" class="button">Volver</a>
-                                </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
-</nav>
-<script>
-    {% block extrajs %}    
+    </nav>
 
-        //PRODUCTOS EXISTENTES
-        document.getElementById('add-producto').addEventListener('click', function() {
-            var container = document.getElementById('productos-container');
-            var item = container.querySelector('.producto-item');
-            var clone = item.cloneNode(true);
-            var index = container.querySelectorAll('.producto-item').length;
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const addProductoBtn = document.getElementById('add-producto');
+            const productosContainer = document.getElementById('productos-container');
+            const addProductoNuevoBtn = document.getElementById('add-producto_nuevo');
+            const productosNuevosContainer = document.getElementById('productos_nuevos-container');
+            const initialDeleteButtons = document.querySelectorAll('.btn-delete-producto');
+            const initialDeleteButtonsNuevo = document.querySelectorAll('.btn-delete-producto_nuevo');
 
-            clone.querySelectorAll('input').forEach(input => {
-                input.value = '';
-                input.id = input.id.replace(/\d+$/, index);
-            });
-            clone.querySelectorAll('select').forEach(select => {
-                select.id = select.id.replace(/\d+$/, index);
-            });
-            container.appendChild(clone);
-            updateDeleteButtons();
-        });
-
-        document.addEventListener('click', function(event) {
-            if (event.target.classList.contains('btn-delete-producto')) {
-                if (document.querySelectorAll('.producto-item').length > 1) {
-                    event.target.closest('.producto-item').remove();
-                    updateDeleteButtons();
-                } else {
-                    alert("No puedes eliminar el único producto.");
-                }
-            }
-        });
-
-        function updateDeleteButtons() {
-            var deleteButtons = document.querySelectorAll('.btn-delete-producto');
-            if (deleteButtons.length === 1) {
-                deleteButtons[0].setAttribute('disabled', true);
-            } else {
-                deleteButtons.forEach(function(button) {
-                    button.removeAttribute('disabled');
+            function enableDeleteButtons(buttons) {
+                buttons.forEach(button => {
+                    button.disabled = false;
+                    button.addEventListener('click', function() {
+                        this.closest('.product-item, .product-nuevo-item').remove();
+                    });
                 });
             }
-        }
 
-<<<<<<< HEAD
-        //PRODUCTOS NUEVOS
+            enableDeleteButtons(initialDeleteButtons);
+            enableDeleteButtons(initialDeleteButtonsNuevo);
 
-        document.getElementById('add-producto_nuevo').addEventListener('click', function() {
-            var container = document.getElementById('productos_nuevos-container');
-            var item = container.querySelector('.producto_nuevo-item');
-            var clone = item.cloneNode(true);
-            var index = container.querySelectorAll('.producto_nuevo-item').length;
-
-            clone.querySelectorAll('input').forEach(input => {
-                input.value = '';
-                input.id = input.id.replace(/\d+$/, index);
+            addProductoBtn.addEventListener('click', function() {
+                const index = productosContainer.querySelectorAll('.product-item').length;
+                const newProducto = document.createElement('div');
+                newProducto.classList.add('product-item', 'mb-3', 'col-12');
+                newProducto.innerHTML = `
+                    <div class="row">
+                        <div class="mb-0 col-md-11">
+                            <label for="producto_orden_${index}" class="form-label">Producto</label>
+                            <select class="form-select" name="producto_orden[]" id="producto_orden_${index}" required>
+                                <option value="" selected disabled>Selecciona un Producto</option>
+                                {% for producto in productos %}
+                                <option value="{{ producto.id }}">{{ producto.get_nombre_producto }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-0 col-md-1 d-flex align-items-end">
+                            <button type="button" class="btn btn-danger btn-delete-producto">Borrar Producto</button>
+                        </div>
+                    </div>
+                `;
+                productosContainer.insertBefore(newProducto, addProductoBtn.parentElement);
+                enableDeleteButtons(newProducto.querySelectorAll('.btn-delete-producto'));
             });
-            clone.querySelectorAll('select').forEach(select => {
-                select.id = select.id.replace(/\d+$/, index);
+
+            addProductoNuevoBtn.addEventListener('click', function() {
+                const index = productosNuevosContainer.querySelectorAll('.product-nuevo-item').length;
+                const newProductoNuevo = document.createElement('div');
+                newProductoNuevo.classList.add('product-nuevo-item', 'mb-3', 'col-12');
+                newProductoNuevo.innerHTML = `
+                    <div class="row">
+                        <div class="mb-0 col-md-11">
+                            <label for="producto_nuevo_${index}" class="form-label">Producto</label>
+                            <input type="text" class="form-control" name="producto_nuevo[]" pattern="[A-Za-zÑñ]+" id="producto_nuevo_${index}" placeholder="Producto" style="text-transform: capitalize;">
+                            <input type="text" class="form-control" name="codigo_nuevo[]" id="codigo_nuevo_${index}" placeholder="Código en formato XXXX" style="text-transform: capitalize;">
+                            <select name="unidad_nuevo[]" id="unidad_nuevo_${index}" class="form-control border border-danger">
+                                <option value="">Seleccione la unidad</option>
+                                {% for supply_unit in supply_unit %}
+                                <option value="{{ supply_unit }}">{{ supply_unit }}</option>
+                                {% endfor %}
+                                <option value="kg">kg</option>
+                                <option value="LATA (330 ml)">LATA (330 ml)</option>
+                            </select>
+                        </div>
+                        <div class="mb-0 col-md-1 d-flex align-items-end">
+                            <button type="button" class="btn btn-danger btn-delete-producto_nuevo">Borrar Producto</button>
+                        </div>
+                    </div>
+                `;
+                productosNuevosContainer.insertBefore(newProductoNuevo, addProductoNuevoBtn.parentElement);
+                enableDeleteButtons(newProductoNuevo.querySelectorAll('.btn-delete-producto_nuevo'));
             });
-            container.appendChild(clone);
-            updateDeleteButtons();
         });
-
-        document.addEventListener('click', function(event) {
-            if (event.target.classList.contains('btn-delete-producto_nuevo')) {
-                if (document.querySelectorAll('.producto_nuevo-item').length > 1) {
-                    event.target.closest('.producto_nuevo-item').remove();
-                    updateDeleteButtons();
-                } else {
-                    alert("No puedes eliminar el único producto.");
-                }
-            }
-        });
-
-        function updateDeleteButtons() {
-            var deleteButtons = document.querySelectorAll('.btn-delete-producto_nuevo');
-            if (deleteButtons.length === 1) {
-                deleteButtons[0].setAttribute('disabled', true);
-            } else {
-                deleteButtons.forEach(function(button) {
-                    button.removeAttribute('disabled');
-                });
-            }
-        }
-=======
-
->>>>>>> 687712b577c6447ac976a7a363140c4d302d118f
-
-
-        document.getElementById('supply_code').addEventListener('input', function(event) {
-            // Obtener el valor actual del campo
-            var value = event.target.value;
-    
-            // Eliminar cualquier carácter que no sea un número
-            var newValue = value.replace(/\D/g, '');
-    
-            // Limitar el campo a 4 caracteres
-            newValue = newValue.slice(0, 4);
-    
-            // Actualizar el valor del campo
-            event.target.value = newValue;
-        });
-
-<<<<<<< HEAD
-=======
-        // Limitar el campo a 9 caracteres (considerando el formato de un número telefónico)
-        newValue = newValue.slice(0, 9);
-
-        // Actualizar el valor del campo
-        event.target.value = newValue;
-    });
-    {% endblock extrajs %}    
->>>>>>> 687712b577c6447ac976a7a363140c4d302d118f
-</script>
-
-    {% endblock extrajs %}    
+    </script>
 {% endblock %}

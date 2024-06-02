@@ -129,7 +129,7 @@ def admin_main(request, page=None, search=None):
                     'supply_total': p.supply_total,
                     'low_stock': True,
                 })  
-    paginator = Paginator(low_stock_products, 10)  # Ajusta el número de elementos por página según sea necesario
+    paginator = Paginator(low_stock_products, 4)  # Ajusta el número de elementos por página según sea necesario
     p_list_paginate = paginator.get_page(page)   
     return render(request,template_name,{'profiles':profiles, 'p_list_paginate':p_list_paginate})
 
