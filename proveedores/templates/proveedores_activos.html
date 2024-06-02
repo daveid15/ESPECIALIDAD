@@ -42,7 +42,7 @@
     .list-container {
         background-color: white;
         padding: 20px;
-        border-radius: 8px;
+        border-radius: 15px;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         position: relative;
     }
@@ -106,10 +106,10 @@
         list-style: none; /* Elimina los puntos de la lista */
     }
     .nav-tabs .nav-item .nav-link {
-        border: 1px solid #000000;
+        border: 1px #000000;
         border-radius: 0.25rem;
         border-color: #000000 #000000 #000000;
-        padding: 10px 15px;
+        padding: 12px 15px;
         color: #000;
         margin-right: -15px;
         background-color: #c8d0a2;;
@@ -150,7 +150,7 @@
 <div class="list-container">
     <a href="{% url 'proveedores_main' %}" class="btn btn-danger btn-volver"><i class="fas fa-arrow-left" style="color: #000000;"></i></a> <!-- Botón "Volver" con icono -->
     <div>
-        <a href="{% url 'proveedores_crear' %}" class="boton"><i class="fas fa-user-plus"  style="color: #000000"></i></a><strong>Proveedores</strong> 
+        <a style="padding: 2%; font-weight: bold; font-size: larger;">Proveedores</a><a href="{% url 'proveedores_crear' %}" class="boton" ><i class="fas fa-user-plus"  style="color: #000000"></i></a> 
     </div>
     <div class="search-form">
         <form method="get" action="" class='input-container-search my-auto'>
