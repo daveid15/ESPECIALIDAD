@@ -58,16 +58,16 @@
     }
 
     .button {
-        background-color: #87963C;
-        color: white;
-        padding: 12px 20px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        width: 20%;
-        margin-top: 10px;
-        font-size: 16px;
-    }
+            background-color: #87963C;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
 
     .button:hover {
         background-color: #65702d;
@@ -164,8 +164,8 @@
                 </div>
                 <div class="row">
                     <div class="col-12 col-sm-6 mb-3">
-                        <input type="submit" value="Crear Usuario" class="button form-control" style="padding: 4px; margin-top: 4px;">
-                        <a href="{% url 'users_main' %}" class="button form-control"  style="padding: 4px; margin-top: 4px;">Volver</a>
+                        <button type="submit" class="button">Crear Usuario</button>
+                        <a href="{% url 'users_main' %}" class="button"> Regresar</a>
                     </div>
                 </div>
             </form>
