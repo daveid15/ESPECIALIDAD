@@ -615,7 +615,10 @@ def orden_list_enviada(request, page=None):
     ordenes = Orden_compra.objects.filter(estado='enviado').order_by('id')
     
     if search:
-        ordenes = ordenes.filter(Q(proveedor_orden__proveedor_name__icontains=search))
+        ordenes = ordenes.filter(
+            Q(proveedor_orden__proveedor_name__icontains=search) | 
+            Q(proveedor_orden__proveedor_last_name__icontains=search)
+        )
 
     paginator = Paginator(ordenes, 5)
     pagina_numero = request.GET.get('pagina')
@@ -642,8 +645,10 @@ def orden_list_aceptada(request, page=None):
     ordenes = Orden_compra.objects.filter(estado='aceptado').order_by('id')
     
     if search:
-        ordenes = ordenes.filter(Q(proveedor_orden__proveedor_name__icontains=search))
-
+        ordenes = ordenes.filter(
+            Q(proveedor_orden__proveedor_name__icontains=search) | 
+            Q(proveedor_orden__proveedor_last_name__icontains=search)
+        )
     paginator = Paginator(ordenes, 5)
     pagina_numero = request.GET.get('pagina')
     
@@ -669,8 +674,10 @@ def orden_list_rechazada(request, page=None):
     ordenes = Orden_compra.objects.filter(estado='rechazado').order_by('id')
     
     if search:
-        ordenes = ordenes.filter(Q(proveedor_orden__proveedor_name__icontains=search))
-
+        ordenes = ordenes.filter(
+            Q(proveedor_orden__proveedor_name__icontains=search) | 
+            Q(proveedor_orden__proveedor_last_name__icontains=search)
+        )
     paginator = Paginator(ordenes, 5)
     pagina_numero = request.GET.get('pagina')
     
@@ -695,8 +702,10 @@ def orden_list_anulada(request, page=None):
     ordenes = Orden_compra.objects.filter(estado='anulado').order_by('id')
     
     if search:
-        ordenes = ordenes.filter(Q(proveedor_orden__proveedor_name__icontains=search))
-
+        ordenes = ordenes.filter(
+            Q(proveedor_orden__proveedor_name__icontains=search) | 
+            Q(proveedor_orden__proveedor_last_name__icontains=search)
+        )
     paginator = Paginator(ordenes, 5)
     pagina_numero = request.GET.get('pagina')
     
@@ -1078,3 +1087,10 @@ def get_chart_oc_2(request):
     }
 
     return JsonResponse(chart_data)
+
+def cargar_productos(request):
+    proveedor_id = request.GET.get('proveedor')
+    productos = Product.objects.filter(prov_prod__proveedor_id=proveedor_id).distinct()
+    productos_list = list(productos.values('id', 'supply_name', 'supply_unit'))
+
+    return JsonResponse(productos_list, safe=False)

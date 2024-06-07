@@ -25,6 +25,8 @@ proveedores_patterns = [
     path('proveedores/eliminar/<int:proveedor_id>/', views.eliminar_proveedor, name='eliminar_proveedor'),
     path('proveedores/restaurar/<int:proveedor_id>/', views.restaurar_proveedor, name='restaurar_proveedor'),
 
+    # Añade esta línea en tu archivo de urls.py
+    path('cargar_productos/', views.cargar_productos, name='cargar_productos'),
 
 #Órden de Compra
     path('orden_main', views.orden_main,name='orden_main'),
