@@ -582,7 +582,7 @@ def carga_masiva_user_save(request):
             print("Tamaño del archivo: ", uploaded_file.size)
             print("Tipo de contenido del archivo: ", uploaded_file.content_type)
 
-            data = pd.read_excel(uploaded_file, engine='openpyxl', skiprows=0)
+            data = pd.read_excel(uploaded_file, engine='openpyxl', skiprows=1)
             df = pd.DataFrame(data)
             print("Contenido del DataFrame después de la lectura:")
             print(df)  # Mostrar el contenido del DataFrame para verificar los datos

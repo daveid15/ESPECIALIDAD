@@ -55,6 +55,7 @@
 
             .main-content {
                 display: flex;
+                width: 100%;
                 flex-direction: column;
                 align-items: center;
                 justify-content: center;
@@ -306,7 +307,7 @@
             .container {
                 display: flex;
                 flex-wrap: wrap;
-                padding: 20px;
+                padding: 20px 20px;
                 width: 100%;
             }
             .sidebutton {
@@ -365,6 +366,7 @@
             }
             .dashboard {
                 display: flex;
+                width: 100%;
                 border-radius: 10px;
                 justify-content: space-between;
                 
@@ -374,6 +376,7 @@
                 background-color: #e0e0e0;
                 width: 48%;
                 height: 380px;
+                overflow-x: auto;
             }
 
             .logout-icon {
@@ -397,11 +400,13 @@
             } 
 
 
-            @media screen and (max-width: 768px) {
+            @media (max-width: 450px) {
                 .container {
                     flex-direction: column;
-                    padding: 0;
+                    padding: 20px 20px;
                     width: 100%;
+                    box-sizing: border-box;
+                    word-wrap: break-word;
                 }
                 .sidebutton {
                     max-width: 100%;
@@ -414,12 +419,215 @@
                 .dashboard {
                     flex-direction: column;
                     align-items: center;
+                    width: 100%;
+                    word-wrap: break-word;
                 }
                 .dashboard div {
-                    width: 90%;
+                    width: 116%;
                     margin-bottom: 20px;
+                    box-sizing: border-box;
+                    overflow-x: auto;
+                }
+
+                .main-content {
+                    display: flex;
+                    width: 95%;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 50px;
+                    text-align: center;
+                    background-color: rgba(255, 255, 255, 0.8);
+                    border-radius: 10px;
+                    margin: 20px;
+                    color: #333;
+                    position: relative;
+                    z-index: 1;
+                    box-shadow: 0 0 1px #333;
+                }
+
+
+                .welcome-banner {
+                    width: 80%;
+                    overflow-x: auto;
+                    background-color: rgba(158, 178, 59, 0.8);
+                    color: white;
+                    height: 260px;
+                    padding: 10px 20px;
+                    align-items: center;
+                    text-align: center;
+                    border-radius: 10px;
+                    margin: auto;
+                    font-size: 0.8em !important;
+                    position: relative;
+                    z-index: 1;
+                    
+                }
+
+                .sidebar.open {
+                    height: fit-content;
+                    left: 0;
+                }
+
+
+                .table-user th, .table-user td {
+                    padding: 8px; /* Adjust padding as needed */
+                    word-wrap: break-word; /* Allow content to wrap within cells */
+                    }
+                                
+                
+            }
+
+
+            @media (min-width: 451px) and (max-width: 767px) {
+                .container {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center; /* Center container contents horizontally */
+                    padding: 0;
+                    width: 100%;
+                    box-sizing: border-box;
+                }
+                .sidebutton {
+                    max-width: 100%;
+                    margin: 0 0 20px 0;
+                    text-align: center; /* Center text inside sidebutton */
+                }
+                .main {
+                    width: 100%;
+                    padding: 0;
+                    text-align: center; /* Center text inside main */
+                }
+                .dashboard {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center; /* Center dashboard contents horizontally */
+                    width: 100%; /* Ensure the dashboard takes the full width */
+                }
+                .dashboard div {
+                    width: 90%; /* Set a percentage width to leave some padding on the sides */
+                    margin: 0 auto 20px auto; /* Center each div horizontally and add bottom margin */
+                    box-sizing: border-box; /* Include padding/border in the width */
+                }
+
+                .main-content {
+                    display: flex;
+                    width: 93%; /* Set width to 93% for some padding on the sides */
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 50px;
+                    text-align: center;
+                    background-color: rgba(255, 255, 255, 0.8);
+                    border-radius: 10px;
+                    margin: 20px auto; /* Center the main content horizontally */
+                    color: #333;
+                    position: relative;
+                    z-index: 1;
+                    box-shadow: 0 0 1px #333;
+                }
+
+                .sidebar.open {
+                    height: fit-content;
+                    left: 0;
+                }
+
+                .welcome-banner {
+                    width: 60%; /* Set width to 60% for some padding on the sides */
+                    background-color: rgba(158, 178, 59, 0.8);
+                    color: white;
+                    height: 260px;
+                    padding: 10px 20px;
+                    
+                    align-items: center;
+                    text-align: center;
+                    border-radius: 10px;
+                    margin: 20px; /* Center the welcome banner horizontally */
+                    font-size: 1.15em !important;
+                    position: relative;
+                    z-index: 1;
+                }
+
+                table {
+                    width: 100%; /* Ensure the table takes the full width */
+                }
+
+                .table-user th, .table-user td {
+                    padding: 8px; /* Adjust padding as needed */
+                    word-wrap: break-word; /* Allow content to wrap within cells */
+                    text-align: center; /* Center the table cell contents */
                 }
             }
+
+
+            @media (min-width:768px ) and (max-width: 1500px)  {
+                .container {
+                    flex-direction: column;
+                    padding: 20px 20px;
+                    width: 100%;
+                }
+                .sidebutton {
+                    max-width: 100%;
+                    margin: 0 0 20px 0;
+                }
+                .main {
+                    width: 100%;
+                    padding: 0;
+                }
+                .dashboard {
+                    width: 100%;
+                    flex-direction: column;
+                    align-items: center;
+                }
+                .dashboard div {
+                    display: inline;
+                    width: 90%;
+                    margin-bottom: 20px;
+                    overflow-x: auto;
+                }
+                    
+                    
+                }
+
+                .main-content {
+                    display: flex;
+                    width: 95.2%;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 50px;
+                    text-align: center;
+                    background-color: rgba(255, 255, 255, 0.8);
+                    border-radius: 10px;
+                    margin: 20px;
+                    color: #333;
+                    position: relative;
+                    z-index: 1;
+                    box-shadow: 0 0 1px #333;
+                }
+
+                .welcome-banner {
+                    width: 60%;
+                    background-color: rgba(158, 178, 59, 0.8);
+                    color: white;
+                    height: 260px;
+                    padding: 10px 20px;
+                    align-items: center;
+                    text-align: center;
+                    border-radius: 10px;
+                    margin: auto;
+                    font-size: 1.35em;
+                    position: relative;
+                    z-index: 1;
+                }
+
+                .sidebar.open {
+                    height: fit-content;
+                    left: 0;
+                }
+            
+
+            
         </style>
     {% endblock %}
 </head>
@@ -469,6 +677,7 @@
 
 
                     </div>
+                    <div></div>
                     <div></div>
                 </div>
             </div>

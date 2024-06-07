@@ -106,7 +106,7 @@ body.dark {
 .sidebar { /*BARRA MENÚ PRINCIPAL*/
   background-color: var(--green-color);
   width: 310px; /* Ajusta el ancho según tus necesidades */
-  height: calc(65% - 60px); /* Ajusta la altura según tus necesidades */
+  height: fit-content; /* Ajusta la altura según tus necesidades */
   position: fixed;
   top: 70px; /* Ajusta la distancia desde la parte superior de la ventana */
   left: 0; /* Ajusta la distancia desde el lado izquierdo de la ventana */
