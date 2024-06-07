@@ -514,7 +514,8 @@ def proveedores_activos(request):
     # Aplicar búsqueda si se proporciona un término de búsqueda
     search = request.GET.get('search')
     if search:
-        proveedores_activos = proveedores_activos.filter(proveedor_name__icontains=search)
+        proveedores_activos = proveedores_activos.filter(Q(proveedor_name__icontains=search) | 
+            Q(proveedor_last_name__icontains=search))
 
     # Paginar los resultados
     paginator = Paginator(proveedores_activos, 10)
@@ -524,16 +525,25 @@ def proveedores_activos(request):
     # Renderizar la plantilla con los datos de los proveedores activos
     return render(request, 'proveedores_activos.html', {'p_list_paginate': page_obj, 'paginator': paginator, 'search': search})
 
+
 @login_required
 def proveedores_eliminados(request):
     profiles = Profile.objects.get(user_id=request.user.id)
     if profiles.group_id != 1:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a un área para la que no tiene permisos')
         return redirect('check_group_main')
-
+    
+    search = request.GET.get('search')
     proveedores_list = Proveedor.objects.filter(activo=False)
-    paginator = Paginator(proveedores_list, 10)  # Cambia 10 por el número de proveedores que deseas mostrar por página
+    
+    if search:
+        proveedores_list = proveedores_list.filter(
+            Q(proveedor_name__icontains=search) | 
+            Q(proveedor_last_name__icontains=search)
+        )
 
+    paginator = Paginator(proveedores_list, 10)  # Cambia 10 por el número de proveedores que deseas mostrar por página
+    
     page = request.GET.get('page')
     proveedores_paginate = paginator.get_page(page)
     
@@ -542,6 +552,7 @@ def proveedores_eliminados(request):
         'paginator': paginator,
         'search': request.GET.get('search', '')
     })
+
 
 @login_required
 def restaurar_proveedor(request, proveedor_id):
