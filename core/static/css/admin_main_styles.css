@@ -746,6 +746,7 @@ body.dark .header {
     width: 75%; /* Ajusta el ancho para pantallas más pequeñas */
     top: 110px; /* Ajusta la distancia desde la parte superior*/
     left: 115px;
+    height: 450px;
     box-sizing: border-box;
     word-wrap: break-word;
   }
@@ -761,7 +762,7 @@ body.dark .header {
 
 @media (min-width: 501px) and (max-width: 767px) {
   .profileedit {
-    width:50%; /* Ajusta el ancho para pantallas muy pequeñas */
+    width:45%; /* Ajusta el ancho para pantallas muy pequeñas */
     top: 110px; /* Ajusta la distancia desde la parte superior */
     left: 260px;
     box-sizing: border-box;

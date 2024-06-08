@@ -25,7 +25,6 @@
         /*color: #333;*/
         font-size: 30px;
         top: 1000px;
-        color: aqua;
         text-align: left;
     }
 
@@ -88,10 +87,22 @@
             margin-block-start: 75px;
             margin-inline-start: 115px;
         }
+
         section {
             flex-direction: column;
             align-items: center;
         }
+
+        .form-control{
+            width: 60%;
+            word-wrap: break-word;
+        }
+
+        .button{
+            width: 90px;
+            height: 44px;
+        }
+
     }
     @media (min-width: 501px) {
         h2{
@@ -101,6 +112,16 @@
         section {
             flex-direction: column;
             align-items: center;
+        }
+
+        .form-control{
+            width: 90%;
+            word-wrap: break-word;
+        }
+
+        .button{
+            width: 90px;
+            height: 44px;
         }
     }
 
@@ -163,7 +184,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-11 col-sm-6 mb-3">
-                                    <input type="submit" value="Editar Usuario" class="button form-control">
+                                    <input type="submit" value="Editar" class="button form-control">
                                     <a href="{% url 'perfil_main'%}" class="button form-control">Volver</a>
                                 </div>
                             </div>
