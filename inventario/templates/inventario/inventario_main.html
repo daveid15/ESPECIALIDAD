@@ -48,8 +48,8 @@
                 font-family: 'Arial', sans-serif;
                 background-color: #f7f7f7;
             }
-            section {
-            background-color: white; 
+            section { /*Dashboard alerta*/
+            background-color: pink; 
             max-width: 1000px;
             margin: 90px auto;
             padding: 40px;
@@ -58,7 +58,7 @@
             top: 100px; /* Ajusta esta propiedad según lo que necesites */
             left: 150; /* Asegura que esté pegado al borde izquierdo */
             right: 50; /* Asegura que esté pegado al borde derecho */
-            margin-left: auto; /* Centra horizontalmente */
+            margin-left: 260px;/* Centra horizontalmente */
             margin-right: auto; /* Centra horizontalmente */
             position: fixed;
             text-align: center; /* Centra horizontalmente el contenido del section */
@@ -80,12 +80,12 @@
                 color: red;
                 font-weight: bold;
             }
-            .top-right-link {
+            .top-right-link { /*Ir al listado botón*/
                 position: absolute;
                 top: 120px;
-                right: 600px;
-                background-color: white; 
+                background-color:white; 
                 color: #000;
+                left: 500px;
                 padding: 10px 15px;
                 border-radius: 5px;
                 border: 1px solid black; /* Borde negro */
@@ -103,7 +103,33 @@
             margin: 20px; /* Ajusta el margen para separarlo del borde superior e izquierdo */
             font-weight: bold;
             font-size: 18px;
-        }
+            }
+
+            @media screen and (max-width: 500px) {
+                section{
+                    left: -140px;
+                    margin-top: 90px;
+                    width: 75%;
+                    
+                }
+
+                .top-right-link{
+                    left: 300px;
+                    top: 140px;
+                }
+
+                h1{
+                    font-size: 25px;
+                    margin-top: 80px;
+                    margin-inline-start: 150px;
+                }
+
+                .alert-text{
+                    left: 10px;
+                }
+                
+            }
+    
         
         </style>
     

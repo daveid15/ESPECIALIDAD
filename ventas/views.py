@@ -257,7 +257,7 @@ def venta_list(request, page=None, search=None):
     if search:
         ordenes = ordenes.filter(Q(cliente_venta__icontains=search))
 
-    paginator = Paginator(ordenes, 10)
+    paginator = Paginator(ordenes, 5)
     pagina_numero = request.GET.get('pagina')
     
     try:

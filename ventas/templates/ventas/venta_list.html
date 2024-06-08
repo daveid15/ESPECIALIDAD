@@ -15,11 +15,13 @@
             padding: 20px; /* Añade espacio alrededor del contenido dentro del contenedor */
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Añade una sombra para darle un poco de profundidad */
             display: flex;
+            top: 10px;
+            left: 105px;
             overflow-y: auto;
             flex-direction: column;
             align-items: center;
         }
-        .table-container table {
+        .table-cotainern table {
             width: 100%; /* Asegura que la tabla ocupe todo el ancho del contenedor */
             border-collapse: separate; /* Asegura que las esquinas redondeadas se apliquen correctamente */
             border-spacing: 0; /* Elimina el espacio entre las celdas de la tabla */
@@ -27,11 +29,11 @@
         }
         .table-container th, .table-container td {
             background-color: white; /* Establece el fondo de las celdas a blanco */
-            padding: 15px; /* Añade espacio dentro de cada celda */
+            padding: 5px; /* Añade espacio dentro de cada celda */
         }
         .table-container th {
-            background-color: white; /* Establece el color de fondo de la fila de encabezados a blanco */
-            text-align: center; /* Alinea el texto del encabezado al centro */
+            background-color: white /* Establece el color de fondo de la fila de encabezados a blanco */
+            
         }
         .table-container td {
             text-align: center; /* Alinea el texto de las celdas al centro */
@@ -68,7 +70,8 @@
         }
         .btn {
             display: inline-block;
-            margin-left: 10px;
+            margin-left: 2px;
+            margin-top: 75px;
         }
         .total-ventas {
             margin-top: 20px; /* Añade margen superior para el monto total */
@@ -83,14 +86,120 @@
         width: fit-content; /* Ancho ajustado al contenido */
         margin-left: auto; /* Mover el monto total a la derecha */
         margin-right: auto; /* Mover el monto total a la izquierda */
-    }
+        }
+
+        h2 {
+            display: block;
+            font-size: 1.5em;
+            margin-block-start: 80px;
+            margin-block-end: 0px;
+            margin-inline-start: 250px;
+            margin-inline-end: 0px;
+            font-weight: bold;
+            unicode-bidi: isolate;  
+        }
+        
+        @media (max-width: 500px) {
+            h2 {
+                margin-block-start: 70px;
+                margin-inline-start: 115px;
+            }
+
+            .table-container{
+                width: 80%;
+                left: 98px;
+                box-sizing: border-box;
+                word-wrap: break-word;
+            }
+
+            .btn-volver{
+                margin-top: -9px;
+                margin-left: 2px;
+            }
+
+
+            .table-container th {
+               margin-top: 20px
+               ;
+            }
+
+            .search-form{
+                left: 60px;
+                top: -10px;
+
+            }
+            
+
+        }
+    
+        @media (min-width: 501px) and (max-width: 767px){
+            h2 {
+                margin-block-start: 70px;
+                margin-inline-start: 250px;
+            }
+            
+            .table-container{
+                width: 55%;
+                left: 245px;
+                box-sizing: border-box;
+                word-wrap: break-word;
+            }
+
+            .btn-volver{
+                margin-top: -9px;
+                margin-left: 2px;
+            }
+
+
+            .table-container th {
+               margin-top: 20px
+               ;
+            }
+
+            .search-form{
+                top: -10px;
+            }
+
+        }
+
+        @media (min-width: 768px) {
+            h2 {
+                margin-block-start: 70px;
+                margin-inline-start: 250px;
+            }
+            
+            .table-container{
+                width: 65%;
+                left: 245px;
+                box-sizing: border-box;
+                word-wrap: break-word;
+            }
+
+            .btn-volver{
+                margin-top: -9px;
+                margin-left: 2px;
+            }
+
+
+            .table-container th {
+               margin-top: 20px
+               ;
+            }
+
+            .search-form{
+                top: -10px;
+            }
+
+        }
 
     </style>
     {% endblock extra_css %}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <header class='mb-5'>
         <div class="title-button-container">
-            <h2 class='h2 medium text-blue'>Listado de Órdenes de Venta</h2>
+            <h2 class='h2'>Listado de Ventas</h2>
+            <a href="{% url 'venta_crear' %}" class="btn btn-primary" style="margin-left: 10px;">
+                <i class="fas fa-plus" style="color: #000000"></i></a>
         </div>
     </header>
     <div class="table-container mt-5">
@@ -102,17 +211,10 @@
         <a href="{% url 'ventas_main' %}" class="btn-volver btn btn-secondary"><i class="fas fa-arrow-left" style="color: #000000;"></i></a>
         <table class="table table-user" style="text-align: center;">
             <thead>
-                <tr>
-                    <th colspan="4" scope="col" style="font-size: 24px; color: #000000; display: flex; justify-content: center; align-items: center;">
-                        Ventas
-                        <a href="{% url 'venta_crear' %}" class="btn btn-primary" style="margin-left: 10px;">
-                            <i class="fas fa-plus" style="color: #000000"></i>
-                        </a>
-                    </th>
                 </tr>
                 <tr>
                     <th width="15%" scope="col">Cliente</th>
-                    <th width="25%" scope="col">Número de Orden</th>
+                    <th width="25%" scope="col">Orden</th>
                     <th width="25%" scope="col">Total</th>
                     <th width="30%" scope="col">Acciones</th>
                 </tr>
@@ -133,7 +235,7 @@
             </tbody>
         </table>
         <!-- Paginación -->
-        <div class="pagination">
+        <div class="ion">
             <span class="step-links">
                 {% if ordenes.has_previous %}
                     <a href="?pagina=1{% if search %}&search={{ search }}{% endif %}">&laquo; Primera</a>
@@ -141,12 +243,12 @@
                 {% endif %}
         
                 <span class="current">
-                    Página {{ ordenes.number }} de {{ ordenes.paginator.num_pages }}.
+                    Página {{ ordenes.number }} de {{ ordenes.or.num_pages }}.
                 </span>
         
                 {% if ordenes.has_next %}
                     <a href="?pagina={{ ordenes.next_page_number }}{% if search %}&search={{ search }}{% endif %}">Siguiente</a>
-                    <a href="?pagina={{ ordenes.paginator.num_pages }}{% if search %}&search={{ search }}{% endif %}">Última &raquo;</a>
+                    <a href="?pagina={{ ordenes.or.num_pages }}{% if search %}&search={{ search }}{% endif %}">Última &raquo;</a>
                 {% endif %}
             </span>
         </div>

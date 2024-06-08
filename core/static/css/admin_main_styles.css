@@ -653,7 +653,7 @@ body.dark .header {
   position: fixed;
   top: 70px; /* Ajusta la distancia desde la parte superior de la ventana */
   left: 60%; /* Centra el contenedor */
-  transform: translateX(-50%); /* Centra el contenedor */
+  transform: translateX(-50%); /* Centra el contenedor*/ 
   border-radius: 10px; /* Redondea las esquinas */
   padding: 5px; /* Ajusta el relleno interior */
   z-index: 100;
@@ -661,6 +661,7 @@ body.dark .header {
   box-shadow: 0 0 10px var(--grey-color-light);
   transition: all 0.5s ease;
 }
+
 .ventasbar::-webkit-scrollbar {
   display: none;
 }
@@ -685,7 +686,7 @@ body.dark .header {
   width: 980px; /* Ajusta el ancho según tus necesidades  PENSARLO BIEN SI QUEDA ASÍ O NO */ 
   height: 78%; /* Ajusta la altura según tus necesidades */
   position: fixed;
-  top: 125px; /* Ajusta la distancia desde la parte superior de la ventana */
+  top: 60px; /* Ajusta la distancia desde la parte superior de la ventana */
   left: 24%; /* Ajusta la distancia desde el lado izquierdo de la ventana */
   padding: 5px; /* Ajusta el relleno interior */
   z-index: 100;
@@ -719,17 +720,17 @@ body.dark .header {
   display: none;
 }
 
-/* ventasedit styles */
+/* ventasedit styles 
 .ventasedit {
   background-color: var(--white-color);
-  width: 1000px; /* Ajusta el ancho según tus necesidades */
-  height: 65%; /* Ajusta la altura según tus necesidades */
+  width: 1000px; /* Ajusta el ancho según tus necesidades 
+  height: 65%; /* Ajusta la altura según tus necesidades 
   position: fixed;
-  top: 140px; /* Ajusta la distancia desde la parte superior de la ventana */
-  left: 330px; /* Ajusta la distancia desde el lado izquierdo de la ventana */
-  padding: 5px; /* Ajusta el relleno interior */
+  top: 140px; /* Ajusta la distancia desde la parte superior de la ventana 
+  left: 330px; /* Ajusta la distancia desde el lado izquierdo de la ventana 
+  padding: 5px; /* Ajusta el relleno interior 
   z-index: 100;
-  border-radius: 15px;/* Ajusta la barra de desplazamiento si es necesario */
+  border-radius: 15px;/* Ajusta la barra de desplazamiento si es necesario 
   box-shadow: 0 0 10px var(--grey-color-light);
   transition: all 0.5s ease;
 }
@@ -758,6 +759,14 @@ body.dark .header {
     width: fit-content;
     
   }
+
+  .ventasdash{
+    width: 75%;
+    left: 110px;
+    box-sizing: border-box;
+  }
+
+ 
 }
 
 @media (min-width: 501px) and (max-width: 767px) {
@@ -768,7 +777,12 @@ body.dark .header {
     box-sizing: border-box;
     word-wrap: break-word;
   }
+  
+  .ventasdash{
+    width: 45%;
+    left: 260px;
 
+  }
 }
 
 /* Media Queries para pantallas más pequeñas */
@@ -780,5 +794,15 @@ body.dark .header {
     left: 260px;
     box-sizing: border-box;
     word-wrap: break-word;
+  }
+
+  .ventasbar{
+    width: 100%;
+    top: 900px;
+  }
+
+  .ventasdash{
+    width: 64%;
+    left: 260px;
   }
 }
