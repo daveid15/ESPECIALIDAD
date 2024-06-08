@@ -22,9 +22,11 @@
 
     .titulo {
         font-family: 'Sigmar', sans-serif;
-        color: #333;
-        font-size: 36px;
-        margin: 0;
+        /*color: #333;*/
+        font-size: 30px;
+        top: 1000px;
+        color: aqua;
+        text-align: left;
     }
 
     .form-label {
@@ -70,7 +72,32 @@
         text-align: center;
     }
 
-    @media (max-width: 768px) {
+    h2 {
+    display: block;
+    font-size: 1.5em;
+    margin-block-start: 80px;
+    margin-block-end: 0px;
+    margin-inline-start: 250px;
+    margin-inline-end: 0px;
+    font-weight: bold;
+    unicode-bidi: isolate;
+    }
+
+    @media (max-width: 500px) {
+        h2{
+            margin-block-start: 75px;
+            margin-inline-start: 115px;
+        }
+        section {
+            flex-direction: column;
+            align-items: center;
+        }
+    }
+    @media (min-width: 501px) {
+        h2{
+            margin-block-start: 70px;
+            margin-inline-start: 250px;
+        }
         section {
             flex-direction: column;
             align-items: center;
@@ -79,93 +106,72 @@
 
 
 </style>
-    <main role="main">
-        <nav id="profilebar" class="profilebar">
-            <div class="col-12 mt-3 border">
-                <div class="row mt-4 mb-4">
-                    <div class="col-12 col-sm-3 mb-3" style="text-align: center;">
-                            <a href="{% url 'edit_perfil' %}" class="nav_link submenu_item">
-                                </span>
-                                <span class="navlink">Editar perfil</span>
-                            </a>
-                            <a href="{% url 'password_reset' %}" class="nav_link submenu_item">
-                                </span>
-                                <span class="navlink">Cambiar contraseña</span>
-                            </a>
-                                <a href="{% url 'admin_main' %}" class="nav_link submenu_item">
-                                </span>
-                                <span class="navlink">Volver</span>
-                            </a>
-                    </div>
-                </div> 
-            </div> 
-        </nav>
-        <section>
-        <div class="container col-12 mt-3">
+<main role="main">
+    <div class="container col-12 mt-3">
+        <h2 class="h2">Editar perfil</h2>
+    <section>
             <nav id="profileedit" class="profileedit">
-            <div class="col-12  mt-3 border">
-                <h3>Editar perfil</h3> 
-                <form action="" method="post">
-                    {% csrf_token %}
-                    <input type="hidden" value="{{ user_data.id }}" name="user_id" id="user_id">
-                    <input type="hidden" value="{{ groups.id }}" name="grupo" id="grupo"> 
-                    <div class="row">
-                        <div class="col-10 col-sm-4 mb-3">
-                            <label for="name">Nombre (*)</label>
-                            <input type="text" id="name" name="name" value="{{user_data.first_name}}" pattern="[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+" class="form-control border border-danger" required/>
-                            <label for="last_name">Apellido (*)</label>
-                            <input type="text" id="last_name1" name="last_name1" value="{{user_data.last_name}}" pattern="[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+" class="form-control border border-danger" required/>
-                        </div>
-                        
-                        <div class="col-11 col-sm-4 mb-3"> 
-                            <label for="phone">Número de contacto (*)</label>
-                            <input type="tel" id="phone" name="phone" pattern="[0-9]{9}" value="{{profile_data.mobile}}" class="form-control border border-danger" required/>
-                        </div> 
-                        <div class="mb-0 col-md-12">
-                            <label for="proveedor_name" class="form-label">Rut (Campo no editable): </label>
-                            <span class="form-label" id="proveedor_name">{{profile_data.rut}}</span>
-                        </div>
-                        <div class="mb-0 col-md-12">
-                            <label for="proveedor_name" class="form-label">Email (Campo no editable): </label>
-                            <span class="form-label" id="proveedor_name">{{profile_data.email}}</span>
-                        </div>                       
-                    
-                        <div class="col-11 col-sm-4 mb-3"> 
-                        <label for="address">Dirección</label>
-                        <input type="text" id="address" name="address" value="{{profile_data.address}}" class="form-control border border-danger" required/>
-                        </div>
-                        <div class="col-11 col-sm-4 mb-3">
-                        <label for="region">Región</label>
-                        <select name="region" id="region" value = "{profile_data.region}" class="form-control border border-danger" required>
-                            <option value="">Seleccione una región</option>
-                            <option value="Region Metropolitana de Santiago" {% if profile_data.region == "Region Metropolitana de Santiago" %}selected{% endif %}>Región Metropolitana de Santiago</option>
-                        </select>      
-                        </div>
-                        <div class="col-11 col-sm-4 mb-3">
-                        <label for="comuna">Comuna</label>
-                        <select name="comuna" id="comuna" class="form-control border border-danger" required>
-                            <option value="">Seleccione una comuna</option>
-                            <optgroup label="Región Metropolitana de Santiago">
-                                <option value="Providencia" {% if profile_data.comuna == "Providencia" %}selected{% endif %}>Providencia</option>
-                                <option value="Santiago" {% if profile_data.comuna == "Santiago" %}selected{% endif %}>Santiago</option>
-                                <option value="San Bernardo" {% if profile_data.comuna == "San Bernardo" %}selected{% endif %}>San Bernardo</option>
-                                <option value="Maipú" {% if profile_data.comuna == "Maipú" %}selected{% endif %}>Maipú</option>
-                                <option value="Buin" {% if profile_data.comuna == "Buin" %}selected{% endif %}>Buin</option>
-                            </optgroup>
-                        </select>
-                        </div>               
-                        <div class="row"> 
-                            <div class="col-11 col-sm-6 mb-3">
-                                <input type="submit" value="Editar Usuario" class="button form-control">
-                                <a href="{% url 'perfil_main'%}" class="button form-control">Volver</a>
+                <div class="col-12 mt-3 border">
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" value="{{ user_data.id }}" name="user_id" id="user_id">
+                        <input type="hidden" value="{{ groups.id }}" name="grupo" id="grupo">
+                        <div class="row">
+                            <div class="col-10 col-sm-4 mb-3">
+                                <label for="name">Nombre (*)</label>
+                                <input type="text" id="name" name="name" value="{{user_data.first_name}}" pattern="[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+" class="form-control border border-danger" required/>
+                                <label for="last_name">Apellido (*)</label>
+                                <input type="text" id="last_name1" name="last_name1" value="{{user_data.last_name}}" pattern="[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+" class="form-control border border-danger" required/>
+                            </div>
+
+                            <div class="col-11 col-sm-4 mb-3">
+                                <label for="phone">Número de contacto (*)</label>
+                                <input type="tel" id="phone" name="phone" pattern="[0-9]{9}" value="{{profile_data.mobile}}" class="form-control border border-danger" required/>
+                            </div>
+                            <div class="mb-0 col-md-12">
+                                <label for="proveedor_name" class="form-label">Rut (Campo no editable): </label>
+                                <span class="form-label" id="proveedor_name">{{profile_data.rut}}</span>
+                            </div>
+                            <div class="mb-0 col-md-12">
+                                <label for="proveedor_name" class="form-label">Email (Campo no editable): </label>
+                                <span class="form-label" id="proveedor_name">{{profile_data.email}}</span>
+                            </div>
+
+                            <div class="col-11 col-sm-4 mb-3">
+                                <label for="address">Dirección</label>
+                                <input type="text" id="address" name="address" value="{{profile_data.address}}" class="form-control border border-danger" required/>
+                            </div>
+                            <div class="col-11 col-sm-4 mb-3">
+                                <label for="region">Región</label>
+                                <select name="region" id="region" value="{{profile_data.region}}" class="form-control border border-danger" required>
+                                    <option value="">Seleccione una región</option>
+                                    <option value="Region Metropolitana de Santiago" {% if profile_data.region == "Region Metropolitana de Santiago" %}selected{% endif %}>Región Metropolitana de Santiago</option>
+                                </select>
+                            </div>
+                            <div class="col-11 col-sm-4 mb-3">
+                                <label for="comuna">Comuna</label>
+                                <select name="comuna" id="comuna" class="form-control border border-danger" required>
+                                    <option value="">Seleccione una comuna</option>
+                                    <optgroup label="Región Metropolitana de Santiago">
+                                        <option value="Providencia" {% if profile_data.comuna == "Providencia" %}selected{% endif %}>Providencia</option>
+                                        <option value="Santiago" {% if profile_data.comuna == "Santiago" %}selected{% endif %}>Santiago</option>
+                                        <option value="San Bernardo" {% if profile_data.comuna == "San Bernardo" %}selected{% endif %}>San Bernardo</option>
+                                        <option value="Maipú" {% if profile_data.comuna == "Maipú" %}selected{% endif %}>Maipú</option>
+                                        <option value="Buin" {% if profile_data.comuna == "Buin" %}selected{% endif %}>Buin</option>
+                                    </optgroup>
+                                </select>
+                            </div>
+                            <div class="row">
+                                <div class="col-11 col-sm-6 mb-3">
+                                    <input type="submit" value="Editar Usuario" class="button form-control">
+                                    <a href="{% url 'perfil_main'%}" class="button form-control">Volver</a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </form>
-            </div>
-        </nav>
+                    </form>
+                </div>
+            </nav>
         </div>
     </section>
-    </main>
-
-    {% endblock %}
+</main>
+{% endblock %}

@@ -297,18 +297,8 @@ body.dark {
   display: none;
 }
 
-#sidebarOpen {
-  display: none;
-}
 
 @media screen and (max-width: 768px) {
-  #sidebarOpen {
-    font-size: 25px;
-    display: block;
-    margin-right: 10px;
-    cursor: pointer;
-    color: var(--grey-color);
-  }
 
   .sidebar.close {
     left: -100%;
@@ -376,52 +366,15 @@ body.dark .header {
   border-bottom: 1px solid #444;
 }
 
-/* profilebar styles */
-.profilebar {
-  background-color: var(--green-color);
-  width: 90%; /* Ajusta el ancho de manera relativa */
-  max-width: 1010px; /* Ancho máximo */
-  height: 6%; /* Ajusta la altura según tus necesidades */
-  position: fixed;
-  top: 70px; /* Ajusta la distancia desde la parte superior de la ventana */
-  left: 60%; /* Centra el contenedor */
-  transform: translateX(-50%); /* Centra el contenedor */
-  border-radius: 15px; /* Redondea las esquinas */
-  padding: 5px; /* Ajusta el relleno interior */
-  z-index: 100;
-  overflow-y: auto; /* Ajusta la barra de desplazamiento si es necesario */
-  box-shadow: 0 0 10px var(--grey-color-light);
-  transition: all 0.5s ease;
-}
-
-.profilebar::-webkit-scrollbar {
-  display: none;
-}
-
-.profilebar.close {
-  padding: 60px 0;
-  width: 80px;
-}
-
-.profilebar .nav_link {
-  align-items: center;
-  width: 25%;
-  padding: 4px 0px; /* del contenido dentro de la sidebar */
-  border-radius: 8px;
-  text-decoration: none;
-  color: var(--grey-color);
-  white-space: nowrap;
-}
 
 /* useredit styles */
 .profileedit {
   background-color: white;
   max-width: 1000px; /* Ancho máximo */
-  height: 100%; /* Ajusta la altura según tus necesidades */
+  height: 90%; /* Ajusta la altura según tus necesidades */
   position: fixed;
   top: 120px; /* Ajusta la distancia desde la parte superior de la ventana */
-  left: 60%; /* Centra el contenedor */
-  transform: translateX(-50%); /* Centra el contenedor */
+  left: 25%; /* Centra el contenedor */
   padding: 5px; /* Ajusta el relleno interior */
   z-index: 100;
   overflow-y: auto; /* Ajusta la barra de desplazamiento si es necesario */
@@ -789,14 +742,10 @@ body.dark .header {
 
 /* Media Queries para pantallas más pequeñas */
 @media screen and (max-width: 500px) {
-  .profilebar {
-    width: 60%; /* Ajusta el ancho para pantallas más pequeñas */
-    top: 80px; /* Ajusta la distancia desde la parte superior */
-  }
-
   .profileedit {
-    width: 70%; /* Ajusta el ancho para pantallas más pequeñas */
+    width: 75%; /* Ajusta el ancho para pantallas más pequeñas */
     top: 110px; /* Ajusta la distancia desde la parte superior*/
+    left: 115px;
     box-sizing: border-box;
     word-wrap: break-word;
   }
@@ -812,34 +761,23 @@ body.dark .header {
 
 @media (min-width: 501px) and (max-width: 767px) {
   .profileedit {
-    width:75%; /* Ajusta el ancho para pantallas muy pequeñas */
-    top: 90px; /* Ajusta la distancia desde la parte superior */
+    width:50%; /* Ajusta el ancho para pantallas muy pequeñas */
+    top: 110px; /* Ajusta la distancia desde la parte superior */
+    left: 260px;
     box-sizing: border-box;
     word-wrap: break-word;
-
   }
-  .profilebar {
-    width: 100%; /* Ajusta el ancho para pantallas muy pequeñas */
-    top: 50px; /* Ajusta la distancia desde la parte superior */
-
-  }
-
 
 }
 
 /* Media Queries para pantallas más pequeñas */
 @media screen and (min-width: 768px) {
-  .profilebar {
-    width: 60%; /* Ajusta el ancho para pantallas más pequeñas */
-    top: 80px; /* Ajusta la distancia desde la parte superior */
-  }
-
   .profileedit {
-    width: 75%; /* Ajusta el ancho para pantallas más pequeñas */
+    width: 64%; /* Ajusta el ancho para pantallas más pequeñas */
+    height: 480px;
     top: 110px; /* Ajusta la distancia desde la parte superior */
+    left: 260px;
     box-sizing: border-box;
     word-wrap: break-word;
-
-
   }
 }
