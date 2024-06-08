@@ -796,9 +796,11 @@ body.dark .header {
 
   .profileedit {
     width: 70%; /* Ajusta el ancho para pantallas más pequeñas */
-    top: 110px; /* Ajusta la distancia desde la parte superior */
-    
+    top: 110px; /* Ajusta la distancia desde la parte superior*/
+    box-sizing: border-box;
+    word-wrap: break-word;
   }
+
   .nav_link .navlink {
     display: none;
   }
@@ -808,11 +810,13 @@ body.dark .header {
   }
 }
 
-@media (min-width: 501px) and (max-width: 767px) {
+@media (min-width: 451px) and (max-width: 767px) {
   .profileedit {
-    width:70%; /* Ajusta el ancho para pantallas muy pequeñas */
+    width:75%; /* Ajusta el ancho para pantallas muy pequeñas */
     top: 90px; /* Ajusta la distancia desde la parte superior */
-    
+    box-sizing: border-box;
+    word-wrap: break-word;
+
   }
   .profilebar {
     width: 100%; /* Ajusta el ancho para pantallas muy pequeñas */
@@ -820,8 +824,9 @@ body.dark .header {
 
   }
 
-  
+
 }
+
 /* Media Queries para pantallas más pequeñas */
 @media screen and (min-width: 768px) {
   .profilebar {
@@ -830,9 +835,11 @@ body.dark .header {
   }
 
   .profileedit {
-    width: 70%; /* Ajusta el ancho para pantallas más pequeñas */
+    width: 75%; /* Ajusta el ancho para pantallas más pequeñas */
     top: 110px; /* Ajusta la distancia desde la parte superior */
-    
-    
+    box-sizing: border-box;
+    word-wrap: break-word;
+
+
   }
 }
