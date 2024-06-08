@@ -37,6 +37,7 @@ body.dark {
 /* Navbar styles */
 .navbar { /*BARRA DE ARRIBA QUE DICE NOMBRE E ICONOS CERRAR SESION CONFIG*/
   position: fixed;
+  margin: 0px;
   top: 0;
   height: 60px; /* Ajusta la altura según tus necesidades */
   width: 100%;
@@ -45,7 +46,7 @@ body.dark {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px 30px;
+  padding: 8px 0px;
   z-index: 10000;
   box-shadow: 0 0 10px var(--grey-color-light);
 }
@@ -105,10 +106,10 @@ body.dark {
 /* Sidebar styles */
 .sidebar { /*BARRA MENÚ PRINCIPAL*/
   background-color: var(--green-color);
-  width: 310px; /* Ajusta el ancho según tus necesidades */
+  width: 250px; /* Ajusta el ancho según tus necesidades */
   height: fit-content; /* Ajusta la altura según tus necesidades */
   position: fixed;
-  top: 70px; /* Ajusta la distancia desde la parte superior de la ventana */
+  top: 60px; /* Ajusta la distancia desde la parte superior de la ventana */
   left: 0; /* Ajusta la distancia desde el lado izquierdo de la ventana */
   border-radius: 15px; /* Redondea las esquinas */
   padding: 5px; /* Ajusta el relleno interior */
@@ -174,8 +175,8 @@ body.dark {
 
 .navlink_icon {
   position: relative;
-  font-size: 40px;
-  min-width: 50px;
+  font-size: 35px;
+  min-width: 40px;
   line-height: 40px;
   display: inline-block;
   text-align: center;
@@ -414,10 +415,9 @@ body.dark .header {
 
 /* useredit styles */
 .profileedit {
-  background-color: var(--white-color);
-  width: 90%; /* Ajusta el ancho de manera relativa */
+  background-color: white;
   max-width: 1000px; /* Ancho máximo */
-  height: 70%; /* Ajusta la altura según tus necesidades */
+  height: 100%; /* Ajusta la altura según tus necesidades */
   position: fixed;
   top: 120px; /* Ajusta la distancia desde la parte superior de la ventana */
   left: 60%; /* Centra el contenedor */
@@ -434,30 +434,7 @@ body.dark .header {
   display: default;
 }
 
-/* Media Queries para pantallas más pequeñas */
-@media screen and (max-width: 768px) {
-  .profilebar {
-    width: 60%; /* Ajusta el ancho para pantallas más pequeñas */
-    top: 80px; /* Ajusta la distancia desde la parte superior */
-  }
 
-  .profileedit {
-    width: 30%; /* Ajusta el ancho para pantallas más pequeñas */
-    top: 110px; /* Ajusta la distancia desde la parte superior */
-  }
-}
-
-@media screen and (max-width: 480px) {
-  .profilebar {
-    width: 100%; /* Ajusta el ancho para pantallas muy pequeñas */
-    top: 50px; /* Ajusta la distancia desde la parte superior */
-  }
-
-  .profileedit {
-    width: 30%; /* Ajusta el ancho para pantallas muy pequeñas */
-    top: 90px; /* Ajusta la distancia desde la parte superior */
-  }
-}
 
 /* useredit styles */
 .useredit {
@@ -806,4 +783,56 @@ body.dark .header {
 
 .ventasedit:-webkit-scrollbar {
   display: none;
+}
+
+/*RESPONSIVE*/
+
+/* Media Queries para pantallas más pequeñas */
+@media screen and (max-width: 500px) {
+  .profilebar {
+    width: 60%; /* Ajusta el ancho para pantallas más pequeñas */
+    top: 80px; /* Ajusta la distancia desde la parte superior */
+  }
+
+  .profileedit {
+    width: 70%; /* Ajusta el ancho para pantallas más pequeñas */
+    top: 110px; /* Ajusta la distancia desde la parte superior */
+    
+  }
+  .nav_link .navlink {
+    display: none;
+  }
+  .sidebar {
+    width: fit-content;
+    
+  }
+}
+
+@media (min-width: 501px) and (max-width: 767px) {
+  .profileedit {
+    width:70%; /* Ajusta el ancho para pantallas muy pequeñas */
+    top: 90px; /* Ajusta la distancia desde la parte superior */
+    
+  }
+  .profilebar {
+    width: 100%; /* Ajusta el ancho para pantallas muy pequeñas */
+    top: 50px; /* Ajusta la distancia desde la parte superior */
+
+  }
+
+  
+}
+/* Media Queries para pantallas más pequeñas */
+@media screen and (min-width: 768px) {
+  .profilebar {
+    width: 60%; /* Ajusta el ancho para pantallas más pequeñas */
+    top: 80px; /* Ajusta la distancia desde la parte superior */
+  }
+
+  .profileedit {
+    width: 70%; /* Ajusta el ancho para pantallas más pequeñas */
+    top: 110px; /* Ajusta la distancia desde la parte superior */
+    
+    
+  }
 }
