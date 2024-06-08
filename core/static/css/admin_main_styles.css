@@ -810,7 +810,7 @@ body.dark .header {
   }
 }
 
-@media (min-width: 451px) and (max-width: 767px) {
+@media (min-width: 501px) and (max-width: 767px) {
   .profileedit {
     width:75%; /* Ajusta el ancho para pantallas muy pequeñas */
     top: 90px; /* Ajusta la distancia desde la parte superior */
