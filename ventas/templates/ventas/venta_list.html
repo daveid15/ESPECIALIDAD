@@ -101,7 +101,7 @@
         </div>
     </header>
     <div class="table-container mt-5" style="margin-left: 250px; ">
-        <form method="get" action="{% url 'venta_list' %}" class="search-form">
+        <form method="get" action="{% url 'venta_list' %}" class="search-form" style="margin-top: 10px;">
             {% csrf_token %}
             <input name="search" id="search" type="text" placeholder='Buscar por Nombre'/>
             <button type="submit">Buscar</button>
