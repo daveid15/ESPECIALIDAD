@@ -20,6 +20,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>COMPLETOPIA</title>
     {% block extrahead %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOMy65R2bqU2BqJ/Ex2+ip0EXn1Huxf1W6hJ6gD" crossorigin="anonymous">
         <style>
             /* Import Google font - Poppins */
@@ -39,6 +42,7 @@
             }
 
             .welcome-banner {
+                display: grid;
                 background-color: rgba(158, 178, 59, 0.8);
                 color: white;
                 height: 260px;
@@ -58,8 +62,7 @@
                 width: 100%;
                 flex-direction: column;
                 align-items: center;
-                justify-content: center;
-                padding: 50px;
+                justify-content: center;                
                 text-align: center;
                 background-color: rgba(255, 255, 255, 0.8);
                 border-radius: 10px;
@@ -126,29 +129,41 @@
             }
 
             .menu-icon {
-                position: fixed;
-                top: 20px;
-                left: 20px;
-                font-size: 2em;
-                color: white;
+                display: flex;
+                position: relative;
+                top: 10px;
+                justify-content: center;
+                align-items: center;
+                width: 40px;
+                height: 40px;
                 cursor: pointer;
-                z-index: 1000;
-                background-color: rgba(0, 0, 0, 0.5);
-                padding: 1px 10px;
-                border-radius: 50%;
-                transition: background-color 0.3s;
+                border-radius: 50%; /* Hace que el contenedor sea redondo */
+                background-color: #333; /* Color de fondo del contenedor */
+                transition: background-color 0.3s, transform 0.3s;
             }
 
             .menu-icon:hover {
-                background-color: rgba(0, 0, 0, 0.7);
+                background-color: rgb(37, 37, 37); /* Cambia el color de fondo cuando se pasa el cursor */
+                transform: scale(1.1); /* Aumenta el tamaño cuando se pasa el cursor */
             }
+
+            .menu-icon:active {
+                background-color: #1a1a1a; /* Cambia el color de fondo cuando se hace clic */
+                transform: scale(0.9); /* Reduce el tamaño cuando se hace clic */
+            }
+
+            .menu-icon:focus {
+                outline: none;
+            }
+
+
 
             .sidebar {
                 background-color: #9eb23b;
                 width: 250px; /* Ajusta el ancho según tus necesidades */
                 height: 62%; /* Ajusta la altura según tus necesidades */
                 position: fixed;
-                top: 90px; /* Ajusta la distancia desde la parte superior de la ventana */
+                top: 60px; /* Ajusta la distancia desde la parte superior de la ventana */
                 left: -350px; /* Ajusta la distancia desde el lado izquierdo de la ventana */
                 border-radius: 15px; /* Redondea las esquinas */
                 padding: 5px; /* Ajusta el relleno interior */
@@ -311,53 +326,44 @@
                 width: 100%;
             }
             .sidebutton {
-                flex: 1;
-                max-width: 200px;
-                margin-right: 110px;
+                font-family: Arial, sans-serif;
+                margin: 20px;
             }
-            .sidebutton h3 {
+
+            h3 {
+                color: #333;
                 text-align: center;
+                margin-top: 50px;
+                margin-bottom: 20px;
+                font-size: 24px;
             }
-            .sidebutton button {
-                display: block;
-                height: 10%;
-                width: 100%;
-                
+
+            .sidebutton .button {
+                display: ruby;
+                background-color: #333;
+                color: white;
+                padding: 15px 20px;
                 margin: 10px 0;
-                background-color: #333;
-                color: white;
-                border: none;
-                cursor: pointer;
-                text-align: center;
-                border-radius: 10px;
-                text-align: center;
-                font-family: "Poppins", sans-serif; /* Cambia la fuente aquí */
-                font-size: 16px;
-                
-                align-items: center;
-
-            }
-            .sidebutton button:hover {
-                background-color: #555;
-            }
-
-            .button {
-                display: inline-block;
-                padding: 10px 20px;
-                margin: 5px 0;
-                height: 10%;
-                width: 100%;
-                background-color: #333;
-                color: white;
                 text-align: center;
                 text-decoration: none;
-                border-radius: 10px;
-                font-family: "Poppins", sans-serif; /* Cambia la fuente aquí */
-                font-size: 16px;
+                border-radius: 5px;
+                transition: background-color 0.3s, box-shadow 0.3s;
             }
 
-            .button:hover {
-                background-color: #555;
+            .sidebutton .button:hover {
+                background-color: #414141;
+                box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            }
+
+            .sidebutton .button:active {
+                background-color: rgb(40, 40, 40);
+                box-shadow: 0 5px #666;
+                transform: translateY(4px);
+            }
+
+            .sidebutton .button:focus {
+                outline: none;
+                box-shadow: 0 0 10px #0f0f0f;
             }
             
 
@@ -381,23 +387,35 @@
 
             .logout-icon {
                 position: fixed;
-                align-items: flex-end;
-                top: 1.5%;
-                left: 95%;
-                font-size: 2em;
-                color: white;
-                cursor: pointer;
-                z-index: 1000;
+                top: 5px;
+                left: 93%;
+                display: flex;
                 
-                padding: 1px 10px;
-                border-radius: 50%;
-                transition: background-color 0.3s;
+                padding: 15px;
+                z-index: 999;
+                color: #333;
             }
 
-            .logout-link img {
-                width: 25px; /* Define el ancho deseado */
-                height: 25px; /* Define la altura deseada */
-            } 
+            .logout-link {
+                text-decoration: none;
+                color: inherit;
+                font-size: 24px; /* Tamaño del icono */
+                transition: color 0.3s;
+            }
+
+            .logout-link:hover {
+                color: rgb(69, 69, 69); /* Cambia el color del icono cuando se pasa el cursor */
+            }
+
+            .logout-link:active {
+                color: rgb(34, 34, 34); /* Cambia el color del icono cuando se hace clic */
+            }
+
+            .logout-link:focus {
+                outline: none;
+            }
+
+            
 
 
             @media (max-width: 450px) {
@@ -423,7 +441,7 @@
                     word-wrap: break-word;
                 }
                 .dashboard div {
-                    width: 116%;
+                    width: 95%;
                     margin-bottom: 20px;
                     box-sizing: border-box;
                     overflow-x: auto;
@@ -435,7 +453,7 @@
                     flex-direction: column;
                     align-items: center;
                     justify-content: center;
-                    padding: 50px;
+                    padding: 10px;
                     text-align: center;
                     background-color: rgba(255, 255, 255, 0.8);
                     border-radius: 10px;
@@ -445,7 +463,6 @@
                     z-index: 1;
                     box-shadow: 0 0 1px #333;
                 }
-
 
                 .welcome-banner {
                     width: 80%;
@@ -461,7 +478,6 @@
                     font-size: 0.8em !important;
                     position: relative;
                     z-index: 1;
-                    
                 }
 
                 .sidebar.open {
@@ -469,11 +485,26 @@
                     left: 0;
                 }
 
-
                 .table-user th, .table-user td {
                     padding: 8px; /* Adjust padding as needed */
                     word-wrap: break-word; /* Allow content to wrap within cells */
-                    }
+                }
+
+                .sidebutton .button {
+                display: ruby-text;
+                
+            }
+                .logout-icon {
+                    position: relative;
+                    top: 5px;
+                    left: 90%;
+                    display: flex;
+                    
+                    padding: 10px;
+                    z-index: 999;
+                    color: #333;
+                }
+
                                 
                 
             }
@@ -488,11 +519,7 @@
                     width: 100%;
                     box-sizing: border-box;
                 }
-                .sidebutton {
-                    max-width: 100%;
-                    margin: 0 0 20px 0;
-                    text-align: center; /* Center text inside sidebutton */
-                }
+
                 .main {
                     width: 100%;
                     padding: 0;
@@ -516,7 +543,7 @@
                     flex-direction: column;
                     align-items: center;
                     justify-content: center;
-                    padding: 50px;
+                    
                     text-align: center;
                     background-color: rgba(255, 255, 255, 0.8);
                     border-radius: 10px;
@@ -557,6 +584,11 @@
                     word-wrap: break-word; /* Allow content to wrap within cells */
                     text-align: center; /* Center the table cell contents */
                 }
+
+                .sidebutton .button {
+                display: ruby-text;
+                
+            }
             }
 
 
@@ -564,12 +596,11 @@
                 .container {
                     flex-direction: column;
                     padding: 20px 20px;
-                    width: 100%;
+                    width: 98%;
+                    align-items: center;
+                    justify-content: center
                 }
-                .sidebutton {
-                    max-width: 100%;
-                    margin: 0 0 20px 0;
-                }
+                
                 .main {
                     width: 100%;
                     padding: 0;
@@ -591,11 +622,11 @@
 
                 .main-content {
                     display: flex;
-                    width: 95.2%;
+                    width: 92.5%;
                     flex-direction: column;
                     align-items: center;
                     justify-content: center;
-                    padding: 50px;
+                    
                     text-align: center;
                     background-color: rgba(255, 255, 255, 0.8);
                     border-radius: 10px;
@@ -625,6 +656,34 @@
                     height: fit-content;
                     left: 0;
                 }
+
+                @media (min-width:1501px ) {
+
+                    .main-content {
+                    display: flex;
+                    position: relative;
+                    width: 98.5%;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    text-align: center;
+                    background-color: rgba(255, 255, 255, 0.8);
+                    border-radius: 10px;
+                    margin: 20px;
+                    color: #333;
+                    z-index: 1;
+                    box-shadow: 0 0 1px #333;
+                }
+                .container {
+                    flex-direction: column;
+                    padding: 20px 20px;
+                    width: 98%;
+                }
+                
+
+
+                }
+                
             
 
             
@@ -632,6 +691,17 @@
     {% endblock %}
 </head>
 <body>
+    <div class="logout-icon">
+        <a href="{% url 'edit_perfil' %}" class="logout-link">
+            <i class="fas fa-cog"></i>
+        </a>
+        <a onclick="confirmLogout()" class="logout-link" >
+            <i class="fas fa-sign-out-alt"></i>
+        </a>
+    </div>
+    <div class="menu-icon" onclick="toggleNavPanel()">
+        <i class="fas fa-bars"></i>
+    </div>
     {% block content %}
     <div class="welcome-banner">
         <h1>¡Bienvenido a Completopia, {{request.user.first_name}}!</h1>
@@ -640,13 +710,13 @@
 
     <div class="main-content">
         <div class="container">
-            <div class="sidebutton">
-                <h3>Atajos Rápidos</h3>
-                <a class="button" href="{% url 'venta_crear' %}">Nueva venta</a>
-                <a class="button" href="{% url 'orden_crear' %}">Nueva compra</a>
-                <a class="button" href="{% url 'proveedores_crear' %}">Nuevo proveedor</a>
-            </div>
             <div class="main">
+                <div class="sidebutton">
+                    <h3>Atajos Rápidos</h3>
+                    <a class="button" href="{% url 'venta_crear' %}">Nueva venta</a>
+                    <a class="button" href="{% url 'orden_crear' %}">Nueva compra</a>
+                    <a class="button" href="{% url 'proveedores_crear' %}">Nuevo proveedor</a>
+                </div>
                 <h3>Dashboard</h3>
                 <div class="dashboard">
                     <div>
@@ -658,7 +728,7 @@
                                     <th width="10%" scope="col">Unidad</th>
                                     <th width="10%" scope="col">Stock Actual</th>
                                     <th width="10%" scope="col" style="padding:15px;">Alarma Establecida (>5 KG o Packs de latas)</th>
-                                    <th width="10%" scope="col"></th>
+                                    
                                 </tr>
                             </thead>
                             <tbody>
@@ -684,14 +754,7 @@
         </div>
     </div>
 
-<div class="logout-icon">
-    <a onclick="confirmLogout()" class="logout-link" >
-        <img src="{% static 'assets/img/logout.png' %}">
-    </a>
-</div>
 
-    <!-- Icono de menú -->
-<div class="menu-icon" onclick="toggleNavPanel()">☰</div>
 
     <!-- Panel de Navegación -->
     <nav class="side-bar to-left">

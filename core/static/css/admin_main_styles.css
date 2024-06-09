@@ -95,6 +95,7 @@ body.dark {
   display: flex;
   column-gap: 25px;
   align-items: center;
+  
 }
 
 .navbar_content i {
@@ -717,6 +718,33 @@ body.dark .header {
 
 .ventasver:-webkit-scrollbar {
   display: none;
+}
+.logout-icon {
+ 
+  display: flex;
+  
+  padding: 15px;
+  z-index: 999;
+  color: rgb(33, 33, 33);
+}
+
+.logout-link {
+  text-decoration: none;
+  color: inherit;
+  font-size: 24px; /* Tamaño del icono */
+  transition: color 0.3s;
+}
+
+.logout-link:hover {
+  color: rgb(69, 69, 69); /* Cambia el color del icono cuando se pasa el cursor */
+}
+
+.logout-link:active {
+  color: rgb(34, 34, 34); /* Cambia el color del icono cuando se hace clic */
+}
+
+.logout-link:focus {
+  outline: none;
 }
 
 /* ventasedit styles 

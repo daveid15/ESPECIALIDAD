@@ -13,6 +13,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Icons+Sharp" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Icons+Two+Tone" rel="stylesheet">
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="{% static 'css/admin_main_styles.css' %}">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -26,14 +29,12 @@
                     <span class="username">{{ request.user.first_name }}</span>
                 </div>
                 <div class="navbar_content">
-                    <div class="logout">
-                        <a onclick="confirmLogout()" class="logout-link" >
-                            <img src="{% static 'assets/img/logout.png' %}">
+                    <div class="logout-icon">
+                        <a href="{% url 'edit_perfil' %}" class="logout-link">
+                            <i class="fas fa-cog"></i>
                         </a>
-                    </div>
-                    <div class="settings">
-                        <a href="{% url 'edit_perfil' %}" class="settings-link">
-                            <img src="{% static 'assets/img/gear.png' %}">
+                        <a onclick="confirmLogout()" class="logout-link" >
+                            <i class="fas fa-sign-out-alt"></i>
                         </a>
                     </div>
                 </div>
