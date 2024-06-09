@@ -80,6 +80,8 @@
         gap: 20px;
         padding-left: 0;
         list-style: none; /* Elimina los puntos de la lista */
+        margin-top: 20px;
+        flex-wrap: wrap; /* Permite que las pestañas se envuelvan en múltiples líneas si es necesario */
     }
     .nav-tabs .nav-item .nav-link {
         border: 1px #000000;
@@ -87,7 +89,7 @@
         padding: 10px 15px;
         color: #000;
         margin-right: -15px;
-        background-color: #c8d0a2;;
+        background-color: #c8d0a2;
         text-decoration: none;
     }
     .nav-tabs .nav-item .nav-link.active {
@@ -98,13 +100,39 @@
         background-color: white; /* Establece el fondo de las celdas a blanco */
         padding-top: 15px;
     }
+    @media (max-width: 768px) {
+        .container {
+            padding: 10px;
+        }
+        .search-form {
+            position: static;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .pagination {
+            position: static;
+            margin-top: 20px;
+        }
+        table th, table td {
+            font-size: 14px;
+        }
+    }
+    .page-title {
+        margin-top: 60px; /* Aumenta este valor si el menú flotante es más grande */
+        font-size: 24px;
+        font-weight: bold;
+    }
+    main {
+        margin-left: 250px; /* Asegura que el contenido no quede detrás del menú flotante */
+        margin-top: 100px; /* Espacio adicional para evitar que el menú tape el contenido */
+    }
 </style>
 {% endblock %}
 
 <main role="main">
+    <h1 class="page-title">Usuarios Eliminados</h1>
     <header class='mb-5'>
         <ul class="nav nav-tabs">
-
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'list_user_active' group.id %}">Lista de Usuarios Activos</a>
             </li>
@@ -117,7 +145,9 @@
         <div class="col-12 border" style="position: relative;">
             <div class="btn-container">
                 <div class="action-buttons">
-                    <a href="{% url 'list_user_active' group.id %}" class="btn btn-danger btn-volver"><i class="fas fa-arrow-left" style="color: #000000;"></i></a>
+                    <a href="{% url 'list_user_active' group.id %}" class="btn btn-danger btn-volver">
+                        <i class="fas fa-arrow-left" style="color: #000000;"></i>
+                    </a>
                     <div class="search-form">
                         <form method="get" action="" class='input-container-search'>
                             <input name="search" id="search" type="text" placeholder='Buscar por Nombre' />
@@ -128,19 +158,10 @@
             </div>
             <table id="service" class="table mt-2 table-hover table-sm table-bordered">      
                 <thead class="table-danger">
-                    <tr>
-                        {% if profiles.group_id == 1 %}
-                            <th colspan="5"><h3>Usuarios eliminados</h3></th>
-                        {% endif %}
-                        {% if profiles.group_id == 2 %}
-                            <th colspan="4"><h3>Usuarios eliminados</h3></th>
-                        {% endif %}
-                        <th colspan="1"></th>
-                    </tr>
                     <tr class="text-center">
-                        <th width="450" scope="col">Nombre</th>
-                        <th width="300" scope="col">Correo</th>
-                        <th width="150" scope="col">Acciones</th>
+                        <th width="300" scope="col">Nombre</th>
+                        <th width="350" scope="col">Correo</th>
+                        <th width="900" scope="col">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -165,48 +186,47 @@
                 </tbody>
             </table>
             <!-- Paginación -->
-            {% if paginator.num_pages > 1 %}
-                <nav aria-label="Page navigation">
-                    <ul class="pagination justify-content-center">
-                        {% if user_list.has_previous %}
-                            <li class="page-item ">
-                                <a class="page-link" href="?page={{ user_list.previous_page_number }}{% if search %}&search={{ search }}{% endif %}">
-                                    <i class="fas fa-chevron-left"></i> <!-- Icono de flecha hacia la izquierda -->
-                                </a>
-                            </li>
-                        {% else %}
-                            <li class="page-item disabled">
-                                <a class="page-link" href="#" tabindex="-1">
-                                    <i class="fas fa-chevron-left"></i>
-                                </a>
-                            </li>
-                        {% endif %}
-                        {% for i in paginator.page_range %}
-                            <li class="page-item {% if user_list.number == i %}active{% endif %}">
-                                <a class="page-link" href="?page={{ i }}{% if search %}&search={{ search }}{% endif %}">{{ i }}</a>
-                            </li>
-                        {% endfor %}
-                        {% if user_list.has_next %}
-                            <li class="page-item ">
-                                <a class="page-link" href="?page={{ user_list.next_page_number }}{% if search %}&search={{ search }}{% endif %}">
-                                    <i class="fas fa-chevron-right"></i> <!-- Icono de flecha hacia la derecha -->
-                                </a>
-                            </li>
-                        {% else %}
-                            <li class="page-item disabled">
-                                <a class="page-link" href="#" tabindex="-1">
-                                    <i class="fas fa-chevron-right"></i>
-                                </a>
-                            </li>
-                        {% endif %}
-                    </ul>
-                </nav>
+            {% if user_list.has_other_pages %}
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    {% if user_list.has_previous %}
+                    <li class="page-item ">
+                        <a class="page-link" href="?page={{ user_list.previous_page_number }}{% if search %}&search={{ search }}{% endif %}">
+                            <i class="fas fa-chevron-left"></i> <!-- Icono de flecha hacia la izquierda -->
+                        </a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link" tabindex="-1">
+                            <i class="fas fa-chevron-left"></i>
+                        </span>
+                    </li>
+                    {% endif %}
+                    {% for i in user_list.paginator.page_range %}
+                    <li class="page-item {% if user_list.number == i %}active{% endif %}">
+                        <a class="page-link" href="?page={{ i }}{% if search %}&search={{ search }}{% endif %}">{{ i }}</a>
+                    </li>
+                    {% endfor %}
+                    {% if user_list.has_next %}
+                    <li class="page-item ">
+                        <a class="page-link" href="?page={{ user_list.next_page_number }}{% if search %}&search={{ search }}{% endif %}">
+                            <i class="fas fa-chevron-right"></i> <!-- Icono de flecha hacia la derecha -->
+                        </a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link" tabindex="-1">
+                            <i class="fas fa-chevron-right"></i>
+                        </span>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
             {% endif %}
             <!-- Paginación -->                    
         </div>
     </div>
 </main>
-
 
 <script>
     function confirmrecover(id) {
@@ -214,7 +234,6 @@
             window.location.href = "{% url 'user_activate' 0 %}".replace('0', id);
         }
     }
-
 </script>
 <script>
     function confirmDelete(id) {
@@ -223,7 +242,5 @@
         }
     }
 </script>
-
-
 
 {% endblock %}

@@ -97,28 +97,40 @@
         padding-top: 15px;
         
     }
+    .button-container {
+    display: flex;
+    align-items: center;
+}
+
+.button-wrapper {
+    margin-right: 10px; /* Ajusta el margen entre los botones si es necesario */
+}
 </style>
 {% endblock %}
 {% block extra_css %}    
 {% endblock extra_css %}    
-<main role="main">
+<main role="main" style="margin-left: 250px;">
     <header class='mb-5'>
         <div class="header-container">
-            <div class="title-button-container">
+            <div class="title-button-container" style="margin-top: 60px;">
                 <h2 class='h2 medium text-blue mb-0'>Lista de Productos</h2>
                 <a href="{% url 'crear_producto' %}" class="btn btn-success new-product-button">
                     <i class="fas fa-plus" style="color: #000000"></i> <!-- Icono de signo de más -->
                 </a>
             </div>
-            <div class="ml-auto d-flex">
-                <a href="{% url 'carga_masiva_producto' %}" class="btn btn-info bulk-load">
-                    <i class="fas fa-upload" style="color: #000000"></i> <!-- Icono de carga con flecha hacia arriba -->
-                </a>
-                <a href="{% url 'descarga_reporte_producto' %}" title="Descarga Productos">
-                    <span class="material-icons-outlined"style="color: #000000;">
-                        cloud_download
-                    </span>
-                </a>
+            <div class="button-container ml-auto d-flex" style="margin-top: 70px;">
+                <div class="button-wrapper">
+                    <a href="{% url 'carga_masiva_producto' %}" class="btn btn-info bulk-load">
+                        <i class="fas fa-upload" style="color: #000000"></i> <!-- Icono de carga con flecha hacia arriba -->
+                    </a>
+                </div>
+                <div class="button-wrapper">
+                    <a href="{% url 'descarga_reporte_producto' %}" title="Descarga Productos">
+                        <span class="material-icons-outlined" style="color: #000000;">
+                            cloud_download
+                        </span>
+                    </a>
+                </div>
             </div>
         </div>
     </header>

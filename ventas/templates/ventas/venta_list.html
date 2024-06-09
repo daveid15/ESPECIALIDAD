@@ -64,9 +64,17 @@
         .title-button-container {
             display: flex;
             align-items: center;
+            margin-left: 250px;
+            margin-top: 60px;
         }
         .title-button-container h2 {
-            margin-right: 10px; /* Espacio entre el título y el botón de agregar */
+            margin-top: 20px;
+            margin-left: 20px; 
+            font-size: 30px;
+        }
+        .title-button-container a {
+            margin-top: 25px;
+            font-size: 25px;
         }
         .btn {
             display: inline-block;
@@ -74,7 +82,15 @@
             margin-top: 75px;
         }
         .total-ventas {
-            margin-top: 20px; /* Añade margen superior para el monto total */
+            margin-top: 20px; /* Espacio entre la lista y el monto total */
+            text-align: center;
+            border-radius: 15px;
+            background-color: #b16262;
+            border: 1px solid #ccc;
+            padding: 5px 10px;
+            width: fit-content; /* Ancho ajustado al contenido */
+            margin-left: auto; /* Mover el monto total a la derecha */
+            margin-right: auto; /* Mover el monto total a la izquierda */
         }
         .total-ventas {
         margin-top: 20px; /* Espacio entre la lista y el monto total */
@@ -197,13 +213,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <header class='mb-5'>
         <div class="title-button-container">
-            <h2 class='h2'>Listado de Ventas</h2>
-            <a href="{% url 'venta_crear' %}" class="btn btn-primary" style="margin-left: 10px;">
-                <i class="fas fa-plus" style="color: #000000"></i></a>
+            <h2 class='h2 medium text-blue'>Ventas</h2>
+            <a href="{% url 'venta_crear' %}" class="btn btn-primary">
+                <i class="fas fa-plus" style="color: #000000"></i>
+            </a>
         </div>
     </header>
-    <div class="table-container mt-5">
-        <form method="get" action="{% url 'venta_list' %}" class="search-form">
+    <div class="table-container mt-5" style="margin-left: 250px; ">
+        <form method="get" action="{% url 'venta_list' %}" class="search-form" style="margin-top: 10px;">
             {% csrf_token %}
             <input name="search" id="search" type="text" placeholder='Buscar por Nombre'/>
             <button type="submit">Buscar</button>
@@ -211,7 +228,6 @@
         <a href="{% url 'ventas_main' %}" class="btn-volver btn btn-secondary"><i class="fas fa-arrow-left" style="color: #000000;"></i></a>
         <table class="table table-user" style="text-align: center;">
             <thead>
-                </tr>
                 <tr>
                     <th width="15%" scope="col">Cliente</th>
                     <th width="25%" scope="col">Orden</th>

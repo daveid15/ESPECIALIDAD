@@ -104,6 +104,8 @@
         gap: 20px;
         padding-left: 0;
         list-style: none; /* Elimina los puntos de la lista */
+        margin-top: 40px;
+        margin-left: 250px;
     }
     .nav-tabs .nav-item .nav-link {
         border: 1px #000000;
@@ -128,9 +130,27 @@
         width: 40px;
         height: 40px;
     }
+    .action-buttons {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .action-buttons a {
+        margin: 0 5px;
+    }
+    
 </style>
 {% endblock extra_css %}    
-
+<header class="mb-4" style="margin-top: 90px;margin-left: 270px;">
+    <div class="container-fluid">
+        <div class="row align-items-center justify-content-between">
+            <h3 style="font-size: 30px;margin-left: 0px; margin-top: 10px;">Proveedores <a href="{% url 'proveedores_crear' %}" class="btn btn-success new-user-button">
+                <i class="fas fa-user-plus" style="color: #000000"></i> <!-- Icono de usuario con signo de más -->
+            </a></h3>
+        </div>
+    </div>
+</header>
 <header class='mb-5'>
         <div class="header-container">
             <!-- Componente de Tabs y botón -->
@@ -144,24 +164,28 @@
                         <a class="nav-link" href="{% url 'proveedores_eliminados' %}">Lista de Proveedores Eliminados</a>
                     </li>
                 </ul>
+                <!-- Botón de carga masiva -->
+                <li class="nav-item" style="margin-left: 600px; list-style: none; margin-top: 40px;">
+                    <a href="{% url 'carga_masiva_proveedor' %}" class="btn btn-primary btn-carga-masiva-container" style="font-size: 20px;">
+                        <i class="fas fa-upload" style="color: #000000; margin-right: 5px;"></i> <!-- Icono de subida -->
+                        <span style="color: #000000;">Carga Masiva</span> <!-- Texto "Carga Masiva" sin subrayado y color negro -->
+                    </a>
+                </li>
+                
             </div>
         </div>
     </header>
-<div class="list-container">
+<div class="list-container" style="margin-left: 250px;">
     <a href="{% url 'proveedores_main' %}" class="btn btn-danger btn-volver"><i class="fas fa-arrow-left" style="color: #000000;"></i></a> <!-- Botón "Volver" con icono -->
-    <div>
-        <a style="padding: 2%; font-weight: bold; font-size: larger;">Proveedores</a><a href="{% url 'proveedores_crear' %}" class="boton" ><i class="fas fa-user-plus"  style="color: #000000"></i></a> 
-    </div>
     <div class="search-form">
         <form method="get" action="" class='input-container-search my-auto'>
-            <a href="{% url 'carga_masiva_proveedor' %}" class="boton" style="margin-left: 10px;"><i class="fas fa-upload" style="color: #000000"></i></a>
             <input name="search" id="search" type="text" placeholder='Buscar por Nombre'/>
             <button type="submit">Buscar</button>
         </form>
     </div>
 
     <div class="table-container mt-5">
-        <table class="table table-user">
+        <table class="table table-user" style="margin-top: 50px;">
             <thead>
                 <tr>
                     <th width="10%" scope="col">Nombre</th>
