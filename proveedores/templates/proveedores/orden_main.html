@@ -26,12 +26,59 @@
         border-radius: 10px; /* Añade bordes redondeados al contenedor */
     }
 
+    @media screen and (max-width: 500px) {
+        .chart-container{
+            width: 100%;
+            display: block;
+            padding-top: 5%;
+        }
+        .chart{
+            width: 106%;
+            left: -20px;
+            word-wrap: break-word;
+        }
+
+        .chart2{
+            width: 106%;
+            left: -20px;
+            word-wrap: break-word;
+        }
+        
+        
+    }
+
+    @media screen and (min-width: 501px) and (max-width: 767px) {
+        .chart-container{
+            width: 100%;
+            background-color: aqua;
+        }
+        
+        .chart{
+            width: 120%;
+        }
+
+        .chart2{
+            width: 120%;
+        }
+    }
+
+    @media screen and (min-width: 768px) {
+        .chart{
+            width: 150%;
+        }
+
+        .chart2{
+            width: 150%;
+        }
+        
+    }
+
 </style>
 {% endblock %}
     <main role="main">
-        <nav id="orderdash" class="orderdash">
+        <nav id="ventasdash" class="ventasdash">
             <div class="menu">
-                <nav class="orderdash">
+                <nav class="ventasdash">
                     <div class=chart>
                         <div id = "chart_oc1" class="chart"></div>
                     </div>

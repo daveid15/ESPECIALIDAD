@@ -590,7 +590,6 @@ body.dark .header {
 .orderbar:-webkit-scrollbar {
   display: none;
 }
-
 .orderbar.close {
   padding: 60px 0;
   width: 80px;
@@ -765,7 +764,6 @@ body.dark .header {
     left: 110px;
     box-sizing: border-box;
   }
-
  
 }
 

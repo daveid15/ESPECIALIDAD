@@ -19,6 +19,38 @@
     }
     
     
+    @media screen and (max-width: 500px) {
+        .chart-container{
+            width: 100%;
+            display: block;
+            padding-top: 5%;
+        }
+        .chart{
+            width: 10%;
+            left: -20px;
+            word-wrap: break-word;
+        }
+        
+    }
+
+    @media screen and (min-width: 501px) and (max-width: 767px) {
+        .chart-container{
+            width: 100%;
+            background-color: aqua;
+        }
+        
+        .chart{
+            width: 120%;
+        }
+    }
+
+    @media screen and (min-width: 768px) {
+        .chart{
+            width: 150%;
+        }
+        
+    }
+    
 </style>
 {% endblock %}
 <main role="main">
@@ -54,7 +86,7 @@
     <td>
     <div class="container mt-4">
         <div class="row">
-            <nav id="proveedordash" class="proveedordash">
+            <nav id="ventasdash" class="ventasdash">
             <div class="col-md-8">
                 <div class="card mb-4">
                     <div class="card-body">
