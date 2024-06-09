@@ -5,162 +5,278 @@
 {% block extrahead %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
-    body {
-        background-color: rgb(236, 236, 236); /* Establece el fondo de la página a blanco */
-    }
-    .errorlist { color: red; }
-    .pagination { 
-        position: fixed;
-        bottom: 20px; /* Ajusta esta distancia según tus necesidades */
-        left: 50%;
-        transform: translateX(-50%);
-        display: flex; 
-        justify-content: center; 
-        z-index: 999; /* Asegura que la paginación esté sobre otros elementos */
-        background-color: #9EB23B;
-        border-radius: 12px;
-        font-weight: bold;
-    }
-    .pagination .page-item { 
-        margin: 0 5px; 
-        list-style: none; /* Elimina los estilos de lista */
-        height: 30px; /* Altura fija para los elementos <li> */
-        display: flex; /* Para usar flexbox */
-        align-items: center; /* Centrar verticalmente el contenido */
-    } 
-    .pagination .page-link { 
-        text-decoration: none; 
-        color: #000; 
-        font-size: 18px; 
-        padding: 5px 10px; /* Añade un poco de espacio alrededor del número */
-    }
-    .pagination .page-item.active .page-link { 
-        background-color: #505c14; /* Cambia el color de fondo para la página activa */
-        color: #000; /* Cambia el color del texto para la página activa */
-        border-radius: 5px; /* Agrega bordes redondeados */
-    }
-    table {
-        border: 2px solid white; /* Agrega un borde de color blanco a la tabla */
-        background-color: white; /* Establece el fondo de la tabla a blanco */
-        border-radius: 15px; /* Hace las esquinas de la tabla más ovaladas */
-        overflow: hidden; /* Asegura que el contenido de la tabla no sobresalga de las esquinas redondeadas */
-    }
-    table th, table td {
-        background-color: white; /* Establece el fondo de las celdas a blanco */
-        padding-top: 15px;
-    }
-    .header-row {
-        background-color: #d3d3d3; /* Establece el color de fondo de la fila de encabezados a gris */
-    }
-    .action-buttons {
+body {
+    background-color: rgb(236, 236, 236); 
+}
+.errorlist { color: red; }
+.pagination { 
+    position: fixed;
+    bottom: 20px; 
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex; 
+    justify-content: center; 
+    z-index: 999; 
+    background-color: #9EB23B;
+    border-radius: 12px;
+    font-weight: bold;
+}
+.pagination .page-item { 
+    margin: 0 5px; 
+    list-style: none; 
+    height: 30px; 
+    display: flex; 
+    align-items: center; 
+} 
+.pagination .page-link { 
+    text-decoration: none; 
+    color: #000; 
+    font-size: 18px; 
+    padding: 5px 10px; 
+}
+.pagination .page-item.active .page-link { 
+    background-color: #505c14; 
+    color: #000; 
+    border-radius: 5px; 
+}
+table {
+    border: 2px solid white; 
+    background-color: white; 
+    border-radius: 15px; 
+    overflow: hidden; 
+    width: 100%; /* Asegura que la tabla ocupe el ancho completo del contenedor */
+}
+table th, table td {
+    background-color: white; 
+    padding: 10px; /* Reduce el padding para hacer que las celdas sean más compactas */
+    
+}
+.header-row {
+    background-color: #d3d3d3; 
+}
+.action-buttons {
         display: flex;
-        align-items: center; /* Alinea los elementos verticalmente */
-    }
-    .action-buttons a {
-        margin-right: 10px; /* Ajusta el espacio entre los botones */
-    }
-    .btn-container {
-        display: flex;
-        justify-content: flex-start;
-        margin-bottom: 10px;
-    }
-    .back-button {
-        position: absolute;
-        top: 10px;
-        left: 10px;
-    }
-    .search-form {
-        margin-top: 20px;
-        position: absolute;
-        top: 10px;
-        right: 10px;
-    }
-    .btn-volver {
-        position: absolute;
-        top: 10px;
-        left: 10px;
-        z-index: 1;
-    }
-    .search-form input[type="text"] {
-        border-radius: 15px; /* Bordes redondeados */
-        background-color: #f0f0f0; /* Color de fondo gris claro */
-        border: 1px solid #ccc; /* Borde gris claro */
-        padding: 5px 10px; /* Espaciado interno */
-        margin-right: 5px; /* Espacio entre el input y el botón */
-        margin-top: 15px;
-    }
-    .search-form button {
-        border-radius: 15px; /* Bordes redondeados */
-        background-color: #d3d3d3; /* Color de fondo gris claro */
-        border: 1px solid #ccc; /* Borde gris claro */
-        padding: 5px 10px; /* Espaciado interno */
-    }
-    .new-user-button {
-        margin-left: 15px; /* Espacio entre el título y el botón */
-        white-space: nowrap; /* Evita que el texto del botón se divida en varias líneas */
-    }
-    .header-container {
-        display: flex;
+        justify-content: center;
         align-items: center;
-        justify-content: space-between; /* Alinea elementos al inicio */
-        margin-bottom: -10px; /* Espacio entre los tabs y el contenedor */
+        gap: 10px; /* Adjust spacing between buttons as needed */
     }
-    .bulk-load-container {
-        align-items: right; /* Ajusta esta distancia según sea necesario */
+    .btn-link {
+        padding: 0;
+        margin: 0;
+        border: none;
+        background: none;
     }
-    .bulk-load {
-        white-space: nowrap; /* Evita que el texto del botón se divida en varias líneas */
-    }
-    .nav-tabs {
-        display: flex;
-        gap: 20px;
-        padding-left: 0;
-        list-style: none; /* Elimina los puntos de la lista */
-    }
-    .nav-tabs .nav-item .nav-link {
-        border: 5px;
-        border-radius: 0.25rem;
-        padding: 10px 15px;
-        color: #000;
-        margin-right: -15px;
-        background-color: #c8d0a2;;
-        text-decoration: none;
-    }
-    .nav-tabs .nav-item .nav-link.active {
-        background-color: #ffffff;
-    }
-    .tabs-and-button-container {
-        display: flex;
-        justify-content: space-between; /* Alinea los elementos al principio y al final */
-        align-items: center; /* Alinea los elementos verticalmente */
-    }
-    .btn-carga-masiva-container{
-        width: 40px;
-        height: 40px;
-    }
-    h3 {
-        display: flex;
-        font-size: 1.17em;
-        margin-block-start: -1em;
-        margin-block-end: -1em;
-        margin-inline-start: 100px;
-        margin-inline-end: 100px;
-        font-weight: bold;
-        padding: 15px;
-        ;
-        
+.action-buttons a {
+    margin-right: 10px; 
+}
+.btn-container {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 10px;
+}
+.back-button {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+.search-form {
+    margin-top: 20px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+.btn-volver {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 1;
+}
+.search-form input[type="text"] {
+    border-radius: 15px; 
+    background-color: #f0f0f0; 
+    border: 1px solid #ccc; 
+    padding: 5px 10px; 
+    margin-right: 5px; 
+    margin-top: 15px;
+}
+.search-form button {
+    border-radius: 15px; 
+    background-color: #d3d3d3; 
+    border: 1px solid #ccc; 
+    padding: 5px 10px; 
+}
+.new-user-button {
+    margin-left: 15px; 
+    white-space: nowrap; 
+}
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; 
+    margin-bottom: -10px; 
+}
+.bulk-load-container {
+    align-items: right; 
+}
+.bulk-load {
+    white-space: nowrap; 
+}
+.nav-tabs {
+    display: flex;
+    gap: 20px;
+    padding-left: 0;
+    list-style: none; 
+}
+.nav-tabs .nav-item .nav-link {
+    border: 5px;
+    border-radius: 0.25rem;
+    padding: 10px 15px;
+    color: #000;
+    margin-right: -15px;
+    background-color: #c8d0a2;;
+    text-decoration: none;
+}
+.nav-tabs .nav-item .nav-link.active {
+    background-color: #ffffff;
+}
+.tabs-and-button-container {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center; 
+}
+.btn-carga-masiva-container{
+    width: 40px;
+    height: 40px;
+}
+h3 {
+    display: flex;
+    font-size: 1.17em;
+    margin-block-start: -1em;
+    margin-block-end: -1em;
+    margin-inline-start: 100px;
+    margin-inline-end: 100px;
+    font-weight: bold;
+    padding: 15px;
 }
 
+/* Alternating row colors */
+    tbody tr:nth-child(odd) td {
+        background-color: #f0f0f0; /* Gray color */
+    }
+
+    tbody tr:nth-child(even) td {
+        background-color: #ffffff; /* White color */
+    }
+    
+    /* Ensure the text color remains the same for readability */
+    tbody tr td {
+        color: #000000;
+    }
+
+    /* Optional: Change hover effect to maintain color visibility */
+    tbody tr:hover td {
+        background-color: #e0e0e0; /* Light gray on hover */
+    }
+
+/* Media Queries for Responsiveness */
+@media (max-width: 1200px) {
+    .pagination {
+        font-size: 16px;
+    }
+    .pagination .page-link {
+        padding: 4px 8px;
+    }
+    table th, table td {
+        padding: 8px;
+    }
+    .nav-tabs .nav-item .nav-link {
+        padding: 8px 12px;
+    }
+}
+
+@media (max-width: 992px) {
+    .pagination {
+        bottom: 10px;
+        font-size: 14px;
+    }
+    .pagination .page-link {
+        padding: 3px 6px;
+    }
+    .search-form {
+        position: static;
+        margin-top: 10px;
+        text-align: center;
+    }
+    .header-container {
+        flex-direction: column;
+    }
+    .tabs-and-button-container {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .header-container h3 {
+        margin: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .pagination {
+        font-size: 12px;
+    }
+    .pagination .page-link {
+        padding: 2px 4px;
+    }
+    .nav-tabs {
+        flex-direction: column;
+        align-items: center;
+    }
+    .nav-tabs .nav-item .nav-link {
+        padding: 6px 10px;
+        margin-bottom: 5px;
+    }
+}
+
+@media (max-width: 576px) {
+    .pagination {
+        font-size: 10px;
+    }
+    .pagination .page-link {
+        padding: 1px 2px;
+    }
+    .btn-volver {
+        top: 5px;
+        left: 5px;
+    }
+    .search-form {
+        margin-top: 5px;
+    }
+    .header-container {
+        flex-direction: column;
+    }
+    .header-container h3 {
+        margin: 0;
+        font-size: 1em;
+    }
+}
 </style>
 {% endblock %}
 
-<main role="main">
+<main role="main" style="margin-left: 250px;">
+    <header class="mb-4" style="margin-top: 70px;">
+        <div class="container-fluid">
+            <div class="row align-items-center justify-content-between">
+                <h3 style="font-size: 30px;margin-left: 0px; margin-top: 10px;">Usuarios <a href="{% url 'new_user' %}" class="btn btn-success new-user-button">
+                    <i class="fas fa-user-plus" style="color: #000000"></i> <!-- Icono de usuario con signo de más -->
+                </a></h3>
+            </div>
+        </div>
+    </header>
     <header class='mb-5'>
-        <div class="header-container">
+        <div class="header-container" style="margin-top: 20px; position: relative;">
             <!-- Componente de Tabs y botón -->
-            <div class="tabs-and-button-container">
+            <div class="tabs-and-button-container" style="display: flex; justify-content: space-between; align-items: center;">
                 <!-- Componente de Tabs -->
-                <ul class="nav nav-tabs">
+                <ul class="nav nav-tabs" style="flex-grow: 1;">
                     <li class="nav-item">
                         <a class="nav-link active" href="#">Lista de Usuarios Activos</a>
                     </li>
@@ -169,115 +285,113 @@
                     </li>
                 </ul>
             </div>
+            <!-- Botón de carga masiva fuera del contenedor -->
+            <div style="position: absolute; top: 0; right: 0; display: flex; align-items: center; margin-top: 10px; margin-right: 20px;">
+                <a href="{% url 'carga_masiva_user' %}" class="btn btn-primary btn-carga-masiva-container" style="margin-right: 10px; font-size: 20px;">
+                    <i class="fas fa-upload" style="color: #000000"></i> <!-- Icono de subida -->
+                </a>
+                <span style="color: #000000;margin-right: 85px;">Carga Masiva</span> <!-- Texto "Carga Masiva" sin subrayado y color negro -->
+            </div>
         </div>
     </header>
     <div class="container col-12">
         <div class="col-12 border" style="position: relative; background-color: white; border-radius: 15px; overflow: hidden;">
-            <div style="display: flex; justify-content: flex-end;">
-                <a href="{% url 'carga_masiva_user' %}" class="btn btn-primary btn-carga-masiva-container" style="margin-right: 10px; margin-top: 10px; font-size: 20px;">
-                    <i class="fas fa-upload" style="color: #000000"></i> <!-- Icono de subida -->
-                </a> <!-- Añade margen derecho -->
-                
-                <span style="margin-left: 5px; margin-right: 100px; margin-top: 10px; color: #000000;">Carga Masiva</span> <!-- Texto "Carga Masiva" sin subrayado y color negro -->
-                
-            </div>
-            <a href="{% url 'admin_main' %}" class="btn btn-danger btn-volver"><i class="fas fa-arrow-left" style="color: #000000;"></i></a> <!-- Botón "Volver" con icono -->
+            <a href="{% url 'admin_main' %}" class="btn btn-danger btn-volver">
+                <i class="fas fa-arrow-left" style="color: #000000;"></i>
+            </a> <!-- Botón "Volver" con icono -->
+    
+            <!-- Formulario de búsqueda -->
             <div class="search-form">
                 <form method="get" action="" class='input-container-search my-auto'>
                     <input name="search" id="search" type="text" placeholder='Buscar por Nombre'/>
                     <button type="submit">Buscar</button>
                 </form>
             </div>
-            <table id="service" class="table mt-2 table-hover table-sm table-bordered">      
-                <thead class="table-danger">
-                    <tr>
-                        {% if profiles.group_id == 1 %} <!--NO SÉ SI ES LEGAL DEJAR EL LOGO ASI PERO QUEDO AL LADO-->
-                            <th colspan="5"><h3>Usuarios <a href="{% url 'new_user' %}" class="btn btn-success new-user-button">
-                                <i class="fas fa-user-plus" style="color: #000000"></i> <!-- Icono de usuario con signo de más -->
-                            </a></h3></th> 
-                        {% endif %}
-                        {% if profiles.group_id == 2 %}
-                            <th colspan="4"><h3>Usuarios</h3></th>
-                        {% endif %}
-                        <th colspan="1">
-                            <div class="row">
-                                <div class="col-12 col-sm-12">
-                                    <!-- Botón "Volver" dentro de la tabla -->
-                               </div>
-                            </div>
-                        </th>
-                    </tr>
-                    <tr class="header-row text-center">
-                        <th width="450" scope="col">Nombre</th>
-                        <th width="300" scope="col">Correo</th>
-                        <th width="150" scope="col">Acciones</th> <!-- Nuevo encabezado para el botón "Ver" -->
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for s in user_list %}
+    
+            <!-- Tabla con margen superior -->
+            <div style="margin-top: 60px;"> <!-- Ajusta el valor de margin-top según sea necesario -->
+                <table id="service" class="table mt-2 table-hover table-sm table-bordered">      
+                    <thead class="table-danger">
                         <tr>
-                            <th scope="row" style="font-weight:400;">{{s.name}}</th>
-                            <th scope="row" style="font-weight:400;">{{s.mail}}</th>
-                            {% if profiles.group_id == 1 %}
-                            <th scope="row">
-                                {% if s.id != request.user.id %}
-                                    <div class="action-buttons">
-                                        <a href="{% url 'user_detail' s.id %}">
-                                            <i class="fas fa-eye" style="color: #000000;"></i> <!-- Icono de ojo para ver -->
-                                        </a>
-
-                                        <a href="{% url 'edit_user' s.id %}">
-                                            <i class="fas fa-edit" style="color: #000000;"></i> <!-- Icono de lápiz para editar -->
-                                        </a>
-
-                                        <a href="#" onclick="confirmDelete('{{ s.id }}')">
-                                            <i class="fas fa-trash-alt" style="color: #000000;"></i> <!-- Icono de basura para eliminar -->
-                                        </a>
+                            <th colspan="1">
+                                <div class="row">
+                                    <div class="col-12 col-sm-12">
+                                        <!-- Botón "Volver" dentro de la tabla -->
                                     </div>
-                                    {% endif %}
-                                </th>   
-                            {% endif %}                            
+                                </div>
+                            </th>
                         </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                        <tr class="header-row text-center">
+                            <th width="20%" scope="col">Nombre</th>
+                            <th width="20%" scope="col">Correo</th>
+                            <th width="50%" scope="col">Acciones</th> <!-- Nuevo encabezado para el botón "Ver" -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for s in user_list %}
+                            <tr>
+                                <th scope="row" style="font-weight:400;">{{s.name}}</th>
+                                <th scope="row" style="font-weight:400;">{{s.mail}}</th>
+                                {% if profiles.group_id == 1 %}
+                                <th scope="row">
+                                    {% if s.id != request.user.id %}
+                                        <div class="action-buttons">
+                                            <a href="{% url 'user_detail' s.id %}">
+                                                <i class="fas fa-eye" style="color: #000000;"></i> <!-- Icono de ojo para ver -->
+                                            </a>
+    
+                                            <a href="{% url 'edit_user' s.id %}">
+                                                <i class="fas fa-edit" style="color: #000000;"></i> <!-- Icono de lápiz para editar -->
+                                            </a>
+    
+                                            <a href="#" onclick="confirmDelete('{{ s.id }}')">
+                                                <i class="fas fa-trash-alt" style="color: #000000;"></i> <!-- Icono de basura para eliminar -->
+                                            </a>
+                                        </div>
+                                    {% endif %}
+                                </th>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
+    
     <!-- Paginación -->
-    {% if paginator.num_pages > 1 %}
-        <nav aria-label="Page navigation">
-            <ul class="pagination justify-content-center">
-                {% if user_list.has_previous %}
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            {% if user_list.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ user_list.previous_page_number }}">
+                    <i class="fas fa-chevron-left"></i> <!-- Icono de flecha hacia la izquierda -->
+                </a>
+            </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link"><i class="fas fa-chevron-left"></i></span>
+                </li>
+            {% endif %}
+            {% for i in paginator.page_range %}
+                <li class="page-item {% if user_list.number == i %}active{% endif %}">
+                    <a class="page-link" href="?page={{ i }}{% if search %}&search={{ search }}{% endif %}">{{ i }}</a>
+                </li>
+            {% endfor %}
+            {% if user_list.has_next %}
                 <li class="page-item">
-                    <a class="page-link" href="?page={{ user_list.previous_page_number }}">
-                        <i class="fas fa-chevron-left"></i> <!-- Icono de flecha hacia la izquierda -->
+                    <a class="page-link" href="?page={{ user_list.next_page_number }}">
+                        <i class="fas fa-chevron-right"></i> <!-- Icono de flecha hacia la derecha -->
                     </a>
                 </li>
-                {% else %}
-                    <li class="page-item disabled">
-                        <span class="page-link"><i class="fas fa-chevron-left"></i></span>
-                    </li>
-                {% endif %}
-                {% for i in paginator.page_range %}
-                    <li class="page-item {% if user_list.number == i %}active{% endif %}">
-                        <a class="page-link" href="?page={{ i }}{% if search %}&search={{ search }}{% endif %}">{{ i }}</a>
-                    </li>
-                {% endfor %}
-                {% if user_list.has_next %}
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ user_list.next_page_number }}">
-                            <i class="fas fa-chevron-right"></i> <!-- Icono de flecha hacia la derecha -->
-                        </a>
-                    </li>
-                {% else %}
-                    <li class="page-item disabled">
-                        <span class="page-link"><i class="fas fa-chevron-right"></i></span>
-                    </li>
-                {% endif %}
-            </ul>
-        </nav>
-    {% endif %}  
-    <!-- Paginación -->  
+            {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link"><i class="fas fa-chevron-right"></i></span>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+    <!-- Paginación -->
 </main>
 
 <script>

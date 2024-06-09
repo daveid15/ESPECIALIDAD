@@ -74,6 +74,8 @@
     gap: 20px;
     padding-left: 0;
     list-style: none; /* Elimina los puntos de la lista */
+    margin-top: 60px;
+    margin-left: 250px;
 }
 .nav-tabs .nav-item .nav-link {
     border: 1px #000000;
@@ -199,7 +201,7 @@
         </div>
     </div>
 </header>
-<div class="list-container">
+<div class="list-container" style="margin-left: 250px;">
     <a href="{% url 'orden_main' %}" class="btn btn-danger btn-volver"><i class="fas fa-arrow-left" style="color: #000000;"></i></a> <!-- Botón "Volver" con icono -->
     <div class="search-form">
         <form method="get" action="{% url 'orden_list_anulada' %}">
