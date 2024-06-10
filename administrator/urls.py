@@ -43,6 +43,7 @@ administrator_patterns = [
     path('import_file_user/',views.import_file_user,name="import_file_user"),
     path('carga_masiva_user_form/', views.carga_masiva_user, name='carga_masiva_user_form'),
 
+
     
     #BORRAR
     path('ejemplo_query_set/',views.ejemplo_query_set, name='ejemplo_query_set'),  
