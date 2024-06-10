@@ -172,6 +172,35 @@
     border-color: #3e451a;
     box-shadow: none; /* Sin sombra */
 }
+.pagination { 
+    display: flex; 
+    justify-content: center; 
+    margin-top: 20px; 
+    z-index: 999; 
+    background-color: #9EB23B;
+    border-radius: 12px;
+    font-weight: bold;
+    max-width: 10%; /* Establece un ancho máximo para el contenedor */
+    margin: 0 auto; /* Centra horizontalmente el contenedor */
+}
+.pagination .page-item { 
+    margin: 0 5px; 
+    list-style: none; 
+    height: 30px; 
+    display: flex; 
+    align-items: center; 
+} 
+.pagination .page-link { 
+    text-decoration: none; 
+    color: #000; 
+    font-size: 18px; 
+    padding: 5px 10px; 
+}
+.pagination .page-item.active .page-link { 
+    background-color: #505c14; 
+    color: #000; 
+    border-radius: 5px; 
+}
 </style>
 {% endblock %}
 {% block extra_css %}    
@@ -213,7 +242,7 @@
             <div class="feedback body--small normal"></div>
         </div>
     </div>
-    <div class="table-container mt-5" style="margin-top: 50px;">
+    <div class="table-container mt-5" style="margin-top: 50px;min-height: 400px;">
         <table class="table table-user" style="text-align: center;">
             <thead>
                 <tr>
@@ -262,23 +291,37 @@
         </table>
 
     </div>
-    <div class="pagination">
-        <span class="step-links">
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
             {% if ordenes.has_previous %}
-                <a href="?pagina=1{% if search %}&search={{ search }}{% endif %}">&laquo; Primera</a>
-                <a href="?pagina={{ ordenes.previous_page_number }}{% if search %}&search={{ search }}{% endif %}">Anterior</a>
+                <li class="page-item">
+                    <a class="page-link" href="?pagina={{ ordenes.previous_page_number }}{% if search %}&search={{ search }}{% endif %}">
+                        <i class="fas fa-chevron-left"></i> <!-- Icono de flecha hacia la izquierda -->
+                    </a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link"><i class="fas fa-chevron-left"></i></span>
+                </li>
             {% endif %}
-    
-            <span class="current">
-                Página {{ ordenes.number }} de {{ ordenes.paginator.num_pages }}.
-            </span>
-    
+            {% for i in ordenes.paginator.page_range %}
+                <li class="page-item {% if ordenes.number == i %}active{% endif %}">
+                    <a class="page-link" href="?pagina={{ i }}{% if search %}&search={{ search }}{% endif %}">{{ i }}</a>
+                </li>
+            {% endfor %}
             {% if ordenes.has_next %}
-                <a href="?pagina={{ ordenes.next_page_number }}{% if search %}&search={{ search }}{% endif %}">Siguiente</a>
-                <a href="?pagina={{ ordenes.paginator.num_pages }}{% if search %}&search={{ search }}{% endif %}">Última &raquo;</a>
+                <li class="page-item">
+                    <a class="page-link" href="?pagina={{ ordenes.next_page_number }}{% if search %}&search={{ search }}{% endif %}">
+                        <i class="fas fa-chevron-right"></i> <!-- Icono de flecha hacia la derecha -->
+                    </a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link"><i class="fas fa-chevron-right"></i></span>
+                </li>
             {% endif %}
-        </span>
-    </div>
+        </ul>
+    </nav>
     
     <script>
         function confirmarEnvio(ordenId, ordenNumero) {

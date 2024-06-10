@@ -244,30 +244,29 @@ def venta_save(request):
         return redirect('venta_crear')
 
 @login_required
-def venta_list(request, page=None, search=None):
+def venta_list(request):
     profile = Profile.objects.get(user_id=request.user.id)
     if profile.group_id != 1:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a un área para la que no tienes permisos')
         return redirect('check_group_main')
 
-    search = request.GET.get('search')
+    search_query = request.GET.get('search')
     ordenes = Orden_venta.objects.all()
-    total_ventas = ordenes.aggregate(total_ventas=Sum('total_venta'))['total_ventas'] or 0  # Valor dinámico actual
     
-    if search:
-        ordenes = ordenes.filter(Q(cliente_venta__icontains=search))
+    if search_query:
+        ordenes = ordenes.filter(cliente_venta__icontains=search_query)
 
     paginator = Paginator(ordenes, 5)
-    pagina_numero = request.GET.get('pagina')
-    
+    page_number = request.GET.get('page')
+
     try:
-        ordenes = paginator.page(pagina_numero)
+        ordenes = paginator.page(page_number)
     except PageNotAnInteger:
         ordenes = paginator.page(1)
     except EmptyPage:
         ordenes = paginator.page(paginator.num_pages)
         
-    return render(request, 'ventas/venta_list.html', {'ordenes': ordenes, 'search': search, 'pagina_obj': ordenes, 'total_ventas': total_ventas})
+    return render(request, 'ventas/venta_list.html', {'ordenes': ordenes, 'search_query': search_query})
     
 @login_required
 def venta_crear(request):
