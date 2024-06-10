@@ -4,276 +4,277 @@
     <title>Listado de Órdenes de Venta</title>
 {% endblock %}
 {% block content %}
-    {% block extra_css %}
-    <style>
-        .table-container {
-            position: relative; /* Permite posicionar elementos hijos de forma absoluta */
-            border: 2px solid white; /* Agrega un borde de color blanco a la tabla */
-            background-color: white; /* Establece el fondo de la tabla a blanco */
-            border-radius: 15px; /* Hace las esquinas de la tabla más ovaladas */
-            overflow: hidden; /* Asegura que el contenido de la tabla no sobresalga de las esquinas redondeadas */
-            padding: 20px; /* Añade espacio alrededor del contenido dentro del contenedor */
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Añade una sombra para darle un poco de profundidad */
-            display: flex;
-            top: 10px;
-            left: 105px;
-            overflow-y: auto;
-            flex-direction: column;
-            align-items: center;
-        }
-        .table-cotainern table {
-            width: 100%; /* Asegura que la tabla ocupe todo el ancho del contenedor */
-            border-collapse: separate; /* Asegura que las esquinas redondeadas se apliquen correctamente */
-            border-spacing: 0; /* Elimina el espacio entre las celdas de la tabla */
-            margin-top: 40px; /* Añade margen superior para evitar que el buscador se interponga */
-        }
-        .table-container th, .table-container td {
-            background-color: white; /* Establece el fondo de las celdas a blanco */
-            padding: 5px; /* Añade espacio dentro de cada celda */
-        }
-        .table-container th {
-            background-color: white /* Establece el color de fondo de la fila de encabezados a blanco */
-            
-        }
-        .table-container td {
-            text-align: center; /* Alinea el texto de las celdas al centro */
-        }
-        .search-form {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-        }
-        .search-form input[type="text"] {
-            border-radius: 15px; /* Bordes redondeados */
-            background-color: #f0f0f0; /* Color de fondo gris claro */
-            border: 1px solid #ccc; /* Borde gris claro */
-            padding: 5px 10px; /* Espaciado interno */
-            margin-right: 5px; /* Espacio entre el input y el botón */
-        }
-        .search-form button {
-            border-radius: 15px; /* Bordes redondeados */
-            background-color: #d3d3d3; /* Color de fondo gris claro */
-            border: 1px solid #ccc; /* Borde gris claro */
-            padding: 5px 10px; /* Espaciado interno */
-        }
-        .btn-volver {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-        }
-        .title-button-container {
-            display: flex;
-            align-items: center;
-            margin-left: 250px;
-            margin-top: 60px;
-        }
-        .title-button-container h2 {
-            margin-top: 20px;
-            margin-left: 20px; 
-            font-size: 30px;
-        }
-        .title-button-container a {
-            margin-top: 25px;
-            font-size: 25px;
-        }
-        .btn {
-            display: inline-block;
-            margin-left: 2px;
-            margin-top: 75px;
-        }
-        .total-ventas {
-            margin-top: 20px; /* Espacio entre la lista y el monto total */
-            text-align: center;
-            border-radius: 15px;
-            background-color: #b16262;
-            border: 1px solid #ccc;
-            padding: 5px 10px;
-            width: fit-content; /* Ancho ajustado al contenido */
-            margin-left: auto; /* Mover el monto total a la derecha */
-            margin-right: auto; /* Mover el monto total a la izquierda */
-        }
-        .total-ventas {
-        margin-top: 20px; /* Espacio entre la lista y el monto total */
-        text-align: center;
-        border-radius: 15px;
-        background-color: #b16262;
-        border: 1px solid #ccc;
-        padding: 5px 10px;
-        width: fit-content; /* Ancho ajustado al contenido */
-        margin-left: auto; /* Mover el monto total a la derecha */
-        margin-right: auto; /* Mover el monto total a la izquierda */
-        }
-
-        h2 {
-            display: block;
-            font-size: 1.5em;
-            margin-block-start: 80px;
-            margin-block-end: 0px;
-            margin-inline-start: 250px;
-            margin-inline-end: 0px;
-            font-weight: bold;
-            unicode-bidi: isolate;  
-        }
-        
-        @media (max-width: 500px) {
-            h2 {
-                margin-block-start: 70px;
-                margin-inline-start: 115px;
-            }
-
-            .table-container{
-                width: 80%;
-                left: 98px;
-                box-sizing: border-box;
-                word-wrap: break-word;
-            }
-
-            .btn-volver{
-                margin-top: -9px;
-                margin-left: 2px;
-            }
-
-
-            .table-container th {
-               margin-top: 20px
-               ;
-            }
-
-            .search-form{
-                left: 60px;
-                top: -10px;
-
-            }
-            
-
-        }
-    
-        @media (min-width: 501px) and (max-width: 767px){
-            h2 {
-                margin-block-start: 70px;
-                margin-inline-start: 250px;
-            }
-            
-            .table-container{
-                width: 55%;
-                left: 245px;
-                box-sizing: border-box;
-                word-wrap: break-word;
-            }
-
-            .btn-volver{
-                margin-top: -9px;
-                margin-left: 2px;
-            }
-
-
-            .table-container th {
-               margin-top: 20px
-               ;
-            }
-
-            .search-form{
-                top: -10px;
-            }
-
-        }
-
-        @media (min-width: 768px) {
-            h2 {
-                margin-block-start: 70px;
-                margin-inline-start: 250px;
-            }
-            
-            .table-container{
-                width: 65%;
-                left: 245px;
-                box-sizing: border-box;
-                word-wrap: break-word;
-            }
-
-            .btn-volver{
-                margin-top: -9px;
-                margin-left: 2px;
-            }
-
-
-            .table-container th {
-               margin-top: 20px
-               ;
-            }
-
-            .search-form{
-                top: -10px;
-            }
-
-        }
-
-    </style>
-    {% endblock extra_css %}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <header class='mb-5'>
-        <div class="title-button-container">
-            <h2 class='h2 medium text-blue'>Ventas</h2>
-            <a href="{% url 'venta_crear' %}" class="btn btn-primary">
-                <i class="fas fa-plus" style="color: #000000"></i>
-            </a>
-        </div>
-    </header>
-    <div class="table-container mt-5" style="margin-left: 250px; ">
-        <form method="get" action="{% url 'venta_list' %}" class="search-form" style="margin-top: 10px;">
-            {% csrf_token %}
-            <input name="search" id="search" type="text" placeholder='Buscar por Nombre'/>
-            <button type="submit">Buscar</button>
-        </form>
-        <a href="{% url 'ventas_main' %}" class="btn-volver btn btn-secondary"><i class="fas fa-arrow-left" style="color: #000000;"></i></a>
-        <table class="table table-user" style="text-align: center;">
-            <thead>
+{% block extra_css %}
+<style>
+body {
+    background-color: rgb(236, 236, 236); 
+}
+.table-container {
+    position: relative; 
+    border: 2px solid white; 
+    background-color: white; 
+    border-radius: 15px; 
+    overflow: hidden; 
+    padding: 20px; 
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px; /* Ajuste del margen superior */
+}
+.table-container table {
+    width: 100%; 
+    border-collapse: separate; 
+    border-spacing: 0; 
+    margin-top: 40px; 
+}
+.table-container th, .table-container td {
+    background-color: white; 
+    padding: 5px; 
+}
+.table-container th {
+    background-color: white;
+}
+.table-container td {
+    text-align: center; 
+    vertical-align: middle;
+}
+.search-form {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+.search-form input[type="text"] {
+    border-radius: 15px; 
+    background-color: #f0f0f0; 
+    border: 1px solid #ccc; 
+    padding: 5px 10px; 
+    margin-right: 5px; 
+}
+.search-form button {
+    border-radius: 15px; 
+    background-color: #d3d3d3; 
+    border: 1px solid #ccc; 
+    padding: 5px 10px; 
+}
+.btn-volver {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+.title-button-container {
+    display: flex;
+    align-items: center;
+    margin-left: 250px;
+    margin-top: 60px;
+}
+.title-button-container h2 {
+    margin-top: 20px;
+    margin-left: 20px; 
+    font-size: 30px;
+}
+.title-button-container a {
+    margin-top: 25px;
+    font-size: 25px;
+}
+.btn {
+    display: inline-block;
+    margin-left: 2px;
+    margin-top: 75px;
+}
+.total-ventas {
+    margin-top: 20px;
+    text-align: center;
+    border-radius: 15px;
+    background-color: #b16262;
+    border: 1px solid #ccc;
+    padding: 5px 10px;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+}
+h2 {
+    display: block;
+    font-size: 1.5em;
+    margin-block-start: 80px;
+    margin-block-end: 0px;
+    margin-inline-start: 250px;
+    margin-inline-end: 0px;
+    font-weight: bold;
+    unicode-bidi: isolate;  
+}
+.pagination { 
+    display: flex; 
+    justify-content: center; 
+    margin-top: 20px; 
+    z-index: 999; 
+    background-color: #9EB23B;
+    border-radius: 12px;
+    font-weight: bold;
+}
+.pagination .page-item { 
+    margin: 0 5px; 
+    list-style: none; 
+    height: 30px; 
+    display: flex; 
+    align-items: center; 
+}
+.pagination .page-link { 
+    text-decoration: none; 
+    color: #000; 
+    font-size: 18px; 
+    padding: 10px 15px; /* Aumentar el padding para aumentar el área activa */
+}
+.pagination .page-item.active .page-link { 
+    background-color: #505c14; 
+    color: #000; 
+    border-radius: 5px; 
+}
+.page-link-container {
+    padding: 10px; /* Ajusta el padding según sea necesario para aumentar el área activa */
+    display: inline-block; /* Asegura que el contenedor ocupe solo el espacio necesario */
+}
+@media (max-width: 500px) {
+    h2 {
+        margin-block-start: 70px;
+        margin-inline-start: 115px;
+    }
+    .table-container{
+        width: 80%;
+        left: 98px;
+        box-sizing: border-box;
+        word-wrap: break-word;
+    }
+    .btn-volver{
+        margin-top: -9px;
+        margin-left: 2px;
+    }
+    .table-container th {
+       margin-top: 20px;
+    }
+    .search-form{
+        left: 60px;
+        top: -10px;
+    }
+}
+@media (min-width: 501px) and (max-width: 767px){
+    h2 {
+        margin-block-start: 70px;
+        margin-inline-start: 250px;
+    }
+    .table-container{
+        width: 55%;
+        left: 245px;
+        box-sizing: border-box;
+        word-wrap: break-word;
+    }
+    .btn-volver{
+        margin-top: -9px;
+        margin-left: 2px;
+    }
+    .table-container th {
+       margin-top: 20px;
+    }
+    .search-form{
+        top: -10px;
+    }
+}
+@media (min-width: 768px) {
+    h2 {
+        margin-block-start: 70px;
+        margin-inline-start: 250px;
+    }
+    .table-container{
+        width: 65%;
+        left: 245px;
+        box-sizing: border-box;
+        word-wrap: break-word;
+    }
+    .btn-volver{
+        margin-top: -9px;
+        margin-left: 2px;
+    }
+    .table-container th {
+       margin-top: 20px;
+    }
+    .search-form{
+        top: -10px;
+    }
+}
+</style>
+{% endblock extra_css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<header class='mb-5'>
+    <div class="title-button-container">
+        <h2 class='h2 medium text-blue'>Ventas</h2>
+        <a href="{% url 'venta_crear' %}" class="btn btn-primary">
+            <i class="fas fa-plus" style="color: #000000"></i>
+        </a>
+    </div>
+</header>
+<div class="table-container mt-5" style="margin-left: 20px; ">
+    <form method="get" action="{% url 'venta_list' %}" class="search-form" style="margin-top: 20px;">
+        {% csrf_token %}
+        <input name="search" id="search" type="text" placeholder='Buscar por Nombre'/>
+        <button type="submit">Buscar</button>
+    </form>
+    <a href="{% url 'ventas_main' %}" class="btn-volver btn btn-secondary"><i class="fas fa-arrow-left" style="color: #000000;"></i></a>
+    <table class="table table-user" style="text-align: center;min-height: 600px;">
+        <thead>
+            <tr>
+                <th width="15%" scope="col">Cliente</th>
+                <th width="25%" scope="col">Orden</th>
+                <th width="25%" scope="col">Total</th>
+                <th width="30%" scope="col">Acciones</th>
+            </tr>
+        </thead>
+        <tbody style="min-height: calc(600px - 40px);">
+            {% for orden in ordenes %}
                 <tr>
-                    <th width="15%" scope="col">Cliente</th>
-                    <th width="25%" scope="col">Orden</th>
-                    <th width="25%" scope="col">Total</th>
-                    <th width="30%" scope="col">Acciones</th>
+                    <td>{{ orden.cliente_venta }}</td>
+                    <td>#{{ orden.numero_orden }}</td>
+                    <td>${{ orden.total_venta }}</td>
+                    <td>
+                        <a href="{% url 'detalle_orden_venta' orden_id=orden.numero_orden %}" class="btn btn-primary" style="margin-top: 40px;">
+                            <i class="fas fa-eye" style="color: #000000;"></i>
+                        </a>
+                    </td>
                 </tr>
-            </thead>
-            <tbody>
-                {% for orden in ordenes %}
-                    <tr>
-                        <td>{{ orden.cliente_venta }}</td>
-                        <td>#{{ orden.numero_orden }}</td>
-                        <td>${{ orden.total_venta }}</td>
-                        <td>
-                            <a href="{% url 'detalle_orden_venta' orden_id=orden.numero_orden %}" class="btn btn-primary">
-                                <i class="fas fa-eye" style="color: #000000;"></i>
-                            </a>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        <!-- Paginación -->
-        <div class="ion">
-            <span class="step-links">
-                {% if ordenes.has_previous %}
-                    <a href="?pagina=1{% if search %}&search={{ search }}{% endif %}">&laquo; Primera</a>
-                    <a href="?pagina={{ ordenes.previous_page_number }}{% if search %}&search={{ search }}{% endif %}">Anterior</a>
-                {% endif %}
-        
-                <span class="current">
-                    Página {{ ordenes.number }} de {{ ordenes.or.num_pages }}.
-                </span>
-        
-                {% if ordenes.has_next %}
-                    <a href="?pagina={{ ordenes.next_page_number }}{% if search %}&search={{ search }}{% endif %}">Siguiente</a>
-                    <a href="?pagina={{ ordenes.or.num_pages }}{% if search %}&search={{ search }}{% endif %}">Última &raquo;</a>
-                {% endif %}
-            </span>
-        </div>
-        <!-- Paginación --> 
-    </div>
-    <div class="total-ventas">
-        <strong>VENTA TOTAL: {{ total_ventas }}</strong>
-    </div>
-
-    {% block extrajs %}    
-    {% endblock extrajs %}    
+            {% endfor %}
+        </tbody>
+    </table>
+<!-- Paginación -->
+<nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+        {% if ordenes.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ ordenes.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">
+                    <i class="fas fa-chevron-left"></i> <!-- Icono de flecha hacia la izquierda -->
+                </a>
+            </li>
+        {% else %}
+            <li class="page-item disabled">
+                <span class="page-link"><i class="fas fa-chevron-left"></i></span>
+            </li>
+        {% endif %}
+        {% for i in ordenes.paginator.page_range %}
+            <li class="page-item {% if ordenes.number == i %}active{% endif %}">
+                <a class="page-link" href="?page={{ i }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">{{ i }}</a>
+            </li>
+        {% endfor %}
+        {% if ordenes.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ ordenes.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">
+                    <i class="fas fa-chevron-right"></i> <!-- Icono de flecha hacia la derecha -->
+                </a>
+            </li>
+        {% else %}
+            <li class="page-item disabled">
+                <span class="page-link"><i class="fas fa-chevron-right"></i></span>
+            </li>
+        {% endif %}
+    </ul>
+</nav>
+<!-- Paginación -->
+</div>
 {% endblock %}
