@@ -16,6 +16,7 @@
         font-family: 'Arial', sans-serif;
         background-color: #f7f7f7;
     }
+
     .avatar {
         width: 100px;
         height: 100px;
@@ -47,16 +48,16 @@
     }
 
     .button {
-            background-color: #87963C;
-            color: white;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 10px;
-            margin-bottom: 10px;
-            font-size: 16px;
-        }
+        background-color: #87963C;
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        font-size: 16px;
+    }
 
     .button:hover {
         background-color: #65702d;
@@ -74,18 +75,18 @@
     }
 
     h2 {
-    display: block;
-    font-size: 1.5em;
-    margin-block-start: 80px;
-    margin-block-end: 0px;
-    margin-inline-start: 250px;
-    margin-inline-end: 0px;
-    font-weight: bold;
-    unicode-bidi: isolate;
+        display: block;
+        font-size: 1.5em;
+        margin-block-start: 80px;
+        margin-block-end: 0px;
+        margin-inline-start: 250px;
+        margin-inline-end: 0px;
+        font-weight: bold;
+        unicode-bidi: isolate;
     }
 
     @media (max-width: 500px) {
-        h2{
+        h2 {
             margin-block-start: 70px;
             margin-inline-start: 115px;
         }
@@ -95,120 +96,127 @@
             align-items: center;
         }
 
-        .form-control{
+        .form-control {
             width: 60%;
             word-wrap: break-word;
         }
 
-        .button{
+        .button {
             width: 90px;
             height: 44px;
         }
-
     }
+
     @media (min-width: 501px) {
-        h2{
+        h2 {
             margin-block-start: 70px;
             margin-inline-start: 250px;
         }
+
         section {
             flex-direction: column;
             align-items: center;
         }
 
-        .form-control{
+        .form-control {
             width: 90%;
             word-wrap: break-word;
         }
 
-        .button{
+        .button {
             width: 90px;
             height: 47px;
         }
     }
 
-</style> 
+</style>
 <main role="main">
     <div class="container col-12 mt-3">
         <div class="col-12 mt-3 border">
             <h2 class="h2">Nuevo usuario</h2>
             <nav id="profileedit" class="profileedit">
-            <form action="" method="post">
-                {% csrf_token %}
-                <div class="row">
-                    <div class="col-10 col-sm-4 mb-3">
-                        <label for="name">Nombre (*)</label>
-                        <input type="text" id="name" name="name" value="{{user_data.first_name}}" pattern="[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+" class="form-control border border-danger" required/>
-                        <label for="last_name">Apellido (*)</label>
-                        <input type="text" id="last_name1" name="last_name1" value="{{user_data.last_name}}" pattern="[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+" class="form-control border border-danger" required/>
+                <form action="" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-10 col-sm-4 mb-3">
+                            <label for="name">Nombre (*)</label>
+                            <input type="text" id="name" name="name" value="{{user_data.first_name}}" pattern="[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+" class="form-control border border-danger" required />
+                            <label for="last_name">Apellido (*)</label>
+                            <input type="text" id="last_name1" name="last_name1" value="{{user_data.last_name}}" pattern="[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+" class="form-control border border-danger" required />
+                        </div>
                     </div>
-                    
-                </div>
-                <div class="row">
-                    <div class="col-12 col-sm-8 mb-3">
-                        <label for="rut">RUN (*)</label>
-                        <input type="text" name="rut" required oninput="checkRut(this)" autofocus maxlength="254" required id="id_rut" class="form-control border border-danger" placeholder="Rut (Ej: 17605812-2)" />
-                        <label for="email">Cargo</label>
-                        <select name="grupo" id="grupo" class="form-control border" required>
-                            <option value="">----------</option>
-                            {% for g in groups %}
-                            <option value="{{ g.id }}">{{ g.name }}</option>
-                            {% endfor %}
-                        </select>
+                    <div class="row">
+                        <div class="col-12 col-sm-8 mb-3">
+                            <label for="rut">RUN (*)</label>
+                            <input type="text" name="rut" required oninput="checkRut(this)" autofocus maxlength="254" required id="id_rut" class="form-control border border-danger" placeholder="Rut (Ej: 17605812-2)" />
+                            <label for="grupo">Cargo</label>
+                            <select name="grupo" id="grupo" class="form-control border" required>
+                                <option value="">----------</option>
+                                {% for g in groups %}
+                                <option value="{{ g.id }}">{{ g.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-12 col-sm-4 mb-3">
-                        <label for="email">Correo electrónico (*)</label>
-                        <input type="email" class="form-control border border-danger" placeholder="nombre@unab.cl" name="email" />
+                    <div class="row">
+                        <div class="col-12 col-sm-4 mb-3">
+                            <label for="email">Correo electrónico (*)</label>
+                            <input type="email" class="form-control border border-danger" placeholder="nombre@unab.cl" name="email" />
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-12 col-sm-4 mb-3">
-                        <label for="mobile">Número de contacto (*)</label>
-                        <input type="text" class="form-control border border-danger" id="mobile" pattern="[0-9]{9}" name="mobile" pattern="\d*" />
+                    <div class="row">
+                        <div class="col-12 col-sm-4 mb-3">
+                            <label for="mobile">Número de contacto (*)</label>
+                            <input type="text" class="form-control border border-danger" id="mobile" pattern="[0-9]{9}" name="mobile" pattern="\d*" />
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-12 col-sm-8 mb-3">
-                        <label for="address">Dirección</label>
-                        <input type="text" class="form-control border border-danger" name="address" required />
+                    <div class="row">
+                        <div class="col-12 col-sm-8 mb-3">
+                            <label for="address">Dirección</label>
+                            <input type="text" class="form-control border border-danger" name="address" required />
+                        </div>
+                        <div class="col-12 col-sm-4 mb-3">
+                            <label for="region">Región</label>
+                            <select name="region" id="region" class="form-control border border-danger" required>
+                                <option value="">Seleccione una región</option>
+                                {% for region in regions %}
+                                <option value="{{ region }}">{{ region }}</option>
+                                {% endfor %}
+                                <option value="Region Metropolitana de Santiago">Región Metropolitana de Santiago</option>
+                            </select>
+                            <label for="comuna">Comuna</label>
+                            <select name="comuna" id="comuna" class="form-control border border-danger" required>
+                                <option value="">Seleccione una comuna</option>
+                                {% for comuna in comunas %}
+                                <option value="{{ comuna }}">{{ comuna }}</option>
+                                {% endfor %}
+                                <optgroup label="Región Metropolitana de Santiago">
+                                    <option value="Providencia">Providencia</option>
+                                    <option value="Santiago">Santiago</option>
+                                    <option value="San Bernardo">San Bernardo</option>
+                                    <option value="Maipú">Maipú</option>
+                                    <option value="Buin">Buin</option>
+                                </optgroup>
+                            </select>
+                        </div>
                     </div>
-                    <div class="col-12 col-sm-4 mb-3">
-                        <label for="region">Región</label>
-                        <select name="region" id="region" class="form-control border border-danger" required>
-                            <option value="">Seleccione una región</option>
-                            {% for region in regions %}
-                            <option value="{{ region }}">{{ region }}</option>
-                            {% endfor %}
-                            <option value="Region Metropolitana de Santiago">Región Metropolitana de Santiago</option>
-                        </select>
-                        <label for="comuna">Comuna</label>
-                        <select name="comuna" id="comuna" class="form-control border border-danger" required>
-                            <option value="">Seleccione una comuna</option>
-                            {% for comuna in comunas %}
-                            <option value="{{ comuna }}">{{ comuna }}</option>
-                            {% endfor %}
-                            <optgroup label="Región Metropolitana de Santiago">
-                                <option value="Providencia">Providencia</option>
-                                <option value="Santiago">Santiago</option>
-                                <option value="San Bernardo">San Bernardo</option>
-                                <option value="Maipú">Maipú</option>
-                                <option value="Buin">Buin</option>
-                            </optgroup>
-                        </select>
+                    <div class="row">
+                        <div class="col-12 col-sm-4 mb-3">
+                            <label for="profile_image">Foto de perfil</label>
+                            <input type="file" class="form-control border border-danger" name="profile_image" />
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-12 col-sm-6 mb-3">
-                        <button type="submit" class="button">Crear Usuario</button>
-                        <a href="{% url 'list_user_active' group_id=1 %}" class="button">Regresar</a>
-
+                    <div class="row">
+                        <div class="col-12 col-sm-6 mb-3">
+                            <button type="submit" class="button">Crear Usuario</button>
+                            <a href="{% url 'list_user_active' group_id=1 %}" class="button">Regresar</a>
+                        </div>
                     </div>
-                </div>
-            </form>
-        </nav>
+                </form>
+            </nav>
         </div>
     </div>
 </main>
 {% endblock %}
+
+

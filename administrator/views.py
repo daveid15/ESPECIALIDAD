@@ -155,38 +155,41 @@ def generate_password(email):
 
 @login_required
 def new_user(request):
-    profiles = Profile.objects.get(user_id = request.user.id)
+    profiles = Profile.objects.get(user_id=request.user.id)
     if profiles.group_id != 1:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a una área para la que no tiene permisos')
         return redirect('check_group_main')
+
     if request.method == 'POST':
-        errores= []
-        grupo = request.POST.get('grupo') # ESTA ES LA LINEAAA
+        errores = []
+        grupo = request.POST.get('grupo')
         rut = request.POST.get('rut')
         first_name = request.POST.get('name')
         last_name = request.POST.get('last_name1')
         email = request.POST.get('email')
         mobile = request.POST.get('mobile')
-        comuna= request.POST.get('comuna')
+        comuna = request.POST.get('comuna')
         generated_password = generate_password(email)
-        address= request.POST.get('address')
-        region= request.POST.get('region')
-        template_name = 'administrator/new_user.html'
-        #VALIDACIONES CREAR CUENTA
-        if not validar_string(first_name,request):
+        address = request.POST.get('address')
+        region = request.POST.get('region')
+        profile_image = request.FILES.get('profile_image')
+
+        # VALIDACIONES CREAR CUENTA
+        if not validar_string(first_name, request):
             errores.append('Nombre inválido')
-        if not validar_string(last_name,request):
+        if not validar_string(last_name, request):
             errores.append('Apellido inválido')
-        if not validar_numero(mobile,request):
+        if not validar_numero(mobile, request):
             errores.append('Número de teléfono inválido')
-        if not validar_email(email,request):
+        if not validar_email(email, request):
             errores.append('Correo electrónico inválido')
-        if not validar_rut(rut,request):
+        if not validar_rut(rut, request):
             errores.append('RUT inválido')
         if errores:
             messages.add_message(request, messages.INFO, 'Hubo algunos errores al crear el usuario: ' + ', '.join(errores))
-            return render(request,template_name)
-        rut_exist = User.objects.filter(username=rut).count() 
+            return render(request, 'administrator/new_user.html', {'groups': Group.objects.all().exclude(pk=0).order_by('id')})
+
+        rut_exist = User.objects.filter(username=rut).count()
         mail_exist = User.objects.filter(email=email).count()
         if rut_exist == 0:
             if mail_exist == 0:
@@ -196,11 +199,12 @@ def new_user(request):
                     password=generated_password,
                     first_name=first_name,
                     last_name=last_name,
-                    )
+                    is_active=True  
+                )
                 user.save()
                 profile_save = Profile(
-                    user_id = user.id,
-                    group_id = grupo,    
+                    user=user,
+                    group_id=grupo,
                     username=email,
                     email=email,
                     first_name=first_name,
@@ -210,19 +214,20 @@ def new_user(request):
                     region=region,
                     comuna=comuna,
                     rut=rut,
-
-                    first_session = 'No',
-                    token_app_session = 'No',
+                    first_session='No',
+                    token_app_session='No',
+                    profile_image=profile_image 
                 )
                 profile_save.save()
-                messages.add_message(request, messages.INFO, 'Usuario creado con exito')                             
+                messages.add_message(request, messages.INFO, 'Usuario creado con éxito')
             else:
-                messages.add_message(request, messages.INFO, 'El correo que esta tratando de ingresar, ya existe en nuestros registros')                             
+                messages.add_message(request, messages.INFO, 'El correo que está tratando de ingresar, ya existe en nuestros registros')
         else:
-            messages.add_message(request, messages.INFO, 'El rut que esta tratando de ingresar, ya existe en nuestros registros')                         
+            messages.add_message(request, messages.INFO, 'El rut que está tratando de ingresar, ya existe en nuestros registros')
+
     groups = Group.objects.all().exclude(pk=0).order_by('id')
-    template_name = 'administrator/new_user.html'
-    return render(request,template_name,{'groups':groups})
+    return render(request, 'administrator/new_user.html', {'groups': groups})
+
 
 
 @login_required
@@ -370,11 +375,11 @@ def edit_user(request, user_id):
 
 
 
-@login_required    
+@login_required
 def list_user_active(request, group_id, page=None):
     profiles = Profile.objects.get(user_id=request.user.id)
     if profiles.group_id not in [1, 2]:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a una área para la que no tiene permisos')
         return redirect('check_group_main')
 
     search = request.GET.get('search')
@@ -397,7 +402,15 @@ def list_user_active(request, group_id, page=None):
     paginator = Paginator(user_all, 5)
     user_list = paginator.get_page(page)
     template_name = 'administrator/list_user_active.html'
-    return render(request, template_name, {'profiles': profiles, 'group': group, 'user_list': user_list, 'paginator': paginator, 'page': page, 'search': search})
+    return render(request, template_name, {
+        'profiles': profiles,
+        'group': group,  # Asegúrate de pasar el grupo a la plantilla
+        'user_list': user_list,
+        'paginator': paginator,
+        'page': page,
+        'search': search
+    })
+
 
 @login_required    
 def list_user_block(request, group_id, page=None):

@@ -47,7 +47,7 @@
         margin-top: 20px;
     }
 
-    .file-label{
+    .file-label {
         display: block;
         background-color: rgba(158, 178, 59, 0.8);
         color: white;
@@ -58,7 +58,6 @@
         margin: 0 auto;
         margin-bottom: 30px;
         max-width: 200px;
-        
     }
 
     .file-label:hover {
@@ -96,30 +95,29 @@
     .upload-button:hover {
         background-color: #7CB342;
     }
+
     .back-link:hover {
         background-color: #7CB342;
     }
 
     @media screen and (max-width: 500px ) {
         .upload-container {
-        width: 83%;
-        margin-inline-start: 90px;
-        box-sizing: border-box;
-        word-wrap: break-word;
+            width: 83%;
+            margin-inline-start: 90px;
+            box-sizing: border-box;
+            word-wrap: break-word;
         }
 
         .download-link {
             width: 100%;
             box-sizing: border-box;
             word-wrap: break-word;
-        
         }
 
         .file-label {
             width: 80%;
             box-sizing: border-box;
             word-wrap: break-word;
-        
         }
 
         .upload-button {
@@ -127,14 +125,13 @@
             box-sizing: border-box;
             word-wrap: break-word;
         }
-        
+
         .back-link {
             width: 50%;
             box-sizing: border-box;
             word-wrap: break-word;
         }
     }
-
 
     @media screen and (min-width: 501px ) and (max-width: 767px) {
         .upload-container {
@@ -154,7 +151,6 @@
             width: 100%;
             box-sizing: border-box;
             word-wrap: break-word;
-        
         }
 
         .upload-button {
@@ -169,6 +165,7 @@
             word-wrap: break-word;
         }
     }
+
     @media screen and (min-width: 768px) {
         .upload-container {
             width: 65%;
@@ -185,26 +182,26 @@
         .file-label {
             width: 80%;
             box-sizing: border-box;
-            word-wrap: break-word;        
+            word-wrap: break-word;
         }
 
         .upload-button {
             width: 35%;
             box-sizing: border-box;
-            word-wrap: break-word;      
+            word-wrap: break-word;
         }
 
         .back-link {
             width: 50%;
             box-sizing: border-box;
-            word-wrap: break-word;      
+            word-wrap: break-word;
         }
     }
 </style>
 {% endblock %}
 <main role="main">
     <div class="container col-12 mt-3">
-        <div class="col-12  mt-3 border">
+        <div class="col-12 mt-3 border">
             <div class="upload-container">
                 <h2>Carga Masiva Usuarios</h2>
                 {% if profiles.group_id == 1 %}
@@ -214,6 +211,7 @@
                         <label for="file" class="file-label">
                             Seleccionar archivo
                             <input type="file" name="myfile" id="file" required>
+                            <span id="file-name"></span>
                         </label>
                         <button type="submit" class="upload-button">Cargar</button>
                         <a href="{% url 'list_user_active' group_id=1 %}" class="back-link">Regresar</a>
@@ -223,4 +221,11 @@
         </div>
     </div>
 </main>
+
+<script>
+    document.getElementById('file').addEventListener('change', function() {
+        var fileName = this.files[0].name;
+        document.getElementById('file-name').textContent = fileName;
+    });
+</script>
 {% endblock %}

@@ -4,6 +4,7 @@ from django.db import models
 class Usuario(AbstractUser):
     telefono = models.CharField(max_length=20)
     direccion = models.CharField(max_length=255)
+    profile_image = models.ImageField(upload_to='profile_images/', null=True, blank=True)
     # Otros campos personalizados que necesites
 
     # Definir accesos inversos personalizados

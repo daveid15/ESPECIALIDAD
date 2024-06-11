@@ -19,7 +19,6 @@
         margin: auto;
         border-radius: 10px; /* Agregar bordes redondeados */
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Agregar sombra */
-        
     }
 
     .upload-container h3 {
@@ -33,9 +32,8 @@
         color: #1976D2;
         text-decoration: none;
         font-weight: bold;
-        margin: 0 auto; 
+        margin: 0 auto;
         margin-bottom: 40px;
-        
     }
 
     .download-link:hover, .back-link:hover {
@@ -57,7 +55,6 @@
         margin: 0 auto;
         margin-bottom: 30px;
         max-width: 200px;
-        
     }
 
     .file-label:hover {
@@ -86,7 +83,7 @@
 {% endblock %}
 <main role="main">
     <div class="container col-12 mt-3">
-        <div class="col-12  mt-3 border">
+        <div class="col-12 mt-3 border">
             <div class="upload-container">
                 <h2>Carga Masiva Productos</h2>
                 {% if profiles.group_id == 1 %}
@@ -96,6 +93,7 @@
                         <label for="file" class="file-label">
                             Seleccionar archivo
                             <input type="file" name="myfile" id="file" required>
+                            <span id="file-name"></span>
                         </label>
                         <button type="submit" class="upload-button">Cargar</button>
                     </form>
@@ -105,4 +103,11 @@
         </div>
     </div>
 </main>
+
+<script>
+    document.getElementById('file').addEventListener('change', function() {
+        var fileName = this.files[0].name;
+        document.getElementById('file-name').textContent = fileName;
+    });
+</script>
 {% endblock %}

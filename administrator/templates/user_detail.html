@@ -2,6 +2,7 @@
 {% load static %}
 
 {% block title %}
+Detalles del Usuario
 {% endblock %}
 
 {% block content %}
@@ -14,43 +15,52 @@
         font-family: 'Arial', sans-serif;
         background-color: #f7f7f7;
     }
+
     .container {
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        h1 {
-            color: #333;
-            text-align: center;
-        }
-        .detail-item {
-            margin-bottom: 10px;
-        }
-        .detail-item p {
-            margin: 5px 0;
-        }
-        .product-list {
-            border-collapse: collapse;
-            width: 100%;
-            margin-top: 20px;
-        }
-        .product-list th, .product-list td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-        .product-list th {
-            background-color: #f2f2f2;
-        }
-        .total {
-            text-align: right;
-            margin-top: 20px;
-            font-size: 1.2em;
-            font-weight: bold;
-        }
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    h1 {
+        color: #333;
+        text-align: center;
+    }
+
+    .detail-item {
+        margin-bottom: 10px;
+    }
+
+    .detail-item p {
+        margin: 5px 0;
+    }
+
+    .product-list {
+        border-collapse: collapse;
+        width: 100%;
+        margin-top: 20px;
+    }
+
+    .product-list th, .product-list td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+
+    .product-list th {
+        background-color: #f2f2f2;
+    }
+
+    .total {
+        text-align: right;
+        margin-top: 20px;
+        font-size: 1.2em;
+        font-weight: bold;
+    }
+
     section {
         background-color: white;
         max-width: 900px;
@@ -59,13 +69,27 @@
         border-radius: 10px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .avatar-container {
+        width: 220px;
+        height: 220px;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 5px solid #87963C; /* Color del borde */
+        background-color: #f7f7f7; /* Color de fondo */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 20px;
     }
 
     .avatar {
-        width: 100px;
-        height: 100px;
+        width: 200px;
+        height: 200px;
         border-radius: 50%;
-        margin-right: 10px;
     }
 
     .titulo {
@@ -77,7 +101,7 @@
 
     .form-label {
         font-size: 16px;
-        margin-bottom: 70px;
+        margin-bottom: 10px;
         color: #333;
     }
 
@@ -100,8 +124,8 @@
         border-radius: 5px;
         cursor: pointer;
         width: 100%;
-        margin-top: 100px;
         font-size: 16px;
+        margin-bottom: 20px;
     }
 
     .button:hover {
@@ -118,7 +142,10 @@
         color: red;
         text-align: center;
     }
-    
+
+    .btn-volver {
+        margin-top: 100px; /* Añadir margen superior para separar el botón de los datos */
+    }
 
     @media (max-width: 768px) {
         section {
@@ -134,38 +161,44 @@
 </header>
 <div class="col-md-11">
     <div class="mb-3">
-                {% csrf_token %}
-                <div class="col-12 col-lg-12 row row-cols-1 row-cols-md-1 g-2 p-lg-0-5">
-                    <div class="mb-0 col-md-12">
-                        <label for="proveedor_orden_id" class="form-label">Nombre: </label>
-                        <span class="form-label" id="proveedor_orden_id">{{user_data.first_name}} {{ user_data.last_name }}</span>
-                    </div>
-                    <div class="mb-0 col-md-12">
-                        <label for="proveedor" class="form-label">RUT: </label>
-                        <span class="form-label" id="proveedor">{{profile_data.rut}}</span>
-                    </div>
-                    <div class="mb-0 col-md-12">
-                        <label for="monto" class="form-label">Email:</label>
-                        <span class="form-label" id="monto">{{user_data.email}}</span>
-                    </div>
-                    <div class="mb-0 col-md-12">
-                        <label for="monto" class="form-label">Número de contacto:</label>
-                        <span class="form-label" id="monto">{{profile_data.mobile}}</span>
-                    </div>
-                    <div class="mb-0 col-md-12">
-                        <label for="monto" class="form-label">Direccion:</label>
-                        <span class="form-label" id="monto">{{profile_data.address}}</span>
-                    </div>
-                    <div class="mb-0 col-md-12">
-                        <label for="monto" class="form-label"></label>
-                    </div>
-                    <div class="col-12 col-sm-6 mb-3">
-                            <a href="{% url 'list_user_active' profile_data.group_id %}" class="button">Volver</a>
-                    </div>
+        {% csrf_token %}
+        <div class="col-12 col-lg-12 row row-cols-1 row-cols-md-1 g-2 p-lg-0-5 text-center">
+            <div class="mb-0 col-md-12">
+                <div class="avatar-container">
+                    {% if profile_data.profile_image %}
+                        <img src="{{ profile_data.profile_image.url }}" alt="Foto de Perfil" class="avatar">
+                    {% else %}
+                        <img src="{% static 'images/default_profile.png' %}" alt="Foto de Perfil" class="avatar">
+                    {% endif %}
                 </div>
             </div>
+            <div class="mb-0 col-md-12">
+                <label for="proveedor_orden_id" class="form-label">Nombre: </label>
+                <span class="form-label" id="proveedor_orden_id">{{user_data.first_name}} {{ user_data.last_name }}</span>
+            </div>
+            <div class="mb-0 col-md-12">
+                <label for="proveedor" class="form-label">RUT: </label>
+                <span class="form-label" id="proveedor">{{profile_data.rut}}</span>
+            </div>
+            <div class="mb-0 col-md-12">
+                <label for="monto" class="form-label">Email:</label>
+                <span class="form-label" id="monto">{{user_data.email}}</span>
+            </div>
+            <div class="mb-0 col-md-12">
+                <label for="monto" class="form-label">Número de contacto:</label>
+                <span class="form-label" id="monto">{{profile_data.mobile}}</span>
+            </div>
+            <div class="mb-0 col-md-12">
+                <label for="monto" class="form-label">Dirección:</label>
+                <span class="form-label" id="monto">{{profile_data.address}}</span>
+            </div>
+        </div>
+        <div class="col-12 col-sm-6 mb-3">
+            <a href="{% url 'list_user_active' profile_data.group_id %}" class="button btn-volver">Volver</a>
         </div>
     </div>
 </div>
 </nav>
 {% endblock %}
+
+

@@ -20,7 +20,7 @@ class Profile(models.Model):
     address = models.CharField(max_length=255, null=True, blank=True)
     region = models.CharField(max_length=255, null=True, blank=True)
     comuna = models.CharField(max_length=255, null=True, blank=True)
-
+    profile_image = models.ImageField(upload_to='profile_images/', null=True, blank=True)
 
     class Meta:
         ordering = ['user__username']

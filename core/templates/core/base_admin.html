@@ -22,18 +22,26 @@
 <body>
     <nav id="sidebar" class="side-bar to-left">
         <div class="menu">
-            <!--=== Menu Inicio ===-->
             <nav class="navbar">
                 <div class="user-info">
-                    <img src="{% static 'assets/img/no-avatar.jpg' %}" alt="User Image" class="profile">
-                    <span class="username">{{ request.user.first_name }}</span>
+                    {% if request.user.is_authenticated %}
+                        {% if user_profile.profile_image %}
+                            <img src="{{ user_profile.profile_image.url }}" alt="User Image" class="profile">
+                        {% else %}
+                            <img src="{% static 'assets/img/no-avatar.jpg' %}" alt="User Image" class="profile">
+                        {% endif %}
+                        <span class="username">{{ request.user.first_name }}</span>
+                    {% else %}
+                        <img src="{% static 'assets/img/no-avatar.jpg' %}" alt="User Image" class="profile">
+                        <span class="username">Usuario</span>
+                    {% endif %}
                 </div>
                 <div class="navbar_content">
                     <div class="logout-icon">
                         <a href="{% url 'edit_perfil' %}" class="logout-link">
                             <i class="fas fa-cog"></i>
                         </a>
-                        <a onclick="confirmLogout()" class="logout-link" >
+                        <a onclick="confirmLogout()" class="logout-link">
                             <i class="fas fa-sign-out-alt"></i>
                         </a>
                     </div>
@@ -99,7 +107,7 @@
                                 <li><a href="{% url 'orden_main' %}" class="nav_link sublink">Órden Main</a></li>
                             </ul>
                         </li>
-    
+
                         <li class="item">
                             <a href="{% url 'ventas_main' %}" class="nav_link submenu_item">
                                 <span class="navlink_icon">
