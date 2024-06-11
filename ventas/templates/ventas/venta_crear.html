@@ -5,173 +5,170 @@
     {% block extra_css %}
     {% endblock extra_css %}
     <style>
-        .errorlist {
-            color: red;
-        }
-    
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f7f7f7;
-        }
-        
-        .avatar {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            margin-right: 10px;
-        }
-    
-        .titulo {
-            font-family: 'Sigmar', sans-serif;
-            color: #333;
-            font-size: 36px;
-            margin: 0;
-        }
-    
-        .form-label {
-            font-size: 16px;
-            margin-bottom: 10px;
-            color: #333;
-        }
-    
-        .form-control {
-            width: 20%;
-            height: 40px;
-            padding: 10px;
-            margin-top: 5px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-sizing: border-box;
-        }
-    
-        .button {
-            background-color: #87963C;
-            color: white;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            width: 10%;
-            margin-top: 10px;
-            margin-bottom: 10px;
-            font-size: 16px;
-        }
-    
-        .button:hover {
-            background-color: #65702d;
-            color: white;
-        }
-    
-        .message {
-            color: green;
-            text-align: center;
-        }
-    
-        .error-message {
-            color: red;
-            text-align: center;
-        }
+        .errorlist { color: red; }
+        body { font-family: 'Arial', sans-serif; background-color: #f7f7f7; }
+        .avatar { width: 100px; height: 100px; border-radius: 50%; margin-right: 10px; }
+        .titulo { font-family: 'Sigmar', sans-serif; color: #333; font-size: 36px; margin: 0; }
+        .form-label { font-size: 16px; margin-bottom: 10px; color: #333; }
+        .form-control { width: 100%; height: 40px; padding: 10px; margin-top: 5px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+        .button { background-color: #87963C; color: white; padding: 12px 20px; border: none; border-radius: 5px; cursor: pointer; width: 30%; margin-top: 10px; margin-bottom: 10px; font-size: 16px; }
+        .button:hover { background-color: #65702d; color: white; }
+        .message { color: green; text-align: center; }
+        .error-message { color: red; text-align: center; }
+        .product-item, .product-nuevo-item { border: 1px solid #ccc; border-radius: 5px; padding: 10px; margin-bottom: 10px; background-color: #f9f9f9; }
+        h2 { display: block; font-size: 1.5em; margin-block-start: 70px; margin-inline-start: 250px; font-weight: bold; unicode-bidi: isolate; }
 
-        .product-item, .product-nuevo-item {
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 10px;
-            margin-bottom: 10px;
-            background-color: #f9f9f9;
-        }
-
-        h2 {
-            display: block;
-            font-size: 1.5em;
-            margin-block-start: 80px;
-            margin-block-end: 0px;
-            margin-inline-start: 250px;
-            margin-inline-end: 0px;
-            font-weight: bold;
-            unicode-bidi: isolate;
-            }
-        
         @media (max-width: 500px) {
-            h2 {
-                margin-block-start: 70px;
-                margin-inline-start: 115px;
-            }
-
-            .form-control {
-                width: 80%;
-                word-wrap: break-word;
-            }
-
-            .button {
-                width: 90px;
-                height: 47px;
-            }
-
+            h2 { margin-block-start: 70px; margin-inline-start: 115px; }
+            .form-control { width: 60%; word-wrap: break-word; }
+            .button { width: 110px; height: 44px; }
+            .preview-container { width: 100%; margin-top: 20px; }
         }
-    
         @media (min-width: 501px) {
-            h2 {
-                margin-block-start: 70px;
-                margin-inline-start: 250px;
-            }
+            h2 { margin-block-start: 70px; margin-inline-start: 250px; }
+            .form-control { width: 90%; word-wrap: break-word; }
+            .button { width: 90px; height: 47px; }
+        }
 
-            .form-control {
-                width: 90%;
-                word-wrap: break-word;
-            }
-
-            .button {
-                width: 90px;
-                height: 47px;
-            }
-        }    
-        
+        .preview-container {
+            width: 10%;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: absolute;
+            right: 10px;
+            top: 100px;
+        }
+        .preview-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #87963C;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .preview-item { font-size: 16px; color: #333; margin-bottom: 10px; }
     </style>
     <header class='mb-4'>
         <h2 class='h2'>Nueva venta</h2>
     </header>
-    <nav id="profileedit" class="profileedit">
-    <div class="col-md-11">
-        <div class="mb-3">
-            <div class="d-flex flex-column align-items-center align-items-lg-start">
-                {% if messages %}
-                    <div class="alert alert-info">
-                        {% for message in messages %}
-                            <p>{{ message }}</p>
-                        {% endfor %}
+    <div class="row">
+        <div class="col-md-8">
+            <nav id="profileedit" class="profileedit">
+                <div class="col-md-12">
+                    <div class="mb-3">
+                        <div class="d-flex flex-column align-items-center align-items-lg-start">
+                            {% if messages %}
+                                <div class="alert alert-info">
+                                    {% for message in messages %}
+                                        <p>{{ message }}</p>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            <form method="post" action="{% url 'venta_save' %}">
+                                {% csrf_token %}
+                                <div class="mb-0 col-md-6">
+                                    <label for="cliente_name" class="form-label">Nombre del cliente</label>
+                                    <input type="text" class="form-control border border-danger" id="cliente_name" name="cliente_name" pattern="[A-Za-záéíóúÁÉÍÓÚüÜñÑ\s]+" autofocus maxlength="254" required placeholder="Nombre cliente"/>
+                                </div>
+                                <div class="mb-0 col-md-6">
+                                    <label for="cliente_last_name" class="form-label">Apellido del cliente</label>
+                                    <input type="text" class="form-control border border-danger" id="cliente_last_name" name="cliente_last_name" pattern="[A-Za-zÑñ]+" autofocus maxlength="254" required placeholder="Apellido"/>
+                                </div>
+                                <div class="mb-0 col-md-6">
+                                    <label for="cantidad_italiano" class="form-label">Completos Italianos</label>
+                                    <input type="number" min="0" class="form-control" name="cantidad_italiano" id="cantidad_italiano" placeholder="0">
+                                </div>
+                                <div class="mb-0 col-md-6">
+                                    <label for="cantidad_personalizado" class="form-label">Completos Personalizados</label>
+                                    <input type="number" min="0" class="form-control" name="cantidad_personalizado" id="cantidad_personalizado" placeholder="0">
+                                </div>
+                                <div class="mb-0 col-md-6">
+                                    <label for="cantidad_bebida" class="form-label">Bebidas</label>
+                                    <input type="number" min="0" class="form-control" name="cantidad_bebida" id="cantidad_bebida" placeholder="0">
+                                </div>
+                                <div class="button-container">
+                                    <button type="submit" class="button">Crear</button>
+                                    <a href="{% url 'ventas_main' %}" class="button">Regresar</a>
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                {% endif %}
-                <form method="post" action="{% url 'venta_save' %}">
-                    {% csrf_token %}
-                    <div class="mb-0 col-md-6">
-                        <label for="cliente_name" class="form-label">Nombre del cliente</label>
-                        <input type="text" class="form-control border border-danger" id="cliente_name" name="cliente_name" pattern="[A-Za-záéíóúÁÉÍÓÚüÜñÑ\s]+" autofocus maxlength="254" required placeholder="Nombre cliente"/>
-                    </div>
-                    <div class="mb-0 col-md-6">
-                        <label for="cliente_last_name" class="form-label">Apellido del cliente</label>
-                        <input type="text" class="form-control border border-danger" id="cliente_last_name" name="cliente_last_name" pattern="[A-Za-zÑñ]+" autofocus maxlength="254" required placeholder="Apellido"/>
-                    </div>
-                    <div class="mb-0 col-md-6">
-                        <label for="cantidad_italiano" class="form-label">Completos Italianos</label>
-                        <input type="number" min="0" class="form-control" name="cantidad_italiano" id="cantidad_italiano" placeholder="0">
-                    </div>
-                    <div class="mb-0 col-md-6">
-                        <label for="cantidad_personalizado" class="form-label">Completos Personalizados</label>
-                        <input type="number" min="0" class="form-control" name="cantidad_personalizado" id="cantidad_personalizado" placeholder="0">
-                    </div>
-                    <div class="mb-0 col-md-6">
-                        <label for="cantidad_bebida" class="form-label">Bebidas</label>
-                        <input type="number" min="0" class="form-control" name="cantidad_bebida" id="cantidad_bebida" placeholder="0">
-                    </div>
-                    <button type="submit" class="button">Crear</button>
-                        <a href="{% url 'ventas_main' %}" class="button">Regresar</a>
-                    </div>
-                </form>
+                </div>
+            </nav>
+        </div>
+        <div class="col-md-4">
+            <div class="preview-container">
+                <div class="preview-title">Venta</div>
+                <div id="preview-content">
+                    <div class="preview-item"><strong>Nombre del Cliente:</strong> <span id="preview-nombre">Nombre</span></div>
+                    <div class="preview-item"><strong>Apellido del Cliente:</strong> <span id="preview-apellido">Apellido</span></div>
+                    <div id="preview-italiano-container" class="preview-item" style="display: none;"><strong>Completos Italianos:</strong> <span id="preview-italianos">0</span> <span id="italiano-price"></span></div>
+                    <div id="preview-personalizado-container" class="preview-item" style="display: none;"><strong>Completos Personalizados:</strong> <span id="preview-personalizados">0</span> <span id="personalizado-price"></span></div>
+                    <div id="preview-bebida-container" class="preview-item" style="display: none;"><strong>Bebidas:</strong> <span id="preview-bebidas">0</span> <span id="bebida-price"></span></div>
+                    <div class="preview-item"><strong>Total:</strong> <span id="preview-total">0</span></div>
+                </div>
             </div>
         </div>
     </div>
-    </nav>
     {% block extrajs %}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        const precioItaliano = 2000;
+        const precioPersonalizado = 4000;
+        const precioBebida = 1500;
+
+        function updateTotal() {
+            const cantidadItalianos = parseInt($('#cantidad_italiano').val()) || 0;
+            const cantidadPersonalizados = parseInt($('#cantidad_personalizado').val()) || 0;
+            const cantidadBebidas = parseInt($('#cantidad_bebida').val()) || 0;
+
+            let total = (cantidadItalianos * precioItaliano) + (cantidadPersonalizados * precioPersonalizado) + (cantidadBebidas * precioBebida);
+
+            $('#preview-total').text(total);
+        }
+
+        function updatePreview() {
+            const nombre = $('#cliente_name').val();
+            const apellido = $('#cliente_last_name').val();
+            const cantidadItalianos = parseInt($('#cantidad_italiano').val()) || 0;
+            const cantidadPersonalizados = parseInt($('#cantidad_personalizado').val()) || 0;
+            const cantidadBebidas = parseInt($('#cantidad_bebida').val()) || 0;
+
+            $('#preview-nombre').text(nombre);
+            $('#preview-apellido').text(apellido);
+
+            if (cantidadItalianos > 0) {
+                $('#preview-italiano-container').show();
+                $('#preview-italianos').text(cantidadItalianos);
+                $('#italiano-price').text(`($${cantidadItalianos * precioItaliano})`);
+            } else {
+                $('#preview-italiano-container').hide();
+            }
+
+            if (cantidadPersonalizados > 0) {
+                $('#preview-personalizado-container').show();
+                $('#preview-personalizados').text(cantidadPersonalizados);
+                $('#personalizado-price').text(`($${cantidadPersonalizados * precioPersonalizado})`);
+            } else {
+                $('#preview-personalizado-container').hide();
+            }
+
+            if (cantidadBebidas > 0) {
+                $('#preview-bebida-container').show();
+                $('#preview-bebidas').text(cantidadBebidas);
+                $('#bebida-price').text(`($${cantidadBebidas * precioBebida})`);
+            } else {
+                $('#preview-bebida-container').hide();
+            }
+
+            updateTotal();
+        }
+
+        $('#cliente_name, #cliente_last_name, #cantidad_italiano, #cantidad_personalizado, #cantidad_bebida').on('input', updatePreview);
+
+        updatePreview();
+    </script>
     {% endblock extrajs %}
 {% endblock %}

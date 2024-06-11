@@ -13,8 +13,8 @@
         .form-control { width: 100%; height: 40px; padding: 10px; margin-top: 5px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
         .form-select { width: 100%; height: 40px; padding: 10px; margin-top: 5px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
         .button-container {
-            display: inline-block; /* O usa 'block' si prefieres que ocupe todo el ancho */
-            margin: 10px; /* Añade margen alrededor del contenedor */
+            display: inline-block;
+            margin: 10px;
         }
         .button { background-color: #87963C; color: white; padding: 12px 20px; border: none; border-radius: 5px; cursor: pointer; width: 30%; margin-top: 10px; margin-bottom: 10px; font-size: 16px; text-align: center; text-decoration: none; }
         .button:hover { background-color: #65702d; color: white; }
@@ -22,131 +22,138 @@
         .error-message { color: red; text-align: center; }
         .logoutbutton { background-color: #87963C; color: white; padding: 12px 20px; border: none; border-radius: 5px; cursor: pointer; width: 30%; margin-top: 10px; margin-bottom: 10px; font-size: 16px; }
         .logoutbutton:hover { background-color: #65702d; color: white; }
-        
-        
+
         h2 {
-    display: block;
-    font-size: 1.5em;
-    margin-block-start: 80px;
-    margin-block-end: 0px;
-    margin-inline-start: 250px;
-    margin-inline-end: 0px;
-    font-weight: bold;
-    unicode-bidi: isolate;
-    }
-
-    @media (max-width: 500px) {
-        h2{
-            margin-block-start: 70px;
-            margin-inline-start: 115px;
+            display: block;
+            font-size: 1.5em;
+            margin-block-start: 20px;
+            margin-block-end: 20px;
+            font-weight: bold;
+            unicode-bidi: isolate;
         }
 
-        .form-control{
-            width: 60%;
-            word-wrap: break-word;
+        @media (max-width: 500px) {
+            h2 { margin-block-start: 70px; margin-inline-start: 115px; }
+            .form-control { width: 60%; word-wrap: break-word; }
+            .button { width: 110px; height: 44px; }
+            .preview-container { width: 100%; margin-top: 20px; }
+        }
+        @media (min-width: 501px) {
+            h2 { margin-block-start: 70px; margin-inline-start: 250px; }
+            .form-control { width: 90%; word-wrap: break-word; }
+            .button { width: 90px; height: 47px; }
         }
 
-        .button{
-            width: 110px;
-            height: 44px;
+        .preview-container {
+            width: 10%;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: absolute;
+            right: 10px;
+            top: 100px;
         }
-
-    }
-    @media (min-width: 501px) {
-        h2{
-            margin-block-start: 70px;
-            margin-inline-start: 250px;
+        .preview-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #87963C;
+            text-align: center;
+            margin-bottom: 20px;
         }
-        .form-control{
-            width: 90%;
-            word-wrap: break-word;
-        }
-
-        .button{
-            width: 90px;
-            height: 47px;
-        }
-    }
-    
-
-
+        .preview-item { font-size: 16px; color: #333; margin-bottom: 10px; }
 
     </style>
     <header class='mb-4'>
         <h2 class='h2'>Nueva orden de compra</h2>
     </header>
-    <nav id="profileedit" class="profileedit">
-        <div class="col-md-11">
-            <div class="mb-3">
-                <div class="d-flex flex-column align-items-center align-items-lg-start">
-                    {% if messages %}
-                        <div class="alert alert-info">
-                            {% for message in messages %}
-                                <p>{{ message }}</p>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-                    <form method="post" action="{% url 'orden_save' %}">
-                        {% csrf_token %}
-                        <div class="mb-0 col-md-6">
-                            <label for="proveedor_orden" class="form-label">Proveedor</label>
-                            <select class="form-select" name="proveedor_orden" id="proveedor_orden" required>
-                                <option value="" selected disabled>Selecciona un proveedor</option>
-                                {% for proveedor in proveedores %}
-                                    <option value="{{ proveedor.id }}">{{ proveedor.get_nombre_completo }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div id="productos-container" class="col-12 col-lg-12 row row-cols-1 row-cols-md-1 g-2 p-lg-0-5">
-                            <div class="producto-item mb-3 col-12">
-                                <div class="row">
-                                    <div class="mb-0 col-md-6">
-                                        <label for="producto_orden_0" class="form-label">Producto</label>
-                                        <select class="form-select" name="producto_orden[]" id="producto_orden_0" required>
-                                            <option value="" selected disabled>Selecciona un Producto</option>
-                                        </select>
-                                    </div>
-                                    <div class="mb-0 col-md-5">
-                                        <label for="cantidad_orden_0" class="form-label">Cantidad</label>
-                                        <input type="number" min="0" class="form-control" name="cantidad_orden[]" id="cantidad_orden_0" placeholder="Cantidad" required>
-                                    </div>
-                                    <div class="mb-0 col-md-1 d-flex align-items-end">
-                                        <button type="button" class="btn btn-danger btn-delete-producto" disabled>Borrar Producto</button>
+    <div class="row">
+        <div class="col-md-8">
+            <nav id="profileedit" class="profileedit">
+                <div class="col-md-12">
+                    <div class="mb-3">
+                        <div class="d-flex flex-column align-items-center align-items-lg-start">
+                            {% if messages %}
+                                <div class="alert alert-info">
+                                    {% for message in messages %}
+                                        <p>{{ message }}</p>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            <form method="post" action="{% url 'orden_save' %}">
+                                {% csrf_token %}
+                                <div class="mb-0 col-md-6">
+                                    <label for="proveedor_orden" class="form-label">Proveedor</label>
+                                    <select class="form-select" name="proveedor_orden" id="proveedor_orden" required>
+                                        <option value="" selected disabled>Selecciona un proveedor</option>
+                                        {% for proveedor in proveedores %}
+                                            <option value="{{ proveedor.id }}">{{ proveedor.get_nombre_completo }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div id="productos-container" class="col-12 col-lg-12 row row-cols-1 row-cols-md-1 g-2 p-lg-0-5">
+                                    <div class="producto-item mb-3 col-12">
+                                        <div class="row">
+                                            <div class="mb-0 col-md-6">
+                                                <label for="producto_orden_0" class="form-label">Producto</label>
+                                                <select class="form-select" name="producto_orden[]" id="producto_orden_0" required>
+                                                    <option value="" selected disabled>Selecciona un Producto</option>
+                                                </select>
+                                            </div>
+                                            <div class="mb-0 col-md-5">
+                                                <label for="cantidad_orden_0" class="form-label">Cantidad</label>
+                                                <input type="number" min="0" class="form-control" name="cantidad_orden[]" id="cantidad_orden_0" placeholder="Cantidad" required>
+                                            </div>
+                                            <div class="mb-0 col-md-1 d-flex align-items-end">
+                                                <button type="button" class="btn btn-danger btn-delete-producto" disabled>Borrar Producto</button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                                <div class="mb-3">
+                                    <button type="button" id="add-producto" class="btn btn-secondary">Agregar Producto</button>
+                                </div>
+                                <div class="mb-0 col-md-5">
+                                    <label for="monto_orden" class="form-label">Monto</label>
+                                    <input type="number" min="0" class="form-control" name="monto_orden" id="monto_orden" placeholder="Monto" required>
+                                </div>
+                                <div class="button-container">
+                                    <button type="submit" class="button">Crear</button>
+                                    <a href="{% url 'orden_main' %}" class="button">Regresar</a>
+                                </div>                        
+                            </form>
                         </div>
-                        <div class="mb-3">
-                            <button type="button" id="add-producto" class="btn btn-secondary">Agregar Producto</button>
-                        </div>
-                        <div class="mb-0 col-md-5">
-                            <label for="monto_orden" class="form-label">Monto</label>
-                            <input type="number" min="0" class="form-control" name="monto_orden" id="monto_orden" placeholder="Monto" required>
-                        </div>
-                        <div class="button-container">
-                            <button type="submit" class="button">Crear</button>
-                            <a href="{% url 'orden_main' %}" class="button">Regresar</a>
-                        </div>                        
-                    </form>
+                    </div>
+                </div>
+            </nav>
+        </div>
+        <div class="col-md-4">
+            <div class="preview-container">
+                <div class="preview-title">Orden de Compra</div>
+                <div id="preview-content">
+                    <div class="preview-item"><strong>Proveedor:</strong> <span id="preview-proveedor">Selecciona un proveedor</span></div>
+                    <div id="preview-productos"></div>
+                    <div class="preview-item"><strong>Monto Total:</strong> $<span id="preview-monto">0</span></div>
                 </div>
             </div>
         </div>
-    </nav>
+    </div>
     {% block extrajs %}
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         // Función para cargar los productos basados en el proveedor seleccionado
         function cargarProductos(proveedorId, index) {
-            var url = "{% url 'cargar_productos' %}";  // La URL a la que se envía la solicitud
+            var url = "{% url 'cargar_productos' %}";
 
             $.ajax({
                 url: url,
                 data: {
-                    'proveedor': proveedorId  // Los datos enviados en la solicitud: el ID del proveedor
+                    'proveedor': proveedorId
                 },
                 success: function(data) {
                     var productoSelect = $('#producto_orden_' + index);
-                    productoSelect.empty();  // Vacía el select de productos
+                    productoSelect.empty();
                     productoSelect.append('<option value="" selected disabled>Selecciona un Producto</option>');
                     $.each(data, function(key, value) {
                         productoSelect.append('<option value="' + value.id + '">' + value.supply_name + ' (' + value.supply_unit + ')</option>');
@@ -155,12 +162,36 @@
             });
         }
 
-        // Escucha cambios en el select de proveedor
+        // Actualizar vista previa del proveedor
         $('#proveedor_orden').change(function() {
             var proveedorId = $(this).val();
             $('#productos-container .producto-item').each(function(index, item) {
                 cargarProductos(proveedorId, index);
             });
+            var proveedorText = $('#proveedor_orden option:selected').text();
+            $('#preview-proveedor').text(proveedorText);
+        });
+
+        // Actualizar vista previa de productos
+        function actualizarVistaPrevia() {
+            var productos = [];
+            $('#productos-container .producto-item').each(function(index, item) {
+                var productoNombre = $(item).find('select option:selected').text();
+                var cantidad = $(item).find('input').val();
+                if (productoNombre && cantidad) {
+                    productos.push({nombre: productoNombre, cantidad: cantidad});
+                }
+            });
+
+            var previewProductos = $('#preview-productos');
+            previewProductos.empty();
+            productos.forEach(function(producto) {
+                previewProductos.append('<div class="preview-item"><strong>Producto:</strong> ' + producto.nombre + ' - <strong>Cantidad:</strong> ' + producto.cantidad + '</div>');
+            });
+        }
+
+        $('#productos-container').on('change', 'select, input', function() {
+            actualizarVistaPrevia();
         });
 
         document.getElementById('add-producto').addEventListener('click', function() {
@@ -183,6 +214,8 @@
             if (proveedorId) {
                 cargarProductos(proveedorId, index);
             }
+
+            actualizarVistaPrevia();
         });
 
         document.addEventListener('click', function(event) {
@@ -191,6 +224,7 @@
                     event.target.closest('.producto-item').remove();
                 }
                 updateDeleteButtons();
+                actualizarVistaPrevia();
             }
         });
 
@@ -202,6 +236,10 @@
                 deleteButtons[0].disabled = true;
             }
         }
+
+        $('#monto_orden').on('input', function() {
+            $('#preview-monto').text($(this).val());
+        });
 
         updateDeleteButtons();
     </script>
