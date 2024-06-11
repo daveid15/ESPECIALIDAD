@@ -11,17 +11,19 @@ body {
 }
 .errorlist { color: red; }
 .pagination { 
-    position: fixed;
-    bottom: 20px; 
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex; 
-    justify-content: center; 
-    z-index: 999; 
-    background-color: #9EB23B;
-    border-radius: 12px;
-    font-weight: bold;
-}
+        position: absolute; /* Cambiado a absolute para estar dentro del contenedor */
+        bottom: 20px; /* Ajusta esta distancia según tus necesidades */
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex; 
+        justify-content: center; 
+        z-index: 999; /* Asegura que la paginación esté sobre otros elementos */
+        background-color: #9EB23B;
+        border-radius: 12px;
+        font-weight: bold;
+        padding: 5px 10px; /* Espaciado interno */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra para mejorar la estética */
+    }
 .pagination .page-item { 
     margin: 0 5px; 
     list-style: none; 
@@ -45,28 +47,27 @@ table {
     background-color: white; 
     border-radius: 15px; 
     overflow: hidden; 
-    width: 100%; /* Asegura que la tabla ocupe el ancho completo del contenedor */
+    width: 100%;
 }
 table th, table td {
     background-color: white; 
-    padding: 10px; /* Reduce el padding para hacer que las celdas sean más compactas */
-    
+    padding: 10px;
 }
 .header-row {
     background-color: #d3d3d3; 
 }
 .action-buttons {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 10px; /* Adjust spacing between buttons as needed */
-    }
-    .btn-link {
-        padding: 0;
-        margin: 0;
-        border: none;
-        background: none;
-    }
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px; 
+}
+.btn-link {
+    padding: 0;
+    margin: 0;
+    border: none;
+    background: none;
+}
 .action-buttons a {
     margin-right: 10px; 
 }
@@ -134,7 +135,7 @@ table th, table td {
     padding: 10px 15px;
     color: #000;
     margin-right: -15px;
-    background-color: #c8d0a2;;
+    background-color: #c8d0a2;
     text-decoration: none;
 }
 .nav-tabs .nav-item .nav-link.active {
@@ -159,25 +160,6 @@ h3 {
     font-weight: bold;
     padding: 15px;
 }
-
-/* Alternating row colors */
-    tbody tr:nth-child(odd) td {
-        background-color: #f0f0f0; /* Gray color */
-    }
-
-    tbody tr:nth-child(even) td {
-        background-color: #ffffff; /* White color */
-    }
-    
-    /* Ensure the text color remains the same for readability */
-    tbody tr td {
-        color: #000000;
-    }
-
-    /* Optional: Change hover effect to maintain color visibility */
-    tbody tr:hover td {
-        background-color: #e0e0e0; /* Light gray on hover */
-    }
 
 /* Media Queries for Responsiveness */
 @media (max-width: 1200px) {
@@ -267,16 +249,14 @@ h3 {
         <div class="container-fluid">
             <div class="row align-items-center justify-content-between">
                 <h3 style="font-size: 30px;margin-left: 0px; margin-top: 10px;">Usuarios <a href="{% url 'new_user' %}" class="btn btn-success new-user-button">
-                    <i class="fas fa-user-plus" style="color: #000000"></i> <!-- Icono de usuario con signo de más -->
+                    <i class="fas fa-user-plus" style="color: #000000"></i>
                 </a></h3>
             </div>
         </div>
     </header>
     <header class='mb-5'>
         <div class="header-container" style="margin-top: 20px; position: relative;">
-            <!-- Componente de Tabs y botón -->
             <div class="tabs-and-button-container" style="display: flex; justify-content: space-between; align-items: center;">
-                <!-- Componente de Tabs -->
                 <ul class="nav nav-tabs" style="flex-grow: 1;">
                     <li class="nav-item">
                         <a class="nav-link active" href="#">Lista de Usuarios Activos</a>
@@ -286,38 +266,32 @@ h3 {
                     </li>
                 </ul>
             </div>
-            <!-- Botón de carga masiva fuera del contenedor -->
             <div style="position: absolute; top: 0; right: 0; display: flex; align-items: center; margin-top: 10px; margin-right: 20px;">
                 <a href="{% url 'carga_masiva_user' %}" class="btn btn-primary btn-carga-masiva-container" style="margin-right: 10px; font-size: 20px;">
-                    <i class="fas fa-upload" style="color: #000000"></i> <!-- Icono de subida -->
+                    <i class="fas fa-upload" style="color: #000000"></i>
                 </a>
-                <span style="color: #000000;margin-right: 85px;">Carga Masiva</span> <!-- Texto "Carga Masiva" sin subrayado y color negro -->
+                <span style="color: #000000;margin-right: 85px;">Carga Masiva</span>
             </div>
         </div>
     </header>
     <div class="container col-12">
-        <div class="col-12 border" style="position: relative; background-color: white; border-radius: 15px; overflow: hidden;">
+        <div class="col-12 border" style="position: relative; background-color: white; border-radius: 15px; overflow: hidden;min-height: 600px;">
             <a href="{% url 'admin_main' %}" class="btn btn-danger btn-volver">
                 <i class="fas fa-arrow-left" style="color: #000000;"></i>
-            </a> <!-- Botón "Volver" con icono -->
-    
-            <!-- Formulario de búsqueda -->
+            </a>
             <div class="search-form">
                 <form method="get" action="" class='input-container-search my-auto'>
                     <input name="search" id="search" type="text" placeholder='Buscar por Nombre' value="{{ search }}"/>
                     <button type="submit">Buscar</button>
                 </form>
             </div>
-    
-            <!-- Tabla con margen superior -->
-            <div style="margin-top: 60px;"> <!-- Ajusta el valor de margin-top según sea necesario -->
+            <div style="margin-top: 60px;">
                 <table id="service" class="table mt-2 table-hover table-sm table-bordered">      
                     <thead class="table-danger">
                         <tr>
                             <th colspan="1">
                                 <div class="row">
                                     <div class="col-12 col-sm-12">
-                                        <!-- Botón "Volver" dentro de la tabla -->
                                     </div>
                                 </div>
                             </th>
@@ -325,7 +299,7 @@ h3 {
                         <tr class="header-row text-center">
                             <th width="20%" scope="col">Nombre</th>
                             <th width="20%" scope="col">Correo</th>
-                            <th width="50%" scope="col">Acciones</th> <!-- Nuevo encabezado para el botón "Ver" -->
+                            <th width="50%" scope="col">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -338,15 +312,13 @@ h3 {
                                     {% if s.id != request.user.id %}
                                         <div class="action-buttons">
                                             <a href="{% url 'user_detail' s.id %}">
-                                                <i class="fas fa-eye" style="color: #000000;"></i> <!-- Icono de ojo para ver -->
+                                                <i class="fas fa-eye" style="color: #000000;"></i>
                                             </a>
-    
                                             <a href="{% url 'edit_user' s.id %}">
-                                                <i class="fas fa-edit" style="color: #000000;"></i> <!-- Icono de lápiz para editar -->
+                                                <i class="fas fa-edit" style="color: #000000;"></i>
                                             </a>
-    
                                             <a href="#" onclick="confirmDelete('{{ s.id }}')">
-                                                <i class="fas fa-trash-alt" style="color: #000000;"></i> <!-- Icono de basura para eliminar -->
+                                                <i class="fas fa-trash-alt" style="color: #000000;"></i>
                                             </a>
                                         </div>
                                     {% endif %}
@@ -357,42 +329,41 @@ h3 {
                     </tbody>
                 </table>
             </div>
+            <!-- Paginación -->
+            <nav aria-label="Page navigation" style="margin-top: 20px;">
+                <ul class="pagination justify-content-center">
+                    {% if user_list.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ user_list.previous_page_number }}">
+                            <i class="fas fa-chevron-left"></i>
+                        </a>
+                    </li>
+                    {% else %}
+                        <li class="page-item disabled">
+                            <span class="page-link"><i class="fas fa-chevron-left"></i></span>
+                        </li>
+                    {% endif %}
+                    {% for i in paginator.page_range %}
+                        <li class="page-item {% if user_list.number == i %}active{% endif %}">
+                            <a class="page-link" href="?page={{ i }}{% if search %}&search={{ search }}{% endif %}">{{ i }}</a>
+                        </li>
+                    {% endfor %}
+                    {% if user_list.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ user_list.next_page_number }}">
+                                <i class="fas fa-chevron-right"></i>
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled">
+                            <span class="page-link"><i class="fas fa-chevron-right"></i></span>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            <!-- Paginación -->
         </div>
     </div>
-    
-    <!-- Paginación -->
-    <nav aria-label="Page navigation">
-        <ul class="pagination justify-content-center">
-            {% if user_list.has_previous %}
-            <li class="page-item">
-                <a class="page-link" href="?page={{ user_list.previous_page_number }}">
-                    <i class="fas fa-chevron-left"></i> <!-- Icono de flecha hacia la izquierda -->
-                </a>
-            </li>
-            {% else %}
-                <li class="page-item disabled">
-                    <span class="page-link"><i class="fas fa-chevron-left"></i></span>
-                </li>
-            {% endif %}
-            {% for i in paginator.page_range %}
-                <li class="page-item {% if user_list.number == i %}active{% endif %}">
-                    <a class="page-link" href="?page={{ i }}{% if search %}&search={{ search }}{% endif %}">{{ i }}</a>
-                </li>
-            {% endfor %}
-            {% if user_list.has_next %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ user_list.next_page_number }}">
-                        <i class="fas fa-chevron-right"></i> <!-- Icono de flecha hacia la derecha -->
-                    </a>
-                </li>
-            {% else %}
-                <li class="page-item disabled">
-                    <span class="page-link"><i class="fas fa-chevron-right"></i></span>
-                </li>
-            {% endif %}
-        </ul>
-    </nav>
-    <!-- Paginación -->
 </main>
 
 <script>

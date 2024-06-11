@@ -528,6 +528,7 @@ def proveedores_activos(request):
 
 @login_required
 def proveedores_eliminados(request):
+    # Verificar si el usuario tiene permisos
     profiles = Profile.objects.get(user_id=request.user.id)
     if profiles.group_id != 1:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a un área para la que no tiene permisos')
@@ -542,17 +543,20 @@ def proveedores_eliminados(request):
             Q(proveedor_last_name__icontains=search)
         )
 
-    paginator = Paginator(proveedores_list, 10)  # Cambia 10 por el número de proveedores que deseas mostrar por página
-    
-    page = request.GET.get('page')
-    proveedores_paginate = paginator.get_page(page)
-    
-    return render(request, 'proveedores_eliminados.html', {
-        'proveedores_eliminados': proveedores_paginate,
-        'paginator': paginator,
-        'search': request.GET.get('search', '')
-    })
+    # Obtener el paginador y los resultados paginados
+    page_obj, paginator = get_paginated_results(request, proveedores_list)
 
+    return render(request, 'proveedores_eliminados.html', {
+        'proveedores_eliminados': page_obj,
+        'paginator': paginator,
+        'search': search
+    })
+def get_paginated_results(request, queryset):
+    # Paginar los resultados
+    paginator = Paginator(queryset, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return page_obj, paginator
 
 @login_required
 def restaurar_proveedor(request, proveedor_id):

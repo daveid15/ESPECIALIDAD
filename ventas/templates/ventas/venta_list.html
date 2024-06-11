@@ -21,6 +21,7 @@ body {
     flex-direction: column;
     align-items: center;
     margin-top: 20px; /* Ajuste del margen superior */
+    min-height: 600px;
 }
 .table-container table {
     width: 100%; 
@@ -104,14 +105,19 @@ h2 {
     unicode-bidi: isolate;  
 }
 .pagination { 
-    display: flex; 
-    justify-content: center; 
-    margin-top: 20px; 
-    z-index: 999; 
-    background-color: #9EB23B;
-    border-radius: 12px;
-    font-weight: bold;
-}
+        position: absolute; /* Cambiado a absolute para estar dentro del contenedor */
+        bottom: 20px; /* Ajusta esta distancia según tus necesidades */
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex; 
+        justify-content: center; 
+        z-index: 999; /* Asegura que la paginación esté sobre otros elementos */
+        background-color: #9EB23B;
+        border-radius: 12px;
+        font-weight: bold;
+        padding: 5px 10px; /* Espaciado interno */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra para mejorar la estética */
+    }
 .pagination .page-item { 
     margin: 0 5px; 
     list-style: none; 
@@ -212,14 +218,14 @@ h2 {
         </a>
     </div>
 </header>
-<div class="table-container mt-5" style="margin-left: 20px; ">
+<div class="table-container mt-5" style="margin-left: 20px;">
     <form method="get" action="{% url 'venta_list' %}" class="search-form" style="margin-top: 20px;">
         {% csrf_token %}
         <input name="search" id="search" type="text" placeholder='Buscar por Nombre'/>
         <button type="submit">Buscar</button>
     </form>
     <a href="{% url 'ventas_main' %}" class="btn-volver btn btn-secondary"><i class="fas fa-arrow-left" style="color: #000000;"></i></a>
-    <table class="table table-user" style="text-align: center;min-height: 600px;">
+    <table class="table table-user" style="text-align: center;">
         <thead>
             <tr>
                 <th width="15%" scope="col">Cliente</th>

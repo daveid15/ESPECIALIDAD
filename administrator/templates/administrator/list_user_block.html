@@ -10,8 +10,8 @@
     }
     .errorlist { color: red; }
     .pagination { 
-        position: fixed;
-        bottom: 20px; /* Ajusta esta distancia según tus necesidades */
+        position: absolute; /* Cambiado a absolute para estar dentro del contenedor */
+        margin-top:360px ;
         left: 50%;
         transform: translateX(-50%);
         display: flex; 
@@ -20,6 +20,8 @@
         background-color: #9EB23B;
         border-radius: 12px;
         font-weight: bold;
+        padding: 5px 10px; /* Espaciado interno */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra para mejorar la estética */
     }
     .pagination .page-item { 
         margin: 0 5px; 
@@ -56,6 +58,7 @@
         padding: 20px;
         position: relative;
         background-color: white; /* Ajusta el fondo del contenedor */
+        min-height: 600px;
     }
     .search-form {
         position: absolute;
@@ -121,6 +124,7 @@
         margin-top: 60px; /* Aumenta este valor si el menú flotante es más grande */
         font-size: 24px;
         font-weight: bold;
+        margin-left: 25px;
     }
     main {
         margin-left: 250px; /* Asegura que el contenido no quede detrás del menú flotante */
@@ -186,44 +190,38 @@
                 </tbody>
             </table>
             <!-- Paginación -->
-            {% if user_list.has_other_pages %}
-            <nav aria-label="Page navigation">
+            <nav aria-label="Page navigation" style="margin-top: 20px;">
                 <ul class="pagination justify-content-center">
                     {% if user_list.has_previous %}
-                    <li class="page-item ">
-                        <a class="page-link" href="?page={{ user_list.previous_page_number }}{% if search %}&search={{ search }}{% endif %}">
-                            <i class="fas fa-chevron-left"></i> <!-- Icono de flecha hacia la izquierda -->
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ user_list.previous_page_number }}">
+                            <i class="fas fa-chevron-left"></i>
                         </a>
                     </li>
                     {% else %}
-                    <li class="page-item disabled">
-                        <span class="page-link" tabindex="-1">
-                            <i class="fas fa-chevron-left"></i>
-                        </span>
-                    </li>
+                        <li class="page-item disabled">
+                            <span class="page-link"><i class="fas fa-chevron-left"></i></span>
+                        </li>
                     {% endif %}
-                    {% for i in user_list.paginator.page_range %}
-                    <li class="page-item {% if user_list.number == i %}active{% endif %}">
-                        <a class="page-link" href="?page={{ i }}{% if search %}&search={{ search }}{% endif %}">{{ i }}</a>
-                    </li>
+                    {% for i in paginator.page_range %}
+                        <li class="page-item {% if user_list.number == i %}active{% endif %}">
+                            <a class="page-link" href="?page={{ i }}{% if search %}&search={{ search }}{% endif %}">{{ i }}</a>
+                        </li>
                     {% endfor %}
                     {% if user_list.has_next %}
-                    <li class="page-item ">
-                        <a class="page-link" href="?page={{ user_list.next_page_number }}{% if search %}&search={{ search }}{% endif %}">
-                            <i class="fas fa-chevron-right"></i> <!-- Icono de flecha hacia la derecha -->
-                        </a>
-                    </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ user_list.next_page_number }}">
+                                <i class="fas fa-chevron-right"></i>
+                            </a>
+                        </li>
                     {% else %}
-                    <li class="page-item disabled">
-                        <span class="page-link" tabindex="-1">
-                            <i class="fas fa-chevron-right"></i>
-                        </span>
-                    </li>
+                        <li class="page-item disabled">
+                            <span class="page-link"><i class="fas fa-chevron-right"></i></span>
+                        </li>
                     {% endif %}
                 </ul>
             </nav>
-            {% endif %}
-            <!-- Paginación -->                    
+            <!-- Paginación -->
         </div>
     </div>
 </main>

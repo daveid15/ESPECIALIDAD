@@ -10,7 +10,7 @@
     }
     .errorlist { color: red; }
     .pagination { 
-        position: fixed;
+        position: absolute; /* Cambiado a absolute para estar dentro del contenedor */
         bottom: 20px; /* Ajusta esta distancia según tus necesidades */
         left: 50%;
         transform: translateX(-50%);
@@ -20,6 +20,8 @@
         background-color: #9EB23B;
         border-radius: 12px;
         font-weight: bold;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra para mejorar la estética */
+        
     }
     .pagination .page-item { 
         margin: 0 5px; 
@@ -39,6 +41,7 @@
         color: #000; /* Cambia el color del texto para la página activa */
         border-radius: 5px; /* Agrega bordes redondeados */
     }
+
     .list-container {
         background-color: white;
         padding: 20px;
@@ -175,51 +178,86 @@
             </div>
         </div>
     </header>
-<div class="list-container" style="margin-left: 250px;">
-    <a href="{% url 'proveedores_main' %}" class="btn btn-danger btn-volver"><i class="fas fa-arrow-left" style="color: #000000;"></i></a> <!-- Botón "Volver" con icono -->
-    <div class="search-form">
-        <form method="get" action="" class='input-container-search my-auto'>
-            <input name="search" id="search" type="text" placeholder='Buscar por Nombre'/>
-            <button type="submit">Buscar</button>
-        </form>
-    </div>
-
-    <div class="table-container mt-5">
-        <table class="table table-user" style="margin-top: 50px;">
-            <thead>
-                <tr>
-                    <th width="10%" scope="col">Nombre</th>
-                    <th width="10%" scope="col">Apellido</th>
-                    <th width="10%" scope="col">Teléfono de contacto</th>
-                    <th width="10%" scope="col">Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for p in p_list_paginate %} 
+    <div class="list-container" style="margin-left: 250px; min-height: 600px;">
+        <a href="{% url 'proveedores_main' %}" class="btn btn-danger btn-volver"><i class="fas fa-arrow-left" style="color: #000000;"></i></a> <!-- Botón "Volver" con icono -->
+        <div class="search-form">
+            <form method="get" action="" class='input-container-search my-auto'>
+                <input name="search" id="search" type="text" placeholder='Buscar por Nombre'/>
+                <button type="submit">Buscar</button>
+            </form>
+        </div>
+    
+        <div class="table-container mt-5">
+            <table class="table table-user" style="margin-top: 50px;">
+                <thead>
                     <tr>
-                        <td style="text-align: center; padding: 15px;">{{ p.proveedor_name }}</td>
-                        <td style="text-align: center;">{{ p.proveedor_last_name }}</td>
-                        <td style="text-align: center;">{{ p.proveedor_phone }}</td>
-                        <td>
-                            <div class="action-buttons">
-                                <a href="{% url 'proveedor_ver' p.id %}">
-                                    <i class="fas fa-eye" style="color: #000000;"></i> <!-- Icono de ojo para ver -->
-                                </a>
-                                <a href="{% url 'proveedor_edit' p.id %}">
-                                    <i class="fas fa-edit" style="color: #000000;"></i> <!-- Icono de lápiz para editar -->
-                                </a>
-                                <a href="#" onclick="confirmDelete('{{ p.id }}')">
-                                    <i class="fas fa-trash-alt" style="color: #000000;"></i> <!-- Icono de basura para eliminar -->
-                                </a>
-                            </div>
-                        </td>
-                        
+                        <th width="10%" scope="col">Nombre</th>
+                        <th width="10%" scope="col">Apellido</th>
+                        <th width="10%" scope="col">Teléfono de contacto</th>
+                        <th width="10%" scope="col">Acciones</th>
                     </tr>
+                </thead>
+                <tbody>
+                    {% for p in p_list_paginate %} 
+                        <tr>
+                            <td style="text-align: center; padding: 15px;">{{ p.proveedor_name }}</td>
+                            <td style="text-align: center;">{{ p.proveedor_last_name }}</td>
+                            <td style="text-align: center;">{{ p.proveedor_phone }}</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <a href="{% url 'proveedor_ver' p.id %}">
+                                        <i class="fas fa-eye" style="color: #000000;"></i> <!-- Icono de ojo para ver -->
+                                    </a>
+                                    <a href="{% url 'proveedor_edit' p.id %}">
+                                        <i class="fas fa-edit" style="color: #000000;"></i> <!-- Icono de lápiz para editar -->
+                                    </a>
+                                    <a href="#" onclick="confirmDelete('{{ p.id }}')">
+                                        <i class="fas fa-trash-alt" style="color: #000000;"></i> <!-- Icono de basura para eliminar -->
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    
+        <!-- Paginación -->
+        <div class="pagination">
+            <ul class="pagination">
+                {% if p_list_paginate.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ p_list_paginate.previous_page_number }}{% if search %}&search={{ search }}{% endif %}">
+                        <i class="fas fa-chevron-left"></i> <!-- Icono de flecha hacia la izquierda -->
+                    </a>
+                </li>
+                {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link"><i class="fas fa-chevron-left"></i></span>
+                </li>
+                {% endif %}
+                {% for i in paginator.page_range %}
+                <li class="page-item {% if p_list_paginate.number == i %}active{% endif %}">
+                    <a class="page-link" href="?page={{ i }}{% if search %}&search={{ search }}{% endif %}">{{ i }}</a>
+                </li>
                 {% endfor %}
-            </tbody>
-        </table>
+                {% if p_list_paginate.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ p_list_paginate.next_page_number }}{% if search %}&search={{ search }}{% endif %}">
+                        <i class="fas fa-chevron-right"></i> <!-- Icono de flecha hacia la derecha -->
+                    </a>
+                </li>
+                {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link"><i class="fas fa-chevron-right"></i></span>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+        <!-- Fin de Paginación -->
+    
     </div>
-</div>
+    </div>
 
 {% block extrajs %}    
 <script>
