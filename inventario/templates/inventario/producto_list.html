@@ -5,12 +5,12 @@
 {% block extrahead %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <style>
-            body {
+    body {
         background-color: rgb(236, 236, 236); /* Establece el fondo de la página a blanco */
     }
     .errorlist { color: red; }
     .pagination { 
-        position: fixed;
+        position: absolute; /* Cambiado a absolute para estar dentro del contenedor */
         bottom: 20px; /* Ajusta esta distancia según tus necesidades */
         left: 50%;
         transform: translateX(-50%);
@@ -20,6 +20,8 @@
         background-color: #9EB23B;
         border-radius: 12px;
         font-weight: bold;
+        padding: 5px 10px; /* Espaciado interno */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra para mejorar la estética */
     }
     .pagination .page-item { 
         margin: 0 5px; 
@@ -95,17 +97,14 @@
     table th, table td {
         background-color: white; /* Establece el fondo de las celdas a blanco */
         padding-top: 15px;
-        
     }
     .button-container {
-    display: flex;
-    align-items: center;
-}
-
-.button-wrapper {
-    margin-right: 10px; /* Ajusta el margen entre los botones si es necesario */
-}
-
+        display: flex;
+        align-items: center;
+    }
+    .button-wrapper {
+        margin-right: 10px; /* Ajusta el margen entre los botones si es necesario */
+    }
 </style>
 {% endblock %}
 {% block extra_css %}    
@@ -122,7 +121,7 @@
             <div class="button-container ml-auto d-flex" style="margin-top: 70px;">
                 <div class="button-wrapper">
                     <a href="{% url 'carga_masiva_producto' %}" class="btn btn-info bulk-load">
-                        <i class="fas fa-upload" style="color: #000000"></i> <!-- Icono de carga con flecha hacia arriba -->
+                        <i class="fas fa-upload" style="color: #000000;"></i> <!-- Icono de carga con flecha hacia arriba -->
                     </a>
                 </div>
                 <div class="button-wrapper">
@@ -186,9 +185,8 @@
                         </tr>
                     {% endfor %}
                 </tbody>
-                
             </table>
-            <!-- Paginación B Modificada -->
+            <!-- Paginación -->
             {% if paginator.num_pages > 1 %}
             <nav aria-label="Page navigation">
                 <ul class="pagination justify-content-center">
@@ -221,12 +219,11 @@
                     {% endif %}
                 </ul>
             </nav>
-        {% endif %}
-            <!-- Fin de la Paginación B Modificada -->
+            {% endif %}
+            <!-- Fin de la Paginación B -->
         </div>
     </div>
 </main>
-</div>
 {% block extrajs %}    
 <!--FUNCIÓN PARA CONFIRMAR LA ELIMINACIÓN DE UN INSUMO-->
 <script>
