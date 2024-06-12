@@ -24,6 +24,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from django.http.response import JsonResponse
 from django.db.models import Sum, Q
+import re
 
 from registration.models import Profile
 from proveedores.models import Proveedor, Orden_compra, Producto_Orden, Prov_prod
@@ -97,10 +98,7 @@ def proveedor_save(request):
         producto_nuevo = request.POST.getlist('producto_nuevo[]')
         codigo_nuevo = request.POST.getlist('codigo_nuevo[]')
         unidad_nuevo = request.POST.getlist('unidad_nuevo[]')
-        
-        print(producto_nuevo)
-        print(codigo_nuevo)
-        print(unidad_nuevo)
+
         # Validaciones
         if not validar_string(proveedor_name, request):
             errores.append('Nombre inválido')
@@ -157,29 +155,39 @@ def proveedor_save(request):
                                 producto=producto_instance,
                             )
                 
+                    # Verificar si la lista de productos nuevos no está vacía
+                    if producto_nuevo:
                         for producto, codigo, unidad in zip(producto_nuevo, codigo_nuevo, unidad_nuevo):
+                            # Formatear y validar el código del nuevo producto
+                            codigo_formateado = f'SKU{codigo}'
+                            if not re.match(r'^SKU\d{4}$', codigo_formateado):
+                                messages.add_message(request, messages.ERROR, f'El código del producto {codigo} debe tener el formato SKU seguido de 4 dígitos')
+                                return render(request, template_name)
+
                             # Crear el nuevo producto
                             nuevo_producto = Product.objects.create(
                                 supply_name=producto,
-                                supply_code=codigo,
+                                supply_code=codigo_formateado,
                                 supply_unit=unidad,
                                 supply_initial_stock=0,
                                 supply_input=0,
                                 supply_output=0,
                                 supply_total=0
                             )
-                            
+
                             # Imprimir la ID del nuevo producto
                             print(nuevo_producto.id)
-                            
+
                             # Obtener la instancia del producto recién creado
                             producto_instance_nuevo = Product.objects.get(id=nuevo_producto.id)
-                            
+
                             # Crear la relación en Prov_prod
                             Prov_prod.objects.create(
                                 proveedor=proveedor_save,
                                 producto=producto_instance_nuevo,
                             )
+                    else:
+                        print("No hay productos nuevos para agregar.")
 
                     messages.add_message(request, messages.INFO, 'Productos guardados con éxito')
                 except Exception as e:

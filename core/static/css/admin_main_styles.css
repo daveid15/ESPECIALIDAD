@@ -412,6 +412,32 @@ body.dark .header {
   display: default;
 }
 
+.preview-container {
+  width: 30%;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 15px;
+  background-color: #fff;
+  position: absolute;
+  left: 1030px;
+  top: 108px;
+  height: 485px; 
+  box-shadow: 0 0 10px var(--grey-color-light);
+  overflow-y: auto; /* Ajusta la barra de desplazamiento si es necesario */
+}
+
+.preview-container::-webkit-scrollbar {
+  display: default;
+}
+.preview-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #87963C;
+  text-align: center;
+  margin-bottom: 20px;
+}
+.preview-item { font-size: 16px; color: #333; margin-bottom: 10px; }
+
 /* Media Queries para pantallas más pequeñas */
 @media screen and (max-width: 768px) {
   .profilebar {
@@ -814,7 +840,7 @@ body.dark .header {
 /* Media Queries para pantallas más pequeñas */
 @media screen and (min-width: 768px) {
   .profileedit {
-    width: 64%; /* Ajusta el ancho para pantallas más pequeñas */
+    width: 50%; /* Ajusta el ancho para pantallas más pequeñas */
     height: 480px;
     top: 110px; /* Ajusta la distancia desde la parte superior */
     left: 260px;
