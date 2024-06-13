@@ -712,7 +712,7 @@ body.dark .header {
   width: 980px; /* Ajusta el ancho según tus necesidades  PENSARLO BIEN SI QUEDA ASÍ O NO */ 
   height: 78%; /* Ajusta la altura según tus necesidades */
   position: fixed;
-  top: 60px; /* Ajusta la distancia desde la parte superior de la ventana */
+  top: 90px; /* Ajusta la distancia desde la parte superior de la ventana */
   left: 24%; /* Ajusta la distancia desde el lado izquierdo de la ventana */
   padding: 5px; /* Ajusta el relleno interior */
   z-index: 100;
