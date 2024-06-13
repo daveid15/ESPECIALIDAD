@@ -130,6 +130,7 @@
     }
 
 </style>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <main role="main">
     <div class="container col-12 mt-3">
         <div class="col-12 mt-3 border">
@@ -139,15 +140,16 @@
                     {% csrf_token %}
                     <div class="row">
                         <div class="col-10 col-sm-4 mb-3">
-                            <label for="name">Nombre (*)</label>
+                            <label for="name">Nombre</label>
                             <input type="text" id="name" name="name" value="{{user_data.first_name}}" pattern="[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+" class="form-control border border-danger" required />
-                            <label for="last_name">Apellido (*)</label>
+                        <div class="col-10 col-sm-4 mb-3"></div>
+                            <label for="last_name">Apellido</label>
                             <input type="text" id="last_name1" name="last_name1" value="{{user_data.last_name}}" pattern="[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+" class="form-control border border-danger" required />
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-12 col-sm-8 mb-3">
-                            <label for="rut">RUN (*)</label>
+                            <label for="rut">RUN </label>
                             <input type="text" name="rut" required oninput="checkRut(this)" autofocus maxlength="254" required id="id_rut" class="form-control border border-danger" placeholder="Rut (Ej: 17605812-2)" />
                             <label for="grupo">Cargo</label>
                             <select name="grupo" id="grupo" class="form-control border" required>
@@ -160,13 +162,13 @@
                     </div>
                     <div class="row">
                         <div class="col-12 col-sm-4 mb-3">
-                            <label for="email">Correo electrónico (*)</label>
+                            <label for="email">Correo electrónico </label>
                             <input type="email" class="form-control border border-danger" placeholder="nombre@unab.cl" name="email" />
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-12 col-sm-4 mb-3">
-                            <label for="mobile">Número de contacto (*)</label>
+                            <label for="mobile">Número de contacto </label>
                             <input type="text" class="form-control border border-danger" id="mobile" pattern="[0-9]{9}" name="mobile" pattern="\d*" />
                         </div>
                     </div>
@@ -179,24 +181,12 @@
                             <label for="region">Región</label>
                             <select name="region" id="region" class="form-control border border-danger" required>
                                 <option value="">Seleccione una región</option>
-                                {% for region in regions %}
-                                <option value="{{ region }}">{{ region }}</option>
-                                {% endfor %}
-                                <option value="Region Metropolitana de Santiago">Región Metropolitana de Santiago</option>
+                                <!-- Las opciones serán agregadas dinámicamente -->
                             </select>
                             <label for="comuna">Comuna</label>
                             <select name="comuna" id="comuna" class="form-control border border-danger" required>
                                 <option value="">Seleccione una comuna</option>
-                                {% for comuna in comunas %}
-                                <option value="{{ comuna }}">{{ comuna }}</option>
-                                {% endfor %}
-                                <optgroup label="Región Metropolitana de Santiago">
-                                    <option value="Providencia">Providencia</option>
-                                    <option value="Santiago">Santiago</option>
-                                    <option value="San Bernardo">San Bernardo</option>
-                                    <option value="Maipú">Maipú</option>
-                                    <option value="Buin">Buin</option>
-                                </optgroup>
+                                <!-- Las opciones serán agregadas dinámicamente -->
                             </select>
                         </div>
                     </div>
@@ -217,6 +207,108 @@
         </div>
     </div>
 </main>
+
+
+<script>
+    var RegionesYcomunas = {
+        "regiones": [
+            {
+                "NombreRegion": "Arica y Parinacota",
+                "comunas": ["Arica", "Camarones", "Putre", "General Lagos"]
+            },
+            {
+                "NombreRegion": "Tarapacá",
+                "comunas": ["Iquique", "Alto Hospicio", "Pozo Almonte", "Camiña", "Colchane", "Huara", "Pica"]
+            },
+            {
+                "NombreRegion": "Antofagasta",
+                "comunas": ["Antofagasta", "Mejillones", "Sierra Gorda", "Taltal", "Calama", "Ollagüe", "San Pedro de Atacama", "Tocopilla", "María Elena"]
+            },
+            {
+                "NombreRegion": "Atacama",
+                "comunas": ["Copiapó", "Caldera", "Tierra Amarilla", "Chañaral", "Diego de Almagro", "Vallenar", "Alto del Carmen", "Freirina", "Huasco"]
+            },
+            {
+                "NombreRegion": "Coquimbo",
+                "comunas": ["La Serena", "Coquimbo", "Andacollo", "La Higuera", "Paiguano", "Vicuña", "Illapel", "Canela", "Los Vilos", "Salamanca", "Ovalle", "Combarbalá", "Monte Patria", "Punitaqui", "Río Hurtado"]
+            },
+            {
+                "NombreRegion": "REGIÓN DE VALPARAÍSO",
+                "comunas": ["ALGARROBO", "CABILDO", "CALERA", "CALLE LARGA", "CARTAGENA", "CASABLANCA", "CATEMU", "CONCÓN", "CURACAVÍ", "EL QUISCO", "EL TABO", "HIJUELAS", "ISLA DE PASCUA", "JUAN FERNÁNDEZ", "LA CRUZ", "LA LIGUA", "LIMACHE", "LLAILLAY", "LOS ANDES", "NOGALES", "OLMUÉ", "PANQUEHUE", "PAPUDO", "PETORCA", "PUCHUNCAVÍ", "PUTAENDO", "QUILLOTA", "QUILPUÉ", "QUINTERO", "RINCONADA", "SAN ANTONIO", "SAN ESTEBAN", "SAN FELIPE", "SANTA MARÍA", "SANTO DOMINGO", "VALPARAÍSO", "VILLA ALEMANA", "VIÑA DEL MAR", "ZAPALLAR"]
+            },
+            {
+                "NombreRegion": "Región del Libertador Gral. Bernardo O'Higgins",
+                "comunas": ["Rancagua", "Codegua", "Coinco", "Coltauco", "Doñihue", "Graneros", "Las Cabras", "Machalí", "Malloa", "Mostazal", "Olivar", "Peumo", "Pichidegua", "Quinta de Tilcoco", "Rengo", "Requínoa", "San Vicente", "Pichilemu", "La Estrella", "Litueche", "Marchihue", "Navidad", "Paredones", "San Fernando", "Chépica", "Chimbarongo", "Lolol", "Nancagua", "Palmilla", "Peralillo", "Placilla", "Pumanque", "Santa Cruz"]
+            },
+            {
+                "NombreRegion": "Región del Maule",
+                "comunas": ["Talca", "Constitución", "Curepto", "Empedrado", "Maule", "Pelarco", "Pencahue", "Río Claro", "San Clemente", "San Rafael", "Cauquenes", "Chanco", "Pelluhue", "Curicó", "Hualañé", "Licantén", "Molina", "Rauco", "Romeral", "Sagrada Familia", "Teno", "Vichuquén", "Linares", "Colbún", "Longaví", "Parral", "Retiro", "San Javier", "Villa Alegre", "Yerbas Buenas"]
+            },
+            {
+                "NombreRegion": "Región de Ñuble",
+                "comunas": ["Chillán", "Bulnes", "Cobquecura", "Coelemu", "Coihueco", "El Carmen", "Ninhue", "Ñiquén", "Pemuco", "Pinto", "Portezuelo", "Quillón", "Quirihue", "Ránquil", "San Carlos", "San Fabián", "San Ignacio", "San Nicolás", "Treguaco", "Yungay"]
+            },
+            {
+                "NombreRegion": "Región del Biobío",
+                "comunas": ["Concepción", "Coronel", "Chiguayante", "Florida", "Hualqui", "Lota", "Penco", "San Pedro de la Paz", "Santa Juana", "Talcahuano", "Tomé", "Hualpén", "Lebu", "Arauco", "Cañete", "Contulmo", "Curanilahue", "Los Álamos", "Tirúa", "Los Ángeles", "Antuco", "Cabrero", "Laja", "Mulchén", "Nacimiento", "Negrete", "Quilaco", "Quilleco", "San Rosendo", "Santa Bárbara", "Tucapel", "Yumbel", "Alto Biobío"]
+            },
+            {
+                "NombreRegion": "Región de La Araucanía",
+                "comunas": ["Temuco", "Carahue", "Cunco", "Curarrehue", "Freire", "Galvarino", "Gorbea", "Lautaro", "Loncoche", "Melipeuco", "Nueva Imperial", "Padre las Casas", "Perquenco", "Pitrufquén", "Pucón", "Saavedra", "Teodoro Schmidt", "Toltén", "Vilcún", "Villarrica", "Cholchol", "Angol", "Collipulli", "Curacautín", "Ercilla", "Lonquimay", "Los Sauces", "Lumaco", "Purén", "Renaico", "Traiguén", "Victoria"]
+            },
+            {
+                "NombreRegion": "Región de Los Ríos",
+                "comunas": ["Valdivia", "Corral", "Lanco", "Los Lagos", "Máfil", "Mariquina", "Paillaco", "Panguipulli", "La Unión", "Futrono", "Lago Ranco", "Río Bueno"]
+            },
+            {
+                "NombreRegion": "Región de Los Lagos",
+                "comunas": ["Puerto Montt", "Calbuco", "Cochamó", "Fresia", "Frutillar", "Los Muermos", "Llanquihue", "Maullín", "Puerto Varas", "Castro", "Ancud", "Chonchi", "Curaco de Vélez", "Dalcahue", "Puqueldón", "Queilén", "Quellón", "Quemchi", "Quinchao", "Osorno", "Puerto Octay", "Purranque", "Puyehue", "Río Negro", "San Juan de la Costa", "San Pablo", "Chaitén", "Futaleufú", "Hualaihué", "Palena"]
+            },
+            {
+                "NombreRegion": "Región Aysén del Gral. Carlos Ibáñez del Campo",
+                "comunas": ["Coihaique", "Lago Verde", "Aysén", "Cisnes", "Guaitecas", "Cochrane", "O'Higgins", "Tortel", "Chile Chico", "Río Ibáñez"]
+            },
+            {
+                "NombreRegion": "Región de Magallanes y de la Antártica Chilena",
+                "comunas": ["Punta Arenas", "Laguna Blanca", "Río Verde", "San Gregorio", "Cabo de Hornos", "Antártica", "Porvenir", "Primavera", "Timaukel", "Natales", "Torres del Paine"]
+            },
+            {
+                "NombreRegion": "Región Metropolitana de Santiago",
+                "comunas": ["Cerrillos", "Cerro Navia", "Conchalí", "El Bosque", "Estación Central", "Huechuraba", "Independencia", "La Cisterna", "La Florida", "La Granja", "La Pintana", "La Reina", "Las Condes", "Lo Barnechea", "Lo Espejo", "Lo Prado", "Macul", "Maipú", "Ñuñoa", "Pedro Aguirre Cerda", "Peñalolén", "Providencia", "Pudahuel", "Quilicura", "Quinta Normal", "Recoleta", "Renca", "San Joaquín", "San Miguel", "San Ramón", "Santiago", "Vitacura", "Puente Alto", "Pirque", "San José de Maipo", "Colina", "Lampa", "Tiltil", "San Bernardo", "Buin", "Calera de Tango", "Paine", "Melipilla", "Alhué", "Curacaví", "María Pinto", "San Pedro", "Talagante", "El Monte", "Isla de Maipo", "Padre Hurtado", "Peñaflor"]
+            }
+        ]
+    };
+
+    jQuery(document).ready(function () {
+        var htmlRegion = '<option value="">Seleccione una región</option>';
+        var htmlComunas = '<option value="">Seleccione una comuna</option>';
+        
+        jQuery.each(RegionesYcomunas.regiones, function (index, region) {
+            htmlRegion += '<option value="' + region.NombreRegion + '">' + region.NombreRegion + '</option>';
+        });
+
+        jQuery('#region').html(htmlRegion);
+        jQuery('#comuna').html(htmlComunas);
+
+        jQuery('#region').change(function () {
+            var selectedRegion = jQuery(this).val();
+            var htmlComuna = '<option value="">Seleccione una comuna</option>';
+
+            jQuery.each(RegionesYcomunas.regiones, function (index, region) {
+                if (region.NombreRegion == selectedRegion) {
+                    jQuery.each(region.comunas, function (index, comuna) {
+                        htmlComuna += '<option value="' + comuna + '">' + comuna + '</option>';
+                    });
+                }
+            });
+
+            jQuery('#comuna').html(htmlComuna);
+        });
+    });
+</script>
+
+</body>
+</html>
 {% endblock %}
 
 
