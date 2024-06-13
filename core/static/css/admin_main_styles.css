@@ -712,7 +712,7 @@ body.dark .header {
   width: 980px; /* Ajusta el ancho según tus necesidades  PENSARLO BIEN SI QUEDA ASÍ O NO */ 
   height: 78%; /* Ajusta la altura según tus necesidades */
   position: fixed;
-  top: 90px; /* Ajusta la distancia desde la parte superior de la ventana */
+  top: 160px; /* Ajusta la distancia desde la parte superior de la ventana */
   left: 24%; /* Ajusta la distancia desde el lado izquierdo de la ventana */
   padding: 5px; /* Ajusta el relleno interior */
   z-index: 100;
@@ -771,6 +771,20 @@ body.dark .header {
 
 .logout-link:focus {
   outline: none;
+}
+
+.top-right-link { /*Ir al listado botón*/
+  position: absolute;
+  top: 100px;
+  background-color:white; 
+  color: #000;
+  left: 500px;
+  padding: 10px 15px;
+  border-radius: 5px;
+  border: 1px solid black; /* Borde negro */
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 14px;
 }
 
 /* ventasedit styles 

@@ -58,21 +58,7 @@
 <main role="main">
     <div class="container mt-3">
             <div class="border px-3 py-4">
-                <nav id="ventasbar" class="ventasbar">
-                    <div class="col-12 mt-3 border">
-                        <div class="row mt-4 mb-4">
-                            <div class="col-12 col-sm-3 mb-3" style="text-align: center;">
-                                    {% if profiles.group_id == 1 %}
-                                            <a href="{% url 'venta_crear' %}" class="boton form-control">Crear nueva venta</a>
-                                    {% endif %}
-                                    <!-- Enlace al listado de órdenes -->
-                                    {% if profiles.group_id == 1 %}
-                                            <a href="{% url 'venta_list' %}" class="boton form-control">Listado de ventas</a>
-                                    {% else %}
-                                            <p>grupo_id no definido</p>
-                                    {% endif %}
-                                        <a href="{% url 'admin_main' %}" class="botton form-control" style="padding: 4px; margin-top: 4px;">Volver</a>
-                </nav>
+                <a href="{% url 'venta_list' %}" class="top-right-link">Listado de ventas</a>
                 <div class="container mt-4">
                     <div class="row">
                         <nav id="ventasdash" class="ventasdash">
