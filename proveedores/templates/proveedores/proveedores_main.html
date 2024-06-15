@@ -3,59 +3,136 @@
 {% block content %}
 {% block extrahead %}
 <style>
-    .chart-container {
-        
-        display: flex; /* Utiliza flexbox para colocar los gráficos en línea */
-        justify-content: space-between; /* Distribuye los gráficos uniformemente a lo largo del contenedor */
-        margin-bottom: 20px; /* Agrega un espacio entre los gráficos y otros elementos */
-    }
+#ventasdash {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    top: 150px;
+}
 
-    .chart {
-        
-        width: 48%;
-        min-height: 300px;
-        background-color: #ffffff; /* Cambia el color de fondo del contenedor */
-        border-radius: 10px; /* Añade bordes redondeados al contenedor */
-    }
+.piechart {
+    display: flex;
+    justify-content: center;
+    margin: 10px 0; /* Reducir el margen alrededor del gráfico */
+}
+
+canvas {
     
+    width: 100%; /* Asegura que el canvas se ajuste al max-width */
+    height: auto; /* Mantiene la proporción del gráfico */
+}
+
+/* Ajuste adicional para reducir el espacio vertical */
+.card-body .card-title,
+.card-body .card-subtitle,
+.card-body .card-text {
+    margin: 0;
+    padding: 2px 0;
+}
+
+.card-body {
+    padding-bottom: 10px; /* Reducir el padding inferior */
+}
+h2 {
+    display: block;
+    font-size: 1.5em;
+    margin-block-start: 70px;
+    margin-inline-start: 250px;
+    font-weight: bold;
+    unicode-bidi: isolate;
+    }
+
+ 
+ /*RESPONSIVE*/
+
+/* Media Queries para pantallas más pequeñas */
+@media screen and (max-width: 500px) {
+    .piechart{
+       
+    }
+    .ventasdash{
+        max-height: 500px;
+        text-align: center; /* Centra el texto de las etiquetas */
+    }
+
+    canvas {
+        max-width: 280px; /* Reduce el ancho máximo del gráfico */
     
-    @media screen and (max-width: 500px) {
-        .chart-container{
-            width: 100%;
-            display: block;
-            padding-top: 5%;
-        }
-        .chart{
-            width: 10%;
-            left: -20px;
-            word-wrap: break-word;
-        }
-        
+    }
+    h2 {
+        margin-block-start: 65px;
+        margin-inline-start: 105px;
+    }
+    .top-right-link { /*Ir al listado botón*/
+    position: relative;
+    top:12px;
+    left: 100px;
+  }
+
+}
+
+@media (min-width: 501px) and (max-width: 767px) {
+    .ventasdash{
+        max-height: 500px;
+        text-align: center; /* Centra el texto de las etiquetas */
     }
 
-    @media screen and (min-width: 501px) and (max-width: 767px) {
-        .chart-container{
-            width: 100%;
-            background-color: aqua;
-        }
-        
-        .chart{
-            width: 120%;
-        }
+    canvas {
+    max-width: 280px; /* Reduce el ancho máximo del gráfico */
+    
+    }
+    .top-right-link { /*Ir al listado botón*/
+    position: relative;
+    top:10px;
+    left: 260px;
+  }
+
+    
+
+    
+  
+}
+
+/* Media Queries para pantallas más pequeñas */
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+    .ventasdash{
+        max-height: 500px;
+        text-align: center; /* Centra el texto de las etiquetas */
+    }
+    .top-right-link { /*Ir al listado botón*/
+    position: relative;
+    top:10px;
+    left: 250px;
+  }
+    
+  
+}
+
+@media screen and (min-width: 1025px){
+    .ventasdash{
+        max-height: 500px;
+        text-align: center; /* Centra el texto de las etiquetas */
     }
 
-    @media screen and (min-width: 768px) {
-        .chart{
-            width: 150%;
-        }
-        
-    }
+    .top-right-link { /*Ir al listado botón*/
+    position: relative;
+    top:10px;
+    left: 260px;
+  }
+    
+  
+}
     
 </style>
+
+
 {% endblock %}
 <main role="main">
     <div class="container mt-3">
         <div class="border px-3 py-4">
+            <h2 class="h2">Proveedores</h2>
             <a href="{% url 'proveedores_activos' %}" class="top-right-link">Listado de proveedores</a>
         </div>
     </div>
@@ -71,20 +148,17 @@
             <div class="col-md-8">
                 <div class="card mb-4">
                     <div class="card-body">
-                        <h5 class="card-title">Dashboard de Proveedores</h5>
-                        <div class="card-body">
-                            <h5 class="card-title">Contadores</h5>
-                            <div class="text-right text-white bg-info mb-3">
-                                <h6 class="card-subtitle mb-2">Proveedores Activos</h6>
-                                <p class="card-text">{{ proveedores_activos_count }}</p>
-                            </div>
-                            <div class="text-right text-white bg-danger">
-                                <h6 class="card-subtitle mb-2">Proveedores Eliminados</h6>
-                                <p class="card-text">{{ proveedores_eliminados_count }}</p>
-                            </div>
-                            <div style="width: 400px; height: 400px;">
-                                <canvas id="proveedoresPieChart"></canvas>
-                            </div>
+                        <h5 class="card-title">Contadores</h5>
+                        <div class="text-right text-white bg-info mb-3">
+                            <h6 class="card-subtitle mb-2">Proveedores Activos</h6>
+                            <p class="card-text">{{ proveedores_activos_count }}</p>
+                        </div>
+                        <div class="text-right text-white bg-danger">
+                            <h6 class="card-subtitle mb-2">Proveedores Eliminados</h6>
+                            <p class="card-text">{{ proveedores_eliminados_count }}</p>
+                        </div>
+                        <div class="piechart">
+                            <canvas id="proveedoresPieChart"></canvas>
                         </div>
                     </div>
                 </div>
