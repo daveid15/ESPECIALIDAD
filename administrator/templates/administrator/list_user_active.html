@@ -131,7 +131,7 @@ table th, table td {
 }
 .nav-tabs .nav-item .nav-link {
     border: 5px;
-    border-radius: 0.25rem;
+    border-radius: 0.25rem 0.25rem 0 0;
     padding: 10px 15px;
     color: #000;
     margin-right: -15px;
@@ -160,87 +160,319 @@ h3 {
     font-weight: bold;
     padding: 15px;
 }
+h2 {
+    display: block;
+    font-size: 1.5em;
+    margin-block-start: 70px;
+    margin-inline-start: 250px;
+    font-weight: bold;
+    unicode-bidi: isolate;
+    }
+.list-container {
+    background-color: white;
 
-/* Media Queries for Responsiveness */
-@media (max-width: 1200px) {
-    .pagination {
-        font-size: 16px;
+    height: 90%; /* Ajusta la altura según tus necesidades */
+    position: fixed;
+    top: 120px; /* Ajusta la distancia desde la parte superior de la ventana */
+    left: -100px; /* Centra el contenedor */
+    padding: 5px; /* Ajusta el relleno interior */
+    z-index: 100;
+        /* Ajusta la barra de desplazamiento si es necesario */
+    overflow-y: scroll;
+    transition: all 0.5s ease;
+    border-radius: 15px;
     }
-    .pagination .page-link {
-        padding: 4px 8px;
-    }
-    table th, table td {
-        padding: 8px;
-    }
-    .nav-tabs .nav-item .nav-link {
-        padding: 8px 12px;
-    }
-}
+    
 
-@media (max-width: 992px) {
-    .pagination {
-        bottom: 10px;
-        font-size: 14px;
+.container {
+    /* Estilo para el contenedor externo */
+    max-width: 100%; /* El contenedor externo ocupa el ancho completo disponible */
+    margin: 0 auto; /* Centra el contenedor horizontalmente */
+    padding: 20px; /* Espacio interno del contenedor */
     }
-    .pagination .page-link {
-        padding: 3px 6px;
-    }
-    .search-form {
-        position: static;
-        margin-top: 10px;
-        text-align: center;
-    }
-    .header-container {
-        flex-direction: column;
-    }
-    .tabs-and-button-container {
-        flex-direction: column;
-        gap: 10px;
-    }
-    .header-container h3 {
-        margin: 0;
-    }
-}
 
-@media (max-width: 768px) {
-    .pagination {
-        font-size: 12px;
-    }
-    .pagination .page-link {
-        padding: 2px 4px;
-    }
-    .nav-tabs {
-        flex-direction: column;
-        align-items: center;
-    }
-    .nav-tabs .nav-item .nav-link {
-        padding: 6px 10px;
-        margin-bottom: 5px;
-    }
-}
+.inner-container {
+    background-color: white;
 
-@media (max-width: 576px) {
-    .pagination {
-        font-size: 10px;
+    height: 90%; /* Ajusta la altura según tus necesidades */
+    position: fixed;
+    top: 120px; /* Ajusta la distancia desde la parte superior de la ventana */
+    left: -100px;  /* Centra el contenedor */
+    padding: 5px; /* Ajusta el relleno interior */
+    z-index: 100;
+    /* Ajusta la barra de desplazamiento si es necesario */
+    
+    transition: all 0.5s ease;
+    border-radius: 15px;
     }
-    .pagination .page-link {
-        padding: 1px 2px;
+
+@media screen and (max-width: 500px) {
+        .list-container{
+            position: relative;
+            max-width: 575px;
+            left: -180px;
+            top: -70px;
+            box-sizing: border-box;
+            word-wrap: break-word;
+
+        }
+        .inner-container{
+            max-width: 380px;
+            max-height: 600px;
+            left: 110px;
+            top: 161px;
+            
+
+        }
+        .nav-link {
+            position: relative;
+            width: 100px;
+            top: -22px;
+            left: -155px;
+            padding: 1px 2px;
+            margin: 5px;
+            flex: 1 1 auto; /* Permitir que los botones crezcan y se encojan */
+            white-space: nowrap; /* Evitar que el texto dentro del botón se corte */
+            word-wrap: break-word;
+        }
+
+        /* Ocultar columna de correo en pantallas pequeñas */
+        th.email-column,
+        td.email-column {
+            align-items: flex-start;
+            display: none;
+        }
+
+        td{
+            margin: 0%;
+            
+        }
+
+        h2{
+            width: fit-content;
+            display: block;
+            position: relative;
+            left: -145px;
+            justify-content: center;
+            white-space: nowrap; /* Evitar que el texto dentro del botón se corte */
+            word-wrap: break-word;
+        }
+        .search-form{
+            position: absolute;
+            white-space: nowrap; /* Evitar que el texto dentro del botón se corte */
+            word-wrap: break-word;
+            
+        }
+        .icon-upload {
+            position: relative;
+            color: #000000;
+            margin-right: 5px;
+            left: -80px;
+            top:-35px;
+        }
+
+
     }
-    .btn-volver {
-        top: 5px;
-        left: 5px;
+
+@media (min-width: 501px) and (max-width: 767px) {
+    .list-container{
+            position: relative;
+            max-width: 575px;
+            left: -180px;
+            top: -75px;
+            box-sizing: border-box;
+            word-wrap: break-word;
+
+        }
+        .inner-container{
+            max-width: 405px;
+            max-height: 600px;
+            left: 260px;
+            top: 161px;
+            
+
+        }
+        .nav-link {
+            position: relative;
+            width: 100px;
+            top: -22px;
+            left: -15px;
+            padding: 1px 2px;
+            margin: 5px;
+            flex: 1 1 auto; /* Permitir que los botones crezcan y se encojan */
+            white-space: nowrap; /* Evitar que el texto dentro del botón se corte */
+            word-wrap: break-word;
+        }
+
+        /* Ocultar columna de correo en pantallas pequeñas */
+        th.email-column,
+        td.email-column {
+            align-items: flex-start;
+            display: none;
+        }
+
+        td{
+            margin: 0%;
+            
+        }
+
+        h2{
+            width: fit-content;
+            display: block;
+            position: relative;
+            left: -5px;
+            justify-content: center;
+            white-space: nowrap; /* Evitar que el texto dentro del botón se corte */
+            word-wrap: break-word;
+        }
+        .search-form{
+            position: absolute;
+            white-space: nowrap; /* Evitar que el texto dentro del botón se corte */
+            word-wrap: break-word;
+            
+        }
+        .icon-upload {
+            position: relative;
+            color: #000000;
+            margin-right: 5px;
+            left: 40px;
+            top:-25px;
+        }
+
     }
-    .search-form {
-        margin-top: 5px;
+
+    @media screen and (min-width: 768px) and (max-width: 1024px) {
+        .list-container{
+            position: relative;
+            max-width: 700px;
+            left: -180px;
+            top: -75px;
+            box-sizing: border-box;
+            word-wrap: break-word;
+
+        }
+        .inner-container{
+            max-width: 700px;
+            max-height: 600px;
+            left: 260px;
+            top: 161px;
+            
+
+        }
+        .nav-link {
+            position: relative;
+            width: 100px;
+            top: -22px;
+            left: -15px;
+            padding: 1px 2px;
+            margin: 5px;
+            flex: 1 1 auto; /* Permitir que los botones crezcan y se encojan */
+            white-space: nowrap; /* Evitar que el texto dentro del botón se corte */
+            word-wrap: break-word;
+        }
+
+       
+
+        td{
+            margin: 0%;
+            
+        }
+
+        h2{
+            width: fit-content;
+            display: block;
+            position: relative;
+            left: -5px;
+            justify-content: center;
+            white-space: nowrap; /* Evitar que el texto dentro del botón se corte */
+            word-wrap: break-word;
+        }
+        .search-form{
+            position: absolute;
+            white-space: nowrap; /* Evitar que el texto dentro del botón se corte */
+            word-wrap: break-word;
+            
+        }
+        .icon-upload {
+            position: relative;
+            color: #000000;
+            margin-right: 5px;
+            left: -15px;
+            top:-25px;
+        }
+
     }
-    .header-container {
-        flex-direction: column;
+
+    @media screen and (min-width: 1025px){
+        .list-container{
+            position: relative;
+            max-width: 1000px;
+            left: -180px;
+            top: -75px;
+            box-sizing: border-box;
+            word-wrap: break-word;
+
+        }
+        .inner-container{
+            max-width: 1000px;
+            max-height: 600px;
+            left: 260px;
+            top: 161px;
+            
+
+        }
+        .nav-link {
+            position: relative;
+            width: 100px;
+            top: -22px;
+            left: -15px;
+            padding: 1px 2px;
+            margin: 5px;
+            flex: 1 1 auto; /* Permitir que los botones crezcan y se encojan */
+            white-space: nowrap; /* Evitar que el texto dentro del botón se corte */
+            word-wrap: break-word;
+        }
+
+       
+
+        td{
+            margin: 0%;
+            
+        }
+
+        h2{
+            width: fit-content;
+            display: block;
+            position: relative;
+            left: -5px;
+            justify-content: center;
+            white-space: nowrap; /* Evitar que el texto dentro del botón se corte */
+            word-wrap: break-word;
+        }
+        .search-form{
+            position: absolute;
+            white-space: nowrap; /* Evitar que el texto dentro del botón se corte */
+            word-wrap: break-word;
+            
+        }
+        .icon-upload {
+            position: relative;
+            color: #000000;
+            margin-right: 5px;
+            left: -85px;
+            top:-25px;
+        }
+        
+
+
     }
-    .header-container h3 {
-        margin: 0;
-        font-size: 1em;
-    }
-}
+
+
+
+
+
+
+
 </style>
 {% endblock %}
 
@@ -248,9 +480,9 @@ h3 {
     <header class="mb-4" style="margin-top: 70px;">
         <div class="container-fluid">
             <div class="row align-items-center justify-content-between">
-                <h3 style="font-size: 30px;margin-left: 0px; margin-top: 10px;">Usuarios <a href="{% url 'new_user' %}" class="btn btn-success new-user-button">
+                <h2 style="font-size: 30px;margin-left: 0px; margin-top: 10px;">Usuarios<a href="{% url 'new_user' %}" class="btn btn-success new-user-button">
                     <i class="fas fa-user-plus" style="color: #000000"></i>
-                </a></h3>
+                </a></h2>
             </div>
         </div>
     </header>
@@ -259,23 +491,22 @@ h3 {
             <div class="tabs-and-button-container" style="display: flex; justify-content: space-between; align-items: center;">
                 <ul class="nav nav-tabs" style="flex-grow: 1;">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">Lista de Usuarios Activos</a>
+                        <a class="nav-link active" href="#">Activos</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'list_user_block' group.id %}">Lista de Usuarios Eliminados</a>
+                        <a class="nav-link" href="{% url 'list_user_block' group.id %}">Eliminados</a>
                     </li>
                 </ul>
             </div>
-            <div style="position: absolute; top: 0; right: 0; display: flex; align-items: center; margin-top: 10px; margin-right: 20px;">
-                <a href="{% url 'carga_masiva_user' %}" class="btn btn-primary btn-carga-masiva-container" style="margin-right: 10px; font-size: 20px;">
+            <div style="top: 100px; right: 100px; display: flex; align-items: center; margin-top: 10px; margin-right: 20px;">
+                <a href="{% url 'carga_masiva_user' %}" class="icon-upload" style="margin-right: 10px; font-size: 20px;">
                     <i class="fas fa-upload" style="color: #000000"></i>
                 </a>
-                <span style="color: #000000;margin-right: 85px;">Carga Masiva</span>
             </div>
         </div>
     </header>
-    <div class="container col-12">
-        <div class="col-12 border" style="position: relative; background-color: white; border-radius: 15px; overflow: hidden;min-height: 600px;">
+    <div>
+        <div class="inner-container">
             <a href="{% url 'admin_main' %}" class="btn btn-danger btn-volver">
                 <i class="fas fa-arrow-left" style="color: #000000;"></i>
             </a>
@@ -296,9 +527,9 @@ h3 {
                                 </div>
                             </th>
                         </tr>
-                        <tr class="header-row text-center">
+                        <tr class="text-center">
                             <th width="20%" scope="col">Nombre</th>
-                            <th width="20%" scope="col">Correo</th>
+                            <th width="20%" scope="col" class="email-column">Correo</th>
                             <th width="50%" scope="col">Acciones</th>
                         </tr>
                     </thead>
@@ -306,7 +537,7 @@ h3 {
                         {% for s in user_list %}
                             <tr>
                                 <th scope="row" style="font-weight:400;">{{ s.name }}</th>
-                                <th scope="row" style="font-weight:400;">{{ s.mail }}</th>
+                                <th scope="row" style="font-weight:400;" class="email-column">{{ s.mail }}</th>
                                 {% if profiles.group_id == 1 %}
                                 <th scope="row">
                                     {% if s.id != request.user.id %}

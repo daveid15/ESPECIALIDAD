@@ -88,7 +88,7 @@
     }
     .nav-tabs .nav-item .nav-link {
         border: 1px #000000;
-        border-radius: 0.25rem;
+        border-radius: 0.25rem 0.25rem 0 0;
         padding: 10px 15px;
         color: #000;
         margin-right: -15px;
@@ -103,49 +103,322 @@
         background-color: white; /* Establece el fondo de las celdas a blanco */
         padding-top: 15px;
     }
-    @media (max-width: 768px) {
-        .container {
-            padding: 10px;
+
+    .list-container {
+    background-color: white;
+
+    max-height: 600px; /* Ajusta la altura según tus necesidades */
+    position: fixed;
+    top: 120px; /* Ajusta la distancia desde la parte superior de la ventana */
+    left: -100px; /* Centra el contenedor */
+    padding: 5px; /* Ajusta el relleno interior */
+    z-index: 100;
+        /* Ajusta la barra de desplazamiento si es necesario */
+   
+    transition: all 0.5s ease;
+    border-radius: 15px;
+    }
+    
+    .container {
+    /* Estilo para el contenedor externo */
+    max-width: 100%; /* El contenedor externo ocupa el ancho completo disponible */
+    margin: 0 auto; /* Centra el contenedor horizontalmente */
+    padding: 20px; /* Espacio interno del contenedor */
+    }
+
+    .inner-container {
+    background-color: white;
+    height: 90%; /* Ajusta la altura según tus necesidades */
+    position: fixed;
+    top: 120px; /* Ajusta la distancia desde la parte superior de la ventana */
+    left: -100px;  /* Centra el contenedor */
+    padding: 5px; /* Ajusta el relleno interior */
+    z-index: 100;
+    /* Ajusta la barra de desplazamiento si es necesario */
+    
+    transition: all 0.5s ease;
+    border-radius: 15px;
+    }
+
+    h2 {
+    display: block;
+    font-size: 1.5em;
+    margin-block-start: 70px;
+    margin-inline-start: 250px;
+    font-weight: bold;
+    unicode-bidi: isolate;
+    }
+
+@media screen and (max-width: 500px) {
+        .list-container{
+            position: relative;
+            max-width: 378px;
+            height: 800px;
+            left: 90px;
+            top: -6px;
+            box-sizing: border-box;
+            word-wrap: break-word;
+
         }
-        .search-form {
-            position: static;
-            text-align: center;
-            margin-bottom: 10px;
+        .inner-container{
+            max-width: 380px;
+            height: 800px;
+            left: 110px;
+            top: 161px;
+            
+
         }
         .pagination {
-            position: static;
+            position: absolute;
             margin-top: 20px;
+            top: 500px;
         }
-        table th, table td {
-            font-size: 14px;
+        .nav-link {
+            position: relative;
+            width: 100px;
+            top: -6px;
+            left: 99px;
+            padding: 1px 2px;
+            margin: 5px;
+            flex: 1 1 auto; /* Permitir que los botones crezcan y se encojan */
+            white-space: nowrap; /* Evitar que el texto dentro del botón se corte */
+            word-wrap: break-word;
         }
+
+        /* Ocultar columna de correo en pantallas pequeñas */
+        th.email-column,
+        td.email-column {
+            align-items: flex-start;
+            display: none;
+        }
+
+        td{
+            margin: 0%;
+            
+        }
+
+        h2{
+            width: fit-content;
+            display: block;
+            position: relative;
+            left: -145px;
+            justify-content: center;
+            white-space: nowrap; /* Evitar que el texto dentro del botón se corte */
+            word-wrap: break-word;
+        }
+        .search-form{
+            position: absolute;
+            white-space: nowrap; /* Evitar que el texto dentro del botón se corte */
+            word-wrap: break-word;
+            
+        }
+        
+
+
     }
-    .page-title {
-        margin-top: 60px; /* Aumenta este valor si el menú flotante es más grande */
-        font-size: 24px;
-        font-weight: bold;
-        margin-left: 25px;
+
+@media (min-width: 501px) and (max-width: 767px) {
+    .list-container{
+            position: relative;
+            max-width: 495px;
+            height: 800px;
+            left: 240px;
+            top: -5px;
+            box-sizing: border-box;
+            word-wrap: break-word;
+
+        }
+        .inner-container{
+            max-width: 380px;
+            height: 800px;
+            left: 110px;
+            top: 161px;
+            
+
+        }
+        .pagination {
+            position: absolute;
+            margin-top: 20px;
+            top: 500px;
+        }
+        .nav-link {
+            position: relative;
+            width: 100px;
+            top: -1px;
+            left: 238px;
+            padding: 1px 2px;
+            margin: 5px;
+            flex: 1 1 auto; /* Permitir que los botones crezcan y se encojan */
+            white-space: nowrap; /* Evitar que el texto dentro del botón se corte */
+            word-wrap: break-word;
+        }
+
+        
+
+        td{
+            margin: 0%;
+            
+        }
+
+        h2{
+            width: fit-content;
+            display: block;
+            position: relative;
+            left: 6px;
+            top: 3px;
+            justify-content: center;
+            white-space: nowrap; /* Evitar que el texto dentro del botón se corte */
+            word-wrap: break-word;
+        }
+        .search-form{
+            position: absolute;
+            white-space: nowrap; /* Evitar que el texto dentro del botón se corte */
+            word-wrap: break-word;
+            
+        }
+
     }
-    main {
-        margin-left: 250px; /* Asegura que el contenido no quede detrás del menú flotante */
-        margin-top: 100px; /* Espacio adicional para evitar que el menú tape el contenido */
+
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+    .list-container{
+            position: relative;
+            max-width: 700px;
+            height: 800px;
+            left: 240px;
+            top: -5px;
+            box-sizing: border-box;
+            word-wrap: break-word;
+
+        }
+        .inner-container{
+            max-width: 380px;
+            height: 800px;
+            left: 110px;
+            top: 161px;
+            
+
+        }
+        .pagination {
+            position: absolute;
+            margin-top: 20px;
+            top: 500px;
+        }
+        .nav-link {
+            position: relative;
+            width: 100px;
+            top: -1px;
+            left: 238px;
+            padding: 1px 2px;
+            margin: 5px;
+            flex: 1 1 auto; /* Permitir que los botones crezcan y se encojan */
+            white-space: nowrap; /* Evitar que el texto dentro del botón se corte */
+            word-wrap: break-word;
+        }
+
+        
+
+        td{
+            margin: 0%;
+            
+        }
+
+        h2{
+            width: fit-content;
+            display: block;
+            position: relative;
+            left: 6px;
+            top: 3px;
+            justify-content: center;
+            white-space: nowrap; /* Evitar que el texto dentro del botón se corte */
+            word-wrap: break-word;
+        }
+        .search-form{
+            position: absolute;
+            white-space: nowrap; /* Evitar que el texto dentro del botón se corte */
+            word-wrap: break-word;
+            
+        }
+
+    }
+
+@media screen and (min-width: 1025px){
+    .list-container{
+            position: relative;
+            max-width: 700px;
+            height: 800px;
+            left: 240px;
+            top: -5px;
+            box-sizing: border-box;
+            word-wrap: break-word;
+
+        }
+        .inner-container{
+            max-width: 380px;
+            height: 800px;
+            left: 110px;
+            top: 161px;
+            
+
+        }
+        .pagination {
+            position: absolute;
+            margin-top: 20px;
+            top: 500px;
+        }
+        .nav-link {
+            position: relative;
+            width: 100px;
+            top: -1px;
+            left: 238px;
+            padding: 1px 2px;
+            margin: 5px;
+            flex: 1 1 auto; /* Permitir que los botones crezcan y se encojan */
+            white-space: nowrap; /* Evitar que el texto dentro del botón se corte */
+            word-wrap: break-word;
+        }
+
+
+        
+
+        td{
+            margin: 0%;
+            
+        }
+
+        h2{
+            width: fit-content;
+            display: block;
+            position: relative;
+            left: 6px;
+            top: 3px;
+            justify-content: center;
+            white-space: nowrap; /* Evitar que el texto dentro del botón se corte */
+            word-wrap: break-word;
+        }
+        .search-form{
+            position: absolute;
+            white-space: nowrap; /* Evitar que el texto dentro del botón se corte */
+            word-wrap: break-word;
+            
+        }
+
     }
 </style>
 {% endblock %}
 
 <main role="main">
-    <h1 class="page-title">Usuarios Eliminados</h1>
+    <h2 class="page-title">Usuarios Eliminados</h1>
     <header class='mb-5'>
         <ul class="nav nav-tabs">
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'list_user_active' group.id %}">Lista de Usuarios Activos</a>
+                <a class="nav-link" href="{% url 'list_user_active' group.id %}">Activos</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" href="#">Lista de Usuarios Eliminados</a>
+                <a class="nav-link active" href="#">Eliminados</a>
             </li>
         </ul>
     </header>
-    <div class="container col-12">
+    <div class="list-container col-12">
         <div class="col-12 border" style="position: relative;">
             <div class="btn-container">
                 <div class="action-buttons">
@@ -164,7 +437,7 @@
                 <thead class="table-danger">
                     <tr class="text-center">
                         <th width="300" scope="col">Nombre</th>
-                        <th width="350" scope="col">Correo</th>
+                        <th width="350" scope="col" class="email-column">Correo</th>
                         <th width="900" scope="col">Acciones</th>
                     </tr>
                 </thead>
@@ -172,7 +445,7 @@
                     {% for s in user_list %}
                         <tr>
                             <th scope="row" style="font-weight:400;">{{s.name}}</th>
-                            <th scope="row" style="font-weight:400;">{{s.mail}}</th>
+                            <th scope="row" style="font-weight:400;" class="email-column">{{s.mail}}</th>
                             {% if profiles.group_id == 1 %}
                                 <th scope="row">
                                     {% if s.id != request.user.id %}

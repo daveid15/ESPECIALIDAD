@@ -44,13 +44,21 @@
 
     .list-container {
         background-color: white;
-        padding: 20px;
+  
+        height: 90%; /* Ajusta la altura según tus necesidades */
+        position: fixed;
+        top: 120px; /* Ajusta la distancia desde la parte superior de la ventana */
+        left: 25%; /* Centra el contenedor */
+        padding: 5px; /* Ajusta el relleno interior */
+        z-index: 100;
+         /* Ajusta la barra de desplazamiento si es necesario */
+        
+        transition: all 0.5s ease;
         border-radius: 15px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        position: relative;
-    }
+        }
+
     .search-form {
-        position: absolute;
+        
         top: 10px;
         right: 10px;
     }
@@ -112,7 +120,7 @@
     }
     .nav-tabs .nav-item .nav-link {
         border: 1px #000000;
-        border-radius: 0.25rem;
+        border-radius: 0.25rem 0.25rem 0 0;
         border-color: #000000 #000000 #000000;
         padding: 12px 15px;
         color: #000;
@@ -142,15 +150,233 @@
     .action-buttons a {
         margin: 0 5px;
     }
+
+    h2 {
+        display: block;
+        font-size: 1.5em;
+        font-weight: bold;
+        unicode-bidi: isolate;
+        position: relative;
+        top: -20px;
+        left: -10px;
+        }
+
+    @media screen and (max-width: 500px) {
+        .list-container{
+            position: relative;
+            max-width: 375px;
+            left: 100px;
+            top: -60px;
+            box-sizing: border-box;
+            word-wrap: break-word;
+
+        }
+        .nav-link {
+            position: relative;
+            width: 100px;
+            top: -60px;
+            left: -150px;
+            padding: 1px 2px;
+            margin: 5px;
+            flex: 1 1 auto; /* Permitir que los botones crezcan y se encojan */
+            white-space: nowrap; /* Evitar que el texto dentro del botón se corte */
+            word-wrap: break-word;
+        }
+
+        /* Ocultar columna de correo en pantallas pequeñas */
+        th.phone-column,
+        td.phone-column {
+            align-items: flex-start;
+            display: none;
+        }
+
+        td{
+            margin: 0%;
+            
+        }
+
+        h2{
+            width: fit-content;
+            display: block;
+            position: relative;
+            left: -160px;
+            justify-content: center;
+            white-space: nowrap; /* Evitar que el texto dentro del botón se corte */
+            word-wrap: break-word;
+        }
+        .search-form{
+            position: absolute;
+            white-space: nowrap; /* Evitar que el texto dentro del botón se corte */
+            word-wrap: break-word;
+            
+        }
+        .icon-upload {
+            position: relative;
+            color: #000000;
+            margin-right: 5px;
+            left: -70px;
+            top:-45px;
+        }
+
+
+    }
+
+    @media (min-width: 501px) and (max-width: 767px) {
+        .list-container{
+            position: relative;
+            max-width: 496px;
+            left: 245px;
+            top: -60px;
+            box-sizing: border-box;
+            word-wrap: break-word;
+        }
+        .nav-link {
+            position: relative;
+            width: 100px;
+            top: -60px;
+            left: -10px;
+        }
+
+        
+
+        td{
+            margin: 0%;
+            
+        }
+
+        h2{
+            width: fit-content;
+            display: block;
+            position: relative;
+            left: -20px;
+            justify-content: center;
+            white-space: nowrap; /* Evitar que el texto dentro del botón se corte */
+            word-wrap: break-word;
+        }
+        .search-form{
+            position: absolute;
+            
+            white-space: nowrap; /* Evitar que el texto dentro del botón se corte */
+            word-wrap: break-word;
+            
+        }
+        .icon-upload {
+            position: relative;
+            color: #000000;
+            margin-right: 5px;
+            left: 160px;
+            top:-40px;
+        }
+
+    }
+
+    @media screen and (min-width: 768px) and (max-width: 1024px) {
+        .list-container{
+            position: relative;
+            max-width: 700px;
+            left: 245px;
+            top: -60px;
+            box-sizing: border-box;
+            word-wrap: break-word;
+        }
+        .nav-link {
+            position: relative;
+            width: 100px;
+            top: -60px;
+            left: -10px;
+            
+        }
+             
+        td{
+            margin: 0%;
+            
+        }
+
+        h2{
+            width: fit-content;
+            display: block;
+            position: relative;
+            left: -20px;
+            justify-content: center;
+            white-space: nowrap; /* Evitar que el texto dentro del botón se corte */
+            word-wrap: break-word;
+        }
+        .search-form{
+            
+            white-space: nowrap; /* Evitar que el texto dentro del botón se corte */
+            word-wrap: break-word;
+            margin-bottom: 10px;
+            
+        }
+
+        .icon-upload {
+            position: relative;
+            color: #000000;
+            margin-right: 5px;
+            left: 370px;
+            top:-50px;
+        }
+
+    }
+
+    @media screen and (min-width: 1025px){
+        .list-container{
+            display: block;
+            position: relative;
+            max-width: 700px;
+            left: 245px;
+            top: -60px;
+            box-sizing: border-box;
+            word-wrap: break-word;
+        }
+        .nav-link {
+            position: relative;
+            width: 100px;
+            top: -60px;
+            left: -10px;
+            
+        }        
+        td{
+            margin: 0%;
+            
+        }
+
+        h2{
+            width: fit-content;
+            display: block;
+            position: relative;
+            left: -20px;
+            justify-content: center;
+            white-space: nowrap; /* Evitar que el texto dentro del botón se corte */
+            word-wrap: break-word;
+        }
+        .search-form{
+            
+            white-space: nowrap; /* Evitar que el texto dentro del botón se corte */
+            word-wrap: break-word;
+            
+        }
+
+        .icon-upload {
+            position: relative;
+            color: #000000;
+            margin-right: 5px;
+            left: 370px;
+            top:-50px;
+        }
+        
+
+
+    }
     
 </style>
 {% endblock extra_css %}    
 <header class="mb-4" style="margin-top: 90px;margin-left: 270px;">
     <div class="container-fluid">
         <div class="row align-items-center justify-content-between">
-            <h3 style="font-size: 30px;margin-left: 0px; margin-top: 10px;">Proveedores <a href="{% url 'proveedores_crear' %}" class="btn btn-success new-user-button">
+            <h2 style="font-size: 30px;margin-left: 0px; margin-top: 10px;">Proveedores <a href="{% url 'proveedores_crear' %}" class="btn btn-success new-user-button">
                 <i class="fas fa-user-plus" style="color: #000000"></i> <!-- Icono de usuario con signo de más -->
-            </a></h3>
+            </a></h2>
         </div>
     </div>
 </header>
@@ -161,26 +387,24 @@
                 <!-- Componente de Tabs -->
                 <ul class="nav nav-tabs">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">Lista de Proveedores Activos</a>
+                        <a class="nav-link active" href="#">Activos</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'proveedores_eliminados' %}">Lista de Proveedores Eliminados</a>
+                        <a class="nav-link" href="{% url 'proveedores_eliminados' %}">Eliminados</a>
                     </li>
                 </ul>
-                <!-- Botón de carga masiva -->
-                <li class="nav-item" style="margin-left: 600px; list-style: none; margin-top: 40px;">
-                    <a href="{% url 'carga_masiva_proveedor' %}" class="btn btn-primary btn-carga-masiva-container" style="font-size: 20px;">
-                        <i class="fas fa-upload" style="color: #000000; margin-right: 5px;"></i> <!-- Icono de subida -->
-                        <span style="color: #000000;">Carga Masiva</span> <!-- Texto "Carga Masiva" sin subrayado y color negro -->
+                <div style="top: 100px; right: 100px; display: flex; align-items: center; margin-top: 10px; margin-right: 20px;">
+                    <a href="{% url 'carga_masiva_user' %}" class="icon-upload" style="margin-right: 10px; font-size: 20px;">
+                        <i class="fas fa-upload" style="color: #000000"></i>
                     </a>
-                </li>
+                </div>
                 
             </div>
         </div>
     </header>
-    <div class="list-container" style="margin-left: 250px; min-height: 600px;">
+    <div class="list-container" style="background-color: white;min-height: 600px;">
         <a href="{% url 'proveedores_main' %}" class="btn btn-danger btn-volver"><i class="fas fa-arrow-left" style="color: #000000;"></i></a> <!-- Botón "Volver" con icono -->
-        <div class="search-form">
+        <div class="search-form" style="margin-left:400px">
             <form method="get" action="" class='input-container-search my-auto'>
                 <input name="search" id="search" type="text" placeholder='Buscar por Nombre'/>
                 <button type="submit">Buscar</button>
@@ -188,12 +412,12 @@
         </div>
     
         <div class="table-container mt-5">
-            <table class="table table-user" style="margin-top: 50px;">
+            <table class="table table-user" style="margin-top: 90px; margin-left: 24px;">
                 <thead>
                     <tr>
                         <th width="10%" scope="col">Nombre</th>
                         <th width="10%" scope="col">Apellido</th>
-                        <th width="10%" scope="col">Teléfono de contacto</th>
+                        <th width="10%" scope="col" class="phone-column">Teléfono de contacto</th>
                         <th width="10%" scope="col">Acciones</th>
                     </tr>
                 </thead>
@@ -202,7 +426,7 @@
                         <tr>
                             <td style="text-align: center; padding: 15px;">{{ p.proveedor_name }}</td>
                             <td style="text-align: center;">{{ p.proveedor_last_name }}</td>
-                            <td style="text-align: center;">{{ p.proveedor_phone }}</td>
+                            <td style="text-align: center;" class="phone-column">{{ p.proveedor_phone }}</td>
                             <td>
                                 <div class="action-buttons">
                                     <a href="{% url 'proveedor_ver' p.id %}">

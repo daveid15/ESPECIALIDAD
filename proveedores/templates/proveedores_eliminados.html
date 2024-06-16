@@ -86,7 +86,7 @@
     }
     .nav-tabs {
         display: flex;
-        gap: 20px;
+        gap: 0px;
         padding-left: 0;
         list-style: none;
         margin-top: 53px;
@@ -94,7 +94,7 @@
     }
     .nav-tabs .nav-item .nav-link {
         border: 1px #000000;
-        border-radius: 0.25rem;
+        border-radius: 0.25rem 0.25rem 0 0;
         border-color: #000000 #000000 #000000;
         padding: 12px 15px;
         color: #000;
@@ -106,12 +106,240 @@
         background-color: #ffffff;
         border-color: #000000 #000000 #ffffff;
     }
+    
+
+    @media screen and (max-width: 500px) {
+        .container{
+            position: relative;
+            max-width: 375px;
+            left: 95px;
+            top: -90px;
+            box-sizing: border-box;
+            word-wrap: break-word;
+
+        }
+        .nav-item {
+            position: relative;
+            width: 100px;
+            top: -3px;
+            left: -140px;
+            padding: 1px 2px;
+            margin: 5px;
+            flex: 1 1 auto; /* Permitir que los botones crezcan y se encojan */
+            white-space: nowrap; /* Evitar que el texto dentro del botón se corte */
+            word-wrap: break-word;
+        }
+
+        /* Ocultar columna de correo en pantallas pequeñas */
+        th.phone-column,
+        td.phone-column {
+            align-items: flex-start;
+            display: none;
+        }
+
+        td{
+            margin: 0%;
+            
+        }
+
+        h2{
+            width: fit-content;
+            
+            position: relative;
+            top: -20px;
+            left: -300px;
+            justify-content: center;
+            white-space: nowrap; /* Evitar que el texto dentro del botón se corte */
+            word-wrap: break-word;
+        }
+        .search-form{
+            position: static;
+            white-space: nowrap; /* Evitar que el texto dentro del botón se corte */
+            word-wrap: break-word;
+            
+        }
+        .icon-upload {
+            position: relative;
+            color: #000000;
+            margin-right: 5px;
+            left: 100px;
+            top:-70px;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 100px;
+            padding-left: 0;
+            list-style: none;
+            margin-top: 53px;
+            margin-left: 250px;
+        }
+
+
+    }
+
+    @media (min-width: 501px) and (max-width: 767px) {
+        .custom-container{
+            position: relative;
+            max-width: 490px;
+            left: 248px;
+            top: -85px;
+            box-sizing: border-box;
+            word-wrap: break-word;
+            margin-left: 0px;
+        }}
+        .nav-link {
+            position: relative;
+            width: 100px;
+            top: -72px;
+            left: -10px;
+            
+        }
+
+        td{
+            margin: 0%;
+            
+        }
+
+        h2{
+            width: fit-content;
+            
+            position: relative;
+            top: -20px;
+            left: -23px;
+            justify-content: center;
+            white-space: nowrap; /* Evitar que el texto dentro del botón se corte */
+            word-wrap: break-word;
+        }
+        .search-form{
+            position: absolute;
+            left: 300px;
+            white-space: nowrap; /* Evitar que el texto dentro del botón se corte */
+            word-wrap: break-word;
+            
+        }
+        .icon-upload {
+            position: relative;
+            color: #000000;
+            margin-right: 5px;
+            left: -280px;
+            top:-70px;
+        }
+        .nav-tabs {
+            display: flex;
+            gap: 20px;
+            padding-left: 0;
+            list-style: none;
+            margin-top: 53px;
+            margin-left: 250px;
+        }
+
+    
+
+    @media screen and (min-width: 768px) and (max-width: 1024px) {
+        .custom-container{
+            position: relative;
+            max-width: 700px;
+            left: 248px;
+            top: -85px;
+            box-sizing: border-box;
+            word-wrap: break-word;
+            margin-left: 0px;
+        }
+        .nav-link {
+            position: relative;
+            width: 100px;
+            top: -72px;
+            left: -10px;
+            
+        }
+             
+        td{
+            margin: 0%;
+            
+        }
+
+        h2{
+            width: fit-content;
+            
+            position: relative;
+            top: -20px;
+            left: -23px;
+            justify-content: center;
+            white-space: nowrap; /* Evitar que el texto dentro del botón se corte */
+            word-wrap: break-word;
+        }
+        .search-form{
+            
+            white-space: nowrap; /* Evitar que el texto dentro del botón se corte */
+            word-wrap: break-word;
+            margin-bottom: 10px;
+            
+        }
+
+        .icon-upload {
+            position: static;
+            color: #000000;
+            margin-right: 5px;
+            left: -280px;
+            top:-70px;
+        }
+
+    }
+
+    @media screen and (min-width: 1025px){
+        .custom-container{
+            position: relative;
+            max-width: 700px;
+            left: 248px;
+            top: -85px;
+            box-sizing: border-box;
+            word-wrap: break-word;
+            margin-left: 0px;
+        }
+        .nav-link {
+            position: relative;
+            width: 100px;
+            top: -72px;
+            left: -10px;
+            
+        }        
+        td{
+            margin: 0%;
+            
+        }
+
+        h2{
+            position: relative;
+            top: -20px;
+            left: -23px;
+            justify-content: center;
+            white-space: nowrap; /* Evitar que el texto dentro del botón se corte */
+            word-wrap: break-word;
+        }
+        .search-form{
+            white-space: nowrap; /* Evitar que el texto dentro del botón se corte */
+            word-wrap: break-word;
+            
+        }
+
+        .icon-upload {
+            position: relative;
+            color: #000000;
+            margin-right: 5px;
+            left: -280px;
+            top:-70px;
+        }
+        
+
+
+    }
 </style>
 {% endblock %}
 <header class="mb-4" style="margin-top: 90px;margin-left: 270px;">
     <div class="container-fluid">
         <div class="row align-items-center justify-content-between">
-            <h3 style="font-size: 30px;margin-left: 0px; margin-top: 10px;">Proveedores Eliminados</h3>
+            <h2 style="font-size: 30px;margin-left: 0px; margin-top: 10px;">Proveedores Eliminados</h2>
         </div>
     </div>
 </header>
@@ -121,16 +349,16 @@
             <div class="tabs-and-button-container">
                 <ul class="nav nav-tabs">
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'proveedores_activos' %}">Lista de Proveedores Activos</a>
+                        <a class="nav-link" href="{% url 'proveedores_activos' %}">Activos</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">Lista de Proveedores Eliminados</a>
+                        <a class="nav-link active" href="#">Eliminados</a>
                     </li>
                 </ul>
             </div>
         </div>
     </header>
-    <div class="container" style="margin-left: 250px;min-height: 600px;">
+    <div class="container custom-container" style="min-height: 600px;">
         <a href="{% url 'proveedores_main' %}" class="btn btn-danger btn-volver">
             <i class="fas fa-arrow-left" style="color: #000000;"></i>
         </a>
@@ -141,12 +369,12 @@
             </form>
         </div>
 
-        <table class="table mt-5 table-hover table-sm table-bordered">
+        <table class="table mt-5 table-hover table-sm table-bordered" style="margin-top: 40px;">
             <thead class="table-danger">
                 <tr>
                     <th width="10%" scope="col" style="padding: 15px;">Nombre</th>
                     <th width="10%" scope="col">Apellido</th>
-                    <th width="10%" scope="col">Teléfono de contacto</th>
+                    <th width="10%" scope="col" class="phone-column">Teléfono de contacto</th>
                     <th width="10%" scope="col">Acciones</th>
                 </tr>
             </thead>
@@ -155,7 +383,7 @@
                 <tr>
                     <th scope="row" style="font-weight: 400; padding: 15px;">{{ p.proveedor_name }}</th>
                     <th scope="row" style="font-weight: 400; padding: 15px;">{{ p.proveedor_last_name }}</th>
-                    <th scope="row" style="font-weight: 400; padding: 15px;">{{ p.proveedor_phone }}</th>
+                    <th scope="row" style="font-weight: 400; padding: 15px;" class="phone-column>{{ p.proveedor_phone }}</th>
                     <th scope="row">
                         <a href="{% url 'restaurar_proveedor' p.id %}">
                             <i class="fa-solid fa-arrow-rotate-left" style="color: #000000;"></i>
