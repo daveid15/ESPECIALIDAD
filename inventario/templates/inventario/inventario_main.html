@@ -49,23 +49,23 @@
                 background-color: #f7f7f7;
             }
             section { /*Dashboard alerta*/ 
-            max-width: 1000px;
-            margin: 90px auto;
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            top: 100px; /* Ajusta esta propiedad según lo que necesites */
-            left: 150; /* Asegura que esté pegado al borde izquierdo */
-            right: 50; /* Asegura que esté pegado al borde derecho */
-            margin-left: 260px;/* Centra horizontalmente */
-            margin-right: auto; /* Centra horizontalmente */
-            position: fixed;
-            text-align: center; /* Centra horizontalmente el contenido del section */
-        }
-        h1 {
-            margin-top: 20px; /* Ajusta el margen superior del título */
-            margin-bottom: 20px; /* Ajusta el margen inferior del título */
-        }
+                max-width: 1000px;
+                margin: 90px auto;
+                padding: 40px;
+                border-radius: 10px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                top: 100px; /* Ajusta esta propiedad según lo que necesites */
+                left: 150; /* Asegura que esté pegado al borde izquierdo */
+                right: 50; /* Asegura que esté pegado al borde derecho */
+                margin-left: 260px;/* Centra horizontalmente */
+                margin-right: auto; /* Centra horizontalmente */
+                position: fixed;
+                text-align: center; /* Centra horizontalmente el contenido del section */
+                overflow-y: auto;
+            }
+            section::-webkit-scrollbar{
+                display: default;
+            }
             .alert-icon {
                 font-size: 50px;
             }
@@ -92,30 +92,98 @@
             font-size: 18px;
             }
 
+            h2 {
+                display: block;
+                font-size: 1.5em;
+                margin-block-start: 70px;
+                margin-inline-start: 250px;
+                font-weight: bold;
+                unicode-bidi: isolate;
+            }         
+
             @media screen and (max-width: 500px) {
                 section{
                     left: -140px;
-                    margin-top: 90px;
-                    width: 75%;
-                    
+                    margin-top: 65px;
+                    max-width: 75%;
+                    height: 70%;              
                 }
 
-                .top-right-link{
-                    left: 300px;
-                    top: 140px;
+                .top-right-link { /*Ir al listado botón*/
+                    position: relative;
+                    top:22px;
+                    left: 115px;
                 }
 
-                h1{
-                    font-size: 25px;
-                    margin-top: 80px;
-                    margin-inline-start: 150px;
+                h2 {
+                    margin-block-start: 65px;
+                    margin-inline-start: 105px;
                 }
 
                 .alert-text{
                     left: 10px;
                 }
+
+                th.hidden-content-column,
+                td.hidden-content-column {
+                    align-items: flex-start;
+                    display: none;
+                }
                 
             }
+
+            @media (min-width: 501px) and (max-width: 767px) {
+                .top-right-link { /*Ir al listado botón*/
+                    position: relative;
+                    top:22px;
+                    left: 270px;
+                }
+
+                section{
+                    left: 10px;
+                    margin-top: 70px;
+                    max-width: 60%;
+                    height: 70%;              
+                }
+                th.hidden-content-column,
+                td.hidden-content-column {
+                    align-items: flex-start;
+                    display: none;
+                }
+
+            }
+
+            @media screen and (min-width: 768px) and (max-width: 1024px) {
+                .top-right-link { /*Ir al listado botón*/
+                    position: relative;
+                    top:22px;
+                    left: 270px;
+                }
+
+                section{
+                    left: 10px;
+                    margin-top: 70px;
+                    max-width: 70%;
+                    height: 70%;              
+                }
+            }
+
+            @media screen and (min-width: 1025px){
+                .top-right-link { /*Ir al listado botón*/
+                    position: relative;
+                    top:22px;
+                    left: 270px;
+                }
+
+                section{
+                    left: 10px;
+                    margin-top: 70px;
+                    max-width: 70%;
+                    height: 70%;              
+                }
+
+            }
+
     
         
         </style>
@@ -126,7 +194,7 @@
     {% block extra_css %}
     {% endblock extra_css %}
     <body>
-        <h1>Dashboard inventario</h1>
+        <h2 class="h2">Inventario</h2>
         <a href="{% url 'producto_list' %}" class="top-right-link">Listado de inventario</a>
         <section>
             
@@ -136,9 +204,9 @@
                     <thead>
                         <tr>
                             <th width="10%" scope="col">Producto</th>
-                            <th width="12%" scope="col">Codigo</th>
-                            <th width="10%" scope="col">Unidad</th>
-                            <th width="10%" scope="col">Stock Actual</th>
+                            <th width="12%" scope="col" class="hidden-content-column">Codigo</th>
+                            <th width="10%" scope="col" class="hidden-content-column">Unidad</th>
+                            <th width="10%" scope="col" class="hidden-content-column">Stock Actual</th>
                             <th width="10%" scope="col">Alarma Establecida (>5 KG o Packs de latas)</th>
                             <th width="10%" scope="col"></th>
                         </tr>
@@ -147,9 +215,9 @@
                         {% for p in p_list_paginate %}
                             <tr>
                                 <td style="padding: 15px;">{{ p.supply_name }}</td>
-                                <td>{{ p.supply_code }}</td>
-                                <td>{{ p.supply_unit }}</td>
-                                <td>{{ p.supply_total }}</td>
+                                <td class="hidden-content-column">{{ p.supply_code }}</td>
+                                <td class="hidden-content-column">{{ p.supply_unit }}</td>
+                                <td class="hidden-content-column">{{ p.supply_total }}</td>
                                 <td><span class="low-stock-alert">⚠️ ¡Stock bajo!</span></td>
                             </tr>
                         {% endfor %}

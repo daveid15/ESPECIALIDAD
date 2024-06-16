@@ -352,6 +352,7 @@ body.dark {
   border-radius: 8px;
 }
 
+
 .footer p {
   margin: 0;
   color: var(--green-color);
@@ -371,7 +372,6 @@ body.dark .header {
 /* useredit styles */
 .profileedit {
   background-color: white;
-  
   height: 90%; /* Ajusta la altura según tus necesidades */
   position: fixed;
   top: 120px; /* Ajusta la distancia desde la parte superior de la ventana */
@@ -417,12 +417,12 @@ body.dark .header {
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 15px;
-  background-color: #fff;
+  background-color: #EBEBEB; 
   position: absolute;
   left: 1030px;
   top: 108px;
   height: 485px; 
-  box-shadow: 0 0 10px var(--grey-color-light);
+  box-shadow: 0 0 20px var(--grey-color-light);
   overflow-y: auto; /* Ajusta la barra de desplazamiento si es necesario */
 }
 
@@ -432,7 +432,7 @@ body.dark .header {
 .preview-title {
   font-size: 24px;
   font-weight: bold;
-  color: #87963C;
+  color: #333;
   text-align: center;
   margin-bottom: 20px;
 }
@@ -833,12 +833,21 @@ body.dark .header {
     box-sizing: border-box;
   }
 
+  .proveedorver{
+    max-width: 370px;
+    height: 400px;
+    top: 120px;
+    left: 115px;
+  }
+
+
+
  
 }
 
 @media (min-width: 501px) and (max-width: 767px) {
   .profileedit {
-    max-width: 495px; /* Ajusta el ancho para pantallas muy pequeñas */
+    max-width:485px; /* Ajusta el ancho para pantallas muy pequeñas */
     top: 110px; /* Ajusta la distancia desde la parte superior */
     left: 260px;
     box-sizing: border-box;
@@ -846,9 +855,15 @@ body.dark .header {
   }
   
   .ventasdash{
-    width: 45%;
+    max-width: 480px;
     left: 260px;
+  }
 
+  .proveedorver{
+    max-width: 490px;
+    height: 400px;
+    top: 120px;
+    left: 260px;
   }
 }
 
@@ -863,13 +878,15 @@ body.dark .header {
     word-wrap: break-word;
   }
 
-  .ventasbar{
-    width: 100%;
-    top: 900px;
+  .ventasdash{
+    max-width: 750px;
+    left: 260px;
   }
 
-  .ventasdash{
-    width: 64%;
+  .proveedorver{
+    max-width: 700px;
+    height: 400px;
+    top: 120px;
     left: 260px;
   }
 }
@@ -891,7 +908,14 @@ body.dark .header {
   }
 
   .ventasdash{
-    width: 64%;
+    max-width: 1000px;
+    left: 260px;
+  }
+
+  .proveedorver{
+    max-width: 700px;
+    height: 400px;
+    top: 120px;
     left: 260px;
   }
 }

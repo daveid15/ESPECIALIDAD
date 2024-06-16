@@ -81,62 +81,107 @@
             background-color: #f9f9f9;
         }
         h2 {
-    display: block;
-    font-size: 1.5em;
-    margin-block-start: 80px;
-    margin-block-end: 0px;
-    margin-inline-start: 250px;
-    margin-inline-end: 0px;
-    font-weight: bold;
-    unicode-bidi: isolate;
-    }
+            display: block;
+            font-size: 1.5em;
+            margin-block-start: 80px;
+            margin-block-end: 0px;
+            margin-inline-start: 250px;
+            margin-inline-end: 0px;
+            font-weight: bold;
+            unicode-bidi: isolate;
+        }
 
-    @media (max-width: 500px) {
+
+    @media screen and (max-width: 500px) {
         h2{
             margin-block-start: 70px;
             margin-inline-start: 115px;
         }
-
-        section {
-            flex-direction: column;
-            align-items: center;
-        }
-
         .form-control{
-            width: 60%;
+            width: 90%;
+            display: block;
             word-wrap: break-word;
         }
 
         .button{
-            width: 110px;
-            height: 44px;
+            width: 87px;
+            height: 46px;
+        }
+
+        .monto-form-control{
+            max-width: 50%;
+            height: 30px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+
         }
 
     }
-    @media (min-width: 501px) {
+
+    @media (min-width: 501px) and (max-width: 767px) {
         h2{
             margin-block-start: 70px;
             margin-inline-start: 250px;
         }
-        section {
-            flex-direction: column;
-            align-items: center;
-        }
 
-        .form-control{
-            width: 90%;
-            word-wrap: break-word;
+        .monto-form-control{
+            max-width: 50%;
+            height: 30px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+
         }
 
         .button{
             width: 90px;
             height: 47px;
         }
+
+    }
+
+    @media screen and (min-width: 768px) and (max-width: 1024px) {
+        h2{
+            margin-block-start: 70px;
+            margin-inline-start: 250px;
+        }
+    
+        .button{
+            width: 90px;
+            height: 47px;
+        }
+        .monto-form-control{
+            max-width: 50%;
+            height: 30px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+
+        }
+
+    }
+
+    @media screen and (min-width: 1025px){
+        h2{
+            margin-block-start: 70px;
+            margin-inline-start: 250px;
+        }
+    
+        .button{
+            width: 90px;
+            height: 47px;
+        }
+
+        .monto-form-control{
+            max-width: 50%;
+            height: 30px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+
+        }
     }
 
     </style>
     <header class='mb-4'>
-        <h2 class='h2'>Editar Órden de compra Número #{{orden.id}}</h2>
+        <h2 class='h2'>Editar Orden #{{orden.id}}</h2>
     </header>
     <nav id="profileedit" class="profileedit">
     <div class="col-md-11">
@@ -180,11 +225,11 @@
                     </div>
                     <div class="mb-0 col-md-5">
                         <label for="monto_orden" class="form-label">Monto</label>
-                        <input type="number" min="0" class="form-control" name="monto_orden" placeholder="{{orden.monto}}" value="{{orden.monto}}" required>
+                        <input type="number" min="0" class="monto-form-control" name="monto_orden" placeholder="{{orden.monto}}" value="{{orden.monto}}" required>
                     </div>
                     <div class="d-flex justify-content-center mx-0-5--custom">
-                        <button type="submit" class="button">Guardar</button>
-                        <a href="{% url 'orden_list_enviada' %}" class="button">Regresar</a>
+                        <button type="submit" class="button">Editar</button>
+                        <a href="{% url 'orden_list_enviada' %}" class="button">Volver</a>
                     </div>
                 </form>
             </div>

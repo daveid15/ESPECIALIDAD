@@ -15,16 +15,12 @@
         background-color: #f7f7f7;
     }
     .container {
-            background-color: #fff;
+            background-color: #cc1414;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             padding: 20px;
             max-width: 600px;
             margin: 0 auto;
-        }
-        h1 {
-            color: #333;
-            text-align: center;
         }
         .detail-item {
             margin-bottom: 10px;
@@ -51,15 +47,7 @@
             font-size: 1.2em;
             font-weight: bold;
         }
-    section {
-        background-color: white;
-        max-width: 900px;
-        margin: 50px auto;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        display: flex;
-    }
+
 
     .avatar {
         width: 100px;
@@ -118,42 +106,86 @@
         color: red;
         text-align: center;
     }
-    
 
-    @media (max-width: 768px) {
-        section {
-            flex-direction: column;
-            align-items: center;
-        }
+    h2 {
+        display: block;
+        font-size: 1.5em;
+        margin-block-start: 70px;
+        margin-inline-start: 250px;
+        font-weight: bold;
+        unicode-bidi: isolate;
     }
+
+    @media screen and (max-width: 500px) {
+        h2 {
+            margin-block-start: 70px;
+            margin-inline-start: 115px;
+        }
+
+        th.precioun-column,
+        td.precioun-column {
+            align-items: flex-start;
+            display: none;
+        }
+
+        .button{
+            position: relative;
+            top:40px;
+        }
+
+
+        }
+
+        @media (min-width: 501px) and (max-width: 767px) {
+            
+            .button{
+                position: relative;
+                top:40px;
+            }
+        }
+
+        @media screen and (min-width: 768px) and (max-width: 1024px) {
+            .button{
+                position: relative;
+                top:40px;
+            }
+
+        }
+
+        @media screen and (min-width: 1025px){ 
+            .button{
+                position: relative;
+                top:40px;
+            }          
+        }
+
 </style>
 {% load multiply_filter %}
-<nav id="proveedorver" class="proveedorver">
 <header class='mb-4'>
-    <h2 class='h2 medium text-blue'>Detalles de la Venta</h2>
+    <h2 class='h2'>Detalles de la Venta</h2>
 </header>
+<nav id="proveedorver" class="proveedorver">
 <div class="col-md-11">
     <div class="mb-3">
                 {% csrf_token %}
                 <div class="col-12 col-lg-12 row row-cols-1 row-cols-md-1 g-2 p-lg-0-5">
                     <div class="mb-0 col-md-12">
-                        <label for="proveedor_orden_id" class="form-label">Número de órden: </label>
-                        <span class="form-label" id="proveedor_orden_id">{{orden.numero_orden}}</span>
+                        <label for="proveedor_orden_id" class="form-label">Número de órden:</label>
+                        <span class="form-label" id="proveedor_orden_id">#{{orden.numero_orden}}</span>
                     </div>
                     <div class="mb-0 col-md-12">
                         <label for="proveedor" class="form-label">Cliente: </label>
                         <span class="form-label" id="proveedor">{{orden.cliente_venta}}</span>
                     </div>
                     <div class="mb-0 col-md-12">
-                        <label for="monto" class="form-label">Número de contacto:</label>
-                        <span class="form-label" id="monto">{{orden.monto}}</span>
+                        <p><strong>TOTAL:</strong> ${{ orden.total_venta }}</p>
                     </div>
                     <table class="product-list">
                         <thead>
                             <tr>
                                 <th>Producto</th>
                                 <th>Cantidad</th>
-                                <th>Precio Unitario</th>
+                                <th class="precioun-column">Precio Unitario</th>
                                 <th>Subtotal</th>
                             </tr>
                         </thead>
@@ -163,16 +195,13 @@
                                 <tr>
                                     <td>{{ venta_producto.producto.nombre_producto }}</td>
                                     <td>{{ venta_producto.cantidad }}</td>
-                                    <td>${{ venta_producto.precio_producto }}</td>
+                                    <td class="precioun-column">${{ venta_producto.precio_producto }}</td>
                                     <td>${{ venta_producto.precio_producto|multiply:venta_producto.cantidad }}</td>
                                 </tr>
                                 {% endif %}
                             {% endfor %}
                         </tbody>
                     </table>
-                    <div class="mb-0 col-md-12">
-                        <p>TOTAL: ${{ orden.total_venta }}</p>
-                    </div>
                     <div class="col-12 col-sm-6 mb-3">
                             <a href="{% url 'venta_list' %}" class="button">Volver</a>
                     </div>

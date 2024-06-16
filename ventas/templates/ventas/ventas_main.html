@@ -20,36 +20,73 @@
         border-radius: 10px; /* Añade bordes redondeados al contenedor */
     }
 
-    @media screen and (max-width: 500px) {
-        .chart-container{
-            width: 100%;
-            display: block;
-            padding-top: 5%;
-        }
-        .chart{
-            width: 106%;
-            left: -20px;
-            word-wrap: break-word;
-        }
-        
+    h2 {
+        display: block;
+        font-size: 1.5em;
+        margin-block-start: 70px;
+        margin-inline-start: 250px;
+        font-weight: bold;
+        unicode-bidi: isolate;
     }
 
-    @media screen and (min-width: 501px) and (max-width: 767px) {
-        .chart-container{
+
+
+    @media screen and (max-width: 500px) {
+    .top-right-link { /*Ir al listado botón*/
+        position: relative;
+        top:22px;
+        left: 100px;
+    }
+
+    h2 {
+        margin-block-start: 65px;
+        margin-inline-start: 105px;
+    }
+
+    .chart-container{
+        width: 100%;
+        display: block;
+        padding-top: 5%;
+    }
+    .chart{
+        width: 106%;
+        left: -20px;
+        word-wrap: break-word;
+    }
+    
+
+    }
+
+    @media (min-width: 501px) and (max-width: 767px) {
+        
+        .chart-container {
             width: 100%;
-            background-color: aqua;
         }
         
-        .chart{
+        .chart {
             width: 120%;
         }
     }
 
-    @media screen and (min-width: 768px) {
+    /* Media Queries para pantallas más pequeñas */
+    @media screen and (min-width: 768px) and (max-width: 1024px) {
+        .top-right-link { /*Ir al listado botón*/
+            position: relative;
+            top:20px;
+            left: 250px;
+        }
+
         .chart{
             width: 150%;
         }
-        
+    }
+
+    @media screen and (min-width: 1025px){
+        .top-right-link { /*Ir al listado botón*/
+        position: relative;
+        top:20px;
+        left: 250px;
+     }
     }
     
 </style>
@@ -58,6 +95,7 @@
 <main role="main">
     <div class="container mt-3">
             <div class="border px-3 py-4">
+                <h2 class="h2">Ventas</h2>
                 <a href="{% url 'venta_list' %}" class="top-right-link">Listado de ventas</a>
                 <div class="container mt-4">
                     <div class="row">

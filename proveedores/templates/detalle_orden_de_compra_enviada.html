@@ -51,15 +51,6 @@
             font-size: 1.2em;
             font-weight: bold;
         }
-    section {
-        background-color: white;
-        max-width: 900px;
-        margin: 50px auto;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        display: flex;
-    }
 
     .avatar {
         width: 100px;
@@ -119,19 +110,63 @@
         text-align: center;
     }
     
-
-    @media (max-width: 768px) {
-        section {
-            flex-direction: column;
-            align-items: center;
-        }
+    h2 {
+        display: block;
+        font-size: 1.5em;
+        margin-block-start: 70px;
+        margin-inline-start: 250px;
+        font-weight: bold;
+        unicode-bidi: isolate;
     }
+
+    @media screen and (max-width: 500px) {
+        h2 {
+            margin-block-start: 70px;
+            margin-inline-start: 115px;
+        }
+
+        th.precioun-column,
+        td.precioun-column {
+            align-items: flex-start;
+            display: none;
+        }
+
+        .button{
+            position: relative;
+            top:40px;
+        }
+
+
+        }
+
+        @media (min-width: 501px) and (max-width: 767px) {
+            
+            .button{
+                position: relative;
+                top:40px;
+            }
+        }
+
+        @media screen and (min-width: 768px) and (max-width: 1024px) {
+            .button{
+                position: relative;
+                top:40px;
+            }
+
+        }
+
+        @media screen and (min-width: 1025px){ 
+            .button{
+                position: relative;
+                top:40px;
+            }          
+        }
 </style>
 {% load multiply_filter %}
-<nav id="proveedorver" class="proveedorver">
 <header class='mb-4'>
-    <h2 class='h2 medium text-blue'>Detalles de la Compra</h2>
+    <h2 class='h2'>Detalles de la Compra</h2>
 </header>
+<nav id="proveedorver" class="proveedorver">
 <div class="col-md-11">
     <div class="mb-3">
                 {% csrf_token %}

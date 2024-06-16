@@ -5,29 +5,196 @@
     {% block extra_css %}
     {% endblock extra_css %}
     <style>
-        .errorlist { color: red; }
-        body { font-family: 'Arial', sans-serif; background-color: #f7f7f7; }
-        .avatar { width: 100px; height: 100px; border-radius: 50%; margin-right: 10px; }
-        .titulo { font-family: 'Sigmar', sans-serif; color: #333; font-size: 36px; margin: 0; }
-        .form-label { font-size: 16px; margin-bottom: 10px; color: #333; }
-        .form-control { width: 100%; height: 40px; padding: 10px; margin-top: 5px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
-        .button { background-color: #87963C; color: white; padding: 12px 20px; border: none; border-radius: 5px; cursor: pointer; width: 30%; margin-top: 10px; margin-bottom: 10px; font-size: 16px; }
-        .button:hover { background-color: #65702d; color: white; }
-        .message { color: green; text-align: center; }
-        .error-message { color: red; text-align: center; }
-        .product-item, .product-nuevo-item { border: 1px solid #ccc; border-radius: 5px; padding: 10px; margin-bottom: 10px; background-color: #f9f9f9; }
-        h2 { display: block; font-size: 1.5em; margin-block-start: 70px; margin-inline-start: 250px; font-weight: bold; unicode-bidi: isolate; }
-
-        @media (max-width: 500px) {
-            h2 { margin-block-start: 70px; margin-inline-start: 115px; }
-            .form-control { width: 60%; word-wrap: break-word; }
-            .button { width: 110px; height: 44px; }
-            .preview-container { width: 100%; margin-top: 20px; }
+        .errorlist {
+            color: red; 
         }
-        @media (min-width: 501px) {
-            h2 { margin-block-start: 70px; margin-inline-start: 250px; }
-            .form-control { width: 90%; word-wrap: break-word; }
-            .button { width: 90px; height: 47px; }
+        
+        body { 
+            font-family: 'Arial', sans-serif; 
+            background-color: #f7f7f7; 
+        }
+        
+        .avatar { 
+            width: 100px; 
+            height: 100px; 
+            border-radius: 50%; 
+            margin-right: 10px; 
+        }
+        
+        .titulo { 
+            font-family: 'Sigmar', sans-serif; 
+            color: #333; 
+            font-size: 36px;
+            margin: 0; 
+        }
+        
+        .form-label { 
+            font-size: 16px; 
+            margin-bottom: 10px; 
+            color: #333; 
+        }
+        
+        .form-control { 
+            width: 100%; 
+            height: 40px; 
+            padding: 10px; 
+            margin-top: 5px;
+            margin-bottom: 15px; 
+            border: 1px solid #ccc; 
+            border-radius: 5px; 
+            box-sizing: border-box; 
+        }
+        
+        .button { 
+            background-color: #87963C; 
+            color: white; 
+            padding: 12px 20px; 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            width: 30%; 
+            margin-top: 10px; 
+            margin-bottom: 10px; 
+            font-size: 16px; 
+        }
+        
+        .button:hover { 
+            background-color: #65702d; 
+            color: white; 
+        }
+        
+        .message { 
+            color: green; 
+            text-align: center; 
+        }
+        
+        .error-message { 
+            color: red; 
+            text-align: center; 
+        }
+        
+        .product-item, .product-nuevo-item { 
+            border: 1px solid #ccc; 
+            border-radius: 5px; 
+            padding: 10px; 
+            margin-bottom: 10px; 
+            background-color: #f9f9f9; 
+        }
+
+        .divider {
+            border-top: 2.5px dashed #000000;
+            margin: 20px 0;
+        }
+        
+        h2 { 
+            display: block; 
+            font-size: 1.5em; 
+            margin-block-start: 70px;
+            margin-inline-start: 250px; 
+            font-weight: bold; 
+            unicode-bidi: isolate; 
+        }
+
+        @media screen and (max-width: 500px) {
+            h2 { 
+                margin-block-start: 70px; 
+                margin-inline-start: 115px; 
+            }
+            
+            .form-control { 
+                max-width: 90%;
+                word-wrap: break-word; 
+            }
+            
+            .button { 
+                width: 90px; 
+                height: 49px; 
+            }
+
+            .profileedit{
+                max-height: 50%;
+            }
+
+            .preview-container{
+                width: 375px;
+                height: 145px;
+                top: 440px;
+                left: 115px;
+                position: fixed;
+                
+            }
+        }
+
+        @media (min-width: 501px) and (max-width: 767px) {
+            h2 { 
+                margin-block-start: 70px; 
+                margin-inline-start: 250px; 
+            }
+
+            .form-control { 
+                max-width: 90%; 
+                word-wrap: break-word; 
+            }
+
+            .button { 
+                width: 90px;
+                height: 47px; 
+            }
+
+            .profileedit{
+                max-height: 65%;
+            }
+
+            .preview-container{
+                max-width: 70%;
+                left: 750px;
+                max-height: 65%;
+            }
+
+        }
+
+        @media screen and (min-width: 768px) and (max-width: 1024px) {
+            .form-control { 
+                max-width: 90%; 
+                word-wrap: break-word; 
+            }
+
+            .button { 
+                width: 90px;
+                height: 47px; 
+            }
+
+            .profileedit{
+                max-height: 65%;
+            }
+            .preview-container{
+                max-width: 70%;
+                left: 750px;
+                max-height: 60%;
+            }
+
+        }
+
+        @media screen and (min-width: 1025px){ 
+            .form-control { 
+                max-width: 90%; 
+                word-wrap: break-word; 
+            }
+
+            .button { 
+                width: 90px;
+                height: 47px; 
+            }
+
+            .profileedit{
+                max-height: 65%;
+            }
+            .preview-container{
+                max-width: 70%;
+                left: 800px;
+                max-height: 60%;
+            }
+        
         }
 
     </style>
@@ -71,7 +238,7 @@
                                 </div>
                                 <div class="button-container">
                                     <button type="submit" class="button">Crear</button>
-                                    <a href="{% url 'ventas_main' %}" class="button">Regresar</a>
+                                    <a href="{% url 'ventas_main' %}" class="button">Volver</a>
                                 </div>
                             </form>
                         </div>
@@ -81,13 +248,14 @@
         </div>
         <div class="col-md-4">
             <div class="preview-container">
-                <div class="preview-title">Venta</div>
+                <div class="preview-title">Resumen</div>
                 <div id="preview-content">
                     <div class="preview-item"><strong>Nombre del Cliente:</strong> <span id="preview-nombre">Nombre</span></div>
                     <div class="preview-item"><strong>Apellido del Cliente:</strong> <span id="preview-apellido">Apellido</span></div>
                     <div id="preview-italiano-container" class="preview-item" style="display: none;"><strong>Completos Italianos:</strong> <span id="preview-italianos">0</span> <span id="italiano-price"></span></div>
                     <div id="preview-personalizado-container" class="preview-item" style="display: none;"><strong>Completos Personalizados:</strong> <span id="preview-personalizados">0</span> <span id="personalizado-price"></span></div>
                     <div id="preview-bebida-container" class="preview-item" style="display: none;"><strong>Bebidas:</strong> <span id="preview-bebidas">0</span> <span id="bebida-price"></span></div>
+                    <div class="divider"></div>
                     <div class="preview-item"><strong>Total:</strong> <span id="preview-total">0</span></div>
                 </div>
             </div>
