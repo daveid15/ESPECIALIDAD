@@ -6,215 +6,330 @@
 {% block content %}
 {% block extra_css %}
 <style>
-body {
-    background-color: rgb(236, 236, 236); 
-}
-.table-container {
-    position: relative; 
-    border: 2px solid white; 
-    background-color: white; 
-    border-radius: 15px; 
-    overflow: hidden; 
-    padding: 20px; 
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 20px; /* Ajuste del margen superior */
-    min-height: 600px;
-}
-.table-container table {
-    width: 100%; 
-    border-collapse: separate; 
-    border-spacing: 0; 
-    margin-top: 40px; 
-}
-.table-container th, .table-container td {
-    background-color: white; 
-    padding: 5px; 
-}
-.table-container th {
-    background-color: white;
-}
-.table-container td {
-    text-align: center; 
-    vertical-align: middle;
-}
-.search-form {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-}
-.search-form input[type="text"] {
-    border-radius: 15px; 
-    background-color: #f0f0f0; 
-    border: 1px solid #ccc; 
-    padding: 5px 10px; 
-    margin-right: 5px; 
-}
-.search-form button {
-    border-radius: 15px; 
-    background-color: #d3d3d3; 
-    border: 1px solid #ccc; 
-    padding: 5px 10px; 
-}
-.btn-volver {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-}
-.title-button-container {
-    display: flex;
-    align-items: center;
-    margin-left: 250px;
-    margin-top: 60px;
-}
-.title-button-container h2 {
-    margin-top: 20px;
-    margin-left: 20px; 
-    font-size: 30px;
-}
-.title-button-container a {
-    margin-top: 25px;
-    font-size: 25px;
-}
-.btn {
-    display: inline-block;
-    margin-left: 2px;
-    margin-top: 75px;
-}
-.total-ventas {
-    margin-top: 20px;
-    text-align: center;
-    border-radius: 15px;
-    background-color: #b16262;
-    border: 1px solid #ccc;
-    padding: 5px 10px;
-    width: fit-content;
-    margin-left: auto;
-    margin-right: auto;
-}
-h2 {
-    display: block;
-    font-size: 1.5em;
-    margin-block-start: 80px;
-    margin-block-end: 0px;
-    margin-inline-start: 250px;
-    margin-inline-end: 0px;
-    font-weight: bold;
-    unicode-bidi: isolate;  
-}
-.pagination { 
-        position: absolute; /* Cambiado a absolute para estar dentro del contenedor */
-        bottom: 20px; /* Ajusta esta distancia según tus necesidades */
-        left: 50%;
-        transform: translateX(-50%);
-        display: flex; 
-        justify-content: center; 
-        z-index: 999; /* Asegura que la paginación esté sobre otros elementos */
-        background-color: #9EB23B;
-        border-radius: 12px;
+    .table-container {
+        position: relative; 
+        border: 2px solid white; 
+        background-color: white; 
+        border-radius: 15px; 
+        overflow: hidden; 
+        padding: 20px; 
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 20px; /* Ajuste del margen superior */
+        min-height: 600px;
+    }
+    .table-container table {
+        width: 100%; 
+        border-collapse: separate; 
+        border-spacing: 0; 
+        margin-top: 40px; 
+    }
+    .table-container th, .table-container td {
+        background-color: white; 
+        padding: 5px; 
+    }
+    .table-container th {
+        background-color: white;
+    }
+    .table-container td {
+        text-align: center; 
+        vertical-align: middle;
+    }
+    .search-form {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    }
+    .search-form input[type="text"] {
+        border-radius: 15px; 
+        background-color: #f0f0f0; 
+        border: 1px solid #ccc; 
+        padding: 5px 10px; 
+        margin-right: 5px; 
+    }
+    .search-form button {
+        border-radius: 15px; 
+        background-color: #d3d3d3; 
+        border: 1px solid #ccc; 
+        padding: 5px 10px; 
+    }
+    .btn-volver {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+    }
+    .title-button-container {
+        display: flex;
+        align-items: center;
+        margin-left: 250px;
+        margin-top: 60px;
+    }
+    .title-button-container h2 {
+        margin-top: 20px;
+        margin-left: 20px; 
+        font-size: 30px;
+    }
+    .title-button-container a {
+        margin-top: 25px;
+        font-size: 25px;
+    }
+    .btn {
+        display: inline-block;
+        margin-left: 2px;
+        margin-top: 75px;
+    }
+    .total-ventas {
+        margin-top: 20px;
+        text-align: center;
+        border-radius: 15px;
+        background-color: #b16262;
+        border: 1px solid #ccc;
+        padding: 5px 10px;
+        width: fit-content;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    h2 {
+        display: block;
+        font-size: 1.5em;
+        margin-block-start: 80px;
+        margin-block-end: 0px;
+        margin-inline-start: 250px;
+        margin-inline-end: 0px;
         font-weight: bold;
-        padding: 5px 10px; /* Espaciado interno */
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra para mejorar la estética */
+        unicode-bidi: isolate;  
     }
-.pagination .page-item { 
-    margin: 0 5px; 
-    list-style: none; 
-    height: 30px; 
-    display: flex; 
-    align-items: center; 
-}
-.pagination .page-link { 
-    text-decoration: none; 
-    color: #000; 
-    font-size: 18px; 
-    padding: 10px 15px; /* Aumentar el padding para aumentar el área activa */
-}
-.pagination .page-item.active .page-link { 
-    background-color: #505c14; 
-    color: #000; 
-    border-radius: 5px; 
-}
-.page-link-container {
-    padding: 10px; /* Ajusta el padding según sea necesario para aumentar el área activa */
-    display: inline-block; /* Asegura que el contenedor ocupe solo el espacio necesario */
-}
-@media (max-width: 500px) {
+    .pagination { /*Rectangulo donde estan los numeros*/
+            position: absolute; /* Cambiado a absolute para estar dentro del contenedor */
+            bottom: 20px; /* Ajusta esta distancia según tus necesidades */
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex; 
+            justify-content: center; 
+            z-index: 999; /* Asegura que la paginación esté sobre otros elementos */
+            background-color: #9EB23B;
+            border-radius: 12px;
+            font-weight: bold;
+            padding: 5px 10px; /* Espaciado interno */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra para mejorar la estética */
+        }
+    .pagination .page-item { 
+        margin: 0 5px; 
+        list-style: none; 
+        height: 30px; 
+        display: flex; 
+        align-items: center; 
+    }
+    .pagination .page-link { /*Clieckadores, o sea que se pueden apretar y hacer algo*/
+        text-decoration: none; 
+        color: #000; 
+        font-size: 18px; 
+        padding: 10px 15px; /* Aumentar el padding para aumentar el área activa */
+    }
+    .pagination .page-item.active .page-link { /*Encierra la pagina actual en el paginador*/
+        background-color: #505c14; 
+        color: #000; 
+        border-radius: 5px; 
+    }
+    .page-link-container {
+        padding: 10px; /* Ajusta el padding según sea necesario para aumentar el área activa */
+        display: inline-block; /* Asegura que el contenedor ocupe solo el espacio necesario */
+
+    }
+
+    .icon-responsive{
+        color: black;
+    }
+
+
+
     h2 {
-        margin-block-start: 70px;
-        margin-inline-start: 115px;
-    }
-    .table-container{
-        width: 80%;
-        left: 98px;
-        box-sizing: border-box;
-        word-wrap: break-word;
-    }
-    .btn-volver{
-        margin-top: -9px;
-        margin-left: 2px;
-    }
-    .table-container th {
-       margin-top: 20px;
-    }
-    .search-form{
-        left: 60px;
-        top: -10px;
-    }
-}
-@media (min-width: 501px) and (max-width: 767px){
-    h2 {
-        margin-block-start: 70px;
-        margin-inline-start: 250px;
-    }
-    .table-container{
-        width: 55%;
-        left: 245px;
-        box-sizing: border-box;
-        word-wrap: break-word;
-    }
-    .btn-volver{
-        margin-top: -9px;
-        margin-left: 2px;
-    }
-    .table-container th {
-       margin-top: 20px;
-    }
-    .search-form{
-        top: -10px;
-    }
-}
-@media (min-width: 768px) {
-    h2 {
+        display: block;
+        font-size: 1.5em;
         margin-block-start: 70px;
         margin-inline-start: 250px;
+        font-weight: bold;
+        unicode-bidi: isolate;
     }
-    .table-container{
-        width: 65%;
-        left: 245px;
-        box-sizing: border-box;
-        word-wrap: break-word;
+    @media screen and (max-width: 500px) {
+        h2 {
+            margin-block-start: 70px;
+            margin-inline-start: 115px;
+        }
+
+        .table-container{
+            max-width: 80%;
+            left: 80px;
+            top: -110px;
+            box-sizing: border-box;
+            word-wrap: break-word;
+        }
+
+        .btn-volver{
+            margin-top: -9px;
+            margin-left: 2px;
+        }
+
+        .table-container th {
+            margin-top: 20px;
+        }
+
+        .search-form{
+            left: 60px;
+            top: -10px;
+        }
+
+        .search-form input[type="text"] {
+            max-width: 60%;
+            left: -20px;
+            position: static;
+        }
+
+        .search-form button {
+            max-width: 40%;
+            position: static;
+
+             
+        }
+
+        .pagination{
+            max-width: 90%;
+        }
+
+        th.total-column,
+        td.total-column {
+            align-items: flex-start;
+            display: none;
+        }
+
+        .add-icon{
+            position: relative;
+            left: 215px;
+            top: -105px;
+        }
+
+
     }
-    .btn-volver{
-        margin-top: -9px;
-        margin-left: 2px;
+
+    @media (min-width: 501px) and (max-width: 767px) {
+        h2 {
+            margin-block-start: 70px;
+            margin-inline-start: 250px;
+        }
+
+        .table-container{
+            max-width: 60%;
+            left: 230px;
+            top: -110px;
+            box-sizing: border-box;
+            word-wrap: break-word;
+        }
+
+        .btn-volver{
+            margin-top: -9px;
+            margin-left: 2px;
+        }
+
+        .table-container th {
+            margin-top: 20px;
+        }
+
+        .search-form{
+            top: -10px;
+            position: static;
+        }
+
+        .search-form button{
+            top: -10px;
+            position: static;
+        }
+
+        .add-icon{
+            position: relative;
+            left: 345px;
+            top: -105px;
+        }
     }
-    .table-container th {
-       margin-top: 20px;
+
+    @media screen and (min-width: 768px) and (max-width: 1024px) {
+        h2 {
+            margin-block-start: 70px;
+            margin-inline-start: 250px;
+        }
+
+        .table-container{
+            max-width: 70%;
+            left: 230px;
+            top: -110px;
+            box-sizing: border-box;
+            word-wrap: break-word;
+        }
+
+        .btn-volver{
+            margin-top: -9px;
+            margin-left: 2px;
+        }
+
+        .table-container th {
+         margin-top: 20px;
+        }
+
+        .search-form{
+            top: -10px;
+        }
+
+        .add-icon{
+            position: relative;
+            left: 345px;
+            top: -105px;
+        }
     }
-    .search-form{
-        top: -10px;
-    }
-}
+
+    @media screen and (min-width: 1025px){
+        h2 {
+            margin-block-start: 70px;
+            margin-inline-start: 250px;
+        }
+
+        .table-container{
+            max-width: 70%;
+            left: 230px;
+            top: -110px;
+            box-sizing: border-box;
+            word-wrap: break-word;
+        }
+
+        .btn-volver{
+            margin-top: -9px;
+            margin-left: 2px;
+        }
+
+        .table-container th {
+         margin-top: 20px;
+        }
+
+        .search-form{
+            top: -10px;
+        }
+
+        .add-icon{
+            position: relative;
+            left: 345px;
+            top: -105px;
+        }
+      
+     }
+    
 </style>
 {% endblock extra_css %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <header class='mb-5'>
-    <div class="title-button-container">
-        <h2 class='h2 medium text-blue'>Ventas</h2>
+    <div class="h2">
+        <h2 class='h2'>Ventas</h2>
         <a href="{% url 'venta_crear' %}" class="btn btn-primary">
-            <i class="fas fa-plus" style="color: #000000"></i>
+            <i class="fas fa-plus add-icon" style="color: #000000"></i>
         </a>
     </div>
 </header>
@@ -230,7 +345,7 @@ h2 {
             <tr>
                 <th width="15%" scope="col">Cliente</th>
                 <th width="25%" scope="col">Orden</th>
-                <th width="25%" scope="col">Total</th>
+                <th width="25%" scope="col" class="total-column">Total</th>
                 <th width="30%" scope="col">Acciones</th>
             </tr>
         </thead>
@@ -239,10 +354,10 @@ h2 {
                 <tr>
                     <td>{{ orden.cliente_venta }}</td>
                     <td>#{{ orden.numero_orden }}</td>
-                    <td>${{ orden.total_venta }}</td>
+                    <td class="total-column">${{ orden.total_venta }}</td>
                     <td>
-                        <a href="{% url 'detalle_orden_venta' orden_id=orden.numero_orden %}" class="btn btn-primary" style="margin-top: 40px;">
-                            <i class="fas fa-eye" style="color: #000000;"></i>
+                        <a href="{% url 'detalle_orden_venta' orden_id=orden.numero_orden %}" class="btn btn-primary" style="margin-top: 4px;">
+                            <i class="fas fa-eye eye-icon" style="color: #000000;"></i>
                         </a>
                     </td>
                 </tr>
@@ -255,12 +370,12 @@ h2 {
         {% if ordenes.has_previous %}
             <li class="page-item">
                 <a class="page-link" href="?page={{ ordenes.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">
-                    <i class="fas fa-chevron-left"></i> <!-- Icono de flecha hacia la izquierda -->
+                    <i class="fas fa-chevron-left icon-responsive"></i> <!-- Icono de flecha hacia la izquierda -->
                 </a>
             </li>
         {% else %}
             <li class="page-item disabled">
-                <span class="page-link"><i class="fas fa-chevron-left"></i></span>
+                <span class="page-link"><i class="fas fa-chevron-left icon-responsive"></i></span>
             </li>
         {% endif %}
         {% for i in ordenes.paginator.page_range %}
@@ -271,12 +386,12 @@ h2 {
         {% if ordenes.has_next %}
             <li class="page-item">
                 <a class="page-link" href="?page={{ ordenes.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">
-                    <i class="fas fa-chevron-right"></i> <!-- Icono de flecha hacia la derecha -->
+                    <i class="fas fa-chevron-right  icon-responsive"></i> <!-- Icono de flecha hacia la derecha -->
                 </a>
             </li>
         {% else %}
             <li class="page-item disabled">
-                <span class="page-link"><i class="fas fa-chevron-right"></i></span>
+                <span class="page-link"><i class="fas fa-chevron-right  icon-responsive"></i></span>
             </li>
         {% endif %}
     </ul>

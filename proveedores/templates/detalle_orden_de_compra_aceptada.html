@@ -15,50 +15,41 @@
         background-color: #f7f7f7;
     }
     .container {
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        h1 {
-            color: #333;
-            text-align: center;
-        }
-        .detail-item {
-            margin-bottom: 10px;
-        }
-        .detail-item p {
-            margin: 5px 0;
-        }
-        .product-list {
-            border-collapse: collapse;
-            width: 100%;
-            margin-top: 20px;
-        }
-        .product-list th, .product-list td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-        .product-list th {
-            background-color: #f2f2f2;
-        }
-        .total {
-            text-align: right;
-            margin-top: 20px;
-            font-size: 1.2em;
-            font-weight: bold;
-        }
-    section {
-        background-color: white;
-        max-width: 900px;
-        margin: 50px auto;
-        padding: 20px;
+        background-color: #fff;
         border-radius: 10px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        display: flex;
+        padding: 20px;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    h1 {
+        color: #333;
+        text-align: center;
+    }
+    .detail-item {
+        margin-bottom: 10px;
+    }
+    .detail-item p {
+        margin: 5px 0;
+    }
+    .product-list {
+        border-collapse: collapse;
+        width: 100%;
+        margin-top: 20px;
+    }
+    .product-list th, .product-list td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+    .product-list th {
+        background-color: #f2f2f2;
+    }
+    .total {
+        text-align: right;
+        margin-top: 20px;
+        font-size: 1.2em;
+        font-weight: bold;
     }
 
     .avatar {
@@ -118,20 +109,65 @@
         color: red;
         text-align: center;
     }
-    
 
-    @media (max-width: 768px) {
-        section {
-            flex-direction: column;
-            align-items: center;
-        }
+    h2 {
+        display: block;
+        font-size: 1.5em;
+        margin-block-start: 70px;
+        margin-inline-start: 250px;
+        font-weight: bold;
+        unicode-bidi: isolate;
     }
+
+    @media screen and (max-width: 500px) {
+        h2 {
+            margin-block-start: 70px;
+            margin-inline-start: 115px;
+        }
+
+        th.precioun-column,
+        td.precioun-column {
+            align-items: flex-start;
+            display: none;
+        }
+
+        .button{
+            position: relative;
+            top:40px;
+        }
+
+
+        }
+
+        @media (min-width: 501px) and (max-width: 767px) {
+            
+            .button{
+                position: relative;
+                top:40px;
+            }
+        }
+
+        @media screen and (min-width: 768px) and (max-width: 1024px) {
+            .button{
+                position: relative;
+                top:40px;
+            }
+
+        }
+
+        @media screen and (min-width: 1025px){ 
+            .button{
+                position: relative;
+                top:40px;
+            }          
+        }
 </style>
 {% load multiply_filter %}
-<nav id="proveedorver" class="proveedorver">
 <header class='mb-4'>
-    <h2 class='h2 medium text-blue'>Detalles de la Compra</h2>
+    <h2 class='h2'>Detalles de la Compra</h2>
 </header>
+{% load multiply_filter %}
+<nav id="proveedorver" class="proveedorver">
 <div class="col-md-11">
     <div class="mb-3">
                 {% csrf_token %}

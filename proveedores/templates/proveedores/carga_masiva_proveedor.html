@@ -16,7 +16,8 @@
         text-align: center;
         max-width: 500px;
         width: 100%;
-        margin: auto;
+        margin-inline-start: 500px;
+        margin-top: 80px;
         border-radius: 10px; /* Agregar bordes redondeados */
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Agregar sombra */
         
@@ -27,7 +28,7 @@
         color: #333;
     }
 
-    .download-link, .back-link {
+    .download-link {
         display: block;
         margin: 10px 0;
         color: #1976D2;
@@ -57,7 +58,6 @@
         margin: 0 auto;
         margin-bottom: 30px;
         max-width: 200px;
-        
     }
 
     .file-label:hover {
@@ -71,6 +71,19 @@
     .upload-button {
         background-color: rgba(158, 178, 59, 0.8);
         color: white;
+        height: 44px;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background 0.3s;
+        margin-bottom: 20px;
+    }
+
+    .back-link {
+        background-color: rgba(158, 178, 59, 0.8);
+        color: white;
+        height: 44px;
         border: none;
         padding: 10px 20px;
         border-radius: 4px;
@@ -81,6 +94,110 @@
 
     .upload-button:hover {
         background-color: #7CB342;
+    }
+
+    .back-link:hover {
+        background-color: #7CB342;
+    }
+
+    @media screen and (max-width: 500px ) {
+        .upload-container {
+            width: 83%;
+            margin-inline-start: 90px;
+            box-sizing: border-box;
+            word-wrap: break-word;
+        }
+
+        .download-link {
+            width: 100%;
+            box-sizing: border-box;
+            word-wrap: break-word;
+        }
+
+        .file-label {
+            width: 80%;
+            box-sizing: border-box;
+            word-wrap: break-word;
+        }
+
+        .upload-button {
+            width: 33%;
+            height: 43px;
+            box-sizing: border-box;
+            word-wrap: break-word;
+        }
+
+        .back-link {
+            width: 50%;
+            box-sizing: border-box;
+            word-wrap: break-word;
+        }
+    }
+
+    @media screen and (min-width: 501px ) and (max-width: 767px) {
+        .upload-container {
+            width: 53%;
+            margin-inline-start: 229px;
+            box-sizing: border-box;
+            word-wrap: break-word;
+        }
+
+        .download-link {
+            width: 100%;
+            box-sizing: border-box;
+            word-wrap: break-word;
+        }
+
+        .file-label {
+            width: 100%;
+            box-sizing: border-box;
+            word-wrap: break-word;
+        }
+
+        .upload-button {
+            width: 80%;
+            box-sizing: border-box;
+            word-wrap: break-word;
+        }
+
+        .back-link {
+            width: 100%;
+            box-sizing: border-box;
+            word-wrap: break-word;
+        }
+    }
+
+    @media screen and (min-width: 768px) {
+        .upload-container {
+            width: 65%;
+            box-sizing: border-box;
+            word-wrap: break-word;
+        }
+
+        .download-link, .back-link {
+            width: 100%;
+            box-sizing: border-box;
+            word-wrap: break-word;
+        }
+
+        .file-label {
+            width: 80%;
+            box-sizing: border-box;
+            word-wrap: break-word;
+        }
+
+        .upload-button {
+            width: 90px;
+            height: 43px;
+            box-sizing: border-box;
+            word-wrap: break-word;
+        }
+
+        .back-link {
+            width: 50%;
+            box-sizing: border-box;
+            word-wrap: break-word;
+        }
     }
 </style>
 {% endblock %}
@@ -98,8 +215,8 @@
                             <input type="file" name="myfile" id="file" required>
                         </label>
                         <button type="submit" class="upload-button">Cargar</button>
+                        <a href="{% url 'proveedores_main' %}" class="back-link">Volver</a>
                     </form>
-                    <a href="{% url 'proveedores_main' %}" class="back-link">Regresar</a>
                 {% endif %}
             </div>
         </div>

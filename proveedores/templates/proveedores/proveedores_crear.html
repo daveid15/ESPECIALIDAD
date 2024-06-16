@@ -92,40 +92,57 @@
         unicode-bidi: isolate;
     }
 
-    @media (max-width: 500px) {
+    @media screen and (max-width: 500px) {
         h2 {
             margin-block-start: 70px;
             margin-inline-start: 115px;
         }
 
-        section {
-            flex-direction: column;
-            align-items: center;
-        }
-
         .form-control {
-            width: 60%;
+            display: block;
+            width: 100%;
             word-wrap: break-word;
         }
 
         .button {
-            width: 110px;
-            height: 44px;
+            width: 90px;
+            height: 47px;
         }
 
     }
-    @media (min-width: 501px) {
+
+    @media (min-width: 501px) and (max-width: 767px) {
         h2 {
             margin-block-start: 70px;
             margin-inline-start: 250px;
         }
-        section {
-            flex-direction: column;
-            align-items: center;
+
+        .form-control {
+            display: block;
+            width: 100%;
+            word-wrap: break-word;
+        }
+
+        .button {
+            width: 90px;
+            height: 47px;
+        }
+
+    }
+
+    @media screen and (min-width: 768px) and (max-width: 1024px) {
+        h2 {
+            margin-block-start: 70px;
+            margin-inline-start: 250px;
+        }
+
+        .profileedit{
+            width: 700px;
         }
 
         .form-control {
-            width: 90%;
+            display: block;
+            width: 100%;
             word-wrap: break-word;
         }
 
@@ -134,6 +151,29 @@
             height: 47px;
         }
     }
+
+    @media screen and (min-width: 1025px){
+        h2 {
+            margin-block-start: 70px;
+            margin-inline-start: 250px;
+        }
+
+        .profileedit{
+            width: 900px;
+        }
+
+        .form-control {
+            display: flexbox;
+            width: 280px;
+            word-wrap: break-word;
+        }
+
+        .button {
+            width: 90px;
+            height: 47px;
+        }
+    }
+
 </style>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <header class='mb-4'>
@@ -150,29 +190,24 @@
                             <div class="mb-0 col-md-6">
                                 <label for="proveedor_name" class="form-label">Nombre</label>
                                 <input type="text" class="form-control" name="proveedor_name" pattern="[A-Za-zÑñáéíóúÁÉÍÓÚ\s]+" id="proveedor_name" placeholder="Nombre" style="text-transform: capitalize;" required>
-                            </div>
-                            <div class="mb-0 col-md-6">
                                 <label for="proveedor_last_name" class="form-label">Apellido</label>
                                 <input type="text" class="form-control" name="proveedor_last_name" pattern="[A-Za-zÑñáéíóúÁÉÍÓÚ\s]+" id="proveedor_last_name" placeholder="Apellido" style="text-transform: capitalize;" required>
                             </div>
                             <div class="mb-0 col-md-6">
-                                <label for="proveedor_rut" class="form-label">Rut</label>
+                                <label for="proveedor_rut" class="form-label">Rut
+                                    ‎‎ ‎ ‎ ‎‎ ‎      ‎‎‎‎‎ ‎ ‎ ‎‎ </label>
                                 <input type="text" class="form-control" name="proveedor_rut" id="proveedor_rut" placeholder="Rut" required>
-                            </div>
-                            <div class="mb-0 col-md-6">
-                                <label for="proveedor_mail" class="form-label">Correo electrónico</label>
+                                <label for="proveedor_mail" class="form-label">Correo ‎ ‎ ‎ ‎</label>
                                 <input type="email" class="form-control" name="proveedor_mail" id="proveedor_mail" placeholder="nombre@gmail.com" required>
                             </div>
                             <div class="mb-0 col-md-6">
                                 <label for="proveedor_phone" class="form-label">Teléfono</label>
                                 <input type="text" class="form-control" name="proveedor_phone" id="proveedor_phone" pattern="[0-9]{9}" placeholder="Teléfono" required>
-                            </div>
-                            <div class="mb-0 col-md-12">
                                 <label for="proveedor_address" class="form-label">Dirección</label>
                                 <input type="text" class="form-control" name="proveedor_address" id="proveedor_address" placeholder="Dirección" required>
                             </div>
                             <div class="col-12 col-sm-4 mb-3">
-                                <label for="region">Región</label>
+                                <label for="region">Región‎ ‎ ‎ ‎</label>
                                 <select name="region" id="region" class="form-control border border-danger" required>
                                     <option value="">Seleccione una región</option>
                                     <!-- Las opciones serán agregadas dinámicamente -->
@@ -232,8 +267,8 @@
                                 </div>
                             </div>
                             <div class="d-flex justify-content-center">
-                                <button class="button" type="submit">Guardar</button>
-                                <a href="{% url 'proveedores_main' %}" class="button" style="margin-left: 10px;">Regresar</a>
+                                <button class="button" type="submit">Crear</button>
+                                <a href="{% url 'proveedores_main' %}" class="button" style="margin-left: 10px;">Volver</a>
                             </div>
                             {% if message %}
                             <p class="message">{{ message }}</p>
