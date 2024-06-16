@@ -14,15 +14,6 @@
             background-color: #f7f7f7;
         }
     
-        section {
-            background-color: white;
-            max-width: 900px;
-            margin: 50px auto;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-    
         .avatar {
             width: 100px;
             height: 100px;
@@ -61,7 +52,7 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            width: 21%;
+            width: 13%;
             margin-top: 10px;
             margin-bottom: 10px;
             font-size: 16px;
@@ -91,58 +82,58 @@
         }
 
         h2 {
-    display: block;
-    font-size: 1.5em;
-    margin-block-start: 80px;
-    margin-block-end: 0px;
-    margin-inline-start: 250px;
-    margin-inline-end: 0px;
-    font-weight: bold;
-    unicode-bidi: isolate;
-    }
-
-    @media (max-width: 500px) {
-        h2{
-            margin-block-start: 70px;
-            margin-inline-start: 115px;
-        }
-
-        section {
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .form-control{
-            width: 60%;
-            word-wrap: break-word;
-        }
-
-        .button{
-            width: 90px;
-            height: 44px;
-        }
-
-    }
-    @media (min-width: 501px) {
-        h2{
-            margin-block-start: 70px;
+            display: block;
+            font-size: 1.5em;
+            margin-block-start: 80px;
+            margin-block-end: 0px;
             margin-inline-start: 250px;
-        }
-        section {
-            flex-direction: column;
-            align-items: center;
+            margin-inline-end: 0px;
+            font-weight: bold;
+            unicode-bidi: isolate;
+            }
+
+        @media screen and (max-width: 500px) {
+            h2{
+                margin-block-start: 70px;
+                margin-inline-start: 115px;
+            }
+
+            .form-control{
+                display: block;
+                width: 100%;
+                word-wrap: break-word;
+            }
+
+            .button{
+                width: 90px;
+                height: 44px;
+            }
         }
 
-        .form-control{
-            width: 90%;
-            word-wrap: break-word;
+        @media (min-width: 501px) and (max-width: 767px) {
+            h2{
+                margin-block-start: 70px;
+                margin-inline-start: 250px;
+            }
+    
+            .form-control{
+                display: block;
+                width: 90%;
+                word-wrap: break-word;
+            }
+
+            .button{
+                width: 90px;
+                height: 47px;
+            }
         }
 
-        .button{
-            width: 90px;
-            height: 47px;
+        @media screen and (min-width: 768px) and (max-width: 1024px) {
         }
-    }
+
+        @media screen and (min-width: 1025px){
+
+        }
 
 
       
