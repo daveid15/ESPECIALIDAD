@@ -74,31 +74,113 @@
     }
 
     h2 {
+        color: #333;
+        font-size: 30px;
         display: block;
         font-size: 1.5em;
         margin-block-start: 70px;
         margin-inline-start: 250px;
         font-weight: bold;
         unicode-bidi: isolate;
-    }
+        }
 
     @media screen and (max-width: 500px) {
+        h2{
+            font-size: 30px;
+            width: fit-content;
+            display: block;
+            position: relative;
+            left: -125px;
+            justify-content: center;
+            white-space: nowrap; /* Evitar que el texto dentro del botón se corte */
+            word-wrap: break-word;
+        }
+
+        .proveedorver{
+            max-width: 370px;
+            height: 600px;
+        }
+
+        .button{
+            position: relative;
+            top: 255px;
+        }
+
+
 
     }
 
     @media (min-width: 501px) and (max-width: 767px) {
 
+        h2{
+            font-size: 30px;
+            width: fit-content;
+            display: block;
+            position: relative;
+            left: 10px;
+            justify-content: center;
+            white-space: nowrap; /* Evitar que el texto dentro del botón se corte */
+            word-wrap: break-word;
+        }
+
+        .proveedorver{
+            max-width: 490px;
+            height: 600px;
+        }
+        .button{
+            position: relative;
+            top: 255px;
+        }
+
     }
 
     @media screen and (min-width: 768px) and (max-width: 1024px) {
+        h2{
+            font-size: 30px;
+            width: fit-content;
+            display: block;
+            position: relative;
+            left: 10px;
+            justify-content: center;
+            white-space: nowrap; /* Evitar que el texto dentro del botón se corte */
+            word-wrap: break-word;
+        }
+
+        .proveedorver{
+            max-width: 700px;
+            height: 600px;
+        }
+        .button{
+            position: relative;
+            top: 255px;
+        }
+
     }
 
     @media screen and (min-width: 1025px){
+        h2{
+            font-size: 30px;
+            width: fit-content;
+            display: block;
+            position: relative;
+            left: 10px;
+            justify-content: center;
+            white-space: nowrap; /* Evitar que el texto dentro del botón se corte */
+            word-wrap: break-word;
+        }
+        .proveedorver{
+            max-width: 700px;
+            height: 600px;
+        }
+
+        .proveedorver{
+            max-width: 325px;
+        }
 
     }
 </style>
 <header class='mb-4'>
-    <h2 class='h2'>Ver Proveedor</h2>
+    <h2 class='h2'>Detalles</h2>
 </header>
 <nav id="proveedorver" class="proveedorver">
 <div class="col-md-11">
@@ -106,35 +188,36 @@
             <form method="post" action="{% url 'proveedor_ver' proveedor_id=proveedor_data.id %}">
                 {% csrf_token %}
                 <div class="col-12 col-lg-12 row row-cols-1 row-cols-md-1 g-2 p-lg-0-5">
-                    <div class="mb-0 col-md-12">
+                    <div class="mb-0 col-md-12" style="text-align: center;">
                         <label for="proveedor_name" class="titulo"><strong>{{proveedor_data.proveedor_name}} {{proveedor_data.proveedor_last_name}}</strong></label>
                     </div>
-                    <div class="mb-0 col-md-12">
-                        <label for="proveedor_rut" class="form-label">RUN: </label>
+                    <div class="mb-0 col-md-12" style="text-align: center;">
+                        <!-- <label for="proveedor_rut" class="form-label">RUN: </label> -->
                         <span class="form-label" id="proveedor_rut">{{proveedor_data.proveedor_rut}}</span>
                     </div>
-                    <div class="mb-0 col-md-12">
-                        <label for="proveedor_mail" class="form-label">Correo: </label>
+                    <div class="mb-0 col-md-12" style="text-align: center;">
+                        <!-- <label for="proveedor_mail" class="form-label">Correo: </label> -->
                         <span class="form-label" id="proveedor_mail">{{proveedor_data.proveedor_mail}}</span>
                     </div>
-                    <div class="mb-0 col-md-12">
-                        <label for="proveedor_phone" class="form-label">Número de contacto:</label>
+                    <div class="mb-0 col-md-12" style="text-align: center;">
+                        <!-- <label for="proveedor_phone" class="form-label">Número de contacto:</label> -->
                         <span class="form-label" id="proveedor_phone">{{proveedor_data.proveedor_phone}}</span>
                     </div>
-                    <div class="mb-0 col-md-12">
-                        <label for="proveedor_addres" class="form-label">Dirección:</label>
+                    <div class="mb-0 col-md-12" style="text-align: center;">
+                        <!-- <label for="proveedor_addres" class="form-label">Dirección:</label> -->
                         <span class="form-label" id="proveedor_address">{{proveedor_data.proveedor_address}}, {{proveedor_data.proveedor_comuna}}, {{proveedor_data.proveedor_region}}.</span>
                     </div>
-                    <table class="product-list">
+                    
+                    <table class="product-list" style="margin-top: 20px;">
                         <thead>
-                            <tr>
-                                <th>Productos Asociados</th>
+                            <tr style="color: #333;">
+                                <th>Productos Asociados:</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for producto in proveedor_productos %}
                             <tr>
-                                <td>{{ producto.producto.supply_name }}</td>
+                                <td>  ●  {{ producto.producto.supply_name }}</td>
                             </tr>
                             {% endfor %}
                         </tbody>
