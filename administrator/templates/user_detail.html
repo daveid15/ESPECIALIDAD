@@ -78,18 +78,20 @@ Detalles del Usuario
         height: 220px;
         border-radius: 50%;
         overflow: hidden;
-        border: 5px solid #87963C; /* Color del borde */
         background-color: #f7f7f7; /* Color de fondo */
         display: flex;
         justify-content: center;
         align-items: center;
         margin-bottom: 20px;
+        left: 200px;
+        position: relative;
     }
 
     .avatar {
         width: 200px;
         height: 200px;
         border-radius: 50%;
+
     }
 
     .titulo {
@@ -97,6 +99,7 @@ Detalles del Usuario
         color: #333;
         font-size: 36px;
         margin: 0;
+        text-align: center;
     }
 
     .form-label {
@@ -148,36 +151,91 @@ Detalles del Usuario
     }
 
     h2 { 
-            display: block; 
-            font-size: 1.5em; 
-            margin-block-start: 70px;
-            margin-inline-start: 250px; 
-            font-weight: bold; 
-            unicode-bidi: isolate; 
-        }
+        display: block; 
+        font-size: 1.5em; 
+        margin-block-start: 70px;
+        margin-inline-start: 250px; 
+        font-weight: bold; 
+        unicode-bidi: isolate; 
+    }
+
+    .user-data-box {
+        border: 2.5px solid #333; /* Color del borde */
+        border-radius: 10px;
+        padding: 20px;
+        margin-top: 20px;
+        text-align: center;
+    }
 
     @media screen and (max-width: 500px) {
+        h2 { 
+            margin-block-start: 70px; 
+            margin-inline-start: 115px; 
+        }
+
+        .avatar-container{
+            left: 50px;
+            position: relative;
+        }
+
+        .button{
+            position: relative;
+            bottom: -20px;
+        }
+
+        .proveedorver{
+            height: 550px;
+        }
 
     }
 
     @media (min-width: 501px) and (max-width: 767px) {
+        h2 { 
+            margin-block-start: 70px; 
+            margin-inline-start: 250px; 
+        }
+
+        .avatar-container{
+            left: 110px;
+        }
+
+        .proveedorver{
+            height: 550px;
+        }
+
+        .button{
+            position: relative;
+            bottom: -20px;
+        }
 
     }
 
     @media screen and (min-width: 768px) and (max-width: 1024px) {
+        h2 { 
+            margin-block-start: 70px; 
+            margin-inline-start: 250px; 
+        }
+
+        .proveedorver{
+            height: 550px;
+        }
+
+        .button{
+            position: relative;
+            bottom: -20px;
+        }
     }
 
     @media screen and (min-width: 1025px){
-        .avatar-container{
-            left: 200px;
-            position: relative;
+
+        .proveedorver{
+            height: 550px;
         }
 
-        .titulo{
-            left: 230px;
+        .button{
             position: relative;
+            bottom: -20px;
         }
-
     }
 </style>
 <header class='mb-4'>
@@ -202,21 +260,23 @@ Detalles del Usuario
                     {% endif %}
                 </div>
             </div>
-            <div class="mb-0 col-md-12">
-                <label for="proveedor" class="form-label">RUT: </label>
-                <span class="form-label" id="proveedor">{{profile_data.rut}}</span>
-            </div>
-            <div class="mb-0 col-md-12">
-                <label for="monto" class="form-label">Email:</label>
-                <span class="form-label" id="monto">{{user_data.email}}</span>
-            </div>
-            <div class="mb-0 col-md-12">
-                <label for="monto" class="form-label">Número de contacto:</label>
-                <span class="form-label" id="monto">{{profile_data.mobile}}</span>
-            </div>
-            <div class="mb-0 col-md-12">
-                <label for="monto" class="form-label">Dirección:</label>
-                <span class="form-label" id="monto">{{profile_data.address}}</span>
+            <div class="user-data-box">
+                <div class="mb-0 col-md-12">
+                    <label for="proveedor" class="form-label"><strong>RUT:</strong> </label>
+                    <span class="form-label" id="proveedor">{{profile_data.rut}}</span>
+                </div>
+                <div class="mb-0 col-md-12">
+                    <label for="monto" class="form-label"><strong>Contacto:</strong></label>
+                    <span class="form-label" id="monto">{{profile_data.mobile}}</span>
+                </div>
+                <div class="mb-0 col-md-12">
+                    <label for="monto" class="form-label"><strong>Correo:</strong></label>
+                    <span class="form-label" id="monto">{{user_data.email}}</span>
+                </div>              
+                <div class="mb-0 col-md-12">
+                    <label for="monto" class="form-label"><strong>Dirección:</strong></label>
+                    <span class="form-label" id="monto">{{profile_data.address}}</span>
+                </div>
             </div>
         </div>
         <div class="col-12 col-sm-6 mb-3">
@@ -226,5 +286,3 @@ Detalles del Usuario
 </div>
 </nav>
 {% endblock %}
-
-

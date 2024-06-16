@@ -361,26 +361,26 @@ def import_file_proveedor(request):
         return redirect('check_group_main')
     
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-    response['Content-Disposition'] = 'attachment; filename="archivo_importacion_proveedors.xlsx"'
+    response['Content-Disposition'] = 'attachment; filename="archivo_importacion_proveedor.xlsx"'
 
     wb = Workbook()
     ws = wb.active
     ws.title = 'carga_masiva'
 
-    columns = ['proveedor_rut', 'proveedor_name', 'proveedor_last_name', 'proveedor_mail', 'proveedor_phone', 'proveedor_address', 'proveedor_region', 'proveedor_comuna', 'proveedor_insumo']
+    columns = ['Rut', 'Nombre', 'Apellido', 'Correo', 'Teléfono', 'Dirección', 'Región', 'Comuna', 'Insumo']
     ws.append(columns)
 
 
     example_data = [
-        'ej: Rut',
+        'ej: 17605812-2',
         'ej: Nombre proveedor',
         'ej: Apellido proveedor',
-        'abc@gmail.com',
-        '55642334',
-        'ej: Direccion',
-        'ej: Region',
-        'ej: Comuna',
-        'ej: Insumo'
+        'ej: bc@gmail.com',
+        'ej: 955642334',
+        'ej: Av. central 123',
+        'ej: Tarapacá',
+        'ej: Iquique',
+        'ej: Palta'
     ]
     ws.append(example_data)
 
@@ -526,7 +526,7 @@ def proveedores_activos(request):
             Q(proveedor_last_name__icontains=search))
 
     # Paginar los resultados
-    paginator = Paginator(proveedores_activos, 10)
+    paginator = Paginator(proveedores_activos, 5)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
@@ -561,7 +561,7 @@ def proveedores_eliminados(request):
     })
 def get_paginated_results(request, queryset):
     # Paginar los resultados
-    paginator = Paginator(queryset, 10)
+    paginator = Paginator(queryset, 5)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     return page_obj, paginator

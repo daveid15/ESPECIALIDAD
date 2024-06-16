@@ -335,16 +335,16 @@ def import_file_producto(request):
         return redirect('check_group_main')
 
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-    response['Content-Disposition'] = 'attachment; filename="archivo_importacion_productos.xlsx"'
+    response['Content-Disposition'] = 'attachment; filename="archivo_importacion_producto.xlsx"'
 
     wb = Workbook()
     ws = wb.active
     ws.title = 'carga_masiva'
 
-    columns = ['supply_name', 'supply_code', 'supply_unit', 'supply_stock_initial']
+    columns = ['Producto', 'Código', 'Unidad', 'Stock inicial']
     ws.append(columns)
 
-    example_data = ['ej: Nombre producto', 'SK1111', 'Kg', 10]
+    example_data = ['ej: Palta', 'ej: SK1111', 'ej: kg/LATA (330ml)', 'ej: 10']
     ws.append(example_data)
 
     wb.save(response)
@@ -423,7 +423,7 @@ def descarga_reporte_producto(request):
         ws = wb.add_sheet('Productos')
 
         row_num = 0
-        columns = ['Nombre', 'Código', 'Unidad']
+        columns = ['Producto', 'Código', 'Unidad']
         for col_num in range(len(columns)):
             ws.write(row_num, col_num, columns[col_num] ,font_style)
 

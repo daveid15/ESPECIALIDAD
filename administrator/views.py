@@ -382,7 +382,7 @@ def list_user_active(request, group_id, page=None):
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una área para la que no tiene permisos')
         return redirect('check_group_main')
 
-    search = request.GET.get('search')
+    search = request.GET.get('search','')
     
     if page is None:
         page = request.GET.get('page')
@@ -515,65 +515,24 @@ def import_file_user(request):
         return redirect('check_group_main')
     
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-    response['Content-Disposition'] = 'attachment; filename="archivo_importacion_user.xlsx"'
+    response['Content-Disposition'] = 'attachment; filename="archivo_importacion_usuario.xlsx"'
 
     wb = Workbook()
     ws = wb.active
     ws.title = 'carga_masiva'
     
-    columns = ['User_Rut', 'User_email', 'User_firstname', 'User_lastname', 'User_cel', 'User_address', 'User_region', 'User_comuna']  # Añadido User_comuna
+    columns = ['Rut', 'Correo', 'Nombre', 'Apellido', ' Teléfono', 'Dirección', 'Región', 'Comuna']
     ws.append(columns)
     
-    example_data = [
-        'ej: Rut',
-        'ej: Email',
-        'ej: Nombre',
-        'ej: Apellido',
-        'ej: Telefono',
-        'ej: Direccion',
-        'ej: Region',
-        'ej: Comuna'  # Añadido ejemplo para la comuna
-    ]
-    ws.append(example_data)
-    
-    wb.save(response)
-    return response
-
-@login_required
-def carga_masiva_user(request):
-    profile = Profile.objects.get(user_id=request.user.id)
-    if profile.group_id != 1:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una área para la que no tiene permisos')
-        return redirect('check_group_main')
-    template_name = 'administrator/carga_masiva_user.html'
-    return render(request, template_name, {'profiles': profile})
-
-@login_required
-def import_file_user(request):
-    profiles = Profile.objects.get(user_id=request.user.id)
-    if profiles.group_id != 1:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una área para la que no tiene permisos')
-        return redirect('check_group_main')
-    
-    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-    response['Content-Disposition'] = 'attachment; filename="archivo_importacion_user.xlsx"'
-
-    wb = Workbook()
-    ws = wb.active
-    ws.title = 'carga_masiva'
-    
-    columns = ['User_Rut', 'User_email', 'User_firstname', 'User_lastname', 'User_cel', 'User_address', 'User_region', 'User_comuna']  # Añadido User_comuna
-    ws.append(columns)
-    
-    example_data = [
-        'ej: Rut',
-        'ej: Email',
-        'ej: Nombre',
-        'ej: Apellido',
-        'ej: Telefono',
-        'ej: Direccion',
-        'ej: Region',
-        'ej: Comuna'  # Añadido ejemplo para la comuna
+    example_data = [ 
+        'ej: 17605812-2',
+        'ej: bc@gmail.com',
+        'ej: Nombre usuario',
+        'ej: Apellido usuario',
+        'ej: 955642334',
+        'ej: Av. central 123',
+        'ej: Tarapacá',
+        'ej: Iquique'
     ]
     ws.append(example_data)
     
