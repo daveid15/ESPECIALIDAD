@@ -173,6 +173,7 @@
 
 </style>
 <!---->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <main role="main">
         <div class="container col-12 mt-3">
             <h2 class="h2">Editar usuario</h2>
@@ -213,27 +214,17 @@
                                 <input type="text" class="form-control border border-danger" value="{{profile_data.address}}"  name="address" required/>
                             </div>
                             <div class="col-12 col-sm-4 mb-3">
-                                <label for="region">Región</label>
-                                <select name="region" id="region" value = "{profile_data.region}" class="form-control border border-danger" required>
+                                <label for="region">Región‎ ‎ ‎ ‎ ‎ ‎   </label>
+                                <select name="region" id="region" class="form-control border border-danger" required>
                                     <option value="">Seleccione una región</option>
-                                    <option value="Region Metropolitana de Santiago" {% if profile_data.region == "Region Metropolitana de Santiago" %}selected{% endif %}>Región Metropolitana de Santiago</option>
-                                </select>      
+                                    <!-- Las opciones serán agregadas dinámicamente -->
+                                </select>
+                                <label for="comuna">Comuna</label>
+                                <select name="comuna" id="comuna" class="form-control border border-danger" required>
+                                    <option value="">Seleccione una comuna</option>
+                                    <!-- Las opciones serán agregadas dinámicamente -->
+                                </select>
                             </div>
-                        </div>    
-                        <div class="col-12 col-sm-4 mb-3">
-                            <label for="comuna">Comuna</label>
-                            <select name="comuna" id="comuna" class="form-control border border-danger" required>
-                                <option value="">Seleccione una comuna</option>
-                                <optgroup label="Región Metropolitana de Santiago">
-                                    <option value="Providencia" {% if profile_data.comuna == "Providencia" %}selected{% endif %}>Providencia</option>
-                                    <option value="Santiago" {% if profile_data.comuna == "Santiago" %}selected{% endif %}>Santiago</option>
-                                    <option value="San Bernardo" {% if profile_data.comuna == "San Bernardo" %}selected{% endif %}>San Bernardo</option>
-                                    <option value="Maipú" {% if profile_data.comuna == "Maipú" %}selected{% endif %}>Maipú</option>
-                                    <option value="Buin" {% if profile_data.comuna == "Buin" %}selected{% endif %}>Buin</option>
-                                </optgroup>
-                            </select>
-                        </div>        
-                    </div>
                     </div>
                     <div class="row"> 
                         <div class="col-12 col-sm-6 mb-4">
@@ -246,4 +237,101 @@
         </div>
     </nav>
     </main>
+<script>
+        var RegionesYcomunas = {
+            "regiones": [
+                {
+                    "NombreRegion": "Arica y Parinacota",
+                    "comunas": ["Arica", "Camarones", "Putre", "General Lagos"]
+                },
+                {
+                    "NombreRegion": "Tarapacá",
+                    "comunas": ["Iquique", "Alto Hospicio", "Pozo Almonte", "Camiña", "Colchane", "Huara", "Pica"]
+                },
+                {
+                    "NombreRegion": "Antofagasta",
+                    "comunas": ["Antofagasta", "Mejillones", "Sierra Gorda", "Taltal", "Calama", "Ollagüe", "San Pedro de Atacama", "Tocopilla", "María Elena"]
+                },
+                {
+                    "NombreRegion": "Atacama",
+                    "comunas": ["Copiapó", "Caldera", "Tierra Amarilla", "Chañaral", "Diego de Almagro", "Vallenar", "Alto del Carmen", "Freirina", "Huasco"]
+                },
+                {
+                    "NombreRegion": "Coquimbo",
+                    "comunas": ["La Serena", "Coquimbo", "Andacollo", "La Higuera", "Paiguano", "Vicuña", "Illapel", "Canela", "Los Vilos", "Salamanca", "Ovalle", "Combarbalá", "Monte Patria", "Punitaqui", "Río Hurtado"]
+                },
+                {
+                    "NombreRegion": "REGIÓN DE VALPARAÍSO",
+                    "comunas": ["ALGARROBO", "CABILDO", "CALERA", "CALLE LARGA", "CARTAGENA", "CASABLANCA", "CATEMU", "CONCÓN", "CURACAVÍ", "EL QUISCO", "EL TABO", "HIJUELAS", "ISLA DE PASCUA", "JUAN FERNÁNDEZ", "LA CRUZ", "LA LIGUA", "LIMACHE", "LLAILLAY", "LOS ANDES", "NOGALES", "OLMUÉ", "PANQUEHUE", "PAPUDO", "PETORCA", "PUCHUNCAVÍ", "PUTAENDO", "QUILLOTA", "QUILPUÉ", "QUINTERO", "RINCONADA", "SAN ANTONIO", "SAN ESTEBAN", "SAN FELIPE", "SANTA MARÍA", "SANTO DOMINGO", "VALPARAÍSO", "VILLA ALEMANA", "VIÑA DEL MAR", "ZAPALLAR"]
+                },
+                {
+                    "NombreRegion": "Región del Libertador Gral. Bernardo O'Higgins",
+                    "comunas": ["Rancagua", "Codegua", "Coinco", "Coltauco", "Doñihue", "Graneros", "Las Cabras", "Machalí", "Malloa", "Mostazal", "Olivar", "Peumo", "Pichidegua", "Quinta de Tilcoco", "Rengo", "Requínoa", "San Vicente", "Pichilemu", "La Estrella", "Litueche", "Marchihue", "Navidad", "Paredones", "San Fernando", "Chépica", "Chimbarongo", "Lolol", "Nancagua", "Palmilla", "Peralillo", "Placilla", "Pumanque", "Santa Cruz"]
+                },
+                {
+                    "NombreRegion": "Región del Maule",
+                    "comunas": ["Talca", "Constitución", "Curepto", "Empedrado", "Maule", "Pelarco", "Pencahue", "Río Claro", "San Clemente", "San Rafael", "Cauquenes", "Chanco", "Pelluhue", "Curicó", "Hualañé", "Licantén", "Molina", "Rauco", "Romeral", "Sagrada Familia", "Teno", "Vichuquén", "Linares", "Colbún", "Longaví", "Parral", "Retiro", "San Javier", "Villa Alegre", "Yerbas Buenas"]
+                },
+                {
+                    "NombreRegion": "Región de Ñuble",
+                    "comunas": ["Chillán", "Bulnes", "Cobquecura", "Coelemu", "Coihueco", "El Carmen", "Ninhue", "Ñiquén", "Pemuco", "Pinto", "Portezuelo", "Quillón", "Quirihue", "Ránquil", "San Carlos", "San Fabián", "San Ignacio", "San Nicolás", "Treguaco", "Yungay"]
+                },
+                {
+                    "NombreRegion": "Región del Biobío",
+                    "comunas": ["Concepción", "Coronel", "Chiguayante", "Florida", "Hualqui", "Lota", "Penco", "San Pedro de la Paz", "Santa Juana", "Talcahuano", "Tomé", "Hualpén", "Lebu", "Arauco", "Cañete", "Contulmo", "Curanilahue", "Los Álamos", "Tirúa", "Los Ángeles", "Antuco", "Cabrero", "Laja", "Mulchén", "Nacimiento", "Negrete", "Quilaco", "Quilleco", "San Rosendo", "Santa Bárbara", "Tucapel", "Yumbel", "Alto Biobío"]
+                },
+                {
+                    "NombreRegion": "Región de La Araucanía",
+                    "comunas": ["Temuco", "Carahue", "Cunco", "Curarrehue", "Freire", "Galvarino", "Gorbea", "Lautaro", "Loncoche", "Melipeuco", "Nueva Imperial", "Padre las Casas", "Perquenco", "Pitrufquén", "Pucón", "Saavedra", "Teodoro Schmidt", "Toltén", "Vilcún", "Villarrica", "Cholchol", "Angol", "Collipulli", "Curacautín", "Ercilla", "Lonquimay", "Los Sauces", "Lumaco", "Purén", "Renaico", "Traiguén", "Victoria"]
+                },
+                {
+                    "NombreRegion": "Región de Los Ríos",
+                    "comunas": ["Valdivia", "Corral", "Lanco", "Los Lagos", "Máfil", "Mariquina", "Paillaco", "Panguipulli", "La Unión", "Futrono", "Lago Ranco", "Río Bueno"]
+                },
+                {
+                    "NombreRegion": "Región de Los Lagos",
+                    "comunas": ["Puerto Montt", "Calbuco", "Cochamó", "Fresia", "Frutillar", "Los Muermos", "Llanquihue", "Maullín", "Puerto Varas", "Castro", "Ancud", "Chonchi", "Curaco de Vélez", "Dalcahue", "Puqueldón", "Queilén", "Quellón", "Quemchi", "Quinchao", "Osorno", "Puerto Octay", "Purranque", "Puyehue", "Río Negro", "San Juan de la Costa", "San Pablo", "Chaitén", "Futaleufú", "Hualaihué", "Palena"]
+                },
+                {
+                    "NombreRegion": "Región Aysén del Gral. Carlos Ibáñez del Campo",
+                    "comunas": ["Coihaique", "Lago Verde", "Aysén", "Cisnes", "Guaitecas", "Cochrane", "O'Higgins", "Tortel", "Chile Chico", "Río Ibáñez"]
+                },
+                {
+                    "NombreRegion": "Región de Magallanes y de la Antártica Chilena",
+                    "comunas": ["Punta Arenas", "Laguna Blanca", "Río Verde", "San Gregorio", "Cabo de Hornos", "Antártica", "Porvenir", "Primavera", "Timaukel", "Natales", "Torres del Paine"]
+                },
+                {
+                    "NombreRegion": "Región Metropolitana de Santiago",
+                    "comunas": ["Cerrillos", "Cerro Navia", "Conchalí", "El Bosque", "Estación Central", "Huechuraba", "Independencia", "La Cisterna", "La Florida", "La Granja", "La Pintana", "La Reina", "Las Condes", "Lo Barnechea", "Lo Espejo", "Lo Prado", "Macul", "Maipú", "Ñuñoa", "Pedro Aguirre Cerda", "Peñalolén", "Providencia", "Pudahuel", "Quilicura", "Quinta Normal", "Recoleta", "Renca", "San Joaquín", "San Miguel", "San Ramón", "Santiago", "Vitacura", "Puente Alto", "Pirque", "San José de Maipo", "Colina", "Lampa", "Tiltil", "San Bernardo", "Buin", "Calera de Tango", "Paine", "Melipilla", "Alhué", "Curacaví", "María Pinto", "San Pedro", "Talagante", "El Monte", "Isla de Maipo", "Padre Hurtado", "Peñaflor"]
+                }
+            ]
+        };
+    
+        jQuery(document).ready(function () {
+            var htmlRegion = '<option value="">Seleccione una región</option>';
+            var htmlComunas = '<option value="">Seleccione una comuna</option>';
+            
+            jQuery.each(RegionesYcomunas.regiones, function (index, region) {
+                htmlRegion += '<option value="' + region.NombreRegion + '">' + region.NombreRegion + '</option>';
+            });
+    
+            jQuery('#region').html(htmlRegion);
+            jQuery('#comuna').html(htmlComunas);
+    
+            jQuery('#region').change(function () {
+                var selectedRegion = jQuery(this).val();
+                var htmlComuna = '<option value="">Seleccione una comuna</option>';
+    
+                jQuery.each(RegionesYcomunas.regiones, function (index, region) {
+                    if (region.NombreRegion == selectedRegion) {
+                        jQuery.each(region.comunas, function (index, comuna) {
+                            htmlComuna += '<option value="' + comuna + '">' + comuna + '</option>';
+                        });
+                    }
+                });
+    
+                jQuery('#comuna').html(htmlComuna);
+            });
+        });
+</script>
 {% endblock %}
