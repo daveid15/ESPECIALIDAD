@@ -20,6 +20,7 @@ from django.utils.decorators import method_decorator
 from django.http import HttpResponse
 from django.urls import reverse
 from django.http import HttpResponseRedirect
+from django.core.files.storage import FileSystemStorage
 
 #TABLAS
 from registration.models import Profile
@@ -259,16 +260,16 @@ def list_users(request):
     users = User.objects.all()
     return render(request, 'ruta_a_tu_template.html', {'users': users})    
     
+
 @login_required
 def edit_perfil(request):
     profiles = Profile.objects.get(user_id=request.user.id)
     if profiles.group_id != 1:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una área para la que no tiene permisos')
         return redirect('check_group_main')
-       
 
     if request.method == 'POST':
-        errores=[]
+        errores = []
         grupo = request.POST.get('grupo')
         user_id = request.POST.get('user_id')
         first_name = request.POST.get('name')
@@ -277,30 +278,40 @@ def edit_perfil(request):
         address = request.POST.get('address')
         region = request.POST.get('region')
         comuna = request.POST.get('comuna')
+        profile_image = request.FILES.get('profile_image')
         template_name = 'administrator/edit_perfil.html'
         user_data_count = User.objects.filter(pk=request.user.id).count()
         user_data = User.objects.get(pk=request.user.id)
         profile_data = Profile.objects.get(user_id=request.user.id)
-        #VALIDAR STRINGS Y NUMEROS
-        if not validar_string(first_name,request):
+
+        # Validar strings y números
+        if not validar_string(first_name, request):
             errores.append('Nombre inválido')
-        if not validar_string(last_name,request):
+        if not validar_string(last_name, request):
             errores.append('Apellido inválido')
-        if not validar_numero(mobile,request):
+        if not validar_numero(mobile, request):
             errores.append('Número de teléfono inválido')
         if errores:
             messages.add_message(request, messages.INFO, 'Hubo algunos errores al editar el perfil: ' + ', '.join(errores))
-            return render(request,template_name)
-        
+            return render(request, template_name, {'user_data': user_data, 'profile_data': profile_data, 'groups': groups, 'profile_list': profile_list, 'region': region, 'comuna': comuna})
+
         if user_data_count == 1:
-            User.objects.filter(pk=request.user.id).update(first_name=first_name)
-            User.objects.filter(pk=request.user.id).update(last_name=last_name)
-            Profile.objects.filter(user_id=request.user.id).update(first_name=first_name)
-            Profile.objects.filter(user_id=request.user.id).update(last_name=last_name)
-            Profile.objects.filter(user_id=request.user.id).update(mobile=mobile)
-            Profile.objects.filter(user_id=request.user.id).update(address=address)
-            Profile.objects.filter(user_id=request.user.id).update(region=region)
-            Profile.objects.filter(user_id=request.user.id).update(comuna=comuna)
+            User.objects.filter(pk=request.user.id).update(first_name=first_name, last_name=last_name)
+            profile_data.first_name = first_name
+            profile_data.last_name = last_name
+            profile_data.mobile = mobile
+            profile_data.address = address
+            profile_data.region = region
+            profile_data.comuna = comuna
+
+            # Manejar la foto de perfil
+            if profile_image:
+                fs = FileSystemStorage()
+                filename = fs.save(profile_image.name, profile_image)
+                profile_data.profile_image = filename  # Solo almacena el nombre del archivo
+
+            profile_data.save()
+
             messages.add_message(request, messages.INFO, f'Usuario {user_data.first_name} {user_data.last_name} editado con éxito')
             return redirect('list_user_active', grupo)
         else:
@@ -314,6 +325,7 @@ def edit_perfil(request):
 
     template_name = 'administrator/edit_perfil.html'
     return render(request, template_name, {'user_data': user_data, 'profile_data': profile_data, 'groups': groups, 'profile_list': profile_list})
+
     
 @login_required
 def edit_user(request, user_id):
@@ -323,7 +335,7 @@ def edit_user(request, user_id):
         return redirect('check_group_main')
 
     if request.method == 'POST':
-        errores=[]
+        errores = []
         user_id = request.POST.get('user_id')
         first_name = request.POST.get('name')
         last_name = request.POST.get('last_name1')
@@ -332,26 +344,28 @@ def edit_user(request, user_id):
         mobile = request.POST.get('mobile')
         address = request.POST.get('address')
         region = request.POST.get('region')
+        profile_image = request.FILES.get('profile_image')  # Obtén la imagen de perfil del formulario
+
         template_name = 'administrator/edit_user.html'
         profile_data = Profile.objects.get(user_id=user_id)
         groups = Group.objects.get(pk=profile_data.group_id)
-        # Verificar existencia de usuario
         user_data = User.objects.filter(pk=user_id).first()
-        #VALIDAR STRINGS Y NUMEROS
-        if not validar_string(first_name,request):
+
+        # Validar campos
+        if not validar_string(first_name, request):
             errores.append('Nombre inválido')
-        if not validar_string(last_name,request):
+        if not validar_string(last_name, request):
             errores.append('Apellido inválido')
-        if not validar_numero(mobile,request):
+        if not validar_numero(mobile, request):
             errores.append('Número de teléfono inválido')
         if errores:
             messages.add_message(request, messages.INFO, 'Hubo algunos errores al editar el usuario: ' + ', '.join(errores))
-            return render(request,template_name)
+            return render(request, template_name, {'user_data': user_data, 'profile_data': profile_data, 'groups': groups, 'profile_list': Group.objects.all().exclude(pk=0).order_by('name')})
+
         if user_data is None:
             messages.add_message(request, messages.INFO, 'El usuario no existe.')
             return redirect('list_user_active')
 
-        # Verificar si el correo electrónico existe
         if user_data.email != email and User.objects.filter(email=email).exists():
             messages.add_message(request, messages.INFO, f'El correo {email} ya existe en nuestros registros asociado a otro usuario. Por favor, utilice otro.')
             return redirect('list_user_active', group)
@@ -360,7 +374,17 @@ def edit_user(request, user_id):
         User.objects.filter(pk=user_id).update(first_name=first_name, last_name=last_name)
 
         # Actualizar datos de perfil
-        Profile.objects.filter(user_id=user_id).update(first_name=first_name, last_name=last_name, mobile=mobile,address=address,region=region, group_id=group)
+        profile_data.first_name = first_name
+        profile_data.last_name = last_name
+        profile_data.mobile = mobile
+        profile_data.address = address
+        profile_data.region = region
+        profile_data.group_id = group
+
+        if profile_image:
+            profile_data.profile_image = profile_image  # Actualiza la imagen de perfil si se proporcionó una nueva
+
+        profile_data.save()
 
         messages.add_message(request, messages.INFO, f'Usuario {user_data.first_name} {user_data.last_name} editado con éxito.')
         return redirect('list_user_active', group)
@@ -370,7 +394,13 @@ def edit_user(request, user_id):
     groups = Group.objects.get(pk=profile_data.group_id)
     profile_list = Group.objects.all().exclude(pk=0).order_by('name')
     template_name = 'administrator/edit_user.html'
-    return render(request, template_name, {'user_data': user_data, 'profile_data': profile_data, 'groups': groups, 'profile_list': profile_list})
+    return render(request, template_name, {
+        'user_data': user_data,
+        'profile_data': profile_data,
+        'groups': groups,
+        'profile_list': profile_list,
+        'profile_image_url': profile_data.profile_image.url if profile_data.profile_image else None
+    })
 
 
 

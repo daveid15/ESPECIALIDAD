@@ -14,8 +14,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Icons+Two+Tone" rel="stylesheet">
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="{% static 'css/admin_main_styles.css' %}">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -25,15 +23,19 @@
             <nav class="navbar">
                 <div class="user-info">
                     {% if request.user.is_authenticated %}
-                        {% if user_profile.profile_image %}
-                            <img src="{{ user_profile.profile_image.url }}" alt="User Image" class="profile">
-                        {% else %}
-                            <img src="{% static 'assets/img/no-avatar.jpg' %}" alt="User Image" class="profile">
-                        {% endif %}
+                        <a href="{% url 'user_detail' user_id=request.user.id %}">
+                            {% if user_profile.profile_image %}
+                                <img src="{{ user_profile.profile_image.url }}" alt="User Image" class="profile">
+                            {% else %}
+                                <img src="{% static 'assets/img/no-avatar.jpg' %}" alt="User Image" class="profile">
+                            {% endif %}
+                        </a>
                         <span class="username">{{ request.user.first_name }}</span>
                     {% else %}
-                        <img src="{% static 'assets/img/no-avatar.jpg' %}" alt="User Image" class="profile">
-                        <span class="username">Usuario</span>
+                        <a href="{% url 'login' %}">
+                            <img src="{% static 'assets/img/no-avatar.jpg' %}" alt="User Image" class="profile">
+                            <span class="username">Usuario</span>
+                        </a>
                     {% endif %}
                 </div>
                 <div class="navbar_content">
@@ -107,7 +109,6 @@
                                 <li><a href="{% url 'orden_main' %}" class="nav_link sublink">Órden Main</a></li>
                             </ul>
                         </li>
-
                         <li class="item">
                             <a href="{% url 'ventas_main' %}" class="nav_link submenu_item">
                                 <span class="navlink_icon">
