@@ -24,18 +24,19 @@
         .titulo {
             font-family: 'Sigmar', sans-serif;
             color: #333;
-            font-size: 36px;
+            font-size: 30px;
             margin: 0;
+            text-align: center;
         }
     
         .form-label {
-            font-size: 16px;
+            font-size: 18px;
             margin-bottom: 10px;
             color: #333;
         }
     
         .form-control {
-            width: 10%;
+            width: 20%;
             height: 40px;
             padding: 10px;
             margin-top: 5px;
@@ -52,7 +53,7 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            width: 10%;
+            width: 100%;
             margin-top: 10px;
             margin-bottom: 10px;
             font-size: 16px;
@@ -73,13 +74,107 @@
             text-align: center;
         }
 
-        .product-item, .product-nuevo-item {
-            border: 1px solid #ccc;
+        .producto-item, .producto-nuevo-item {
+            border: 1px solid #d2d2d2;
             border-radius: 5px;
             padding: 10px;
             margin-bottom: 10px;
             background-color: #f9f9f9;
         }
+
+        .titulo-seccion {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        .mb-0 {
+            margin-bottom: 0 !important;
+        }
+
+        .mb-3 {
+            margin-bottom: 1rem !important;
+        }
+
+        .d-flex {
+            display: flex !important;
+        }
+
+        .flex-column {
+            flex-direction: column !important;
+        }
+
+        .align-items-center {
+            align-items: center !important;
+        }
+
+        .align-items-lg-start {
+            align-items: flex-start !important;
+        }
+
+        .justify-content-center {
+            justify-content: center !important;
+        }
+
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            margin-right: -15px;
+            margin-left: -15px;
+        }
+
+        .col-md-6, .col-md-5, .col-md-11, .col-12, .col-lg-12 {
+            position: relative;
+            width: 100%;
+            padding-right: 15px;
+            padding-left: 15px;
+        }
+
+        .g-2 {
+            gap: .5rem !important;
+        }
+
+        .alert {
+            padding: .75rem 1.25rem;
+            margin-bottom: 1rem;
+            border: 1px solid transparent;
+            border-radius: .25rem;
+        }
+
+        .alert-info {
+            color: #0c5460;
+            background-color: #d1ecf1;
+            border-color: #bee5eb;
+        }
+
+        .btn-secondary, .btn-danger {
+            display: inline-block;
+            font-weight: 400;
+            color: #212529;
+            text-align: center;
+            vertical-align: middle;
+            cursor: pointer;
+            background-color: #c8c6c4;
+            border: 1px solid #c8c6c4;
+            padding: .375rem .75rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            border-radius: .25rem;
+            transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+        }
+
+        .btn-danger {
+            background-color: #c8c6c4;
+            border-color: #c8c6c4;
+        }
+
         h2 {
             display: block;
             font-size: 1.5em;
@@ -104,13 +199,15 @@
         }
 
         .button{
-            width: 87px;
-            height: 46px;
+            position: relative;
+            right: 50px;
+            width: 90px;
+            height: 47px;
         }
 
         .monto-form-control{
-            max-width: 50%;
-            height: 30px;
+            width: 40%;
+            height: 50px;
             border-radius: 5px;
             border: 1px solid #ccc;
 
@@ -125,14 +222,16 @@
         }
 
         .monto-form-control{
-            max-width: 50%;
-            height: 30px;
+            width: 40%;
+            height: 50px;
             border-radius: 5px;
             border: 1px solid #ccc;
 
         }
 
         .button{
+            position: relative;
+            right: 50px;
             width: 90px;
             height: 47px;
         }
@@ -146,12 +245,14 @@
         }
     
         .button{
+            position: relative;
+            right: 200px;
             width: 90px;
             height: 47px;
         }
         .monto-form-control{
-            max-width: 50%;
-            height: 30px;
+            width: 20%;
+            height: 50px;
             border-radius: 5px;
             border: 1px solid #ccc;
 
@@ -166,19 +267,24 @@
         }
     
         .button{
+            position: relative;
+            right: 300px;
             width: 90px;
             height: 47px;
         }
 
         .monto-form-control{
-            max-width: 50%;
-            height: 30px;
+            width: 20%;
+            height: 50px;
             border-radius: 5px;
             border: 1px solid #ccc;
 
         }
-    }
 
+        .profileedit{
+            width: 1000px;
+        }
+    }
     </style>
     <header class='mb-4'>
         <h2 class='h2'>Editar Orden #{{orden.id}}</h2>
@@ -197,7 +303,7 @@
                 <form method="post" action="{% url 'editar_orden' orden_id=orden.id %}">
                     {% csrf_token %}
                     <div class="mb-0 col-md-6">
-                        <label for="proveedor_orden" class="form-label"><strong>Proveedor {{orden.proveedor_orden}}</strong></label>
+                        <label for="proveedor_orden" class="titulo"><strong>Proveedor {{orden.proveedor_orden}}</strong></label>
                     </div>
                     <div id="productos-container" class="col-12 col-lg-12 row row-cols-1 row-cols-md-1 g-2 p-lg-0-5">
                         {% for prod, cant in form_data %}
