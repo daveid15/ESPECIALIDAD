@@ -394,6 +394,20 @@
     .show {
         display: block;
     }
+
+    .messages6 {
+        color: rgb(23, 23, 23);
+        background-color: #ededed;
+        box-shadow: #333;
+        list-style: none;
+        text-align: center;
+    }
+
+    .error-message { 
+        color: red; 
+        text-align: center; 
+    }
+
 </style>
 {% endblock %}
 {% block extra_css %}    
@@ -427,7 +441,7 @@
     <div class="list-container"> <!-- Contenedor de fondo blanco -->
         <div class="back-button">
             <a href="{% url 'inventario_main' %}" class="btn btn-secondary">
-                <i class="fas fa-arrow-left arrow""></i>
+                <i class="fas fa-arrow-left arrow"> </i>
             </a>
         </div>
         <div class="d-flex flex-column flex-lg-row my-5">
@@ -521,7 +535,15 @@
             {% endif %}
             <!-- Fin de la Paginación B -->
         </div>
+        {% if messages %}
+        <ul class="messages6">
+            {% for message in messages %}
+            <li{% if messages.tags %} class="{{message.tags}}" {% endif %}>{{message}}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
     </div>
+
 </main>
 {% block extrajs %}    
 <!--FUNCIÓN PARA CONFIRMAR LA ELIMINACIÓN DE UN INSUMO-->
