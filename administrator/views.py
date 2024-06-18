@@ -30,6 +30,7 @@ from django.contrib.auth.models import User
 from inventario.models import Product
 
 import re
+
 def validar_numero(numero,request):
     if request.method == 'POST':
         if re.fullmatch(r'\d{9}', numero):

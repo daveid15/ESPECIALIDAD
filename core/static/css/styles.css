@@ -100,7 +100,7 @@ textarea {
 
 .button:hover {
     background-color: rgba(255, 255, 255, 0);
-    color: purple;
+    color: var(--blue);
 }
 
 .button:focus, .button-outline:focus {
@@ -1010,3 +1010,17 @@ ol {
     }
 
 }
+
+.success {
+    list-style: none;
+    background-color: #f7f7f7;
+    color: #ccc;
+    text-align: center; 
+ }
+
+ .error{
+     list-style: none;
+    background-color: #f7f7f7;
+    color: #ccc;
+    text-align: center; 
+ }

@@ -395,7 +395,44 @@
         }
 
     }
-
+    .popup {
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(
+            0,
+            0,
+            0,
+            0.4
+        );
+        display: none;
+    }
+    .popup-content {
+        background-color: white;
+        margin: 10% auto;
+        padding: 20px;
+        border: 1px solid #888888;
+        width: 30%;
+        font-weight: bolder;
+    }
+    .popup-content button {
+        background-color: #87963C;
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        width: 45%;
+        margin-top: 10px;
+        font-size: 16px;
+    }
+    .show {
+        display: block;
+    }
 </style>
 {% endblock %}
 {% block extra_css %}    
@@ -478,9 +515,8 @@
                                                         <option value="rechazado">Rechazado</option>
                                                         <option value="anulado">Anulado</option>
                                                     </select>
-                                                    <button type="button" class="btn btn-primary" onclick="confirmarEnvio('{{ orden.id }}', '{{ orden.id }}')">Enviar</button>
                                                 </div>
-                                            </form>
+                                                <button id="Button1" type="button" class="btn btn-primary" onclick="mostrar('{{ orden.id }}','{{ orden.id }}')">Enviar</button>
                                         </div>
                                     </div>
                                 </div>
@@ -488,6 +524,24 @@
                         </td>
                     </tr>
                 {% endfor %}
+                <div id="popup1" class="popup">
+                    <div class="popup-content">
+                        <h1 style="color: red">
+                            ¿Seguro que quiere cambiar el estado de esta orden?
+                        </h1>
+                        <button href="#" onclick="aceptar1('{{ orden.id }}','{{ orden.id }}')">Aceptar</button>
+                    </form>
+                        <button id="Cancelar1">Cancelar</button>
+                    </div>
+                </div>
+                <div id="popup2" class="popup">
+                    <div class="popup-content">
+                        <h1 style="color: red">
+                            Debe elegir un nuevo estado
+                        </h1>
+                        <button id="Cancelar2">Aceptar</button>
+                    </div>
+                </div>
             </tbody>
         </table>
     </div>
@@ -524,14 +578,31 @@
     </nav>
 
 <script>
-    function confirmarEnvio(ordenId, ordenNumero) {
-        const select = document.getElementById(`nuevo_estado${ordenId}`);
+        function mostrar (ordenId, ordenNumero) {
+        const select = document.getElementById(`nuevo_estado${ordenId}`)
         if (!select.value) {
-            alert('Debe seleccionar un estado nuevo para la orden');
-        } else if (confirm(`¿Estás seguro de cambiar el estado de la orden #${ordenNumero}?`)) {
-            document.getElementById(`estadoForm${ordenId}`).submit();
-        }
-    }
+            popup2.classList.add("show");}   
+        else {popup1.classList.add("show");}
+    };
+
+    function aceptar1 (ordenId, ordenNumero) {
+        document.getElementById(`estadoForm${ordenId}`).submit();
+        };
+
+    Cancelar1.addEventListener(
+        "click",
+        function () {
+                popup1.classList.remove(
+                "show");
+            }
+    );
+    Cancelar2.addEventListener(
+        "click",
+        function () {
+                popup2.classList.remove(
+                "show");
+            }
+    );
 </script>
 
 {% block extrajs %}    

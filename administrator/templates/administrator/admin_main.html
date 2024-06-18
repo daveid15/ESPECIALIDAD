@@ -695,9 +695,45 @@
 
                 }
                 
-            
-
-            
+                .popup {
+                    position: fixed;
+                    z-index: 1;
+                    left: 0;
+                    top: 0;
+                    width: 100%;
+                    height: 100%;
+                    overflow: auto;
+                    background-color: rgba(
+                        0,
+                        0,
+                        0,
+                        0.4
+                    );
+                    display: none;
+                }
+                .popup-content {
+                    background-color: white;
+                    margin: 10% auto;
+                    padding: 20px;
+                    border: 1px solid #888888;
+                    width: 30%;
+                    font-weight: bolder;
+                }
+                .popup-content button {
+                    background-color: #87963C;
+                    color: white;
+                    padding: 12px 20px;
+                    border: none;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    width: 45%;
+                    margin-top: 10px;
+                    font-size: 16px;
+                }
+                .show {
+                    display: block;
+                }
+    
         </style>
     {% endblock %}
 </head>
@@ -706,8 +742,18 @@
         <a href="{% url 'edit_perfil' %}" class="logout-link">
             <i class="fas fa-cog"></i>
         </a>
-        <a onclick="confirmLogout()" class="logout-link" >
+        <a id="Buttonlogout" class="logout-link">
             <i class="fas fa-sign-out-alt"></i>
+        </a>
+            <div id="Popup" class="popup">
+                <div class="popup-content">
+                    <h1 style="color: red">
+                        ¿Seguro que quiere cerrar su sesion?
+                    </h1>
+                    <button id="Aceptar">Aceptar</button>
+                    <button id="Cancelar">Cancelar</button>
+                </div>
+            </div>
         </a>
     </div>
     <div class="menu-icon" onclick="toggleNavPanel()">
@@ -864,11 +910,25 @@
             navPanel.classList.toggle('open');
         }
 
-        function confirmLogout() {
-            if (confirm("¿Estás seguro de que deseas cerrar sesión?")) {
-                window.location.href = '{% url "logout" %}';
-            }
-        }
+        Buttonlogout.addEventListener(
+                "click",
+                function () {
+                    Popup.classList.add("show");
+                }
+            );
+            Aceptar.addEventListener(
+                "click",
+                function () {
+                    window.location.href = "{% url 'logout' %}";
+                }
+            );
+            Cancelar.addEventListener(
+                "click",
+                function () {
+                        Popup.classList.remove(
+                        "show");
+                    }
+            );
 
         // Lógica de búsqueda
         document.getElementById('searchInput').addEventListener('input', function() {

@@ -17,6 +17,46 @@
     <link rel="stylesheet" href="{% static 'css/admin_main_styles.css' %}">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+<style>
+    .popup {
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(
+            0,
+            0,
+            0,
+            0.4
+        );
+        display: none;
+    }
+    .popup-content {
+        background-color: white;
+        margin: 10% auto;
+        padding: 20px;
+        border: 1px solid #888888;
+        width: 30%;
+        font-weight: bolder;
+    }
+    .popup-content button {
+        background-color: #87963C;
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        width: 45%;
+        margin-top: 10px;
+        font-size: 16px;
+    }
+    .show {
+        display: block;
+    }
+</style>
 <body>
     <nav id="sidebar" class="side-bar to-left">
         <div class="menu">
@@ -43,9 +83,20 @@
                         <a href="{% url 'edit_perfil' %}" class="logout-link">
                             <i class="fas fa-cog"></i>
                         </a>
-                        <a onclick="confirmLogout()" class="logout-link">
-                            <i class="fas fa-sign-out-alt"></i>
-                        </a>
+                    </a>
+                    <a id="Buttonlogout2" class="logout-link">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </a>
+                        <div id="Popuplogout2" class="popup">
+                            <div class="popup-content">
+                                <h1 style="color: red">
+                                    ¿Seguro que quiere cerrar su sesion?
+                                </h1>
+                                <button id="Aceptar">Aceptar</button>
+                                <button id="Cancelar">Cancelar</button>
+                            </div>
+                        </div>                    
+                    </a>
                     </div>
                 </div>
             </nav>
@@ -133,26 +184,30 @@
             </nav>
         </div>
     </nav>
-    <div class="#">
-        <!-- Messages -->
-        {% if messages %}
-        <div class="alert alert-danger mt-3">
-            {% for message in messages %}
-                {{ message }}
-            {% endfor %}
-        </div>
-        {% endif %}
-        <!-- End messages -->
         {% block content %}{% endblock %}
     </div>
     <script src="{% static 'js/admin_main_script.js' %}"></script>
     <script src="{% static 'node_modules/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
     <script>
-        function confirmLogout() {
-            if (confirm("¿Estás seguro de cerrar sesión?")) {
-                window.location.href = "{% url 'logout' %}";
-            }
-        }
+        Buttonlogout2.addEventListener(
+                    "click",
+                    function () {
+                        Popuplogout2.classList.add("show");
+                    }
+                );
+                Aceptar.addEventListener(
+                    "click",
+                    function () {
+                        window.location.href = "{% url 'logout' %}";
+                    }
+                );
+                Cancelar.addEventListener(
+                    "click",
+                    function () {
+                            Popuplogout2.classList.remove(
+                            "show");
+                        }
+                );
     </script>
 </body>
 </html>
