@@ -63,7 +63,7 @@
             color: white;
         }
     
-        .messages7 {
+        .messages {
         color: rgb(23, 23, 23);
         background-color: #ededed;
         box-shadow: #333;
@@ -236,7 +236,7 @@
                                 </div>
                             </div>
                             {% if messages %}
-                                <ul class="messages7">
+                                <ul class="messages" id="message7">
                                     {% for message in messages %}
                                     <li{% if messages.tags %} class="{{message.tags}}" {% endif %}>{{message}}</li>
                                     {% endfor %}

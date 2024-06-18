@@ -273,11 +273,12 @@
                                 <button class="button" type="submit">Crear</button>
                                 <a href="{% url 'proveedores_activos' %}" class="button" style="margin-left: 10px;">Volver</a>
                             </div>
-                            {% if message %}
-                            <p class="message">{{ message }}</p>
-                            {% endif %}
-                            {% if error_message %}
-                            <p class="error-message">{{ error_message }}</p>
+                            {% if messages %}
+                                <ul class="messages" id="message10">
+                                    {% for message in messages %}
+                                    <li{% if messages.tags %} class="{{message.tags}}" {% endif %}>{{message}}</li>
+                                    {% endfor %}
+                                </ul>
                             {% endif %}
                         </div>
                     </div>

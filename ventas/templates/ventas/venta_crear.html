@@ -63,7 +63,7 @@
             color: white; 
         }
         
-        .messages9 {
+        .messages {
         color: rgb(23, 23, 23);
         background-color: #ededed;
         box-shadow: #333;
@@ -233,7 +233,7 @@
                                     <input type="number" min="0" class="form-control" name="cantidad_bebida" id="cantidad_bebida" placeholder="0">
                                 </div>
                                 {% if messages %}
-                                <ul class="messages9">
+                                <ul class="messages" id="message9">
                                     {% for message in messages %}
                                         <li{% if messages.tags %} class="{{message.tags}}" {% endif %}>{{message}}</li>
                                         {% endfor %}

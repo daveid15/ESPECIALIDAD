@@ -64,7 +64,7 @@
             color: white;
         }
     
-        .messages5 {
+        .messages {
         color: rgb(23, 23, 23);
         background-color: #ededed;
         box-shadow: #333;
@@ -330,7 +330,7 @@
                         <input type="number" min="0" class="monto-form-control" name="monto_orden" placeholder="{{orden.monto}}" value="{{orden.monto}}" required>
                     </div>
                     {% if messages %}
-                        <ul class="messages5">
+                        <ul class="messages" id="message6">
                             {% for message in messages %}
                             <li{% if messages.tags %} class="{{message.tags}}" {% endif %}>{{message}}</li>
                             {% endfor %}
