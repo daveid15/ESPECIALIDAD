@@ -453,6 +453,7 @@ h2 {
             position: absolute;
             white-space: nowrap; /* Evitar que el texto dentro del botón se corte */
             word-wrap: break-word;
+            margin-bottom: 30px;
             
         }
         .icon-upload {
@@ -463,7 +464,13 @@ h2 {
             top:-25px;
         }
     }
-
+    .messages {
+        color: rgb(23, 23, 23);
+        background-color: #ededed;
+        box-shadow: #333;
+        list-style: none;
+        text-align: center;
+    }
     .popup {
         position: fixed;
         z-index: 1;
@@ -593,7 +600,14 @@ h2 {
                                 <button id="Aceptar1" onclick="aceptar1(a)">Aceptar</button>
                                 <button id="Cancelar1">Cancelar</button>
                             </div>
-                        </div>        
+                        </div>
+                        {% if messages %}
+                        <ul class="messages" id="message17">
+                            {% for message in messages %}
+                                <li{% if messages.tags %} class="{{message.tags}}" {% endif %}>{{message}}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}        
                     </tbody>
                 </table>
             </div>

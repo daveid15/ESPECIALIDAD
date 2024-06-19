@@ -66,6 +66,7 @@
         background-color: #ededed;
         box-shadow: #333;
         list-style: none;
+        margin: 50px;
         text-align: center;
     }
     
@@ -220,7 +221,7 @@
                       {% if messages %}
                         <ul class="messages" id="message4">
                             {% for message in messages %}
-                            <li{% if messages.tags %} class="{{message.tags}}" {% endif %}>{{message}}</li>
+                                <li{% if messages.tags %} class="{{message.tags}}" {% endif %}>{{message}}</li>
                             {% endfor %}
                         </ul>
                     {% endif %}

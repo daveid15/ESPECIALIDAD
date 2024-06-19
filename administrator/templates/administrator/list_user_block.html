@@ -403,6 +403,14 @@
         }
 
     }
+    .messages {
+        color: rgb(23, 23, 23);
+        background-color: #ededed;
+        box-shadow: #333;
+        list-style: none;
+        text-align: center;
+        margin-top: 50px;
+    }
     .popup {
         position: fixed;
         z-index: 1;
@@ -515,7 +523,14 @@
                             <button id="Aceptar2" href="#" onclick="aceptar2(a)">Aceptar</button>
                             <button id="Cancelar2">Cancelar</button>
                         </div>
-                    </div>  
+                    </div> 
+                    {% if messages %}
+                        <ul class="messages" id="message18">
+                            {% for message in messages %}
+                                <li{% if messages.tags %} class="{{message.tags}}" {% endif %}>{{message}}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %} 
                 </tbody>
             </table>
             <!-- Paginación -->

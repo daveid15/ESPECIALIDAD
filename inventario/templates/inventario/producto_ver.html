@@ -244,11 +244,17 @@
                     
                     <div class="mb-0 col-md-12">
                         <div class="d-flex justify-content-center mb-2">
+                            {% if messages %}
+                            <ul class="messages" id="message19">
+                                {% for message in messages %}
+                                    <li{% if messages.tags %} class="{{message.tags}}" {% endif %}>{{message}}</li>
+                                {% endfor %}
+                            </ul>
+                            {% endif %}
                             <div class="d-flex justify-content-center mx-0-5--custom">
                                 <button type="submit"class="button">Editar</button>
                                 <a href="{% url 'producto_list' %}" class="button">Volver</a>
-                            </div>  
-                                                          
+                            </div>                                       
                         </div>
                     </div>
                 </div>

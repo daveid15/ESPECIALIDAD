@@ -417,6 +417,13 @@
             font-size: 20px;
         }
     }
+    .messages {
+        color: rgb(23, 23, 23);
+        background-color: #ededed;
+        box-shadow: #333;
+        list-style: none;
+        text-align: center;
+    }
     .popup {
         position: fixed;
         z-index: 1;
@@ -562,6 +569,13 @@
                         <button id="Cancelar2">Aceptar</button>
                     </div>
                 </div>
+                {% if messages %}
+                        <ul class="messages" id="message11">
+                            {% for message in messages %}
+                                <li{% if messages.tags %} class="{{message.tags}}" {% endif %}>{{message}}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
             </tbody>
         </table>
 
