@@ -161,7 +161,6 @@
         justify-content: center; 
         margin-top: 20px; 
         z-index: 999; 
-        background-color: #9EB23B;
         border-radius: 12px;
         font-weight: bold;
         max-width: 10%; /* Establece un ancho máximo para el contenedor */
@@ -185,6 +184,8 @@
         color: #000; 
         border-radius: 5px; 
     }
+    
+    
 
     h2 {
         display: block;
@@ -563,7 +564,7 @@
         <ul class="pagination justify-content-center">
             {% if ordenes.has_previous %}
                 <li class="page-item">
-                    <a class="page-link" href="?page={{ ordenes.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">
+                    <a class="page-link" href="?pagina={{ ordenes.previous_page_number }}{% if search %}&search={{ search }}{% endif %}">
                         <i class="fas fa-chevron-left"></i> <!-- Icono de flecha hacia la izquierda -->
                     </a>
                 </li>
@@ -574,12 +575,12 @@
             {% endif %}
             {% for i in ordenes.paginator.page_range %}
                 <li class="page-item {% if ordenes.number == i %}active{% endif %}">
-                    <a class="page-link" href="?page={{ i }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">{{ i }}</a>
+                    <a class="page-link" href="?pagina={{ i }}{% if search %}&search={{ search }}{% endif %}">{{ i }}</a>
                 </li>
             {% endfor %}
             {% if ordenes.has_next %}
                 <li class="page-item">
-                    <a class="page-link" href="?page={{ ordenes.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">
+                    <a class="page-link" href="?pagina={{ ordenes.next_page_number }}{% if search %}&search={{ search }}{% endif %}">
                         <i class="fas fa-chevron-right"></i> <!-- Icono de flecha hacia la derecha -->
                     </a>
                 </li>
@@ -590,6 +591,7 @@
             {% endif %}
         </ul>
     </nav>
+    
 
 <script>
         function mostrar (ordenId, ordenNumero) {

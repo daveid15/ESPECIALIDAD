@@ -6,10 +6,6 @@
     body {
         display: flex;
     }
-    .chart2 {
-        width: 100%;
-        min-height: 400px;
-    }
     .chart-container {
         flex: 1; /* Esto hará que la chart-container ocupe el espacio disponible */
         margin-top: 90px; /* Ajusta la distancia desde la parte superior de la ventana */
@@ -17,7 +13,8 @@
         display: flex; /* Utiliza flexbox para colocar los gráficos en línea */
         justify-content: space-between; /* Distribuye los gráficos uniformemente a lo largo del contenedor */
         border-radius: 15px;
-        
+        width: 100%; /* Asegura que el contenedor ocupe el 100% del ancho disponible */
+        height: 600px; /* Ajusta la altura del contenedor */
     }
 
     h2 {
@@ -60,11 +57,6 @@
             word-wrap: break-word;
         }
 
-        .chart2{
-            width: 106%;
-            left: -20px;
-            word-wrap: break-word;
-        }
     }
 
     @media (min-width: 501px) and (max-width: 767px) {
@@ -84,12 +76,9 @@
         }
         
         .chart{
-            width: 120%;
+            width: 80%;
         }
 
-        .chart2{
-            width: 120%;
-        }
 
     }
 
@@ -106,11 +95,7 @@
         } 
 
         .chart{
-            width: 150%;
-        }
-
-        .chart2{
-            width: 150%;
+            width: 85%;
         }
     }
 
@@ -128,11 +113,8 @@
         }
  
         .chart{
-            width: 650px;
-        }
-
-        .chart2{
-            width: 150%;
+            width: 1050px;
+            height: 600px;
         }
 
     }
@@ -149,21 +131,12 @@
                     <div class=chart>
                         <div id = "chart_oc1" class="chart"></div>
                     </div>
-                    <div class=chart>
-                        <div id = "chart_oc2" class="chart2"></div>
-                    </div>
                 </nav>
             </div>
         </nav>
         <a href="{% url 'orden_list_enviada' %}" class="top-right-link">Listado de ordenes</a>
             <div class="menu"></div>
         </nav>
-        <div class="chart-container">
-            <div id = "chart_oc1" class="#"></div>
-        </div>
-        <div class="chart-container">
-            <div id = "chart_oc2" class="#"></div>
-        </div>
     </main>
 
 <!-- Apache ECharts -->

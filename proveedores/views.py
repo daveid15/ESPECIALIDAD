@@ -295,44 +295,47 @@ def proveedor_edit(request, proveedor_id):
                             producto_instance = Product.objects.get(id=prod_id)
                         except Product.DoesNotExist:
                             messages.add_message(request, messages.ERROR, f'Producto con ID {prod_id} no encontrado')
-                            return render(request, 'proveedores/proveedor_edit.html', {'proveedor_data': proveedor})
+                            return render(request, 'proveedores/proveedor_edit.html', {'proveedor_data': proveedor, 'productos': productos})
                         except ValueError:
                             messages.add_message(request, messages.ERROR, 'Error en los datos de los productos.')
-                            return render(request, 'proveedores/proveedor_edit.html', {'proveedor_data': proveedor})
+                            return render(request, 'proveedores/proveedor_edit.html', {'proveedor_data': proveedor, 'productos': productos})
 
                         Prov_prod.objects.create(
                             proveedor=proveedor,
                             producto=producto_instance,
                         )
 
-                    # Crear y agregar productos nuevos
+                    # Crear y agregar productos nuevos solo si no están vacíos
                     for producto, codigo, unidad in zip(producto_nuevo, codigo_nuevo, unidad_nuevo):
-                        nuevo_producto = Product.objects.create(
-                            supply_name=producto,
-                            supply_code=codigo,
-                            supply_unit=unidad,
-                            supply_initial_stock=0,
-                            supply_input=0,
-                            supply_output=0,
-                            supply_total=0
-                        )
-                        Prov_prod.objects.create(
-                            proveedor=proveedor,
-                            producto=nuevo_producto,
-                        )
+                        if producto.strip() and codigo.strip() and unidad.strip():  # Validar campos no vacíos
+                            nuevo_producto = Product.objects.create(
+                                supply_name=producto,
+                                supply_code=codigo,
+                                supply_unit=unidad,
+                                supply_initial_stock=0,
+                                supply_input=0,
+                                supply_output=0,
+                                supply_total=0
+                            )
+                            Prov_prod.objects.create(
+                                proveedor=proveedor,
+                                producto=nuevo_producto,
+                            )
 
                 messages.add_message(request, messages.INFO, 'Proveedor editado con éxito')
             except Exception as e:
                 messages.add_message(request, messages.ERROR, f'Error al guardar productos: {str(e)}')
-                return render(request, 'proveedores/proveedor_edit.html', {'proveedor_data': proveedor, 'productos':productos})
+                return render(request, 'proveedores/proveedor_edit.html', {'proveedor_data': proveedor, 'productos': productos})
 
             return redirect('proveedores_main')
         else:
             messages.add_message(request, messages.INFO, 'El correo que está tratando de ingresar, ya existe en nuestros registros')
-            return render(request, 'proveedores/proveedor_edit.html', {'proveedor_data': proveedor, 'productos':productos})
+            return render(request, 'proveedores/proveedor_edit.html', {'proveedor_data': proveedor, 'productos': productos})
 
     else:
-        return render(request, 'proveedores/proveedor_edit.html', {'proveedor_data': proveedor, 'productos':productos})
+        return render(request, 'proveedores/proveedor_edit.html', {'proveedor_data': proveedor, 'productos': productos})
+
+
 
 def proveedor_delete(request, proveedor_id):
     profile = Profile.objects.get(user_id=request.user.id)
@@ -628,7 +631,7 @@ def lista_orden(request, grupo_id):
 
 
 @login_required
-def orden_list_enviada(request, page=None):
+def orden_list_enviada(request):
     profile = Profile.objects.get(user_id=request.user.id)
     if profile.group_id != 1:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a un área para la que no tienes permisos')
@@ -642,8 +645,7 @@ def orden_list_enviada(request, page=None):
             Q(proveedor_orden__proveedor_name__icontains=search) | 
             Q(proveedor_orden__proveedor_last_name__icontains=search)
         )
-
-    paginator = Paginator(ordenes, 5)
+    paginator = Paginator(ordenes, 4)
     pagina_numero = request.GET.get('pagina')
     
     try:
@@ -654,6 +656,7 @@ def orden_list_enviada(request, page=None):
         ordenes = paginator.page(paginator.num_pages)
     
     return render(request, 'proveedores/orden_list_enviada.html', {'ordenes': ordenes, 'search': search, 'pagina_obj': ordenes})
+
 
 
 
@@ -672,7 +675,7 @@ def orden_list_aceptada(request, page=None):
             Q(proveedor_orden__proveedor_name__icontains=search) | 
             Q(proveedor_orden__proveedor_last_name__icontains=search)
         )
-    paginator = Paginator(ordenes, 5)
+    paginator = Paginator(ordenes, 4)
     pagina_numero = request.GET.get('pagina')
     
     try:
@@ -701,7 +704,7 @@ def orden_list_rechazada(request, page=None):
             Q(proveedor_orden__proveedor_name__icontains=search) | 
             Q(proveedor_orden__proveedor_last_name__icontains=search)
         )
-    paginator = Paginator(ordenes, 5)
+    paginator = Paginator(ordenes, 4)
     pagina_numero = request.GET.get('pagina')
     
     try:
@@ -729,7 +732,7 @@ def orden_list_anulada(request, page=None):
             Q(proveedor_orden__proveedor_name__icontains=search) | 
             Q(proveedor_orden__proveedor_last_name__icontains=search)
         )
-    paginator = Paginator(ordenes, 5)
+    paginator = Paginator(ordenes, 4)
     pagina_numero = request.GET.get('pagina')
     
     try:
@@ -1056,53 +1059,6 @@ def get_chart_oc_1(request):
         'series': [
             {
                 'data': [Enviadas,Rechazadas,Aceptadas,Anuladas],
-                'type': 'bar',
-
-            }
-        ]
-    }
-
-    return JsonResponse(chart_data)
-
-@login_required
-def get_chart_oc_2(request):
-    
-    monto_por_estado = []
-
-    monto_por_estado = Orden_compra.objects.aggregate(
-        monto_enviadas=Sum('monto', filter=Q(estado='enviado')),
-        monto_aceptadas=Sum('monto', filter=Q(estado='aceptado')),
-        monto_rechazadas=Sum('monto', filter=Q(estado='rechazado')),
-        monto_anuladas=Sum('monto', filter=Q(estado='anulado'))
-    )
-    
-    suma_enviadas = monto_por_estado['monto_enviadas']
-    suma_aceptadas = monto_por_estado['monto_aceptadas'] or 0
-    suma_rechazadas = monto_por_estado['monto_rechazadas'] or 0
-    suma_anuladas = monto_por_estado['monto_anuladas'] or 0
-    
-    lista_sumas = [suma_enviadas, suma_aceptadas, suma_rechazadas, suma_anuladas]
-    print(lista_sumas)
-
-    chart_data = {
-        "title": {
-            "text": 'Inversiones por ordenes'
-        },
-        'tooltip': {
-            'show': True,
-            'trigger': "axis",
-            'triggerOn': "mousemove|click"
-        },
-        'xAxis': {
-            'type': 'category',
-            'data': ['Enviadas',"Rechazadas","Aceptadas","Anuladas"],
-        },
-        'yAxis': {
-            'type': 'value'
-        },
-        'series': [
-            {
-                'data': lista_sumas,
                 'type': 'bar',
 
             }
