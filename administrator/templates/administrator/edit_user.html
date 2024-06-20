@@ -317,8 +317,8 @@
     };
 
     jQuery(document).ready(function () {
-        var htmlRegion = '<option value="">Seleccione una región</option>';
-        var htmlComunas = '<option value="">Seleccione una comuna</option>';
+        var htmlRegion = '<option value="">{{profile_data.region}}</option>';
+        var htmlComunas = '<option value="">{{profile_data.comuna}}</option>';
         
         jQuery.each(RegionesYcomunas.regiones, function (index, region) {
             htmlRegion += '<option value="' + region.NombreRegion + '">' + region.NombreRegion + '</option>';

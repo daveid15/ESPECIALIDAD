@@ -345,6 +345,7 @@ def edit_user(request, user_id):
         mobile = request.POST.get('mobile')
         address = request.POST.get('address')
         region = request.POST.get('region')
+        comuna = request.POST.get('comuna')
         profile_image = request.FILES.get('profile_image')  # Obtén la imagen de perfil del formulario
 
         template_name = 'administrator/edit_user.html'
@@ -380,6 +381,7 @@ def edit_user(request, user_id):
         profile_data.mobile = mobile
         profile_data.address = address
         profile_data.region = region
+        profile_data.comuna = comuna
         profile_data.group_id = group
 
         if profile_image:
