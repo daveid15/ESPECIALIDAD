@@ -401,7 +401,8 @@
         border-radius: 15px ;
         color: #333;
         text-align: center;
-        width: 400px;
+        font-size: 10px;
+        width: 300px;
     }
     .popup-content button {
         background-color: #87963C;
@@ -422,7 +423,7 @@
 <header class="mb-4" style="margin-top: 90px;margin-left: 270px;">
     <div class="container-fluid">
         <div class="row align-items-center justify-content-between">
-            <h2 style="font-size: 30px;margin-left: 0px; margin-top: 10px;">Proveedores <a href="{% url 'proveedores_crear' %}" class="btn btn-success new-user-button">
+            <h2 style="margin-left: 0px; margin-top: 10px;">Proveedores <a href="{% url 'proveedores_crear' %}" class="btn btn-success new-user-button">
                 <i class="fas fa-user-plus" style="color: #000000"></i> <!-- Icono de usuario con signo de más -->
             </a></h2>
         </div>
@@ -495,7 +496,7 @@
                             <h1>
                                 ¿Seguro que quiere eliminar este proveedor?
                             </h1>
-                            <button id="Aceptar1" href="#" onclick="aceptar1(a)">Aceptar</button>
+                            <button id="Aceptar1" href="#" onclick="aceptar1(a)">Eliminar</button>
                             <button id="Cancelar1">Cancelar</button>
                         </div>
                     </div>

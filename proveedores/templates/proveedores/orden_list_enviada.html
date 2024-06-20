@@ -254,8 +254,8 @@
     }
     @media (min-width: 501px) and (max-width: 767px) {
         h2 {
-            margin-block-start: 70px;
-            margin-inline-start: 250px;
+            margin-block-start: 71px;
+            margin-inline-start: 255px;
         }
 
         .list-container {
@@ -309,6 +309,11 @@
 
 
     @media screen and (min-width: 768px) and (max-width: 1024px) {
+        h2 {
+            margin-block-start: 71px;
+            margin-inline-start: 255px;
+        }
+
         .list-container {
             max-width: 700px;
             left: 10px;
@@ -353,6 +358,11 @@
     }
 
     @media screen and (min-width: 1025px){
+
+        h2 {
+            margin-block-start: 71px;
+            margin-inline-start: 255px;
+        }
         .list-container {
             max-width: 900px;
             left: 10px;
@@ -426,6 +436,11 @@
         border: 1px solid #888888;
         width: 30%;
         font-weight: bolder;
+        border-radius: 15px ;
+        color: #333;
+        text-align: center;
+        font-size: 10px;
+        width: 300px;
     }
     .popup-content button {
         background-color: #87963C;
@@ -534,7 +549,7 @@
                 {% endfor %}
                 <div id="popup1" class="popup">
                     <div class="popup-content">
-                        <h1 style="color: red">
+                        <h1 style="color:#333">
                             ¿Seguro que quiere cambiar el estado de esta orden?
                         </h1>
                         <button href="#" onclick="aceptar1('{{ orden.id }}','{{ orden.id }}')">Aceptar</button>
@@ -544,7 +559,7 @@
                 </div>
                 <div id="popup2" class="popup">
                     <div class="popup-content">
-                        <h1 style="color: red">
+                        <h1 style="color:#333">
                             Debe elegir un nuevo estado
                         </h1>
                         <button id="Cancelar2">Aceptar</button>
