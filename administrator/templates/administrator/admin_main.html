@@ -3,8 +3,9 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>TU PANEL</title>
+    <title>COMPLETOPIA</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="{% static 'assets/img/logo.png' %}">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
@@ -748,9 +749,45 @@
 
                 }
                 
-            
-
-            
+                .popup {
+                    position: fixed;
+                    z-index: 1;
+                    left: 0;
+                    top: 0;
+                    width: 100%;
+                    height: 100%;
+                    overflow: auto;
+                    background-color: rgba(
+                        0,
+                        0,
+                        0,
+                        0.4
+                    );
+                    display: none;
+                }
+                .popup-content {
+                    background-color: white;
+                    margin: 10% auto;
+                    padding: 20px;
+                    border: 1px solid #888888;
+                    width: 30%;
+                    font-weight: bolder;
+                }
+                .popup-content button {
+                    background-color: #87963C;
+                    color: white;
+                    padding: 12px 20px;
+                    border: none;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    width: 45%;
+                    margin-top: 10px;
+                    font-size: 16px;
+                }
+                .show {
+                    display: block;
+                }
+    
         </style>
     {% endblock %}
 </head>
@@ -759,8 +796,18 @@
         <a onclick="toggleSettingsPanel()" class="logout-link">
             <i class="fas fa-cog"></i>
         </a>
-        <a onclick="confirmLogout()" class="logout-link" >
+        <a id="Buttonlogout" class="logout-link">
             <i class="fas fa-sign-out-alt"></i>
+        </a>
+            <div id="Popup" class="popup">
+                <div class="popup-content">
+                    <h1 style="color: red">
+                        ¿Seguro que quiere cerrar su sesion?
+                    </h1>
+                    <button id="Aceptar">Aceptar</button>
+                    <button id="Cancelar">Cancelar</button>
+                </div>
+            </div>
         </a>
     </div>
     <div class="menu-icon" onclick="toggleNavPanel()">
@@ -974,6 +1021,7 @@
             navPanel.classList.toggle('open');
         }
 
+<<<<<<< HEAD
         function toggleSettingsPanel() {
             var navPanel = document.getElementById('navPanel');
             var settingsPanel = document.getElementById('SettingsPanel');
@@ -992,6 +1040,27 @@
                 window.location.href = '{% url "logout" %}';
             }
         }
+=======
+        Buttonlogout.addEventListener(
+                "click",
+                function () {
+                    Popup.classList.add("show");
+                }
+            );
+            Aceptar.addEventListener(
+                "click",
+                function () {
+                    window.location.href = "{% url 'logout' %}";
+                }
+            );
+            Cancelar.addEventListener(
+                "click",
+                function () {
+                        Popup.classList.remove(
+                        "show");
+                    }
+            );
+>>>>>>> 6d5afa5e55643e7fdc5d1f99cc2384d45d3c21d8
 
         // Lógica de búsqueda
         document.getElementById('searchInput').addEventListener('input', function() {

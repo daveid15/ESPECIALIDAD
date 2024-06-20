@@ -403,6 +403,52 @@
         }
 
     }
+    .messages {
+        color: rgb(23, 23, 23);
+        background-color: #ededed;
+        box-shadow: #333;
+        list-style: none;
+        text-align: center;
+        margin-top: 50px;
+    }
+    .popup {
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(
+            0,
+            0,
+            0,
+            0.4
+        );
+        display: none;
+    }
+    .popup-content {
+        background-color: white;
+        margin: 10% auto;
+        padding: 20px;
+        border: 1px solid #888888;
+        width: 30%;
+        font-weight: bolder;
+    }
+    .popup-content button {
+        background-color: #87963C;
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        width: 45%;
+        margin-top: 10px;
+        font-size: 16px;
+    }
+    .show {
+        display: block;
+    }
 </style>
 {% endblock %}
 
@@ -449,17 +495,42 @@
                             {% if profiles.group_id == 1 %}
                                 <th scope="row">
                                     {% if s.id != request.user.id %}
-                                    <a href="#" onclick="confirmrecover('{{ s.id }}')">
-                                            <i class="fa-solid fa-arrow-rotate-left" style="color: #000000;"></i>
-                                        </a>
-                                        <a href="#" onclick="confirmDelete('{{ s.id }}')">
-                                            <i class="fa-solid fa-trash-can" style="color: #000000;"></i>
-                                        </a>
+                                    <a id="Buttonrestoreuser" onclick="mostrar1('{{ s.id }}')">
+                                        <i class="fa-solid fa-arrow-rotate-left" style="color: #000000;"></i>
+                                    </a>
+                                    <a id="Buttoneraseuser" onclick="mostrar2('{{ s.id }}')">
+                                        <i class="fa-solid fa-trash-can" style="color: #000000;"></i>
+                                    </a>
                                     {% endif %}
                                 </th>   
                             {% endif %}                            
                         </tr>
                     {% endfor %}
+                    <div id="Popuprestoreuser" class="popup">
+                        <div class="popup-content">
+                            <h1 style="color: red">
+                                ¿Seguro que quiere restaurar este usuario?
+                            </h1>
+                            <button id="Aceptar1" href="#" onclick="aceptar1(a)">Aceptar</button>
+                            <button id="Cancelar1">Cancelar</button>
+                        </div>
+                    </div>  
+                    <div id="Popuperaseuser" class="popup">
+                        <div class="popup-content">
+                            <h1 style="color: red">
+                                ¿Seguro que quiere eliminar permanente este usuario?
+                            </h1>
+                            <button id="Aceptar2" href="#" onclick="aceptar2(a)">Aceptar</button>
+                            <button id="Cancelar2">Cancelar</button>
+                        </div>
+                    </div> 
+                    {% if messages %}
+                        <ul class="messages" id="message18">
+                            {% for message in messages %}
+                                <li{% if messages.tags %} class="{{message.tags}}" {% endif %}>{{message}}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %} 
                 </tbody>
             </table>
             <!-- Paginación -->
@@ -500,18 +571,34 @@
 </main>
 
 <script>
-    function confirmrecover(id) {
-        if (confirm("¿Estás seguro de que deseas recuperar este usuario?")) {
-            window.location.href = "{% url 'user_activate' 0 %}".replace('0', id);
+    function mostrar1(id) {
+        Popuprestoreuser.classList.add("show");
+        a = id;
+    };
+    function aceptar1 (id) {
+        window.location.href = "{% url 'user_activate' 0 %}".replace('0', id);
+    };
+Cancelar1.addEventListener(
+    "click",
+    function () {
+            Popuprestoreuser.classList.remove(
+            "show");
         }
-    }
-</script>
-<script>
-    function confirmDelete(id) {
-        if (confirm("¿Estás seguro de que deseas eliminar este usuario permanentemente?")) {
+);
+        function mostrar2(id) {
+            Popuperaseuser.classList.add("show");
+            a = id;
+        };
+        function aceptar2 (id) {
             window.location.href = "{% url 'user_delete' 0 %}".replace('0', id);
-        }
-    }
+        };
+    Cancelar2.addEventListener(
+        "click",
+        function () {
+                Popuperaseuser.classList.remove(
+                "show");
+            }
+    );
 </script>
 
 {% endblock %}

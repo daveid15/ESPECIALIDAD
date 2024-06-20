@@ -60,8 +60,11 @@
         color: white;
     }
 
-    .message {
-        color: green;
+    .messages {
+        color: rgb(23, 23, 23);
+        background-color: #ededed;
+        box-shadow: #333;
+        list-style: none;
         text-align: center;
     }
 
@@ -191,6 +194,13 @@
                                     <img src="{{ MEDIA_URL }}{{ profile_data.profile_image }}" alt="Foto de perfil" class="avatar">
                                 {% endif %}
                             </div>
+                            {% if messages %}
+                                <ul class="messages" id="message1">
+                                    {% for message in messages %}
+                                    <li{% if messages.tags %} class="{{message.tags}}" {% endif %}>{{message}}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
                             <div class="row">
                                 <div class="col-11 col-sm-6 mb-3">
                                     <input type="submit" value="Editar" class="button form-control">

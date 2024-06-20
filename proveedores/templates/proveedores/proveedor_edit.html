@@ -63,10 +63,13 @@
             color: white;
         }
     
-        .message {
-            color: green;
-            text-align: center;
-        }
+        .messages {
+        color: rgb(23, 23, 23);
+        background-color: #ededed;
+        box-shadow: #333;
+        list-style: none;
+        text-align: center;
+    }
     
         .error-message {
             color: red;
@@ -232,6 +235,13 @@
                                     <button type="button" id="add-producto_nuevo" class="btn btn-secondary">Agregar Producto Nuevo</button>
                                 </div>
                             </div>
+                            {% if messages %}
+                                <ul class="messages" id="message7">
+                                    {% for message in messages %}
+                                    <li{% if messages.tags %} class="{{message.tags}}" {% endif %}>{{message}}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
                             <div class="mb-0 col-md-4">
                                 <div class="d-flex justify-content-center mb-2">
                                     <div class="d-flex justify-content-center mx-0-5--custom">

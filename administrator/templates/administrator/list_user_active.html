@@ -453,6 +453,7 @@ h2 {
             position: absolute;
             white-space: nowrap; /* Evitar que el texto dentro del botón se corte */
             word-wrap: break-word;
+            margin-bottom: 30px;
             
         }
         .icon-upload {
@@ -463,9 +464,53 @@ h2 {
             top:-25px;
         }
     }
+    .messages {
+        color: rgb(23, 23, 23);
+        background-color: #ededed;
+        box-shadow: #333;
+        list-style: none;
+        text-align: center;
+    }
+    .popup {
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(
+            0,
+            0,
+            0,
+            0.4
+        );
+        display: none;
+    }
+    .popup-content {
+        background-color: white;
+        margin: 10% auto;
+        padding: 20px;
+        border: 1px solid #888888;
+        width: 30%;
+        font-weight: bolder;
+    }
+    .popup-content button {
+        background-color: #87963C;
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        width: 45%;
+        margin-top: 10px;
+        font-size: 16px;
+    }
+    .show {
+        display: block;
+    }
 </style>
 {% endblock %}
-
 <main role="main" style="margin-left: 250px;">
     <header class="mb-4" style="margin-top: 70px;">
         <div class="container-fluid">
@@ -496,7 +541,7 @@ h2 {
         </div>
     </header>
     <div>
-        <div class="inner-container">
+        <div class="inner-container">   
             <a href="{% url 'admin_main' %}" class="btn btn-danger btn-volver">
                 <i class="fas fa-arrow-left" style="color: #000000;"></i>
             </a>
@@ -538,15 +583,31 @@ h2 {
                                             <a href="{% url 'edit_user' s.id %}">
                                                 <i class="fas fa-edit" style="color: #000000;"></i>
                                             </a>
-                                            <a href="#" onclick="confirmDelete('{{ s.id }}')">
-                                                <i class="fas fa-trash-alt" style="color: #000000;"></i>
-                                            </a>
+                                            <a id="Buttondeleteuser" onclick="mostrar('{{ s.id }}')">
+                                                <i class="fas fa-trash-alt" style="color: #000000;"></i> <!-- Icono de basura para eliminar -->
+                                            </a>          
                                         </div>
                                     {% endif %}
                                 </th>
                                 {% endif %}
-                            </tr>
-                        {% endfor %}
+                            </tr>      
+                        {% endfor %} 
+                        <div id="Popupdeleteuser" class="popup">
+                            <div class="popup-content">
+                                <h1 style="color: red">
+                                    ¿Seguro que quiere eliminar este usuario?
+                                </h1>
+                                <button id="Aceptar1" onclick="aceptar1(a)">Aceptar</button>
+                                <button id="Cancelar1">Cancelar</button>
+                            </div>
+                        </div>
+                        {% if messages %}
+                        <ul class="messages" id="message17">
+                            {% for message in messages %}
+                                <li{% if messages.tags %} class="{{message.tags}}" {% endif %}>{{message}}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}        
                     </tbody>
                 </table>
             </div>
@@ -586,13 +647,21 @@ h2 {
         </div>
     </div>
 </main>
-
 <script>
-    function confirmDelete(id) {
-        if (confirm("¿Estás seguro de que deseas eliminar este usuario?")) {
+        function mostrar(id) {
+            Popupdeleteuser.classList.add("show");
+            a = id;
+        };
+        function aceptar1 (id) {
             window.location.href = "{% url 'user_block' 0 %}".replace('0', id);
-        }
-    }
+        };
+    Cancelar1.addEventListener(
+        "click",
+        function () {
+                Popupdeleteuser.classList.remove(
+                "show");
+            }
+    );
 </script>
 
 {% endblock %}

@@ -75,10 +75,13 @@
             color: white; 
         }
         
-        .message { 
-            color: green; 
-            text-align: center; 
-        }
+        .messages {
+        color: rgb(23, 23, 23);
+        background-color: #ededed;
+        box-shadow: #333;
+        list-style: none;
+        text-align: center;
+    }
         
         .error-message { 
             color: red; 
@@ -244,13 +247,6 @@
                 <div class="col-md-12">
                     <div class="mb-3">
                         <div class="d-flex flex-column align-items-center align-items-lg-start">
-                            {% if messages %}
-                                <div class="alert alert-info">
-                                    {% for message in messages %}
-                                        <p>{{ message }}</p>
-                                    {% endfor %}
-                                </div>
-                            {% endif %}
                             <form method="post" action="{% url 'orden_save' %}">
                                 {% csrf_token %}
                                 <div class="mb-0 col-md-6">
@@ -288,6 +284,13 @@
                                     <label for="monto_orden" class="form-label">Monto</label>
                                     <input type="number" min="0" class="form -control" name="monto_orden" id="monto_orden" placeholder="Monto" required>
                                 </div>
+                                {% if messages %}
+                                    <ul class="messages" id="message6">
+                                        {% for message in messages %}
+                                        <li{% if messages.tags %} class="{{message.tags}}" {% endif %}>{{message}}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
                                 <div class="button-container">
                                     <button type="submit" class="button">Crear</button>
                                     <a href="{% url 'orden_list_enviada' %}" class="button">Volver</a>

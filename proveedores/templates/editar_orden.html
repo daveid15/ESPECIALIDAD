@@ -64,10 +64,13 @@
             color: white;
         }
     
-        .message {
-            color: green;
-            text-align: center;
-        }
+        .messages {
+        color: rgb(23, 23, 23);
+        background-color: #ededed;
+        box-shadow: #333;
+        list-style: none;
+        text-align: center;
+    }
     
         .error-message {
             color: red;
@@ -293,13 +296,6 @@
     <div class="col-md-11">
         <div class="mb-3">
             <div class="d-flex flex-column align-items-center align-items-lg-start">
-                {% if messages %}
-                    <div class="alert alert-info">
-                        {% for message in messages %}
-                            <p>{{ message }}</p>
-                        {% endfor %}
-                    </div>
-                {% endif %}
                 <form method="post" action="{% url 'editar_orden' orden_id=orden.id %}">
                     {% csrf_token %}
                     <div class="mb-0 col-md-6">
@@ -333,6 +329,13 @@
                         <label for="monto_orden" class="form-label">Monto</label>
                         <input type="number" min="0" class="monto-form-control" name="monto_orden" placeholder="{{orden.monto}}" value="{{orden.monto}}" required>
                     </div>
+                    {% if messages %}
+                        <ul class="messages" id="message6">
+                            {% for message in messages %}
+                            <li{% if messages.tags %} class="{{message.tags}}" {% endif %}>{{message}}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
                     <div class="d-flex justify-content-center mx-0-5--custom">
                         <button type="submit" class="button">Editar</button>
                         <a href="{% url 'orden_list_enviada' %}" class="button">Volver</a>

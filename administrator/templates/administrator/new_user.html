@@ -86,13 +86,11 @@
         color: white;
     }
 
-    .message {
-        color: green;
-        text-align: center;
-    }
-
-    .error-message {
-        color: red;
+    .messages {
+        color: rgb(23, 23, 23);
+        background-color: #ededed;
+        box-shadow: #333;
+        list-style: none;
         text-align: center;
     }
 
@@ -317,6 +315,13 @@
                             <input type="file" class="photo-form" name="profile_image" />
                         </div>
                     </div>
+                    {% if messages %}
+                        <ul class="messages" id="message3">
+                            {% for message in messages %}
+                            <li{% if messages.tags %} class="{{message.tags}}" {% endif %}>{{message}}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
                     <div class="row">
                         <div class="col-12 col-sm-6 mb-3">
                             <button type="submit" class="button">Crear</button>
@@ -426,6 +431,17 @@
             jQuery('#comuna').html(htmlComuna);
         });
     });
+
+    function mostrar() {
+            popupdeleteitem.classList.add("show");
+        };
+    Cancelar1.addEventListener(
+        "click",
+        function () {
+                popupdeleteitem.classList.remove(
+                "show");
+            }
+    );
 </script>
 
 </body>
