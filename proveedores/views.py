@@ -400,7 +400,7 @@ def carga_masiva_proveedor_save(request):
     if request.method == 'POST':
         try:
             # Leer el archivo Excel
-            data = pd.read_excel(request.FILES['myfile'], engine='openpyxl')
+            data = pd.read_excel(request.FILES['myfile'], engine='openpyxl', skiprows=1)
             df = pd.DataFrame(data)
             print("Contenido del DataFrame:")
             print(df)  # Mostrar el contenido del DataFrame para verificar los datos
