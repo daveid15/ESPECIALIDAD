@@ -195,13 +195,13 @@ def proveedor_save(request):
                         
                         
                 messages.add_message(request, messages.INFO, 'Proveedor ingresado con éxito')
-                return redirect('proveedores_main')
+                return redirect('proveedores_activos')
             else:
                 messages.add_message(request, messages.INFO, 'El correo que está tratando de ingresar, ya existe en nuestros registros')
-                return redirect('proveedores_main')
+                return redirect('proveedores_activos')
         else:
             messages.add_message(request, messages.INFO, 'El RUT que está tratando de ingresar, ya existe en nuestros registros')
-            return redirect('proveedores_main')
+            return redirect('proveedores_activos')
     else:
         messages.add_message(request, messages.INFO, 'Error en el método de envío')
         return redirect('check_group_main')
@@ -327,7 +327,7 @@ def proveedor_edit(request, proveedor_id):
                 messages.add_message(request, messages.ERROR, f'Error al guardar productos: {str(e)}')
                 return render(request, 'proveedores/proveedor_edit.html', {'proveedor_data': proveedor, 'productos': productos})
 
-            return redirect('proveedores_main')
+            return redirect('proveedores_activos')
         else:
             messages.add_message(request, messages.INFO, 'El correo que está tratando de ingresar, ya existe en nuestros registros')
             return render(request, 'proveedores/proveedor_edit.html', {'proveedor_data': proveedor, 'productos': productos})
