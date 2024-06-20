@@ -377,7 +377,7 @@ body.dark .header {
   top: 120px; /* Ajusta la distancia desde la parte superior de la ventana */
   left: 25%; /* Centra el contenedor */
   padding: 5px; /* Ajusta el relleno interior */
-  z-index: 0;
+  z-index: 100;
   overflow-y: auto; /* Ajusta la barra de desplazamiento si es necesario */
   box-shadow: 0 0 10px var(--grey-color-light);
   transition: all 0.5s ease;
@@ -526,7 +526,7 @@ body.dark .header {
   top: 100px; /* Ajusta la distancia desde la parte superior de la ventana */
   left: 330px; /* Ajusta la distancia desde el lado izquierdo de la ventana */
   padding: 5px; /* Ajusta el relleno interior */
-  z-index: 0;
+  z-index: 100;
   border-radius: 15px;
   overflow-y: auto; /* Ajusta la barra de desplazamiento si es necesario */
   box-shadow: 0 0 10px var(--grey-color-light);
@@ -715,7 +715,7 @@ body.dark .header {
   top: 160px; /* Ajusta la distancia desde la parte superior de la ventana */
   left: 24%; /* Ajusta la distancia desde el lado izquierdo de la ventana */
   padding: 5px; /* Ajusta el relleno interior */
-  z-index: 0;
+  z-index: 100;
   border-radius: 10px;
   overflow-y: auto; /* Ajusta la barra de desplazamiento si es necesario */
   box-shadow: 0 0 10px var(--grey-color-light);
@@ -787,37 +787,23 @@ body.dark .header {
   font-size: 14px;
 }
 
-.settingsbar {
-  display: none;
-  background-color: #9eb23b;
-  width: 250px; /* Ajusta el ancho según tus necesidades */
-  height: fit-content; /* Ajusta la altura según tus necesidades */
+/* ventasedit styles 
+.ventasedit {
+  background-color: var(--white-color);
+  width: 1000px; /* Ajusta el ancho según tus necesidades 
+  height: 65%; /* Ajusta la altura según tus necesidades 
   position: fixed;
-  top: 60px; /* Ajusta la distancia desde la parte superior de la ventana */
-      /* Ajusta la distancia desde el lado izquierdo de la ventana */
-  border-radius: 15px; /* Redondea las esquinas */
-  padding: 5px; /* Ajusta el relleno interior */
+  top: 140px; /* Ajusta la distancia desde la parte superior de la ventana 
+  left: 330px; /* Ajusta la distancia desde el lado izquierdo de la ventana 
+  padding: 5px; /* Ajusta el relleno interior 
   z-index: 100;
-  overflow-y: auto; /* Ajusta la barra de desplazamiento si es necesario */
+  border-radius: 15px;/* Ajusta la barra de desplazamiento si es necesario 
   box-shadow: 0 0 10px var(--grey-color-light);
-  transition: left 0.3s ease;
-  
+  transition: all 0.5s ease;
 }
 
-.settingsbar.open {
-  position: end;
-  display: flex;
-  right: 0;
-  width: 220px;
-  box-shadow: 0 0 10px var(--grey-color-light);
-  transition: left 0.3s ease;
-}
-
-.settingsbar-content {
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
+.ventasedit:-webkit-scrollbar {
+  display: none;
 }
 
 /*RESPONSIVE*/
@@ -833,9 +819,7 @@ body.dark .header {
     word-wrap: break-word;
   }
 
-  .nav_link .navlink {
-    display: none;
-  }
+ 
   .sidebar {
     width: fit-content;
     
@@ -853,12 +837,6 @@ body.dark .header {
     top: 120px;
     left: 115px;
   }
-
-  .settingsbar.open{
-    position: relative;
-    
-    z-index: 100;
-}
 
 
 
@@ -885,11 +863,6 @@ body.dark .header {
     top: 120px;
     left: 260px;
   }
-
-  /* .settingsbar.open {
-    position: relative;
-    left: 440px;
-} */
 }
 
 /* Media Queries para pantallas más pequeñas */
@@ -914,11 +887,6 @@ body.dark .header {
     top: 120px;
     left: 260px;
   }
-
-  /* .settingsbar.open {
-    position: relative;
-    left: 440px;
-} */
 }
 
 @media screen and (min-width: 1025px){
@@ -949,8 +917,4 @@ body.dark .header {
     left: 260px;
   }
 }
-/* .sidebar.open {
-  height: fit-content;
-  left: 0;
-} */
 

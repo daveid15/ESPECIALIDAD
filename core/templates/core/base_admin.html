@@ -57,6 +57,99 @@
     .show {
         display: block;
     }
+    .settingsbar {
+        display: none;
+        background-color: #9eb23b;
+        width: 250px; /* Ajusta el ancho según tus necesidades */
+        height: fit-content; /* Ajusta la altura según tus necesidades */
+        position: fixed;
+        left: auto;
+        top: 60px; /* Ajusta la distancia desde la parte superior de la ventana */
+            /* Ajusta la distancia desde el lado izquierdo de la ventana */
+        border-radius: 15px; /* Redondea las esquinas */
+        padding: 5px; /* Ajusta el relleno interior */
+        z-index: 100;
+        overflow-y: auto; /* Ajusta la barra de desplazamiento si es necesario */
+        box-shadow: 0 0 10px var(--grey-color-light);
+        transition: left 0.3s ease;
+        
+    }
+
+    .settingsbar.open {
+        position: end;
+        display: flex;
+        right: 0;
+        width: 220px;
+        box-shadow: 0 0 10px var(--grey-color-light);
+        transition: left 0.3s ease;
+    }
+
+    .settingsbar-content {
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    .settingsbar.open{
+        position: relative;
+        position: fixed;
+        
+        z-index: 999;
+    }
+    .submenu_item .arrow-left {
+                    position: absolute;
+                    right: -15px;
+                    display: inline-block;
+                    margin-right: auto;
+                    }
+    @media screen and (max-width: 500px) {
+
+        .settingsbar.open {
+        
+        position: fixed;
+        right: 0;
+        left:270px;
+        box-shadow: 0 0 10px var(--grey-color-light);
+        transition: left 0.3s ease;
+    }
+
+    }
+
+    @media (min-width: 501px) and (max-width: 767px) {
+        .settingsbar.open {
+        
+        position: fixed;
+        
+        box-shadow: 0 0 10px var(--grey-color-light);
+        transition: left 0.3s ease;
+    }
+
+    }
+
+    @media screen and (min-width: 768px) and (max-width: 1024px) {
+        .settingsbar.open {
+        
+        position: fixed;
+       
+        box-shadow: 0 0 10px var(--grey-color-light);
+        transition: left 0.3s ease;
+    }
+    }
+
+    @media screen and (min-width: 1025px){
+   
+    .settingsbar.open {
+        
+        position: fixed;
+        
+        box-shadow: 0 0 10px var(--grey-color-light);
+        transition: left 0.3s ease;
+    }
+    }
+
+
+    
 </style>
 <body>
     <nav id="sidebar" class="side-bar to-left">
@@ -81,7 +174,7 @@
                 </div>
                 <div class="navbar_content">
                     <div class="logout-icon">
-                        <a href="{% url 'edit_perfil' %}" class="logout-link">
+                        <a onclick="toggleSettingsPanel()" class="logout-link">
                             <i class="fas fa-cog"></i>
                         </a>
                     </a>
@@ -185,11 +278,73 @@
             </nav>
         </div>
     </nav>
+    <!-- Menu de la tuerca -->
+    <nav class="side-bar to-right">
+        <div class="menu">
+            <!--=== Menu Inicio ===-->
+            <nav class="sidebar">
+                <div class="settingsbar" id="SettingsPanel">
+                    <ul class="menu_items">
+                        <li class="item">
+                            <a href="{% url 'password_reset' %}" class="nav_link submenu_item">
+                                <span class="navlink_icon">
+                                    <i class="bx bx-buildings"></i>
+                                </span>
+                                <span class="navlink">Contraseña</span>
+                                <i class="bx bx-chevron-right arrow-left"></i>
+                            </a>
+                            <ul class="menu_items submenu">
+                                <li><a href="{% url 'password_reset' %}" class="nav_link sublink">Contraseña</a></li>
+                            </ul>
+                        </li>
+
+
+                        <li class="item">
+                            <a href="{% url 'edit_perfil' %}" class="nav_link submenu_item">
+                                <span class="navlink_icon">
+                                    <i class="bx bx-buildings"></i>
+                                </span>
+                                <span class="navlink">Editar Perfil</span>
+                                <i class="bx bx-chevron-right arrow-left"></i>
+                            </a>
+                        </li>
+
+                        <li class="item">
+                            <a href="{% url 'user_detail' user_id=request.user.id %}" class="nav_link submenu_item">
+                                <span class="navlink_icon">
+                                    <i class="bx bx-buildings"></i>
+                                </span>
+                                <span class="navlink">Ver perfil</span>
+                                <i class="bx bx-chevron-right arrow-left"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </nav>
+
         {% block content %}{% endblock %}
     </div>
     <script src="{% static 'js/admin_main_script.js' %}"></script>
     <script src="{% static 'node_modules/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
     <script>
+
+        
+        function toggleSettingsPanel() {
+            var navPanel = document.getElementById('navPanel');
+            var settingsPanel = document.getElementById('SettingsPanel');
+
+
+            // Alterna el panel de configuración
+            settingsPanel.classList.toggle('open');
+        }
+
+        function confirmLogout() {
+            if (confirm("¿Estás seguro de que deseas cerrar sesión?")) {
+                window.location.href = '{% url "logout" %}';
+            }
+        }
         Buttonlogout2.addEventListener(
                     "click",
                     function () {

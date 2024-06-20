@@ -14,9 +14,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Icons+Sharp" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Icons+Two+Tone" rel="stylesheet">
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/admin_main_styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/inicio_styles.css' %}">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="{% static 'css/admin_main_styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/inicio_styles.css' %}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>COMPLETOPIA</title>
@@ -194,7 +194,7 @@
                 height: fit-content; /* Ajusta la altura según tus necesidades */
                 position: fixed;
                 top: 60px; /* Ajusta la distancia desde la parte superior de la ventana */
-                 /* Ajusta la distancia desde el lado izquierdo de la ventana */
+                    /* Ajusta la distancia desde el lado izquierdo de la ventana */
                 border-radius: 15px; /* Redondea las esquinas */
                 padding: 5px; /* Ajusta el relleno interior */
                 z-index: 100;
@@ -202,12 +202,13 @@
                 box-shadow: 0 0 10px var(--grey-color-light);
                 transition: left 0.3s ease;
                 
-            }
+                }
 
             .settingsbar.open {
                 position: end;
                 display: flex;
                 right: 0;
+                width: 220px;
                 box-shadow: 0 0 10px var(--grey-color-light);
                 transition: left 0.3s ease;
             }
@@ -452,6 +453,13 @@
                 outline: none;
             }
 
+            .submenu_item .arrow-left {
+                    position: absolute;
+                    right: -15px;
+                    display: inline-block;
+                    margin-right: auto;
+                    }
+
             
 
 
@@ -547,10 +555,13 @@
                 .settingsbar.open{
                     position: relative;
                     position: fixed;
-                    top: 60px;
-                    left: 115px;
+                    
                     z-index: 999;
                 }
+                h1{
+                    font-size: 30px;
+                }
+                
                 
                 
             }
@@ -624,7 +635,7 @@
                 .logout-icon {
                     position: relative;
                     top: 5px;
-                    left: 60%;
+                    left: 80%;
                     display: flex;
                     
                     padding: 10px;
@@ -648,6 +659,19 @@
                 }
                 .menu-icon{
                     top:-60px;
+                }
+
+                h1{
+                    
+                    font-size: 30px;
+                }
+
+                .settingsbar.open {
+                    
+                    display: flex;
+                    
+                    box-shadow: 0 0 10px var(--grey-color-light);
+                    transition: left 0.3s ease;
                 }
                 
             }
@@ -952,7 +976,7 @@
             </nav>
         </div>
     </nav>
-       <!-- Panel de Navegación -->
+       <!-- Menu de la tuerca -->
        <nav class="side-bar to-right">
         <div class="menu">
             <!--=== Menu Inicio ===-->
@@ -960,37 +984,37 @@
                 <div class="settingsbar" id="SettingsPanel">
                     <ul class="menu_items">
                         <li class="item">
-                            <a href="{% url 'admin_main' %}" class="nav_link submenu_item">
+                            <a href="{% url 'password_reset' %}" class="nav_link submenu_item">
                                 <span class="navlink_icon">
                                     <i class="bx bx-buildings"></i>
                                 </span>
-                                <span class="navlink">Inicio</span>
+                                <span class="navlink">Contraseña</span>
                                 <i class="bx bx-chevron-right arrow-left"></i>
                             </a>
                             <ul class="menu_items submenu">
-                                <li><a href="{% url 'admin_main' %}" class="nav_link sublink">Inicio</a></li>
+                                <li><a href="{% url 'password_reset' %}" class="nav_link sublink">Contraseña</a></li>
                             </ul>
                         </li>
+
+
                         <li class="item">
-                            <a href="{% url 'list_user_active' group_id=1 %}" class="nav_link submenu_item">
+                            <a href="{% url 'edit_perfil' %}" class="nav_link submenu_item">
                                 <span class="navlink_icon">
                                     <i class="bx bx-buildings"></i>
                                 </span>
-                                <span class="navlink">Usuarios</span>
+                                <span class="navlink">Editar Perfil</span>
                                 <i class="bx bx-chevron-right arrow-left"></i>
                             </a>
                         </li>
+
                         <li class="item">
-                            <a href="{% url 'proveedores_main' %}" class="nav_link submenu_item">
+                            <a href="{% url 'user_detail' user_id=request.user.id %}" class="nav_link submenu_item">
                                 <span class="navlink_icon">
                                     <i class="bx bx-buildings"></i>
                                 </span>
-                                <span class="navlink">Proveedores</span>
+                                <span class="navlink">Ver perfil</span>
                                 <i class="bx bx-chevron-right arrow-left"></i>
                             </a>
-                            <ul class="menu_items submenu">
-                                <li><a href="{% url 'proveedores_main' %}" class="nav_link sublink">Proveedores Main</a></li>
-                            </ul>
                         </li>
                     </ul>
                 </div>
@@ -1021,7 +1045,6 @@
             navPanel.classList.toggle('open');
         }
 
-<<<<<<< HEAD
         function toggleSettingsPanel() {
             var navPanel = document.getElementById('navPanel');
             var settingsPanel = document.getElementById('SettingsPanel');
@@ -1040,7 +1063,6 @@
                 window.location.href = '{% url "logout" %}';
             }
         }
-=======
         Buttonlogout.addEventListener(
                 "click",
                 function () {
@@ -1060,7 +1082,6 @@
                         "show");
                     }
             );
->>>>>>> 6d5afa5e55643e7fdc5d1f99cc2384d45d3c21d8
 
         // Lógica de búsqueda
         document.getElementById('searchInput').addEventListener('input', function() {
