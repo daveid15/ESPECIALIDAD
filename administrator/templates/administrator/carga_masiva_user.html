@@ -199,6 +199,13 @@
             word-wrap: break-word;
         }
     }
+    .messages {
+        color: rgb(23, 23, 23);
+        background-color: #ededed;
+        box-shadow: #333;
+        list-style: none;
+        text-align: center;
+    }
 </style>
 {% endblock %}
 <main role="main">
@@ -215,6 +222,13 @@
                             <input type="file" name="myfile" id="file" required>
                             <span id="file-name"></span>
                         </label>
+                        {% if messages %}
+                            <ul class="messages" id="message20">
+                                {% for message in messages %}
+                                    <li{% if messages.tags %} class="{{message.tags}}" {% endif %}>{{message}}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
                         <button type="submit" class="upload-button">Cargar</button>
                         <a href="{% url 'list_user_active' group_id=1 %}" class="back-link">Volver</a>
                     </form>
