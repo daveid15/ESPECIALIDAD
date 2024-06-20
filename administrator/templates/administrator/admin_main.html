@@ -161,7 +161,7 @@
             .sidebar {
                 background-color: #9eb23b;
                 width: 250px; /* Ajusta el ancho según tus necesidades */
-                height: 62%; /* Ajusta la altura según tus necesidades */
+                height: fit-content; /* Ajusta la altura según tus necesidades */
                 position: fixed;
                 top: 60px; /* Ajusta la distancia desde la parte superior de la ventana */
                 left: -350px; /* Ajusta la distancia desde el lado izquierdo de la ventana */
@@ -173,6 +173,8 @@
                 transition: left 0.3s ease;
             }
 
+            
+
             .sidebar.open {
                 left: 0;
             }
@@ -183,6 +185,40 @@
                 flex-direction: column;
                 height: 100%;
             }
+
+            .settingsbar {
+                display: none;
+                background-color: #9eb23b;
+                width: 250px; /* Ajusta el ancho según tus necesidades */
+                height: fit-content; /* Ajusta la altura según tus necesidades */
+                position: fixed;
+                top: 60px; /* Ajusta la distancia desde la parte superior de la ventana */
+                 /* Ajusta la distancia desde el lado izquierdo de la ventana */
+                border-radius: 15px; /* Redondea las esquinas */
+                padding: 5px; /* Ajusta el relleno interior */
+                z-index: 100;
+                overflow-y: auto; /* Ajusta la barra de desplazamiento si es necesario */
+                box-shadow: 0 0 10px var(--grey-color-light);
+                transition: left 0.3s ease;
+                
+            }
+
+            .settingsbar.open {
+                position: end;
+                display: flex;
+                right: 0;
+                box-shadow: 0 0 10px var(--grey-color-light);
+                transition: left 0.3s ease;
+            }
+
+            .settingsbar-content {
+                padding: 20px;
+                display: flex;
+                flex-direction: column;
+                height: 100%;
+            }
+
+            
 
 
 
@@ -390,7 +426,7 @@
                 top: 5px;
                 left: 93%;
                 display: flex;
-                
+                cursor: pointer;
                 padding: 15px;
                 z-index: 999;
                 color: #333;
@@ -489,11 +525,14 @@
                     padding: 8px; /* Adjust padding as needed */
                     word-wrap: break-word; /* Allow content to wrap within cells */
                 }
+                .menu-icon{
+                    top:-60px;
+                }
 
                 .sidebutton .button {
                 display: ruby-text;
                 
-            }
+                }
                 .logout-icon {
                     position: relative;
                     top: 5px;
@@ -504,8 +543,14 @@
                     z-index: 999;
                     color: #333;
                 }
-
-                                
+                .settingsbar.open{
+                    position: relative;
+                    position: fixed;
+                    top: 60px;
+                    left: 115px;
+                    z-index: 999;
+                }
+                
                 
             }
 
@@ -599,7 +644,11 @@
                 .sidebutton .button {
                 display: ruby-text;
                 
-            }
+                }
+                .menu-icon{
+                    top:-60px;
+                }
+                
             }
 
 
@@ -668,6 +717,8 @@
                     left: 0;
                 }
 
+                
+
                 @media (min-width:1501px ) {
 
                     .main-content {
@@ -690,6 +741,8 @@
                     padding: 20px 20px;
                     width: 98%;
                 }
+
+                
                 
 
 
@@ -703,7 +756,7 @@
 </head>
 <body>
     <div class="logout-icon">
-        <a href="{% url 'edit_perfil' %}" class="logout-link">
+        <a onclick="toggleSettingsPanel()" class="logout-link">
             <i class="fas fa-cog"></i>
         </a>
         <a onclick="confirmLogout()" class="logout-link" >
@@ -713,6 +766,7 @@
     <div class="menu-icon" onclick="toggleNavPanel()">
         <i class="fas fa-bars"></i>
     </div>
+    
     {% block content %}
     <div class="welcome-banner">
         <h1>¡Bienvenido a Completopia, {{request.user.first_name}}!</h1>
@@ -851,6 +905,54 @@
             </nav>
         </div>
     </nav>
+       <!-- Panel de Navegación -->
+       <nav class="side-bar to-right">
+        <div class="menu">
+            <!--=== Menu Inicio ===-->
+            <nav class="sidebar">
+                <div class="settingsbar" id="SettingsPanel">
+                    <ul class="menu_items">
+                        <li class="item">
+                            <a href="{% url 'admin_main' %}" class="nav_link submenu_item">
+                                <span class="navlink_icon">
+                                    <i class="bx bx-buildings"></i>
+                                </span>
+                                <span class="navlink">Inicio</span>
+                                <i class="bx bx-chevron-right arrow-left"></i>
+                            </a>
+                            <ul class="menu_items submenu">
+                                <li><a href="{% url 'admin_main' %}" class="nav_link sublink">Inicio</a></li>
+                            </ul>
+                        </li>
+                        <li class="item">
+                            <a href="{% url 'list_user_active' group_id=1 %}" class="nav_link submenu_item">
+                                <span class="navlink_icon">
+                                    <i class="bx bx-buildings"></i>
+                                </span>
+                                <span class="navlink">Usuarios</span>
+                                <i class="bx bx-chevron-right arrow-left"></i>
+                            </a>
+                        </li>
+                        <li class="item">
+                            <a href="{% url 'proveedores_main' %}" class="nav_link submenu_item">
+                                <span class="navlink_icon">
+                                    <i class="bx bx-buildings"></i>
+                                </span>
+                                <span class="navlink">Proveedores</span>
+                                <i class="bx bx-chevron-right arrow-left"></i>
+                            </a>
+                            <ul class="menu_items submenu">
+                                <li><a href="{% url 'proveedores_main' %}" class="nav_link sublink">Proveedores Main</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </nav>
+
+
+    men
     {% endblock %}
 
     <!-- Pie de página -->
@@ -861,7 +963,28 @@
     <script>
         function toggleNavPanel() {
             var navPanel = document.getElementById('navPanel');
+            var settingsPanel = document.getElementById('SettingsPanel');
+
+            // Cierra el panel de configuración si está abierto
+            if (settingsPanel.classList.contains('open')) {
+                settingsPanel.classList.remove('open');
+            }
+
+            // Alterna el panel de navegación
             navPanel.classList.toggle('open');
+        }
+
+        function toggleSettingsPanel() {
+            var navPanel = document.getElementById('navPanel');
+            var settingsPanel = document.getElementById('SettingsPanel');
+
+            // Cierra el panel de navegación si está abierto
+            if (navPanel.classList.contains('open')) {
+                navPanel.classList.remove('open');
+            }
+
+            // Alterna el panel de configuración
+            settingsPanel.classList.toggle('open');
         }
 
         function confirmLogout() {
