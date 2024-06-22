@@ -515,57 +515,54 @@
             </thead>
             <tbody>
                 {% for orden in ordenes %}
-                    <tr>
-                        <td style="padding: 15px;" class="hide-column">{{ orden.id }}</td>
-                        <td>{{ orden.proveedor_orden }}</td>
-                        <td class="hide-column">{{ orden.producto_orden_set.all|length }}</td>
-                        <td class="hide-column">{{ orden.monto }}</td>
-                        <td>
-                            <a href="{% url 'detalle_orden_de_compra_enviada' orden_id=orden.id %}" class="#"><i class="fas fa-eye" style="color: #000000;"></i></a>
-                            <a href="{% url 'editar_orden' orden_id=orden.id %}" class="btn btn-secondary"><i class="fas fa-edit" style="color: #000000;"></i></a>
-                        </td>
-                        <td>
-                            <!-- Modal -->
-                            <div class="modal fade" id="estadoOrden{{ orden.id }}" tabindex="-1" aria-labelledby="estadoOrden{{ orden.id }}Label" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-body">
-                                            <form id="estadoForm{{ orden.id }}" method="post" action="{% url 'cambiar_estado_orden_enviada' orden.id %}">
-                                                {% csrf_token %}
-                                                <div class="col-sm-8 d-flex justify-content-between align-items-center">
-                                                    <select name="nuevo_estado" id="nuevo_estado{{ orden.id }}" class="form-select me-2">
-                                                        <option value="" selected disabled>Seleccione un estado</option>
-                                                        <option value="aceptado">Aceptado</option>
-                                                        <option value="rechazado">Rechazado</option>
-                                                        <option value="anulado">Anulado</option>
-                                                    </select>
-                                                </div>
-                                                <button id="Button1" type="button" class="btn btn-primary" onclick="mostrar('{{ orden.id }}','{{ orden.id }}')">Enviar</button>
-                                        </div>
+                <tr>
+                    <td style="padding: 15px;" class="hide-column">{{ orden.id }}</td>
+                    <td>{{ orden.proveedor_orden }}</td>
+                    <td class="hide-column">{{ orden.producto_orden_set.all|length }}</td>
+                    <td class="hide-column">{{ orden.monto }}</td>
+                    <td>
+                        <a href="{% url 'detalle_orden_de_compra_enviada' orden_id=orden.id %}" class="#"><i class="fas fa-eye" style="color: #000000;"></i></a>
+                        <a href="{% url 'editar_orden' orden_id=orden.id %}" class="btn btn-secondary"><i class="fas fa-edit" style="color: #000000;"></i></a>
+                    </td>
+                    <td>
+                        <!-- Modal -->
+                        <div class="modal fade" id="estadoOrden{{ orden.id }}" tabindex="-1" aria-labelledby="estadoOrden{{ orden.id }}Label" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-body">
+                                        <form id="estadoForm{{ orden.id }}" method="post" action="{% url 'cambiar_estado_orden_enviada' orden.id %}">
+                                            {% csrf_token %}
+                                            <div class="col-sm-8 d-flex justify-content-between align-items-center">
+                                                <select name="nuevo_estado" id="nuevo_estado{{ orden.id }}" class="form-select me-2">
+                                                    <option value="" selected disabled>Seleccione un estado</option>
+                                                    <option value="aceptado">Aceptado</option>
+                                                    <option value="rechazado">Rechazado</option>
+                                                    <option value="anulado">Anulado</option>
+                                                </select>
+                                            </div>
+                                            <button type="button" class="btn btn-primary" onclick="manejarOrden('{{ orden.id }}')">Enviar</button>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
-                        </td>
-                    </tr>
+                        </div>
+                    </td>
+                </tr>
                 {% endfor %}
                 <div id="popup1" class="popup">
                     <div class="popup-content">
-                        <h1 style="color:#333">
-                            ¿Seguro que quiere cambiar el estado de esta orden?
-                        </h1>
-                        <button href="#" onclick="aceptar1('{{ orden.id }}','{{ orden.id }}')">Aceptar</button>
-                    </form>
+                        <h1 style="color:#333">¿Seguro que quiere cambiar el estado de esta orden?</h1>
+                        <button href="#" onclick="aceptar1()">Aceptar</button>
                         <button id="Cancelar1">Cancelar</button>
                     </div>
                 </div>
                 <div id="popup2" class="popup">
                     <div class="popup-content">
-                        <h1 style="color:#333">
-                            Debe elegir un nuevo estado
-                        </h1>
+                        <h1 style="color:#333">Debe elegir un nuevo estado</h1>
                         <button id="Cancelar2">Aceptar</button>
                     </div>
                 </div>
+                
                 {% if messages %}
                         <ul class="messages" id="message13">
                             {% for message in messages %}
@@ -609,33 +606,35 @@
     </nav>
     
 
-<script>
-        function mostrar (ordenId, ordenNumero) {
-        const select = document.getElementById(`nuevo_estado${ordenId}`)
-        if (!select.value) {
-            popup2.classList.add("show");}   
-        else {popup1.classList.add("show");}
-    };
-
-    function aceptar1 (ordenId, ordenNumero) {
-        document.getElementById(`estadoForm${ordenId}`).submit();
-        };
-
-    Cancelar1.addEventListener(
-        "click",
-        function () {
-                popup1.classList.remove(
-                "show");
+    <script>
+        let currentOrdenId = null;
+    
+        function manejarOrden(ordenId) {
+            const select = document.getElementById(`nuevo_estado${ordenId}`);
+            currentOrdenId = ordenId;
+    
+            if (!select.value) {
+                document.getElementById("popup2").classList.add("show");
+            } else {
+                document.getElementById("popup1").classList.add("show");
             }
-    );
-    Cancelar2.addEventListener(
-        "click",
-        function () {
-                popup2.classList.remove(
-                "show");
+        }
+    
+        function aceptar1() {
+            if (currentOrdenId !== null) {
+                document.getElementById(`estadoForm${currentOrdenId}`).submit();
             }
-    );
-</script>
+        }
+    
+        document.getElementById("Cancelar1").addEventListener("click", function () {
+            document.getElementById("popup1").classList.remove("show");
+        });
+    
+        document.getElementById("Cancelar2").addEventListener("click", function () {
+            document.getElementById("popup2").classList.remove("show");
+        });
+    </script>
+    
 
 {% block extrajs %}    
 {% endblock extrajs %}    
