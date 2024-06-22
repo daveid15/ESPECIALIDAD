@@ -106,6 +106,63 @@
         margin-right: 10px; /* Ajusta el margen entre los botones si es necesario */
     }
 
+    .popup {
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(
+            0,
+            0,
+            0,
+            0.4
+        );
+        display: none;
+    }
+    .popup-content {
+        background-color: white;
+        margin: 10% auto;
+        padding: 20px;
+        border: 1px solid #888888;
+        width: 30%;
+        font-weight: bolder;
+        border-radius: 15px ;
+        color: #333;
+        text-align: center;
+        font-size: 10px;
+        width: 300px;
+    }
+    .popup-content button {
+        background-color: #87963C;
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        width: 45%;
+        margin-top: 10px;
+        font-size: 16px;
+    }
+    .show {
+        display: block;
+    }
+
+    .messages {
+        color: rgb(23, 23, 23);
+        background-color: #ededed;
+        box-shadow: #333;
+        list-style: none;
+        text-align: center;
+    }
+
+    .error-message { 
+        color: red; 
+        text-align: center; 
+    }
+
     h2 {
         display: block;
         font-size: 1.5em;
@@ -306,7 +363,7 @@
         }
         
         .list-container{
-            left: -10px;
+            left: 0px;
             width: 1050px;
             height: 400px;
         }
@@ -321,13 +378,15 @@
         .upload{
             position: relative;
             top: 15px;
-            color: #000;
+            left: -200px;
+            color: #000000;
             font-size: 20px;
         }
 
         .download{
             position: relative;
             top: 15px;
+            left: -200px;
             color: #000;
             font-size: 30px;
         }
@@ -356,62 +415,6 @@
             width: 100%;
         }
     } 
-    .popup {
-        position: fixed;
-        z-index: 1;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        background-color: rgba(
-            0,
-            0,
-            0,
-            0.4
-        );
-        display: none;
-    }
-    .popup-content {
-        background-color: white;
-        margin: 10% auto;
-        padding: 20px;
-        border: 1px solid #888888;
-        width: 30%;
-        font-weight: bolder;
-        border-radius: 15px ;
-        color: #333;
-        text-align: center;
-        font-size: 10px;
-        width: 300px;
-    }
-    .popup-content button {
-        background-color: #87963C;
-        color: white;
-        padding: 12px 20px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        width: 45%;
-        margin-top: 10px;
-        font-size: 16px;
-    }
-    .show {
-        display: block;
-    }
-
-    .messages {
-        color: rgb(23, 23, 23);
-        background-color: #ededed;
-        box-shadow: #333;
-        list-style: none;
-        text-align: center;
-    }
-
-    .error-message { 
-        color: red; 
-        text-align: center; 
-    }
 
 </style>
 {% endblock %}
