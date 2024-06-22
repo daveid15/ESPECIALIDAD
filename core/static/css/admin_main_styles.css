@@ -120,6 +120,8 @@ body.dark {
   transition: all 0.5s ease;
 }
 
+
+
 .sidebar.close {
   padding: 60px 0;
   width: 80px;
@@ -345,7 +347,7 @@ body.dark {
   position: fixed;
   bottom: 5px;
   left: 5px;
-  width: 90%;
+  width: 0%;
   text-align: center;
   padding: 10px;
   font-size: 14px;

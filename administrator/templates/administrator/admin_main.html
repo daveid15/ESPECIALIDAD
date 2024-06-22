@@ -907,7 +907,7 @@
                         <li class="item">
                             <a href="{% url 'admin_main' %}" class="nav_link submenu_item">
                                 <span class="navlink_icon">
-                                    <i class="bx bx-buildings"></i>
+                                    <i class="bx bx-home"></i>
                                 </span>
                                 <span class="navlink">Inicio</span>
                                 <i class="bx bx-chevron-right arrow-left"></i>
@@ -919,7 +919,7 @@
                         <li class="item">
                             <a href="{% url 'list_user_active' group_id=1 %}" class="nav_link submenu_item">
                                 <span class="navlink_icon">
-                                    <i class="bx bx-buildings"></i>
+                                    <i class="bx bx-user"></i>
                                 </span>
                                 <span class="navlink">Usuarios</span>
                                 <i class="bx bx-chevron-right arrow-left"></i>
@@ -928,7 +928,7 @@
                         <li class="item">
                             <a href="{% url 'proveedores_main' %}" class="nav_link submenu_item">
                                 <span class="navlink_icon">
-                                    <i class="bx bx-buildings"></i>
+                                    <i class="bx bx-id-card"></i>
                                 </span>
                                 <span class="navlink">Proveedores</span>
                                 <i class="bx bx-chevron-right arrow-left"></i>
@@ -952,7 +952,7 @@
                         <li class="item">
                             <a href="{% url 'orden_main' %}" class="nav_link submenu_item">
                                 <span class="navlink_icon">
-                                    <i class="bx bx-shopping-bag"></i>
+                                    <i class="bx bx-cart"></i>
                                 </span>
                                 <span class="navlink">Compras</span>
                                 <i class="bx bx-chevron-right arrow-left"></i>
@@ -961,11 +961,10 @@
                                 <li><a href="{% url 'orden_main' %}" class="nav_link sublink">Órden Main</a></li>
                             </ul>
                         </li>
-    
                         <li class="item">
                             <a href="{% url 'ventas_main' %}" class="nav_link submenu_item">
                                 <span class="navlink_icon">
-                                    <i class="bx bx-shopping-bag"></i>
+                                    <i class="bx bx-bar-chart-alt-2"></i>
                                 </span>
                                 <span class="navlink">Ventas</span>
                                 <i class="bx bx-chevron-right arrow-left"></i>
@@ -974,6 +973,7 @@
                                 <li><a href="{% url 'ventas_main' %}" class="nav_link sublink">Ventas Main</a></li>
                             </ul>
                         </li>
+                        
                         <!-- Más ítems del menú -->
                         
                     </ul>
@@ -991,7 +991,7 @@
                         <li class="item">
                             <a href="{% url 'password_reset' %}" class="nav_link submenu_item">
                                 <span class="navlink_icon">
-                                    <i class="bx bx-buildings"></i>
+                                    <i class="bx bx-lock"></i>
                                 </span>
                                 <span class="navlink">Contraseña</span>
                                 <i class="bx bx-chevron-right arrow-left"></i>
@@ -1000,27 +1000,27 @@
                                 <li><a href="{% url 'password_reset' %}" class="nav_link sublink">Contraseña</a></li>
                             </ul>
                         </li>
-
-
+                        
                         <li class="item">
                             <a href="{% url 'edit_perfil' %}" class="nav_link submenu_item">
                                 <span class="navlink_icon">
-                                    <i class="bx bx-buildings"></i>
+                                    <i class="bx bx-edit"></i>
                                 </span>
                                 <span class="navlink">Editar Perfil</span>
                                 <i class="bx bx-chevron-right arrow-left"></i>
                             </a>
                         </li>
-
+                        
                         <li class="item">
                             <a href="{% url 'user_detail' user_id=request.user.id %}" class="nav_link submenu_item">
                                 <span class="navlink_icon">
-                                    <i class="bx bx-buildings"></i>
+                                    <i class="bx bx-user-circle"></i>
                                 </span>
                                 <span class="navlink">Ver perfil</span>
                                 <i class="bx bx-chevron-right arrow-left"></i>
                             </a>
                         </li>
+                        
                     </ul>
                 </div>
             </nav>
