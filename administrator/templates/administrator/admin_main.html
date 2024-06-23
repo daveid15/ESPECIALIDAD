@@ -410,19 +410,40 @@
             }
             .dashboard {
                 display: flex;
-                width: 100%;
-                border-radius: 10px;
+                flex-wrap: wrap;
                 justify-content: space-between;
-                
-            }
-            .dashboard div {
-                border-radius: 10px;
-                background-color: #e0e0e0;
-                width: 48%;
-                height: 380px;
-                overflow-x: auto;
+                gap: 20px; /* Espacio entre los contenedores */
             }
 
+            .dashboard > div {
+                background-color: #e0e0e0;
+                border-radius: 10px;
+                padding: 20px;
+                box-sizing: content-box;
+                flex: 1 1 48%; /* Permitir que los contenedores crezcan y se ajusten */
+                min-width: 300px; /* Evitar que se encojan demasiado en pantallas pequeñas */
+                overflow: auto;
+                max-height: 600px;
+            }
+            .chart-container {
+                display: flex;
+                flex-direction: column;
+                margin-bottom: 20px;
+                justify-content: space-between;
+                background-color: white;
+                padding: 10px;
+                border-radius: 10px;
+                box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            }
+
+            .chart {
+                width: 100%; /* Ocupa todo el ancho disponible */
+                height: 100%; /* Ocupa toda la altura disponible */
+                min-height: 300px; /* Altura mínima para el gráfico */
+                background-color: whitesmoke;
+                border-radius: 10px;
+                margin-bottom: 20px;
+            }
             .logout-icon {
                 position: fixed;
                 top: 5px;
@@ -479,18 +500,7 @@
                     width: 100%;
                     padding: 0;
                 }
-                .dashboard {
-                    flex-direction: column;
-                    align-items: center;
-                    width: 100%;
-                    word-wrap: break-word;
-                }
-                .dashboard div {
-                    width: 95%;
-                    margin-bottom: 20px;
-                    box-sizing: border-box;
-                    overflow-x: auto;
-                }
+
 
                 .main-content {
                     display: flex;
@@ -561,9 +571,25 @@
                 h1{
                     font-size: 30px;
                 }
-                
-                
-                
+                .chart-container {
+                    
+                    padding: auto; /* Ajusta el padding según tus necesidades */
+                }
+                .chart {
+                    width: 100%; /* Ocupa todo el ancho disponible */
+                    min-height: 200px; /* Altura mínima para el gráfico */
+                }
+
+
+                .dashboard {
+                    flex-direction: column; /* Cambia a columna para dispositivos pequeños */
+                    align-items: center; /* Centra los elementos */
+                }
+                .dashboard > div {
+                    width: 100%; /* Ocupa todo el ancho disponible */
+                    min-width: auto; /* Ancho mínimo automático */
+                    margin-bottom: 20px; /* Espacio entre los elementos */
+                }
             }
 
 
@@ -582,17 +608,7 @@
                     padding: 0;
                     text-align: center; /* Center text inside main */
                 }
-                .dashboard {
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center; /* Center dashboard contents horizontally */
-                    width: 100%; /* Ensure the dashboard takes the full width */
-                }
-                .dashboard div {
-                    width: 90%; /* Set a percentage width to leave some padding on the sides */
-                    margin: 0 auto 20px auto; /* Center each div horizontally and add bottom margin */
-                    box-sizing: border-box; /* Include padding/border in the width */
-                }
+
 
                 .main-content {
                     display: flex;
@@ -673,7 +689,25 @@
                     box-shadow: 0 0 10px var(--grey-color-light);
                     transition: left 0.3s ease;
                 }
-                
+                .chart-container {
+                    padding: 10px; /* Ajusta el padding según tus necesidades */
+                }
+                .chart {
+                    width: 100%; /* Ocupa todo el ancho disponible */
+                    min-height: 250px; /* Altura mínima para el gráfico */
+                }
+
+                .dashboard {
+                    flex-wrap: wrap; /* Permite que los elementos se envuelvan */
+                    justify-content: center; /* Centra los elementos */
+                    gap: 20px; /* Espacio entre los elementos */
+                }
+                .dashboard > div {
+                    flex: 1 1 calc(50% - 20px); /* Distribuye en dos columnas */
+                    min-width: 300px; /* Ancho mínimo para cada elemento */
+                }
+
+
             }
 
 
@@ -690,20 +724,26 @@
                     width: 100%;
                     padding: 0;
                 }
+
+                .chart-container {
+                    padding: 20px; /* Ajusta el padding según tus necesidades */
+                }
+                .chart {
+                    width: 100%; /* Ocupa todo el ancho disponible */
+                    min-height: 300px; /* Altura mínima para el gráfico */
+                }
+
                 .dashboard {
-                    width: 100%;
-                    flex-direction: column;
-                    align-items: center;
+                    flex-wrap: wrap; /* Permite que los elementos se envuelvan */
+                    justify-content: space-between; /* Espacio uniforme entre los elementos */
+                    gap: 20px; /* Espacio entre los elementos */
                 }
-                .dashboard div {
-                    display: inline;
-                    width: 90%;
-                    margin-bottom: 20px;
-                    overflow-x: auto;
+                .dashboard > div {
+                    flex: 1 1 calc(48% - 20px); /* Distribuye en dos columnas */
+                    min-width: 300px; /* Ancho mínimo para cada elemento */
                 }
-                    
-                    
-                }
+
+            }
 
                 .main-content {
                     display: flex;
@@ -767,11 +807,25 @@
                     width: 98%;
                 }
 
-                
-                
-
-
+                .chart-container {
+                    padding: 20px; /* Ajusta el padding según tus necesidades */
                 }
+                .chart {
+                    width: 100%; /* Ocupa todo el ancho disponible */
+                    min-height: 350px; /* Altura mínima para el gráfico */
+                }
+                .dashboard {
+                    flex-wrap: wrap; /* Permite que los elementos se envuelvan */
+                    justify-content: space-between; /* Espacio uniforme entre los elementos */
+                    gap: 20px; /* Espacio entre los elementos */
+                }
+                .dashboard > div {
+                    flex: 1 1 calc(24% - 20px); /* Distribuye en cuatro columnas */
+                    min-width: 300px; /* Ancho mínimo para cada elemento */
+                }
+
+
+            }
                 
                 .popup {
                     position: fixed;
@@ -816,7 +870,7 @@
                 .show {
                     display: block;
                 }
-    
+
         </style>
     {% endblock %}
 </head>
@@ -888,14 +942,26 @@
 
 
                     </div>
-                    <div></div>
-                    <div></div>
+                    <div>
+                        <div class="chart-container">
+                            <div id="chart2" class="chart"></div>
+                        </div>
+                        <div class="chart-container">
+                            <div id="chart3" class="chart"></div>
+                        </div>
+                        <div class="chart-container">
+                            <div id="chart" class="chart"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-
+    <!-- Apache ECharts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
+    <!-- Custom JS -->
+    <script src="{% static 'js/main2.js' %}"></script>
 
     <!-- Panel de Navegación -->
     <nav class="side-bar to-left">
