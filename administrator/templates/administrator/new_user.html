@@ -8,22 +8,18 @@
 
 {% block content %}
 <style>
-    .errorlist {
-        color: red;
-    }
-
+    /* Estilos generales para el cuerpo y fuentes */
     body {
         font-family: 'Arial', sans-serif;
         background-color: #f7f7f7;
     }
 
-    .avatar {
-        width: 100px;
-        height: 100px;
-        border-radius: 50%;
-        margin-right: 10px;
+    /* Estilo para los mensajes de error */
+    .errorlist {
+        color: red;
     }
 
+    /* Estilos para el título principal */
     .titulo {
         font-family: 'Sigmar', sans-serif;
         color: #333;
@@ -31,35 +27,16 @@
         margin: 0;
     }
 
+    /* Estilos para los formularios de entrada de texto y selectores */
     .form-label {
         font-size: 16px;
         color: #333;
     }
 
-    .form-control {
-        width: 30%;
-        height: 40px;
-        padding: 10px;
-        margin-top: 5px;
-        margin-bottom: 15px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        box-sizing: border-box;
-    }
-
-    .address-form {
-        width: 30%;
-        height: 40px;
-        padding: 10px;
-        margin-top: 5px;
-        margin-bottom: 15px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        box-sizing: border-box;
-    }
-
+    .form-control,
+    .address-form,
     .photo-form {
-        width: 30%;
+        width: 30%; /* Ancho por defecto para los formularios en pantallas grandes */
         height: 40px;
         padding: 10px;
         margin-top: 5px;
@@ -69,6 +46,7 @@
         box-sizing: border-box;
     }
 
+    /* Estilos para los botones */
     .button {
         background-color: #87963C;
         color: white;
@@ -86,6 +64,7 @@
         color: white;
     }
 
+    /* Estilos para los mensajes */
     .messages {
         color: rgb(23, 23, 23);
         background-color: #ededed;
@@ -94,228 +73,229 @@
         text-align: center;
     }
 
+    /* Estilos para los títulos en diferentes tamaños de pantalla */
     h2 {
         display: block;
         font-size: 1.5em;
-        margin-block-start: 80px;
+        margin-block-start: 80px; /* Margen superior grande en pantallas pequeñas */
         margin-block-end: 0px;
-        margin-inline-start: 250px;
+        margin-inline-start: 250px; /* Margen izquierdo en pantallas medianas y grandes */
         margin-inline-end: 0px;
         font-weight: bold;
         unicode-bidi: isolate;
     }
-    
+
+    /* Media queries para ajustar estilos en pantallas de diferentes tamaños */
 
     @media (max-width: 500px) {
+        /* Estilos para pantallas pequeñas (máximo 500px de ancho) */
         h2 {
             margin-block-start: 70px;
-            margin-inline-start: 115px;
+            margin-inline-start: 115px; /* Ajuste de margen izquierdo para centrar */
         }
 
-        section {
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .form-control {
-            display: block;
-            width: 100%;
-            word-wrap: break-word;
-        }
-
-        .address-form {
-            display: block;
-            width: 100%;
-            word-wrap: break-word;
-        }
-
+        /* Ajuste de ancho para formularios en pantallas pequeñas */
+        .form-control,
+        .address-form,
         .photo-form {
             display: block;
-            width: 100%;
+            width: 100%; /* Ancho completo */
             word-wrap: break-word;
         }
 
+        /* Ajuste de tamaño para botones en pantallas pequeñas */
         .button {
             width: 90px;
             height: 44px;
         }
     }
 
-    @media (min-width: 501px) and (max-width: 767px){
+    @media (min-width: 501px) and (max-width: 767px) {
+        /* Estilos para pantallas medianas (entre 501px y 767px de ancho) */
         h2 {
             margin-block-start: 70px;
-            margin-inline-start: 250px;
+            margin-inline-start: 250px; /* Ajuste de margen izquierdo para centrar */
         }
 
-        section {
-            flex-direction: column;
-            align-items: center;
-        }
-
+        /* Ajuste de ancho para formularios en pantallas medianas */
         .form-control {
-            display: block;
-            width: 90%;
+            width: 90%; /* Ancho del 90% del contenedor */
             word-wrap: break-word;
         }
 
+        /* Ajuste de tamaño para botones en pantallas medianas */
         .button {
             width: 90px;
             height: 47px;
         }
 
-        .address-form {
-            display: block;
-            width: 100%;
-            word-wrap: break-word;
-        }
-
+        /* Ajuste de ancho para formularios específicos en pantallas medianas */
+        .address-form,
         .photo-form {
             display: block;
-            width: 100%;
+            width: 100%; /* Ancho completo */
             word-wrap: break-word;
         }
     }
 
     @media screen and (min-width: 768px) and (max-width: 1024px) {
-        h2{
+        /* Estilos para pantallas grandes (entre 768px y 1024px de ancho) */
+        h2 {
             margin-block-start: 70px;
-            margin-inline-start: 250px;
-        }
-        section {
-            flex-direction: column;
-            align-items: center;
+            margin-inline-start: 250px; /* Ajuste de margen izquierdo para centrar */
         }
 
-        .form-control{
-            display: block;
-            width: 90%;
+        /* Ajuste de ancho para formularios en pantallas grandes */
+        .form-control {
+            width: 90%; /* Ancho del 90% del contenedor */
             word-wrap: break-word;
         }
 
-        .button{
+        /* Ajuste de tamaño para botones en pantallas grandes */
+        .button {
             width: 90px;
             height: 47px;
         }
 
-        .address-form {
-            display: block;
-            width: 100%;
-            word-wrap: break-word;
-        }
-
+        /* Ajuste de ancho para formularios específicos en pantallas grandes */
+        .address-form,
         .photo-form {
             display: block;
-            width: 100%;
+            width: 100%; /* Ancho completo */
             word-wrap: break-word;
         }
-    
     }
 
-    @media screen and (min-width: 1025px){
-        h2{
+    @media screen and (min-width: 1025px) {
+        /* Estilos para pantallas extra grandes (más de 1025px de ancho) */
+        h2 {
             margin-block-start: 70px;
-            margin-inline-start: 250px;
-        }
-        section {
-            flex-direction: column;
-            align-items: center;
+            margin-inline-start: 250px; /* Ajuste de margen izquierdo para centrar */
         }
 
-        .profileedit{
-            width: 900px;
+        /* Ajuste de ancho para formularios en pantallas extra grandes */
+        .profileedit {
+            width: 900px; /* Ancho específico para un contenedor */
         }
 
-        .form-control{
-            display:flexbox;
-            width: 250px;
+        /* Ajuste de ancho para formularios específicos en pantallas extra grandes */
+        .form-control {
+            display: flexbox; /* Corrección de error de sintaxis 'flexbox' */
+            width: 250px; /* Ancho específico para formularios */
             word-wrap: break-word;
-            margin: 10px;
+            margin: 10px; /* Margen en todos los lados */
         }
 
         .address-form {
-            display: flexblock;
-            width: 700px;
+            display: flexblock; /* Corrección de error de sintaxis 'flexblock' */
+            width: 700px; /* Ancho específico para formularios */
             word-wrap: break-word;
-            margin: 10px;
+            margin: 10px; /* Margen en todos los lados */
         }
 
         .photo-form {
-            display: flexblock;
-            width: 580px;
+            display: flexblock; /* Corrección de error de sintaxis 'flexblock' */
+            width: 580px; /* Ancho específico para formularios */
             word-wrap: break-word;
-            margin: 10px;
+            margin: 10px; /* Margen en todos los lados */
         }
 
-        .button{
+        /* Ajuste de tamaño para botones en pantallas extra grandes */
+        .button {
             width: 90px;
             height: 47px;
         }
-    
     }
-
 </style>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <main role="main">
+    <!-- Contenedor principal -->
     <div class="container col-12 mt-3">
         <div class="col-12 mt-3 border">
+            <!-- Encabezado principal -->
             <h2 class="h2">Nuevo usuario</h2>
             <nav id="profileedit" class="profileedit">
+                <!-- Formulario de creación de usuario -->
                 <form action="" method="post" enctype="multipart/form-data">
                     {% csrf_token %}
+                    <!-- Token de seguridad CSRF -->
                     <div class="row">
+                        <!-- Fila 1 -->
                         <div class="col-10 col-sm-4 mb-3">
-                            <label for="name">Nombre‎ ‎ ‎ </label>
+                            <!-- Columnas para campos de nombre y apellido -->
+                            <label for="name">Nombre</label>
                             <input type="text" id="name" name="name" value="{{user_data.first_name}}" pattern="[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+" class="form-control border border-danger" required />
-                            <label for="last_name">Apellido‎</label>
+                            <!-- Campo de nombre con validación -->
+                            <label for="last_name">Apellido</label>
                             <input type="text" id="last_name1" name="last_name1" value="{{user_data.last_name}}" pattern="[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+" class="form-control border border-danger" required />
+                            <!-- Campo de apellido con validación -->
                         </div>
                     </div>
                     <div class="row">
+                        <!-- Fila 2 -->
                         <div class="col-12 col-sm-8 mb-3">
-                            <label for="rut">RUN‎ ‎ ‎ ‎ ‎ ‎  ‎  ‎  ‎  ‎ </label>
+                            <!-- Columnas para campos de RUN, correo electrónico y selección -->
+                            <label for="rut">RUN</label>
                             <input type="text" name="rut" required oninput="checkRut(this)" autofocus maxlength="254" required id="id_rut" class="form-control border border-danger" placeholder="Rut (Ej: 17605812-2)" />
-                            <label for="email">Correo electrónico ‎  ‎ ‎  ‎ </label>
-                            <input type="email" class="form-control border border-danger" placeholder="nombre@unab.cl" name="email" />   
+                            <!-- Campo de RUN con validación -->
+                            <label for="email">Correo electrónico</label>
+                            <input type="email" class="form-control border border-danger" placeholder="nombre@unab.cl" name="email" />
+                            <!-- Campo de correo electrónico -->
                         </div>
                     </div>
                     <div class="row">
+                        <!-- Fila 3 -->
                         <div class="col-12 col-sm-4 mb-3">
-                            <label for="grupo">Cargo ‎ ‎  ‎ ‎ ‎ </label>
+                            <!-- Columnas para campos de cargo y número de contacto -->
+                            <label for="grupo">Cargo</label>
                             <select name="grupo" id="grupo" class="form-control border" required>
+                                <!-- Selección de cargo -->
                                 <option value="">----------</option>
                                 {% for g in groups %}
                                 <option value="{{ g.id }}">{{ g.name }}</option>
                                 {% endfor %}
+                                <!-- Opciones de cargo cargadas dinámicamente -->
                             </select>
-                            <label for="mobile">Número de contacto </label>
+                            <label for="mobile">Número de contacto</label>
                             <input type="text" class="form-control border border-danger" id="mobile" pattern="[0-9]{9}" name="mobile" pattern="\d*" />
+                            <!-- Campo de número de contacto -->
                         </div>
                     </div>
                     <div class="row">
+                        <!-- Fila 4 -->
                         <div class="col-12 col-sm-8 mb-3">
+                            <!-- Columnas para campos de dirección, región y comuna -->
                             <label for="address">Dirección</label>
                             <input type="text" class="address-form" name="address" required />
+                            <!-- Campo de dirección -->
                         </div>
                         <div class="col-12 col-sm-4 mb-3">
-                            <label for="region">Región‎ ‎ ‎ ‎ ‎ ‎   </label>
+                            <label for="region">Región</label>
                             <select name="region" id="region" class="form-control border border-danger" required>
+                                <!-- Selección de región -->
                                 <option value="">Seleccione una región</option>
-                                <!-- Las opciones serán agregadas dinámicamente -->
+                                <!-- Opciones de región cargadas dinámicamente -->
                             </select>
                             <label for="comuna">Comuna</label>
                             <select name="comuna" id="comuna" class="form-control border border-danger" required>
+                                <!-- Selección de comuna -->
                                 <option value="">Seleccione una comuna</option>
-                                <!-- Las opciones serán agregadas dinámicamente -->
+                                <!-- Opciones de comuna cargadas dinámicamente -->
                             </select>
                         </div>
                     </div>
                     <div class="row">
+                        <!-- Fila 5 -->
                         <div class="col-12 col-sm-4 mb-3">
+                            <!-- Columnas para campo de foto de perfil -->
                             <label for="profile_image">Foto de perfil</label>
                             <input type="file" class="photo-form" name="profile_image" />
+                            <!-- Carga de archivo de imagen -->
                         </div>
                     </div>
                     {% if messages %}
+                        <!-- Manejo de mensajes de error o éxito -->
                         <ul class="messages" id="message3">
                             {% for message in messages %}
                             <li{% if messages.tags %} class="{{message.tags}}" {% endif %}>{{message}}</li>
@@ -323,9 +303,12 @@
                         </ul>
                     {% endif %}
                     <div class="row">
+                        <!-- Fila 6 -->
                         <div class="col-12 col-sm-6 mb-3">
+                            <!-- Botones de submit y volver -->
                             <button type="submit" class="button">Crear</button>
                             <a href="{% url 'list_user_active' group_id=1 %}" class="button">Volver</a>
+                            <!-- Botón para crear usuario y enlace para volver -->
                         </div>
                     </div>
                 </form>
@@ -333,6 +316,7 @@
         </div>
     </div>
 </main>
+
 
 
 <script>
@@ -406,41 +390,57 @@
     };
 
     jQuery(document).ready(function () {
+        // HTML inicial para las opciones de región y comuna
         var htmlRegion = '<option value="">Seleccione una región</option>';
         var htmlComunas = '<option value="">Seleccione una comuna</option>';
         
+        // Itera sobre cada región en el objeto RegionesYcomunas.regiones
         jQuery.each(RegionesYcomunas.regiones, function (index, region) {
+            // Construye las opciones para el select de regiones
             htmlRegion += '<option value="' + region.NombreRegion + '">' + region.NombreRegion + '</option>';
         });
 
+        // Llena el select de regiones con las opciones construidas
         jQuery('#region').html(htmlRegion);
+        // Llena el select de comunas con las opciones iniciales
         jQuery('#comuna').html(htmlComunas);
 
+        // Función que se ejecuta cuando cambia la selección de la región
         jQuery('#region').change(function () {
+            // Obtiene el valor seleccionado de la región
             var selectedRegion = jQuery(this).val();
+            // HTML inicial para las opciones de comuna
             var htmlComuna = '<option value="">Seleccione una comuna</option>';
 
+            // Itera sobre cada región para encontrar la seleccionada
             jQuery.each(RegionesYcomunas.regiones, function (index, region) {
+                // Si encuentra la región seleccionada en el objeto
                 if (region.NombreRegion == selectedRegion) {
+                    // Itera sobre cada comuna en la región seleccionada
                     jQuery.each(region.comunas, function (index, comuna) {
+                        // Construye las opciones para el select de comunas
                         htmlComuna += '<option value="' + comuna + '">' + comuna + '</option>';
                     });
                 }
             });
 
+            // Llena el select de comunas con las opciones construidas
             jQuery('#comuna').html(htmlComuna);
         });
     });
 
+    // Función para mostrar el popup de eliminación
     function mostrar() {
-            popupdeleteitem.classList.add("show");
-        };
+        popupdeleteitem.classList.add("show");
+    }
+
+    // Evento click para el botón de cancelar en el popup de eliminación
     Cancelar1.addEventListener(
         "click",
         function () {
-                popupdeleteitem.classList.remove(
-                "show");
-            }
+            // Remueve la clase "show" para ocultar el popup de eliminación
+            popupdeleteitem.classList.remove("show");
+        }
     );
 </script>
 

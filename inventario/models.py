@@ -2,19 +2,24 @@ from django.db import models
 from django.contrib.auth.models import Group, User 
 
 """
-class Category(models.Model):
-    category_name = models.CharField(max_length=100)
+    Modelo que representa un producto en el inventario.
 
-    class Meta:
-        verbose_name = 'Category'
-        verbose_name_plural = 'Categories'
-        ordering = ['category_name']
-    
-    def __str__(self):
-        return self.category_name
+    Atributos:
+    - supply_name: Nombre del producto.
+    - supply_code: Código del producto.
+    - supply_unit: Unidad de medida del producto.
+    - supply_initial_stock: Stock inicial del producto.
+    - supply_input: Entrada de stock del producto.
+    - supply_output: Salida de stock del producto.
+    - supply_total: Stock total actual del producto.
 
-def custom_upload_to(instance, filename):
-    return 'product/' + filename
+    Métodos:
+    - get_nombre_producto(): Retorna el nombre del producto junto con su unidad de medida.
+
+    Meta:
+    - verbose_name: Nombre singular del modelo en el panel de administración.
+    - verbose_name_plural: Nombre plural del modelo en el panel de administración.
+    - ordering: Orden predeterminado para las consultas, ordenado por nombre del producto.
 """
 class Product(models.Model):
     supply_name = models.CharField(max_length=100, null=True, blank=True)
@@ -35,19 +40,3 @@ class Product(models.Model):
     
     def __str__(self):
         return self.supply_name
-"""
-class Insumos(models.Model):
-    insumos_name = models.CharField(max_length=100, null=True, blank=True)
-    insumos_price = models.IntegerField(null=True, blank=True)
-    insumos_image = models.CharField(max_length=240, null=True, blank=True)
-    insumos_state = models.CharField(max_length=100, null=True, blank=True, default='No')
-    insumos_categorys = models.ForeignKey(Category, on_delete=models.CASCADE,default=1, null=True)
-
-    class Meta:
-        verbose_name = 'Insumo'
-        verbose_name_plural = 'Insumos'
-        ordering = ['insumos_name']
-    
-    def __str__(self):
-        return self.insumos_name
-"""

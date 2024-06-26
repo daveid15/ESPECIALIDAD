@@ -4,181 +4,216 @@
 {% block extrahead %}
 {% endblock %}
 <style>
+    /* Estilo para mensajes de error */
     .errorlist {
-        color: red;
+        color: red; /* Texto en rojo para errores */
     }
 
+    /* Estilos generales del cuerpo del documento */
     body {
-        font-family: 'Arial', sans-serif;
-        background-color: #f7f7f7;
+        font-family: 'Arial', sans-serif; /* Fuente principal */
+        background-color: #f7f7f7; /* Color de fondo */
     }
 
+    /* Estilo para imágenes de perfil */
     .avatar {
-        width: 100px;
-        height: 100px;
-        border-radius: 50%;
-        margin-right: 10px;
+        width: 100px; /* Ancho de 100px */
+        height: 100px; /* Alto de 100px */
+        border-radius: 50%; /* Borde redondeado para forma circular */
+        margin-right: 10px; /* Margen derecho de 10px */
     }
 
+    /* Estilo para títulos */
     .titulo {
-        font-family: 'Sigmar', sans-serif;
-        font-size: 30px;
-        top: 1000px;
-        text-align: left;
+        font-family: 'Sigmar', sans-serif; /* Fuente alternativa para títulos */
+        font-size: 30px; /* Tamaño de fuente de 30px */
+        top: 1000px; /* Posicionamiento absoluto (nota: puede no tener efecto si no se usa en un contexto específico) */
+        text-align: left; /* Alineación de texto a la izquierda */
     }
 
+    /* Estilo para etiquetas de formulario */
     .form-label {
-        font-size: 16px;
-        color: #333;
+        font-size: 16px; /* Tamaño de fuente de 16px */
+        color: #333; /* Color de texto oscuro */
     }
 
+    /* Estilo para controles de formulario (inputs, selects, etc.) */
     .form-control {
-        width: 30%;
-        height: 40px;
-        padding: 10px;
-        margin-top: 5px;
-        margin-bottom: 15px;
-        border: 1px solid black;
-        border-radius: 5px;
-        box-sizing: border-box;
+        width: 30%; /* Ancho del control del formulario */
+        height: 40px; /* Altura del control del formulario */
+        padding: 10px; /* Relleno interior de 10px */
+        margin-top: 5px; /* Margen superior de 5px */
+        margin-bottom: 15px; /* Margen inferior de 15px */
+        border: 1px solid black; /* Borde de 1px sólido negro */
+        border-radius: 5px; /* Borde redondeado de 5px */
+        box-sizing: border-box; /* Incluir el borde en el tamaño total */
     }
 
+    /* Estilo para botones */
     .button {
-        background-color: #87963C;
-        color: white;
-        padding: 12px 20px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        width: 20%;
-        margin-top: 10px;
-        font-size: 16px;
+        background-color: #87963C; /* Color de fondo del botón */
+        color: white; /* Color de texto blanco */
+        padding: 12px 20px; /* Relleno interior del botón */
+        border: none; /* Sin borde */
+        border-radius: 5px; /* Borde redondeado de 5px */
+        cursor: pointer; /* Cursor de tipo puntero */
+        width: 20%; /* Ancho del botón */
+        margin-top: 10px; /* Margen superior de 10px */
+        font-size: 16px; /* Tamaño de fuente de 16px */
     }
 
+    /* Efecto hover para botones */
     .button:hover {
-        background-color: #65702d;
-        color: white;
+        background-color: #65702d; /* Color de fondo del botón al pasar el mouse */
+        color: white; /* Color de texto blanco */
     }
 
+    /* Estilo para mensajes */
     .messages {
-        color: rgb(23, 23, 23);
-        background-color: #ededed;
-        box-shadow: #333;
-        list-style: none;
-        text-align: center;
+        color: rgb(23, 23, 23); /* Color de texto oscuro */
+        background-color: #ededed; /* Color de fondo gris claro */
+        box-shadow: #333; /* Sombra ligera */
+        list-style: none; /* Sin viñetas */
+        text-align: center; /* Alineación de texto centrada */
     }
 
+    /* Estilo para mensajes de error */
     .error-message {
-        color: red;
-        text-align: center;
+        color: red; /* Color de texto rojo para mensajes de error */
+        text-align: center; /* Alineación de texto centrada */
     }
 
+    /* Estilo para títulos de nivel 2 */
     h2 {
-        display: block;
-        font-size: 1.5em;
-        margin-block-start: 80px;
-        margin-block-end: 0px;
-        margin-inline-start: 250px;
-        margin-inline-end: 0px;
-        font-weight: bold;
-        unicode-bidi: isolate;
+        display: block; /* Mostrar como bloque */
+        font-size: 1.5em; /* Tamaño de fuente de 1.5em */
+        margin-block-start: 80px; /* Margen superior de 80px */
+        margin-block-end: 0px; /* Sin margen inferior */
+        margin-inline-start: 250px; /* Margen izquierdo de 250px */
+        margin-inline-end: 0px; /* Sin margen derecho */
+        font-weight: bold; /* Texto en negrita */
+        unicode-bidi: isolate; /* Aislamiento de texto bidireccional */
     }
 
+    /* Media query para pantallas pequeñas (máximo 500px de ancho) */
     @media (max-width: 500px) {
         h2 {
-            margin-block-start: 75px;
-            margin-inline-start: 115px;
+            margin-block-start: 75px; /* Ajuste de margen superior para pantallas pequeñas */
+            margin-inline-start: 115px; /* Ajuste de margen izquierdo para pantallas pequeñas */
         }
 
         section {
-            flex-direction: column;
-            align-items: center;
+            flex-direction: column; /* Columnas para diseño en columna */
+            align-items: center; /* Alineación de elementos al centro */
         }
 
         .form-control {
-            display: block;
-            width: 100%;
-            word-wrap: break-word;
+            display: block; /* Mostrar como bloque */
+            width: 100%; /* Ancho completo */
+            word-wrap: break-word; /* Ajuste de palabras */
         }
 
         .button {
-            width: 90px;
-            height: 44px;
+            width: 90px; /* Ancho reducido para botones */
+            height: 44px; /* Altura reducida para botones */
         }
     }
 
+    /* Media query para pantallas medianas y grandes (más de 500px de ancho) */
     @media (min-width: 501px) {
         h2 {
-            margin-block-start: 70px;
-            margin-inline-start: 250px;
+            margin-block-start: 70px; /* Ajuste de margen superior para pantallas medianas y grandes */
+            margin-inline-start: 250px; /* Ajuste de margen izquierdo para pantallas medianas y grandes */
         }
 
         section {
-            flex-direction: column;
-            align-items: center;
+            flex-direction: column; /* Columnas para diseño en columna */
+            align-items: center; /* Alineación de elementos al centro */
         }
 
         .form-control {
-            width: 90%;
-            word-wrap: break-word;
+            width: 90%; /* Ancho ajustado para controles de formulario */
+            word-wrap: break-word; /* Ajuste de palabras */
         }
 
         .button {
-            width: 90px;
-            height: 47px;
+            width: 90px; /* Ancho reducido para botones */
+            height: 47px; /* Altura ligeramente ajustada para botones */
         }
     }
 </style>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <main role="main">
+    <!-- Contenedor principal -->
     <div class="container col-12 mt-3">
+        <!-- Encabezado de la sección -->
         <h2 class="h2">Editar perfil</h2>
         <section>
+            <!-- Navegación o sección de edición de perfil -->
             <nav id="profileedit" class="profileedit">
                 <div class="col-12 mt-3 border">
+                    <!-- Formulario de edición de perfil -->
                     <form action="" method="post" enctype="multipart/form-data">
-                        {% csrf_token %}
+                        {% csrf_token %} <!-- Token CSRF para seguridad -->
+                        <!-- Campos ocultos para identificación -->
                         <input type="hidden" value="{{ user_data.id }}" name="user_id" id="user_id">
                         <input type="hidden" value="{{ groups.id }}" name="grupo" id="grupo">
                         <div class="row">
+                            <!-- Columna para nombre y apellido -->
                             <div class="col-10 col-sm-4 mb-3">
                                 <label for="name">Nombre (*)</label>
+                                <!-- Campo de entrada para nombre -->
                                 <input type="text" id="name" name="name" value="{{user_data.first_name}}" pattern="[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+" class="form-control border border-danger" required/>
                                 <label for="last_name">Apellido (*)</label>
+                                <!-- Campo de entrada para apellido -->
                                 <input type="text" id="last_name1" name="last_name1" value="{{user_data.last_name}}" pattern="[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+" class="form-control border border-danger" required/>
                             </div>
 
+                            <!-- Columna para número de contacto -->
                             <div class="col-11 col-sm-4 mb-3">
                                 <label for="phone">Número de contacto (*)</label>
+                                <!-- Campo de entrada para número de contacto -->
                                 <input type="tel" id="phone" name="phone" pattern="[0-9]{9}" value="{{profile_data.mobile}}" class="form-control border border-danger" required/>
                             </div>
+
+                            <!-- Mostrar Rut y Email (campos no editables) -->
                             <div class="mb-0 col-md-12">
                                 <label for="proveedor_name" class="form-label">Rut (Campo no editable): </label>
+                                <!-- Mostrar Rut -->
                                 <span class="form-label" id="proveedor_name">{{profile_data.rut}}</span>
                             </div>
                             <div class="mb-0 col-md-12">
                                 <label for="proveedor_name" class="form-label">Email (Campo no editable): </label>
+                                <!-- Mostrar Email -->
                                 <span class="form-label" id="proveedor_name">{{profile_data.email}}</span>
                             </div>
 
+                            <!-- Columna para dirección -->
                             <div class="col-11 col-sm-4 mb-3">
                                 <label for="address">Dirección</label>
+                                <!-- Campo de entrada para dirección -->
                                 <input type="text" id="address" name="address" value="{{profile_data.address}}" class="form-control border border-danger" required/>
                             </div>
+
+                            <!-- Columna para región y comuna -->
                             <div class="col-12 col-sm-4 mb-3">
-                                <label for="region">Región‎ ‎ ‎ ‎ ‎ ‎   </label>
+                                <label for="region">Región</label>
+                                <!-- Selección de región -->
                                 <select name="region" id="region" class="form-control border border-danger" required>
                                     <option value="">Seleccione una región</option>
                                     {% for region in RegionesYcomunas.regiones %}
+                                        <!-- Opción de región -->
                                         <option value="{{ region.NombreRegion }}" {% if profile_data.region == region.NombreRegion %}selected{% endif %}>{{ region.NombreRegion }}</option>
                                     {% endfor %}
                                 </select>
                                 <label for="comuna">Comuna</label>
+                                <!-- Selección de comuna -->
                                 <select name="comuna" id="comuna" class="form-control border border-danger" required>
                                     <option value="">Seleccione una comuna</option>
                                     {% if profile_data.region %}
                                         {% for region in RegionesYcomunas.regiones %}
                                             {% if profile_data.region == region.NombreRegion %}
+                                                <!-- Opciones de comuna basadas en la región seleccionada -->
                                                 {% for comuna in region.comunas %}
                                                     <option value="{{ comuna }}" {% if profile_data.comuna == comuna %}selected{% endif %}>{{ comuna }}</option>
                                                 {% endfor %}
@@ -187,23 +222,34 @@
                                     {% endif %}
                                 </select>
                             </div>
+
+                            <!-- Columna para foto de perfil -->
                             <div class="col-12 col-sm-4 mb-3">
                                 <label for="profile_image">Foto de perfil</label>
+                                <!-- Campo de carga de imagen -->
                                 <input type="file" class="form-control border border-danger" id="profile_image" name="profile_image">
+                                <!-- Mostrar imagen de perfil actual -->
                                 {% if profile_data.profile_image %}
                                     <img src="{{ MEDIA_URL }}{{ profile_data.profile_image }}" alt="Foto de perfil" class="avatar">
                                 {% endif %}
                             </div>
+
+                            <!-- Mostrar mensajes de retroalimentación -->
                             {% if messages %}
                                 <ul class="messages" id="message1">
                                     {% for message in messages %}
+                                    <!-- Lista de mensajes -->
                                     <li{% if messages.tags %} class="{{message.tags}}" {% endif %}>{{message}}</li>
                                     {% endfor %}
                                 </ul>
                             {% endif %}
+
                             <div class="row">
+                                <!-- Columna para botones -->
                                 <div class="col-11 col-sm-6 mb-3">
+                                    <!-- Botón de enviar el formulario -->
                                     <input type="submit" value="Editar" class="button form-control">
+                                    <!-- Enlace para volver a la página principal del administrador -->
                                     <a href="{% url 'admin_main'%}" class="button form-control">Volver</a>
                                 </div>
                             </div>
@@ -214,6 +260,7 @@
         </section>
     </div>
 </main>
+
 <script>
     var RegionesYcomunas = {
         "regiones": [
@@ -284,42 +331,60 @@
         ]
     };
 
+    // Espera a que el documento HTML esté completamente cargado y listo
     jQuery(document).ready(function () {
-        var htmlRegion = '<option value="">Seleccione una región</option>';
-        var htmlComunas = '<option value="">Seleccione una comuna</option>';
-        
-        jQuery.each(RegionesYcomunas.regiones, function (index, region) {
-            htmlRegion += '<option value="' + region.NombreRegion + '">' + region.NombreRegion + '</option>';
-        });
 
-        jQuery('#region').html(htmlRegion);
-        jQuery('#comuna').html(htmlComunas);
+    // Variables para almacenar las opciones iniciales de región y comuna
+    var htmlRegion = '<option value="">Seleccione una región</option>';
+    var htmlComunas = '<option value="">Seleccione una comuna</option>';
 
-        jQuery('#region').change(function () {
-            var selectedRegion = jQuery(this).val();
-            var htmlComuna = '<option value="">Seleccione una comuna</option>';
-
-            jQuery.each(RegionesYcomunas.regiones, function (index, region) {
-                if (region.NombreRegion == selectedRegion) {
-                    jQuery.each(region.comunas, function (index, comuna) {
-                        htmlComuna += '<option value="' + comuna + '">' + comuna + '</option>';
-                    });
-                }
-            });
-
-            jQuery('#comuna').html(htmlComuna);
-        });
-
-        // Preseleccionar la región y comuna si están disponibles
-        var selectedRegion = '{{ profile_data.region }}';
-        if (selectedRegion) {
-            jQuery('#region').val(selectedRegion).change();
-            setTimeout(function() {
-                var selectedComuna = '{{ profile_data.comuna }}';
-                jQuery('#comuna').val(selectedComuna);
-            }, 500);
-        }
+    // Recorre cada región en el objeto RegionesYcomunas.regiones para construir las opciones del select de regiones
+    jQuery.each(RegionesYcomunas.regiones, function (index, region) {
+        htmlRegion += '<option value="' + region.NombreRegion + '">' + region.NombreRegion + '</option>';
     });
+
+    // Inserta las opciones de región construidas en el select con id "region"
+    jQuery('#region').html(htmlRegion);
+
+    // Inserta las opciones iniciales de comuna en el select con id "comuna"
+    jQuery('#comuna').html(htmlComunas);
+
+    // Define un evento de cambio para el select de regiones ("#region")
+    jQuery('#region').change(function () {
+        // Obtiene el valor seleccionado de la región
+        var selectedRegion = jQuery(this).val();
+        // Variable para almacenar las opciones de comuna, inicialmente con una opción predeterminada
+        var htmlComuna = '<option value="">Seleccione una comuna</option>';
+
+        // Recorre cada región nuevamente para encontrar la región seleccionada
+        jQuery.each(RegionesYcomunas.regiones, function (index, region) {
+            // Si la región actual coincide con la seleccionada
+            if (region.NombreRegion == selectedRegion) {
+                // Recorre cada comuna de la región y construye las opciones del select de comunas
+                jQuery.each(region.comunas, function (index, comuna) {
+                    htmlComuna += '<option value="' + comuna + '">' + comuna + '</option>';
+                });
+            }
+        });
+
+        // Inserta las opciones de comuna construidas en el select con id "comuna"
+        jQuery('#comuna').html(htmlComuna);
+    });
+
+    // Preseleccionar la región y comuna si están disponibles en profile_data
+    var selectedRegion = '{{ profile_data.region }}';
+    if (selectedRegion) {
+        // Establece la región seleccionada en el select y dispara el evento de cambio
+        jQuery('#region').val(selectedRegion).change();
+
+        // Espera 500 milisegundos y luego establece la comuna seleccionada
+        setTimeout(function() {
+            var selectedComuna = '{{ profile_data.comuna }}';
+            jQuery('#comuna').val(selectedComuna);
+        }, 500);
+    }
+    });
+
 </script>
 {% endblock %}
 
