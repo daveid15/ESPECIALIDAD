@@ -2,17 +2,22 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
+from django.db.models import Q
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.http import JsonResponse
+from django.http.response import JsonResponse
 from random import randrange
-from django.db.models import Sum, F, ExpressionWrapper, DecimalField
+from django.db.models import Sum
+from django.db.models import F, ExpressionWrapper, DecimalField
+
+from registration.models import Profile
+from ventas.models import Prod_venta, Orden_venta, Venta_producto
 from django.utils import timezone
 from django.core.cache import cache
+from django.db.models import Sum
+from django.http import JsonResponse
 from datetime import timedelta
 from django.db.models.functions import TruncMinute
 from administrator.views import validar_string, validar_int
-from registration.models import Profile
-from ventas.models import Prod_venta, Orden_venta, Venta_producto
 
 
 def ventas_main(request):
