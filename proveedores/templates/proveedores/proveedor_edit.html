@@ -435,32 +435,57 @@
             }
         ]
     };
-
     jQuery(document).ready(function () {
+
+        // Variables para almacenar las opciones iniciales de región y comuna
         var htmlRegion = '<option value="">{{proveedor_data.proveedor_region}}</option>';
         var htmlComunas = '<option value="">{{proveedor_data.proveedor_comuna}}</option>';
-        
+
+        // Recorre cada región en el objeto RegionesYcomunas.regiones para construir las opciones del select de regiones
         jQuery.each(RegionesYcomunas.regiones, function (index, region) {
             htmlRegion += '<option value="' + region.NombreRegion + '">' + region.NombreRegion + '</option>';
         });
 
+        // Inserta las opciones de región construidas en el select con id "region"
         jQuery('#region').html(htmlRegion);
+
+        // Inserta las opciones iniciales de comuna en el select con id "comuna"
         jQuery('#comuna').html(htmlComunas);
 
+        // Define un evento de cambio para el select de regiones ("#region")
         jQuery('#region').change(function () {
+            // Obtiene el valor seleccionado de la región
             var selectedRegion = jQuery(this).val();
+            // Variable para almacenar las opciones de comuna, inicialmente con una opción predeterminada
             var htmlComuna = '<option value="">Seleccione una comuna</option>';
 
+            // Recorre cada región nuevamente para encontrar la región seleccionada
             jQuery.each(RegionesYcomunas.regiones, function (index, region) {
+                // Si la región actual coincide con la seleccionada
                 if (region.NombreRegion == selectedRegion) {
+                    // Recorre cada comuna de la región y construye las opciones del select de comunas
                     jQuery.each(region.comunas, function (index, comuna) {
                         htmlComuna += '<option value="' + comuna + '">' + comuna + '</option>';
                     });
                 }
             });
 
+            // Inserta las opciones de comuna construidas en el select con id "comuna"
             jQuery('#comuna').html(htmlComuna);
         });
-    });
+
+        // Preseleccionar la región y comuna si están disponibles en profile_data
+        var selectedRegion = '{{ proveedor_data.proveedor_region }}';
+        if (selectedRegion) {
+            // Establece la región seleccionada en el select y dispara el evento de cambio
+                jQuery('#region').val(selectedRegion).change();
+
+            // Espera 500 milisegundos y luego establece la comuna seleccionada
+            setTimeout(function() {
+                var selectedComuna = '{{proveedor_data.proveedor_comuna}}';
+                jQuery('#comuna').val(selectedComuna);
+            }, 500);
+        }
+        });
 </script>
 {% endblock %}

@@ -2,22 +2,18 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
-from django.db.models import Q
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.http.response import JsonResponse
+from django.http import JsonResponse
 from random import randrange
-from django.db.models import Sum
-from django.db.models import F, ExpressionWrapper, DecimalField
-
-from registration.models import Profile
-from ventas.models import Prod_venta, Orden_venta, Venta_producto
+from django.db.models import Sum, F, ExpressionWrapper, DecimalField
 from django.utils import timezone
 from django.core.cache import cache
-from django.db.models import Sum
-from django.http import JsonResponse
 from datetime import timedelta
 from django.db.models.functions import TruncMinute
 from administrator.views import validar_string, validar_int
+from registration.models import Profile
+from ventas.models import Prod_venta, Orden_venta, Venta_producto
+
 
 def ventas_main(request):
     profiles = Profile.objects.get(user_id=request.user.id)
@@ -179,12 +175,30 @@ def get_chart_data_completos_bebidas(_request):
     return JsonResponse(chart_data)
 
 
+"""
+    venta_save Vista para procesar el formulario de creación de una orden de venta.
 
-from django.shortcuts import render, redirect
-from django.contrib import messages
-from django.db import transaction
-from .models import Prod_venta, Orden_venta, Venta_producto
-from django.contrib.auth.decorators import login_required
+    Métodos HTTP admitidos: POST
+    Requiere autenticación del usuario.
+
+    Funcionalidad:
+    - Valida la información del cliente.
+    - Valida las cantidades de productos ingresadas.
+    - Crea una nueva orden de venta en transacción atómica.
+    - Registra cada producto vendido en la orden con su cantidad y precio.
+    - Calcula y guarda el total de la venta.
+
+    Retorna:
+    - Redirige a 'venta_crear' después de procesar la orden de venta.
+    - Muestra mensajes de éxito o error según el resultado.
+
+    Errores manejados:
+    - Si no se proporciona toda la información del cliente.
+    - Si las cantidades ingresadas no son números enteros válidos.
+    - Si no se agrega al menos un producto con cantidad mayor a 0.
+    - Cualquier error durante la creación de la orden de venta.
+
+"""
 
 @login_required
 def venta_save(request):

@@ -1,35 +1,28 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 from django import forms
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import Group, GroupManager, User
+from django.contrib.auth.models import Group, User
 from django.core.mail import EmailMultiAlternatives
-from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
-from django.db.models import Avg, Count, Q
-from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse_lazy
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.db.models import Avg, Count, Q, Max
+from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
-from .forms import ProductForm
-from django.urls import reverse
-from registration.models import Profile
-from inventario.models import Product 
+from django.conf import settings
 import json
 import pandas as pd
+from openpyxl import Workbook
+from registration.models import Profile
+from inventario.models import Product
+from administrator.views import validar_string, validar_nombre
 import xlwt
 import traceback
-from openpyxl import Workbook
-from django.http import HttpResponse
-from django.conf import settings
-from django.core.mail import EmailMultiAlternatives
-import os 
-from email.mime.multipart import MIMEMultipart 
-from email.mime.text import MIMEText 
-from email.mime.base import MIMEBase 
-from email import encoders 
-from administrator.views import validar_string, validar_nombre
-from .forms import ProductForm
-from django.db.models import Max
-import re
+import os
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.base import MIMEBase
+from email import encoders
+
 
 
 # Create your views here.
@@ -92,7 +85,35 @@ def crear_producto(request):
     return render(request,template_name,{'profile':profile})#,'category_list':category_list})
 #CREAR PRODUCTO TAL VEZ
 
+"""
+    producto_save Vista para guardar un nuevo producto en el sistema.
 
+    Requiere que el usuario esté autenticado y tenga permisos de administrador (grupo_id = 1).
+    Los datos del producto se reciben a través de un formulario POST y se validan antes de ser guardados en la base de datos.
+
+    Métodos HTTP admitidos: POST
+
+    Parámetros esperados en el formulario POST:
+    - supply_name: Nombre del producto (cadena de texto).
+    - supply_unit: Unidad de medida del producto ('kg' o 'LATA (330 ml)').
+    - supply_code: Código único del producto (formato SKU seguido de 4 dígitos).
+    - supply_initial_stock: Stock inicial del producto (número entero).
+    - supply_input: Cantidad de ingreso de stock del producto (opcional, entero).
+    - supply_output: Cantidad de salida de stock del producto (opcional, entero).
+
+    Validaciones realizadas:
+    - Todos los campos deben estar completos.
+    - El nombre del producto debe ser válido según la función validar_nombre.
+    - La unidad de medida debe ser válida ('kg' o 'LATA (330 ml)').
+    - El stock inicial debe ser un número entero.
+    - El código del producto debe tener el formato SKU seguido de 4 dígitos.
+    - Si no se proporcionan supply_input o supply_output, se consideran como 0.
+
+    Retorna:
+    - Redirige a 'inventario_main' si el producto se guarda correctamente.
+    - Redirige a 'crear_producto' con un mensaje de error si hay problemas en el formulario o si el método de envío no es POST.
+    - Redirige a 'check_group_main' si el usuario no tiene permisos de administrador (grupo_id != 1).
+"""
 @login_required
 def producto_save(request):
     profile = Profile.objects.get(user_id=request.user.id)
@@ -226,7 +247,43 @@ def producto_list(request, page=None, search=None):
     template_name = 'inventario/producto_list.html'
     return render(request, template_name, {'template_name': template_name, 'p_list_paginate': p_list_paginate, 'paginator': paginator, 'page': page})
 
+"""
+   producto_edit Vista para editar un producto existente en el sistema.
 
+    Requiere que el usuario esté autenticado y tenga permisos de administrador (grupo_id = 1).
+    Los datos del producto se recuperan a través de su ID y se actualizan con los nuevos datos proporcionados en un formulario POST.
+
+    Métodos HTTP admitidos: GET (para mostrar el formulario de edición) y POST (para procesar la edición).
+
+    Parámetros de URL:
+    - product_id: ID único del producto que se desea editar.
+
+    Parámetros esperados en el formulario POST:
+    - supply_name: Nombre del producto (cadena de texto).
+    - supply_code: Código único del producto (formato SKU seguido de 4 dígitos).
+    - supply_unit: Unidad de medida del producto ('kg' o 'LATA (330 ml)').
+    - supply_initial_stock: Stock inicial del producto (número entero).
+    - supply_input: Cantidad de ingreso de stock del producto (opcional, entero).
+    - supply_output: Cantidad de salida de stock del producto (opcional, entero).
+
+    Validaciones realizadas:
+    - Todos los campos deben estar completos.
+    - El nombre del producto debe ser válido según la función validar_nombre.
+    - La unidad de medida debe ser válida ('kg' o 'LATA (330 ml)').
+    - El stock inicial, entrada y salida deben ser números enteros.
+    - El código del producto debe tener el formato SKU seguido de 4 dígitos.
+    - Si no se proporcionan supply_input o supply_output, se consideran como 0.
+
+    Acciones:
+    - Recupera el producto existente mediante su ID.
+    - Actualiza los campos del producto con los nuevos datos proporcionados.
+    - Calcula el stock total del producto en base a los valores de stock inicial, entrada y salida.
+    - Guarda los cambios en la base de datos y redirige a la página de detalle del producto con un mensaje de éxito.
+
+    Redirecciones:
+    - Redirige a la página de detalle del producto ('producto_ver') después de guardar los cambios correctamente.
+    - Redirige a la página de verificación de grupo principal ('check_group_main') si el usuario no tiene permisos de administrador (grupo_id != 1).
+"""
 @login_required
 def producto_edit(request, product_id):
     profile = Profile.objects.get(user_id=request.user.id)
@@ -304,7 +361,28 @@ def producto_edit(request, product_id):
         
         return render(request, template_name, {'product_data': product_data})
 
-    
+"""
+   producto_delete Vista para eliminar un producto del sistema.
+
+    Requiere que el usuario esté autenticado y tenga permisos de administrador (grupo_id = 1).
+    Recibe el ID del producto que se desea eliminar como parámetro.
+
+    Métodos HTTP admitidos: POST.
+
+    Parámetros de URL:
+    - product_id: ID único del producto que se desea eliminar.
+
+    Acciones:
+    - Verifica que el usuario tenga permisos de administrador (grupo_id = 1).
+    - Recupera el producto mediante su ID o muestra un error 404 si no existe.
+    - Elimina el producto de la base de datos.
+    - Muestra un mensaje de éxito indicando que el producto ha sido eliminado correctamente.
+    - Redirige a la lista de productos ('producto_list') después de eliminar el producto.
+
+    Redirecciones:
+    - Redirige a la lista de productos ('producto_list') después de eliminar el producto correctamente.
+    - Redirige a la página de verificación de grupo principal ('check_group_main') si el usuario no tiene permisos de administrador (grupo_id != 1).
+"""
 #ELIMINAR PRODUCTO
 def producto_delete(request, product_id):
     profile = Profile.objects.get(user_id=request.user.id)
@@ -315,7 +393,20 @@ def producto_delete(request, product_id):
     product.delete()
     messages.success(request, 'Producto eliminado correctamente')
     return redirect(reverse('producto_list'))
+"""
+    carga_masiva_producto Vista para mostrar el formulario de carga masiva de productos.
 
+    Requiere que el usuario esté autenticado y tenga permisos de administrador (grupo_id = 1).
+
+    Métodos HTTP admitidos: GET.
+
+    Acciones:
+    - Verifica que el usuario tenga permisos de administrador (grupo_id = 1).
+    - Muestra el formulario de carga masiva de productos ('carga_masiva_producto.html').
+
+    Redirecciones:
+    - Redirige a la página de verificación de grupo principal ('check_group_main') si el usuario no tiene permisos de administrador (grupo_id != 1).
+"""
 
 #CARGA MASIVA   
 @login_required
@@ -326,7 +417,21 @@ def carga_masiva_producto(request):
         return redirect('check_group_main')
     template_name = 'inventario/carga_masiva_producto.html'
     return render(request, template_name, {'profiles': profile})
+"""
+    import_file_producto Vista para importar un archivo Excel de productos.
 
+    Requiere que el usuario esté autenticado y tenga permisos de administrador (grupo_id = 1).
+    Descarga un archivo de ejemplo para la importación de productos.
+
+    Métodos HTTP admitidos: GET.
+
+    Acciones:
+    - Verifica que el usuario tenga permisos de administrador (grupo_id = 1).
+    - Descarga un archivo Excel de ejemplo prellenado con datos de ejemplo para la importación de productos.
+
+    Redirecciones:
+    - Redirige a la página de verificación de grupo principal ('check_group_main') si el usuario no tiene permisos de administrador (grupo_id != 1).
+"""
 @login_required
 def import_file_producto(request):
     profiles = Profile.objects.get(user_id=request.user.id)
@@ -349,7 +454,27 @@ def import_file_producto(request):
 
     wb.save(response)
     return response  
+"""
+   carga_masiva_producto_save Vista para procesar y guardar los datos importados de productos desde un archivo Excel.
 
+    Requiere que el usuario esté autenticado y tenga permisos de administrador (grupo_id = 1).
+    Recibe un archivo Excel de productos para ser procesado y guardado en la base de datos.
+
+    Métodos HTTP admitidos: POST.
+
+    Parámetros de formulario:
+    - myfile: Archivo Excel que contiene los datos de productos a importar.
+
+    Acciones:
+    - Verifica que el usuario tenga permisos de administrador (grupo_id = 1).
+    - Lee el archivo Excel enviado por el usuario.
+    - Itera sobre los datos del archivo Excel, validando y creando cada producto.
+    - Muestra un mensaje indicando la cantidad de registros importados correctamente.
+    - En caso de error, muestra un mensaje de error con detalles.
+
+    Redirecciones:
+    - Redirige de vuelta a la página de carga masiva de productos ('carga_masiva_producto') después de procesar los datos correctamente o en caso de error.
+"""
 @login_required
 def carga_masiva_producto_save(request):
     profiles = Profile.objects.get(user_id=request.user.id)
@@ -517,75 +642,3 @@ def reporte_producto_filtro(request):
     except:
         messages.add_message(request, messages.INFO, 'Error al generar el reporte')
         return redirect('reportes_main_productos')
-"""
-    ########################## email #######################################
-@login_required
-def correo1(request):
-    #llamos al metodo que envia el correo
-    send_mail_ejemplo2(request,'correo.mypyme@gmail.com','')
-    messages.add_message(request, messages.INFO, 'correo enviado')
-    return redirect('inventario_main')   
-@login_required
-def send_mail_ejemplo2(request,mail_to,data_1):
-    #Ejemplo que permite enviar un correo agregando un excel creado con info de la bd
-
-
-    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))#directorio base del proyecto en el servidor
-    BASE_PATH = os.path.join(BASE_DIR,"core","static","core")#lugar donde se guarda el archivo
-    file_name = "Estado_Ventas.xls"#trate de que no se muy largo
-    file_send = BASE_PATH+"/"+file_name
-    wb = xlwt.Workbook(encoding='utf-8')
-    ws = wb.add_sheet('diosito salvame')
-    row_num = 0
-    font_style = xlwt.XFStyle()
-    font_style.font.bold = True   
-    columns = ['Nombre','Precio','estado','categoria']
-    for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], font_style)
-        style_2 = xlwt.easyxf('font: name Times New Roman, color-index black, bold on')
-    font_style = xlwt.XFStyle()
-    date_format = xlwt.XFStyle()
-    date_format.num_format_str = 'dd/MM/yyyy'
-    time_format = xlwt.XFStyle()
-    time_format.num_format_str = 'hh:mm:ss'   
-    #insumos = Insumos.objects.all().order_by('insumos_name')
-    
-    for row in insumos:
-        row_num += 1
-        for col_num in range(4):
-            if col_num == 0:
-                ws.write(row_num, col_num, row.insumos_name, style_2)
-            if col_num == 1:
-                ws.write(row_num, col_num, row.insumos_price, style_2)   
-            if col_num == 2:
-                ws.write(row_num, col_num, row.insumos_state, style_2)
-            if col_num == 3:
-                ws.write(row_num, col_num, str(row.insumos_categorys), style_2)                                         
-    wb.save(file_send)  
-    #fin archivo
-    from_email = settings.DEFAULT_FROM_EMAIL #exporta desde el settings.py, el correo de envio por defecto
-    subject = "Ventas Mypyme"    
-    HTRML
-    msg = EmailMultiAlternatives(subject, html_content, from_email, [mail_to])
-    msg.content_subtype = "html"
-    msg.attach_alternative(html_content, "text/html")
-
-    msg = EmailMultiAlternatives(subject, html_content, from_email, [mail_to])
-    msg.content_subtype = "html"
-    archivo_adjunto = open(file_send,'rb')
-    # Creamos un objeto MIME base
-    adjunto_MIME = MIMEBase('application', 'octet-stream')
-    # Y le cargamos el archivo adjunto
-    adjunto_MIME.set_payload((archivo_adjunto).read())
-    # Codificamos el objeto en BASE64
-    encoders.encode_base64(adjunto_MIME)
-    # Agregamos una cabecera al objeto    
-    adjunto_MIME.add_header('Content-Disposition',"attachment; filename= %s" % file_name)
-    # Y finalmente lo agregamos al mensaje
-    msg.attach(adjunto_MIME)
-
-
-    msg.send()
-
-
-"""
