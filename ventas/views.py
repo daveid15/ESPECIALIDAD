@@ -19,6 +19,12 @@ from datetime import timedelta
 from django.db.models.functions import TruncMinute
 from administrator.views import validar_string, validar_int
 
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.db import transaction
+from .models import Prod_venta, Orden_venta, Venta_producto
+from django.contrib.auth.decorators import login_required
+
 
 def ventas_main(request):
     profiles = Profile.objects.get(user_id=request.user.id)
@@ -210,7 +216,7 @@ def venta_save(request):
     if request.method == 'POST':
         cliente_name = request.POST.get('cliente_name')
         cliente_last_name = request.POST.get('cliente_last_name')
-        producto_venta = ['Italiano', 'Personalizado', 'Bebida']
+        producto_venta = ['Completo Italiano', 'Completo Personalizado', 'Bebida']
         cantidades = [
             request.POST.get('cantidad_italiano'),
             request.POST.get('cantidad_personalizado'),
@@ -261,7 +267,7 @@ def venta_save(request):
     else:
         messages.error(request, 'Error en el método de envío')
         return redirect('venta_crear')
-
+    
 @login_required
 def venta_list(request):
     profile = Profile.objects.get(user_id=request.user.id)

@@ -76,7 +76,7 @@ def proveedores_crear(request):
     
     return render(request, 'proveedores/proveedores_crear.html', {'proveedor_form': proveedor_form, 'productos': productos})
 
-#CREAR UN PROVEEDOR
+#GUARDAR UN PROVEEDOR
 @login_required
 def proveedor_save(request):
     #Comprobar que el usuario es administrador
@@ -597,8 +597,10 @@ def get_paginated_results(request, queryset):
     page_obj = paginator.get_page(page_number)
     return page_obj, paginator
 
+#RESTAURAR PROVEEDOR
 @login_required
 def restaurar_proveedor(request, proveedor_id):
+    #Validación de permisos de admnistrador
     profiles = Profile.objects.get(user_id=request.user.id)
     if profiles.group_id != 1:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a un área para la que no tiene permisos')
@@ -614,7 +616,8 @@ def restaurar_proveedor(request, proveedor_id):
 
     return redirect('proveedores_eliminados')
 
-@login_required #FUNCION QUE BORRA EL PROVEEDOR PARA SIEMPRE 
+#ELIMINACIÓN LÓGICA DEL PROVEEDOR
+@login_required 
 def eliminar_proveedor(request, proveedor_id):
     profiles = Profile.objects.get(user_id=request.user.id)
     if profiles.group_id != 1:
@@ -628,6 +631,7 @@ def eliminar_proveedor(request, proveedor_id):
     messages.add_message(request, messages.INFO, 'Proveedor ' + proveedor.proveedor_name + ' eliminado con éxito')
     return redirect('proveedores_activos')
 
+#ELIMINACIÓN FÍSICA DEL PROVEEDOR
 def proveedor_delete(request, proveedor_id):
     profile = Profile.objects.get(user_id=request.user.id)
     if profile.group_id != 1:
