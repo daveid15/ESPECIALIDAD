@@ -91,7 +91,7 @@ def get_chart_data_venta(_request):
     time_elapsed = now - start_time
 
     # Valor fijo de referencia (meta)
-    fixed_value = 100000
+    fixed_value = 1000000
 
     if time_elapsed >= timedelta(minutes=1): #SE PUEDE CAMBIAR POR HOURS O MINUTES DEPENDIENDO DE LOQ SE BUSKE
         # Si ha pasado más de un minuto, reiniciar el valor dinámico y el tiempo de inicio
@@ -146,7 +146,7 @@ def get_chart_data_completos_bebidas(_request):
     bebidas = Venta_producto.objects.filter(producto__nombre_producto='Bebida').aggregate(total=Sum('cantidad'))['total'] or 0
 
     # Datos del gráfico
-    categorias = ['Completos', 'Personalizados', 'Bebidas']
+    categorias = ['Italianos', 'Personalizados', 'Bebidas']
     cantidades = [completos, completos_personalizados, bebidas]
 
     # Formatear datos para ECharts
@@ -191,7 +191,7 @@ def venta_save(request):
     if request.method == 'POST':
         cliente_name = request.POST.get('cliente_name')
         cliente_last_name = request.POST.get('cliente_last_name')
-        producto_venta = ['Completo Italiano', 'Completo Personalizado', 'Bebida']
+        producto_venta = ['Italiano', 'Personalizado', 'Bebida']
         cantidades = [
             request.POST.get('cantidad_italiano'),
             request.POST.get('cantidad_personalizado'),

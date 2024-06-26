@@ -76,13 +76,16 @@ def proveedores_crear(request):
     
     return render(request, 'proveedores/proveedores_crear.html', {'proveedor_form': proveedor_form, 'productos': productos})
 
+#CREAR UN PROVEEDOR
 @login_required
 def proveedor_save(request):
+    #Comprobar que el usuario es administrador
     profile = Profile.objects.get(user_id=request.user.id)
     if profile.group_id != 1:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una área para la que no tiene permisos')
         return redirect('check_group_main')
     
+    #Se extraen y guardan los datos ingresados por el usuario mediante POST
     if request.method == 'POST':
         errores = []
         proveedor_name = request.POST.get('proveedor_name')
@@ -111,14 +114,17 @@ def proveedor_save(request):
         if not validar_rut(proveedor_rut, request):
             errores.append('RUT inválido')
         
+        #Validación para el ingreso de los datos en el formato solicitado al usuario
         if errores:
             messages.add_message(request, messages.INFO, 'Hubo algunos errores al crear el proveedor: ' + ', '.join(errores))
             return render(request, template_name)
         
+        #Validación para evitar campos vacíos
         if any(field == '' for field in [proveedor_name, proveedor_last_name, proveedor_rut, proveedor_mail, proveedor_address, proveedor_region, proveedor_comuna, proveedor_phone]):
             messages.add_message(request, messages.INFO, 'Debes ingresar toda la información')
             return redirect('proveedores_main')
         
+        #Validaciones para crear proveedores con ruts y emails únicos
         rut_exist = Proveedor.objects.filter(proveedor_rut=proveedor_rut).exists()
         mail_exist = Proveedor.objects.filter(proveedor_mail=proveedor_mail).exists()
         
@@ -126,7 +132,9 @@ def proveedor_save(request):
             if not mail_exist:
                 
                 try:
+                    # función atomic para ir paso a paso con el procedimiento. Si resulta algún error, se cancelará todo el proceso
                     with transaction.atomic():
+                        #Se crea el proveedor nuevo con los datos guardados anteriormente
                         proveedor_save = Proveedor(
                             proveedor_name=proveedor_name,
                             proveedor_last_name=proveedor_last_name,
@@ -139,10 +147,11 @@ def proveedor_save(request):
                         )
                         proveedor_save.save()
                         
-                        for prod_id in producto:
+                        for prod_id in producto: #-> Se recorre el listado de productos ingresados por el usuario para asociarlos al proveedor a crear
                             try:
                                 prod_id = int(prod_id)  # Convertir prod_id a entero
-                                producto_instance = Product.objects.get(id=prod_id)
+                                producto_instance = Product.objects.get(id=prod_id) #Instanciación del producto
+                            #Validación de que el producto (existente) ingresado exista en la base de datos 
                             except Product.DoesNotExist:
                                 messages.add_message(request, messages.ERROR, f'Producto con ID {prod_id} no encontrado')
                                 return render(request, template_name)
@@ -160,11 +169,12 @@ def proveedor_save(request):
                         for producto, codigo, unidad in zip(producto_nuevo, codigo_nuevo, unidad_nuevo):
                             # Formatear y validar el código del nuevo producto
                             codigo_formateado = f'SKU{codigo}'
+                            #Validación del código en formato solicitado
                             if not re.match(r'^SKU\d{4}$', codigo_formateado):
                                 messages.add_message(request, messages.ERROR, f'El código del producto {codigo} debe tener el formato SKU seguido de 4 dígitos')
                                 return render(request, template_name)
 
-                            # Crear el nuevo producto
+                            # Creación del nuevo producto
                             nuevo_producto = Product.objects.create(
                                 supply_name=producto,
                                 supply_code=codigo_formateado,
@@ -175,9 +185,6 @@ def proveedor_save(request):
                                 supply_total=0
                             )
 
-                            # Imprimir la ID del nuevo producto
-                            print(nuevo_producto.id)
-
                             # Obtener la instancia del producto recién creado
                             producto_instance_nuevo = Product.objects.get(id=nuevo_producto.id)
 
@@ -187,22 +194,25 @@ def proveedor_save(request):
                                 producto=producto_instance_nuevo,
                             )
                     else:
-                        print("No hay productos nuevos para agregar.")
+                        print("No hay productos nuevos para agregar.") #Validación e caso de error al crear el producto nuevo
 
                     messages.add_message(request, messages.INFO, 'Productos guardados con éxito')
                 except Exception as e:
-                    messages.add_message(request, messages.ERROR, f'Error al guardar productos: {str(e)}')
+                    messages.add_message(request, messages.ERROR, f'Error al guardar productos: {str(e)}') #Validación en caso de no guardar los productos
                         
                         
                 messages.add_message(request, messages.INFO, 'Proveedor ingresado con éxito')
                 return redirect('proveedores_activos')
             else:
+                #Validación en caso de un email existente
                 messages.add_message(request, messages.INFO, 'El correo que está tratando de ingresar, ya existe en nuestros registros')
                 return redirect('proveedores_activos')
         else:
+            #Valdació en caso de un rut existente
             messages.add_message(request, messages.INFO, 'El RUT que está tratando de ingresar, ya existe en nuestros registros')
             return redirect('proveedores_activos')
     else:
+        #Validación de POST
         messages.add_message(request, messages.INFO, 'Error en el método de envío')
         return redirect('check_group_main')
 
@@ -249,8 +259,10 @@ def proveedor_ver(request, proveedor_id):
     template_name = 'proveedores/proveedor_ver.html'
     return render(request, template_name, {'profile': profile, 'proveedor_data': proveedor_data, 'proveedor':proveedor, 'proveedor_productos':proveedor_productos})
 
+#EDITAR PROVEEDOR
 @login_required
 def proveedor_edit(request, proveedor_id):
+    #Validación de Permisos de administrador
     profile = Profile.objects.get(user_id=request.user.id)
     productos = Product.objects.all()
     if profile.group_id != 1:
@@ -259,6 +271,7 @@ def proveedor_edit(request, proveedor_id):
 
     proveedor = get_object_or_404(Proveedor, id=proveedor_id)
 
+    #Recolección de los datos mediante POST
     if request.method == 'POST':
         proveedor_name = request.POST.get('proveedor_name')
         proveedor_last_name = request.POST.get('proveedor_last_name')
@@ -272,9 +285,11 @@ def proveedor_edit(request, proveedor_id):
         codigo_nuevo = request.POST.getlist('codigo_nuevo[]')
         unidad_nuevo = request.POST.getlist('unidad_nuevo[]')
 
+        #Validación de email existente, exceptuando al email propio del proveedor a editar
         mail_exist = Proveedor.objects.filter(proveedor_mail=proveedor_mail).exclude(id=proveedor_id).exists()
         if not mail_exist:
             try:
+                # función atomic para ir paso a paso con el procedimiento. Si resulta algún error, se cancelará todo el proceso
                 with transaction.atomic():
                     proveedor.proveedor_name = proveedor_name
                     proveedor.proveedor_last_name = proveedor_last_name
@@ -300,6 +315,7 @@ def proveedor_edit(request, proveedor_id):
                             messages.add_message(request, messages.ERROR, 'Error en los datos de los productos.')
                             return render(request, 'proveedores/proveedor_edit.html', {'proveedor_data': proveedor, 'productos': productos})
 
+                        #Asociación de proveedor al producto asginado
                         Prov_prod.objects.create(
                             proveedor=proveedor,
                             producto=producto_instance,
@@ -317,6 +333,7 @@ def proveedor_edit(request, proveedor_id):
                                 supply_output=0,
                                 supply_total=0
                             )
+                            #Creación del producto nuevo
                             Prov_prod.objects.create(
                                 proveedor=proveedor,
                                 producto=nuevo_producto,
@@ -336,13 +353,16 @@ def proveedor_edit(request, proveedor_id):
         return render(request, 'proveedores/proveedor_edit.html', {'proveedor_data': proveedor, 'productos': productos})
 
 
-
+#ELIMINAR PROVEEDOR
 def proveedor_delete(request, proveedor_id):
+    #Validación de permisoss de administrador
     profile = Profile.objects.get(user_id=request.user.id)
     if profile.group_id != 1:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
         return redirect('check_group_main')
+    #Identifica el proveedor seleccionado
     proveedor = get_object_or_404(Proveedor, id=proveedor_id)
+    #Eliminación del Proveedor
     proveedor.delete()
     messages.success(request, 'Proveedor eliminado correctamente')
     return redirect(reverse('proveedor_list'))
@@ -356,16 +376,21 @@ def carga_masiva_proveedor(request):
     template_name = 'proveedores/carga_masiva_proveedor.html'
     return render(request, template_name, {'profiles': profile})
 
+#ARCHIVO DE EJEMPLO PARA CARGA MASIVA
 @login_required
 def import_file_proveedor(request):
+    #Validación permisos de administrador
     profiles = Profile.objects.get(user_id=request.user.id)
     if profiles.group_id != 1:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
         return redirect('check_group_main')
     
+    #Identifiación del response
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     response['Content-Disposition'] = 'attachment; filename="archivo_importacion_proveedor.xlsx"'
 
+    #Nombre de columnas para el archivo
+    
     wb = Workbook()
     ws = wb.active
     ws.title = 'carga_masiva'
@@ -374,6 +399,7 @@ def import_file_proveedor(request):
     ws.append(columns)
 
 
+    #Información de ejemplo
     example_data = [
         'ej: 17605812-2',
         'ej: Nombre proveedor',
@@ -386,12 +412,14 @@ def import_file_proveedor(request):
         'ej: Palta'
     ]
     ws.append(example_data)
-
+ 
     wb.save(response)
     return response
 
+#CARGA MASIVA
 @login_required
 def carga_masiva_proveedor_save(request):
+    #Validación de permisos de administrador
     profiles = Profile.objects.get(user_id=request.user.id)
     if profiles.group_id != 1:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una área para la que no tiene permisos')
@@ -753,14 +781,17 @@ from inventario.models import Product
 
 @login_required
 def orden_save(request):
+    #Validación Permisos de administrador
     profile = Profile.objects.get(user_id=request.user.id)
     if profile.group_id != 1:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a un área para la que no tiene permisos')
         return redirect('check_group_main')
 
+    #Proveedores y Productos guardados para después recorrerlos
     proveedores = Proveedor.objects.all()
     productos = Product.objects.all()
 
+    #Recolección de los datos mediante POST
     if request.method == 'POST':
         proveedor_orden = request.POST.get('proveedor_orden')
         producto_orden = request.POST.getlist('producto_orden[]')
@@ -793,29 +824,34 @@ def orden_save(request):
             return render(request, 'proveedores/orden_crear.html', {'profiles': profile, 'proveedores': proveedores, 'productos': productos})
 
         try:
+            #Función atomic para ir paso a paso en el procedimiento y cancelar todo en caso de error
             with transaction.atomic():
-                orden = Orden_compra(proveedor_orden=proveedor_instance, monto=monto_valido)
+                orden = Orden_compra(proveedor_orden=proveedor_instance, monto=monto_valido) #Instancia de la nueva orden
                 orden.save()
 
+                #Recorrido de todos los productos y cantidades ingresadas por el usuario
                 for prod, cant in zip(producto_orden, cantidades_validas):
                     try:
                         producto_instance = Product.objects.get(id=prod)
+                        #Validación
                     except Product.DoesNotExist:
                         messages.add_message(request, messages.ERROR, f'Producto con ID {prod} no encontrado')
                         return render(request, 'proveedores/orden_crear.html', {'profiles': profile, 'proveedores': proveedores, 'productos': productos})
 
+                    #Relación de la órden de compra y sus productos respectivos
                     Producto_Orden.objects.create(
                         orden_id=orden,
                         producto=producto_instance,
                         cantidad_orden=cant,
                     )
-                
+                #Mensaje de éxito
                 messages.add_message(request, messages.SUCCESS, f'Orden de compra #{orden.id} creada con éxito')
                 return redirect('orden_crear')
+        #Mensaje de error
         except Exception as e:
             messages.add_message(request, messages.ERROR, f'Error al crear la orden: {str(e)}')
             return redirect('orden_crear')
-
+    #Mensaje de error
     else:
         messages.add_message(request, messages.ERROR, 'Error en el método de envío')
         return redirect('orden_crear')
@@ -836,16 +872,20 @@ def orden_crear(request):
     return render(request, template_name, {'profiles': profiles, 'proveedores': proveedores, 'productos': productos})
 
 def cambiar_estado_orden_enviada(request, orden_id):
+    #Recolección de datos mediante POST
     if request.method == 'POST':
         nuevo_estado = request.POST.get('nuevo_estado')
         
+        #Cambio de estado solicitado por ususario
         if nuevo_estado in ['aceptado', 'rechazado', 'anulado']:
-            orden = get_object_or_404(Orden_compra, id=orden_id)
-            orden.estado = nuevo_estado
+            orden = get_object_or_404(Orden_compra, id=orden_id)#Instanciación de la orden
+            orden.estado = nuevo_estado #Cambio de estado
             orden.save()
+            #Mensaje de éxito
             messages.add_message(request, messages.INFO, 'Se ha cambiado el estado de la orden')
             return redirect('orden_list_enviada')
         else:
+            "Mensaje de error"
             messages.add_message(request, messages.INFO, 'Debe seleccionar un estado nuevo para la orden')
             return redirect('orden_list_enviada')
 
@@ -943,21 +983,27 @@ from .models import Proveedor, Orden_compra, Producto_Orden
 from inventario.models import Product
 @login_required
 def editar_orden(request, orden_id):
+    #Validación de permisos de administrador
     profile = get_object_or_404(Profile, user_id=request.user.id)
     if profile.group_id != 1:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a un área para la que no tiene permisos')
         return redirect('check_group_main')
 
+    #Proveedores y Productos guardados para después recorrerlos
     proveedores = Proveedor.objects.all()
     productos = Product.objects.all()
+    
+    #Identidicación de orden a editar y sus productos correspondientes
     orden = get_object_or_404(Orden_compra, pk=orden_id)
     productos_orden = Producto_Orden.objects.filter(orden_id=orden)
 
+    #Recolección de Datos mediante POST
     if request.method == 'POST':
         producto_orden = request.POST.getlist('producto_orden[]')
         cantidad_orden = request.POST.getlist('cantidad_orden[]')
         monto_orden = request.POST.get("monto_orden")
 
+        #Validación de campos vacíos
         if not producto_orden or not cantidad_orden:
             messages.add_message(request, messages.INFO, 'Debes ingresar toda la información')
             return render(request, 'editar_orden.html', {
@@ -967,16 +1013,18 @@ def editar_orden(request, orden_id):
             })
 
         try:
+            #Validación de cantidades positivas y distintas de 0
             cantidades_validas = [int(cant) if cant else 0 for cant in cantidad_orden]
             monto_valido = int(monto_orden)
         except ValueError:
+            #Mensaje de error por números inválidos
             messages.add_message(request, messages.ERROR, 'Las cantidades y el monto deben ser números enteros válidos')
             return render(request, 'editar_orden.html', {
                 'profiles': profile, 'proveedores': proveedores, 'productos': productos, 
                 'orden': orden, 'productos_orden': productos_orden,
                 'form_data': zip(producto_orden, cantidad_orden)
             })
-
+        #Validación de cantidades vacías
         if all(cant == 0 for cant in cantidades_validas):
             messages.add_message(request, messages.ERROR, 'Debe haber al menos un producto con una cantidad mayor a 0')
             return render(request, 'editar_orden.html', {
@@ -986,15 +1034,18 @@ def editar_orden(request, orden_id):
             })
 
         try:
+            #Función atomic, para procesar paso a paso y en caso de error, cancelar todo
             with transaction.atomic():
-                orden.monto = monto_valido
+                orden.monto = monto_valido #Cambio de monto
                 orden.save()
 
+                #Eliminación de relación anterior entre orden de compra y sus productos
                 Producto_Orden.objects.filter(orden_id=orden).delete()
                 for prod, cant in zip(producto_orden, cantidades_validas):
                     try:
-                        producto = Product.objects.get(id=prod)
+                        producto = Product.objects.get(id=prod) #Instanciación de producto
                     except Product.DoesNotExist:
+                        #Mensaje de error
                         messages.add_message(request, messages.ERROR, f'Producto con ID {prod} no encontrado')
                         return render(request, 'editar_orden.html', {
                             'profiles': profile, 'proveedores': proveedores, 'productos': productos, 
@@ -1002,12 +1053,13 @@ def editar_orden(request, orden_id):
                             'form_data': zip(producto_orden, cantidad_orden)
                         })
 
+                    #Creación de nueva relación orden de compra y producto
                     Producto_Orden.objects.create(
                         orden_id=orden,
                         producto=producto,
                         cantidad_orden=cant,
                     )
-
+                #Mensaje de Éxito
                 messages.add_message(request, messages.SUCCESS, 'Orden actualizada con éxito')
                 return redirect('editar_orden', orden_id=orden.id)
         except Exception as e:
