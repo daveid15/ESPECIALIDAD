@@ -22,10 +22,10 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email import encoders
+import re
 
 
 
-# Create your views here.
 @login_required
 def inventario_main(request, page=None, search=None):
     profile = Profile.objects.get(user_id=request.user.id)
@@ -173,7 +173,7 @@ def producto_save(request):
         return redirect('check_group_main')
 
 
-   #VER PRODUCTO Y se usa pa editar
+   #VER PRODUCTO Y se usa para editar
 @login_required
 def producto_ver(request, product_id):
     profile = Profile.objects.get(user_id=request.user.id)
