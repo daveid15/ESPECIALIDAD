@@ -188,15 +188,15 @@
                 <div class="col-12 col-lg-12 row row-cols-1 row-cols-md-1 g-2 p-lg-0-5">
                     <div class="mb-0 col-md-12">
                         <label for="proveedor_orden_id" class="form-label">Número de órden: </label>
-                        <span class="form-label" id="proveedor_orden_id">{{orden.id}}</span>
+                        <span class="form-label" id="proveedor_orden_id">#{{orden.id}}</span>
                     </div>
                     <div class="mb-0 col-md-12">
                         <label for="proveedor" class="form-label">Proveedor: </label>
                         <span class="form-label" id="proveedor">{{orden.proveedor_orden}}</span>
                     </div>
                     <div class="mb-0 col-md-12">
-                        <label for="monto" class="form-label">Número de contacto:</label>
-                        <span class="form-label" id="monto">{{orden.monto}}</span>
+                        <label for="monto" class="form-label">Monto total:</label>
+                        <span class="form-label" id="monto">${{orden.monto}}</span>
                     </div>
                     <table class="product-list">
                         <thead>

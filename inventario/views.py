@@ -23,6 +23,7 @@ from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email import encoders
 import re
+from django.http import HttpResponse
 
 
 
@@ -449,7 +450,7 @@ def import_file_producto(request):
     columns = ['Producto', 'Código', 'Unidad', 'Stock inicial']
     ws.append(columns)
 
-    example_data = ['ej: Palta', 'ej: SK1111', 'ej: kg/LATA (330ml)', 'ej: 10']
+    example_data = ['ej: Palta', 'ej: SKU1111', 'ej: kg/LATA (330 ml)', 'ej: 10']
     ws.append(example_data)
 
     wb.save(response)
