@@ -220,6 +220,7 @@
                         <label for="file" class="file-label">
                             Seleccionar archivo
                             <input type="file" name="myfile" id="file" required>
+                            <span id="file-name"></span>
                         </label>
                         {% if messages %}
                             <ul class="messages" id="message22">
@@ -236,4 +237,10 @@
         </div>
     </div>
 </main>
+<script>
+    document.getElementById('file').addEventListener('change', function() {
+        var fileName = this.files[0].name;
+        document.getElementById('file-name').textContent = fileName;
+    });
+</script>
 {% endblock %}

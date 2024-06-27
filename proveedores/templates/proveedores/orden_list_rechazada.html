@@ -518,10 +518,10 @@
             <tbody>
                 {% for orden in ordenes %}
                 <tr>
-                    <td style="padding: 15px;" class="hide-column">{{ orden.id }}</td>
+                    <td style="padding: 15px;" class="hide-column">#{{ orden.id }}</td>
                     <td>{{ orden.proveedor_orden }}</td>
                     <td class="hide-column">{{ orden.producto_orden_set.all|length }}</td>
-                    <td class="hide-column">{{ orden.monto }}</td>
+                    <td class="hide-column">${{ orden.monto }}</td>
                     <td>
                         <a href="{% url 'detalle_orden_de_compra_rechazada' orden_id=orden.id %}" class="#"><i class="fas fa-eye" style="color: #000000;"></i></a>
                     </td>

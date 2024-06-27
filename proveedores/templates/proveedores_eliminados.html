@@ -416,6 +416,14 @@
             </form>
         </div>
 
+        {% if messages %}
+            <ul class="messages" id="message16">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
         <table class="table mt-5 table-hover table-sm table-bordered" style="margin-top: 40px;">
             <thead class="table-danger">
                 <tr>
@@ -432,31 +440,29 @@
                     <th scope="row" style="font-weight: 400; padding: 15px;">{{ p.proveedor_last_name }}</th>
                     <th scope="row" style="font-weight: 400; padding: 15px;" class="phone-column">{{ p.proveedor_phone }}</th>
                     <th scope="row">
-                        <a href="{% url 'restaurar_proveedor' p.id %}">
+                        <a onclick="mostrarRestaurar('{{ p.id }}')">
                             <i class="fa-solid fa-arrow-rotate-left" style="color: #000000;"></i>
                         </a>
-                        <a id="Buttoneraseprovider" onclick="mostrar('{{ p.id }}')">
+                        <a id="Buttoneraseprovider" onclick="mostrarEliminar('{{ p.id }}')">
                             <i class="fa-solid fa-trash-can" style="color: #000000;"></i>
                         </a>
                     </th>
                 </tr>
                 {% endfor %}
-                <div id="popuperaseprovider" class="popup">
+                <div id="popupRestaurar" class="popup">
                     <div class="popup-content">
-                        <h1 style="color: #333">
-                            ¿Seguro que quiere eliminar permanentemente este proveedor?
-                        </h1>
-                        <button id="Aceptar1" href="#" onclick="aceptar1(a)">Aceptar</button>
-                        <button id="Cancelar1">Cancelar</button>
+                        <h1 style="color: #333">¿Seguro que quiere restaurar este proveedor?</h1>
+                        <button id="AceptarRestaurar" href="#" onclick="aceptarRestaurar(a)">Aceptar</button>
+                        <button id="CancelarRestaurar">Cancelar</button>
                     </div>
                 </div>
-                {% if messages %}
-                        <ul class="messages" id="message16">
-                            {% for message in messages %}
-                                <li{% if messages.tags %} class="{{message.tags}}" {% endif %}>{{message}}</li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
+                <div id="popupEliminar" class="popup">
+                    <div class="popup-content">
+                        <h1 style="color: #333">¿Seguro que quiere eliminar permanentemente este proveedor?</h1>
+                        <button id="AceptarEliminar" href="#" onclick="aceptarEliminar(a)">Aceptar</button>
+                        <button id="CancelarEliminar">Cancelar</button>
+                    </div>
+                </div>
             </tbody>
         </table>
 
@@ -466,7 +472,7 @@
                 {% if p_list_paginate.has_previous %}
                 <li class="page-item">
                     <a class="page-link" href="?page={{ p_list_paginate.previous_page_number }}{% if search %}&search={{ search }}{% endif %}">
-                        <i class="fas fa-chevron-left"></i> <!-- Icono de flecha hacia la izquierda -->
+                        <i class="fas fa-chevron-left"></i>
                     </a>
                 </li>
                 {% else %}
@@ -482,7 +488,7 @@
                 {% if p_list_paginate.has_next %}
                 <li class="page-item">
                     <a class="page-link" href="?page={{ p_list_paginate.next_page_number }}{% if search %}&search={{ search }}{% endif %}">
-                        <i class="fas fa-chevron-right"></i> <!-- Icono de flecha hacia la derecha -->
+                        <i class="fas fa-chevron-right"></i>
                     </a>
                 </li>
                 {% else %}
@@ -497,20 +503,33 @@
 </main>
 
 <script>
-    function mostrar(id) {
-            popuperaseprovider.classList.add("show");
-            a = id;
-        };
-        function aceptar1 (id) {
-            window.location.href = "{% url 'proveedor_delete' 0 %}".replace('0', id);
-        };
-    Cancelar1.addEventListener(
-        "click",
-        function () {
-                popuperaseprovider.classList.remove(
-                "show");
-            }
-    );
+    var a;
+
+    function mostrarRestaurar(id) {
+        document.getElementById('popupRestaurar').classList.add("show");
+        a = id;
+    }
+
+    function aceptarRestaurar(id) {
+        window.location.href = "{% url 'restaurar_proveedor' 0 %}".replace('0', id);
+    }
+
+    document.getElementById('CancelarRestaurar').addEventListener("click", function () {
+        document.getElementById('popupRestaurar').classList.remove("show");
+    });
+
+    function mostrarEliminar(id) {
+        document.getElementById('popupEliminar').classList.add("show");
+        a = id;
+    }
+
+    function aceptarEliminar(id) {
+        window.location.href = "{% url 'proveedor_delete' 0 %}".replace('0', id);
+    }
+
+    document.getElementById('CancelarEliminar').addEventListener("click", function () {
+        document.getElementById('popupEliminar').classList.remove("show");
+    });
 </script>
 
 {% endblock %}
