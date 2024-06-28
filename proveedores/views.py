@@ -1101,7 +1101,7 @@ def get_chart_oc_1(request):
 
     chart_data = {
         "title": {
-            "text": 'Cantidad de ordenes'
+            "text": 'Cantidad de órdenes'
         },   
         'tooltip': {
             'show': True,
