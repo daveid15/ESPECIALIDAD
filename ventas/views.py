@@ -100,7 +100,7 @@ def get_chart_data_venta(_request):
     # Valor fijo de referencia (meta)
     fixed_value = 1000000
 
-    if time_elapsed >= timedelta(minutes=1): #SE PUEDE CAMBIAR POR HOURS O MINUTES DEPENDIENDO DE LOQ SE BUSKE
+    if time_elapsed >= timedelta(minutes=1): #DEFINICIÓN DEL LAPSO DE TIEMPO
         # Si ha pasado más de un minuto, reiniciar el valor dinámico y el tiempo de inicio
         dynamic_value = 0
         cache.set('start_time', now)

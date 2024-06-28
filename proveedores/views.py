@@ -147,6 +147,8 @@ def proveedor_save(request):
                         )
                         proveedor_save.save()
                         
+                        print(codigo_nuevo)
+                        
                         for prod_id in producto: #-> Se recorre el listado de productos ingresados por el usuario para asociarlos al proveedor a crear
                             try:
                                 prod_id = int(prod_id)  # Convertir prod_id a entero
@@ -163,9 +165,11 @@ def proveedor_save(request):
                                 proveedor=proveedor_save,
                                 producto=producto_instance,
                             )
-                
+                            messages.add_message(request, messages.INFO, 'Productos guardados con éxito')
+
                     # Verificar si la lista de productos nuevos no está vacía
-                    if producto_nuevo:
+                    if producto_nuevo and all(producto_nuevo) and codigo_nuevo and all(codigo_nuevo) and unidad_nuevo and all(unidad_nuevo):
+                        print("xddddlol")
                         for producto, codigo, unidad in zip(producto_nuevo, codigo_nuevo, unidad_nuevo):
                             # Formatear y validar el código del nuevo producto
                             codigo_formateado = f'SKU{codigo}'
@@ -193,10 +197,9 @@ def proveedor_save(request):
                                 proveedor=proveedor_save,
                                 producto=producto_instance_nuevo,
                             )
+                        messages.add_message(request, messages.INFO, 'Productos creados y guardados con éxito')
                     else:
                         print("No hay productos nuevos para agregar.") #Validación e caso de error al crear el producto nuevo
-
-                    messages.add_message(request, messages.INFO, 'Productos guardados con éxito')
                 except Exception as e:
                     messages.add_message(request, messages.ERROR, f'Error al guardar productos: {str(e)}') #Validación en caso de no guardar los productos
                         
