@@ -782,11 +782,12 @@ body.dark .header {
   color: #000;
   left: 500px;
   padding: 10px 15px;
-  border-radius: 5px;
-  
+  border-radius: 5px 5px 0px 0px;
   text-decoration: none;
   font-weight: bold;
   font-size: 14px;
+  white-space: nowrap;
+  word-wrap: break-word;
 }
 
 .settingsbar {
@@ -800,7 +801,7 @@ body.dark .header {
   border-radius: 15px; /* Redondea las esquinas */
   padding: 5px; /* Ajusta el relleno interior */
   z-index: 100;
-  overflow-y: auto; /* Ajusta la barra de desplazamiento si es necesario */
+  
   box-shadow: 0 0 10px var(--grey-color-light);
   transition: left 0.3s ease;
   

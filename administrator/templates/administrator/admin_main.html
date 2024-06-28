@@ -208,7 +208,7 @@
                 position: end;
                 display: flex;
                 right: 0;
-                width: 220px;
+                width: 215px;
                 box-shadow: 0 0 10px var(--grey-color-light);
                 transition: left 0.3s ease;
             }
@@ -424,6 +424,7 @@
                 min-width: 300px; /* Evitar que se encojan demasiado en pantallas pequeñas */
                 overflow: auto;
                 max-height: 600px;
+                height: fit-content;
             }
             .chart-container {
                 display: flex;
@@ -591,6 +592,55 @@
                     margin-bottom: 20px; /* Espacio entre los elementos */
                 }
             }
+
+                            /* Estilos generales para el menú */
+                .settingsbar.custom-side-bar {
+                    display: none;
+                    background-color: #9eb23b;
+                    width: fit-content; /* Ajusta el ancho según tus necesidades */
+                    height: fit-content; /* Ajusta la altura según tus necesidades */
+                    position: fixed;
+                    left: auto;
+                    top: 60px; /* Ajusta la distancia desde la parte superior de la ventana */
+                        /* Ajusta la distancia desde el lado izquierdo de la ventana */
+                    border-radius: 15px; /* Redondea las esquinas */
+                    padding: 5px; /* Ajusta el relleno interior */
+                    z-index: 100;
+                    
+                    box-shadow: 0 0 10px var(--grey-color-light);
+                    transition: left 0.3s ease;
+                }
+
+                /* Estilos para los enlaces del menú */
+                .settingsbar .custom-nav-link {
+                    display: flex;
+                    align-items: center;
+                    width: 100%;
+                    padding: 4px 0px; /* del contenido dentro de la sidebar */
+                    border-radius: 8px;
+                    text-decoration: none;
+                    color: var(--grey-color);
+                    white-space: nowrap;
+                }
+
+                /* Estilos para los iconos de los enlaces del menú */
+                .settingsbar .custom-navlink-icon {
+                margin-right: 10px;
+                font-size: 20px; /* Tamaño del icono */
+                color: white; /* Cambia el color del icono según sea necesario */
+                }
+
+                /* Efecto al pasar el ratón sobre los enlaces del menú */
+                .settingsbar .custom-nav-link:hover {
+                background-color: var(--light-green-color);
+                color: white; /* Cambia el color del texto al pasar el ratón */
+                }
+
+                /* Estilos para las flechas de los submenús */
+                .settingsbar .custom-arrow-left {
+                margin-left: auto;
+                color: white; /* Cambia el color de la flecha según sea necesario */
+                }
 
 
             @media (min-width: 451px) and (max-width: 767px) {
@@ -1047,51 +1097,51 @@
             </nav>
         </div>
     </nav>
-       <!-- Menu de la tuerca -->
-       <nav class="side-bar to-right">
-        <div class="menu">
-            <!--=== Menu Inicio ===-->
-            <nav class="sidebar">
-                <div class="settingsbar" id="SettingsPanel">
-                    <ul class="menu_items">
-                        <li class="item">
-                            <a href="{% url 'password_reset' %}" class="nav_link submenu_item">
-                                <span class="navlink_icon">
-                                    <i class="bx bx-lock"></i>
-                                </span>
-                                <span class="navlink">Contraseña</span>
-                                <i class="bx bx-chevron-right arrow-left"></i>
-                            </a>
-                            <ul class="menu_items submenu">
-                                <li><a href="{% url 'password_reset' %}" class="nav_link sublink">Contraseña</a></li>
-                            </ul>
-                        </li>
-                        
-                        <li class="item">
-                            <a href="{% url 'edit_perfil' %}" class="nav_link submenu_item">
-                                <span class="navlink_icon">
-                                    <i class="bx bx-edit"></i>
-                                </span>
-                                <span class="navlink">Editar Perfil</span>
-                                <i class="bx bx-chevron-right arrow-left"></i>
-                            </a>
-                        </li>
-                        
-                        <li class="item">
-                            <a href="{% url 'user_detail' user_id=request.user.id %}" class="nav_link submenu_item">
-                                <span class="navlink_icon">
-                                    <i class="bx bx-user-circle"></i>
-                                </span>
-                                <span class="navlink">Ver perfil</span>
-                                <i class="bx bx-chevron-right arrow-left"></i>
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </div>
-            </nav>
-        </div>
-    </nav>
+        <!-- Menu de la tuerca -->
+        <nav class="custom-side-bar">
+            <div class="menu">
+                <!--=== Menu Inicio ===-->
+                <nav class="custom-sidebar">
+                    <div class="settingsbar" id="SettingsPanel">
+                        <ul class="menu_items">
+                            <li class="item">
+                                <a href="{% url 'password_reset' %}" class="custom-nav-link submenu_item">
+                                    <span class="custom-navlink-icon">
+                                        <i class="bx bx-lock"></i>
+                                    </span>
+                                    <span class="custom-navlink">Contraseña</span>
+                                    <i class="bx bx-chevron-right custom-arrow-left"></i>
+                                </a>
+                                <ul class="menu_items submenu">
+                                    <li><a href="{% url 'password_reset' %}" class="custom-nav-link sublink">Contraseña</a></li>
+                                </ul>
+                            </li>
+                            
+                            <li class="item">
+                                <a href="{% url 'edit_perfil' %}" class="custom-nav-link submenu_item">
+                                    <span class="custom-navlink-icon">
+                                        <i class="bx bx-edit"></i>
+                                    </span>
+                                    <span class="custom-navlink">Editar Perfil</span>
+                                    <i class="bx bx-chevron-right custom-arrow-left"></i>
+                                </a>
+                            </li>
+                            
+                            <li class="item">
+                                <a href="{% url 'user_detail' user_id=request.user.id %}" class="custom-nav-link submenu_item">
+                                    <span class="custom-navlink-icon">
+                                        <i class="bx bx-user-circle"></i>
+                                    </span>
+                                    <span class="custom-navlink">Ver perfil</span>
+                                    <i class="bx bx-chevron-right custom-arrow-left"></i>
+                                </a>
+                            </li>
+                            
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </nav>
 
 
     men

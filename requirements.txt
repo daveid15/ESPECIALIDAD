@@ -12,3 +12,4 @@ psycopg2==2.8.5
 djangorestframework==3.11.2
 xlrd==1.2.0
 openpyxl
+matplotlib
