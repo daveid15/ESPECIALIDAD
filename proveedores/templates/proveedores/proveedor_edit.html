@@ -163,11 +163,11 @@
                         <div class="col-12 col-lg-12 row row-cols-1 row-cols-md-1 g-2 p-lg-0-5">
                             <div class="mb-0 col-md-6">
                                 <label for="proveedor_name" class="form-label">Nombre</label>
-                                <input type="text" class="form-control" name="proveedor_name" pattern="[A-Za-zÑñ]+" id="proveedor_name" placeholder="Nombre" value="{{ proveedor_data.proveedor_name }}" style="text-transform: capitalize;" required>
+                                <input type="text" class="form-control" name="proveedor_name" pattern="[A-Za-zÑñáéíóúÁÉÍÓÚ\s]+" id="proveedor_name" placeholder="Nombre" value="{{ proveedor_data.proveedor_name }}" style="text-transform: capitalize;" required>
                             </div>
                             <div class="mb-0 col-md-6">
                                 <label for="proveedor_last_name" class="form-label">Apellido</label>
-                                <input type="text" class="form-control" name="proveedor_last_name" pattern="[A-Za-zÑñ]+" id="proveedor_last_name" placeholder="Apellido" value="{{ proveedor_data.proveedor_last_name }}" style="text-transform: capitalize;" required>
+                                <input type="text" class="form-control" name="proveedor_last_name" pattern="[A-Za-zÑñáéíóúÁÉÍÓÚ\s]+" id="proveedor_last_name" placeholder="Apellido" value="{{ proveedor_data.proveedor_last_name }}" style="text-transform: capitalize;" required>
                             </div>
                             <div class="mb-0 col-md-6">
                                 <label for="proveedor_mail" class="form-label">Correo electrónico</label>
